@@ -4,9 +4,10 @@
  * along with a summary of the intake responses.
  */
 
+import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { AngularDiagnosticResults } from '../../components/results/AngularDiagnosticResults';
-import { ExportButton } from '../../components/ExportButton';
+import { exportClientReportToPDF } from '../../services/pdfExport';
 import type { ConsolidatedResults } from '../../models';
 import type { ClientIntakeData } from '../../models/clientIntake';
 import {
@@ -41,6 +42,18 @@ export function ClientResultsPage() {
   }
 
   const { results, intake } = state;
+  const [isExporting, setIsExporting] = useState(false);
+
+  async function handleExportPDF() {
+    setIsExporting(true);
+    try {
+      await exportClientReportToPDF(results, intake);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsExporting(false);
+    }
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#faf8f5] to-[#f0ebe0] py-12 px-4">
@@ -98,7 +111,13 @@ export function ClientResultsPage() {
 
         {/* Actions */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center pt-2">
-          <ExportButton results={results} />
+          <button
+            onClick={handleExportPDF}
+            disabled={isExporting}
+            className="px-6 py-3 bg-[#9a7d4e] hover:bg-[#b8944a] disabled:opacity-60 text-white font-bold rounded-xl transition-colors"
+          >
+            {isExporting ? 'Generating PDF…' : 'Download Your Report (PDF)'}
+          </button>
           <button
             onClick={() => navigate('/client')}
             className="px-6 py-3 border border-gray-200 text-[#6b6188] font-semibold rounded-xl hover:border-[#9a7d4e] hover:text-[#9a7d4e] transition-colors"
