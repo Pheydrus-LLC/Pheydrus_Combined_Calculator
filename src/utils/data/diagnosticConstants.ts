@@ -35,6 +35,12 @@ export const PILLAR_2_PRESSURE_HOUSES = new Set([2, 6, 8, 11]);
 // ---------------------------------------------------------------------------
 export const PILLAR_3_MALEFICS = new Set(['Neptune', 'Pluto', 'Saturn', 'Uranus', 'Mars']);
 export const PILLAR_3_BENEFICS = new Set(['Sun', 'Moon', 'Venus', 'Jupiter']);
+// Sun or Venus in 8th or 12th house at current location → F (mirrors Pillar 1 soft-spot rule)
+export const PILLAR_3_SOFT_SPOT_PLANETS = new Set(['Sun', 'Venus']);
+export const PILLAR_3_SOFT_SPOT_HOUSES = new Set([8, 12]);
+// Outer malefics in pressure houses → C (mirrors Pillar 2 pressure rule; Mars excluded)
+export const PILLAR_3_PRESSURE_PLANETS = new Set(['Neptune', 'Pluto', 'Saturn', 'Uranus']);
+export const PILLAR_3_PRESSURE_HOUSES = new Set([2, 6, 8, 11]);
 
 // ---------------------------------------------------------------------------
 // Life Cycle grading

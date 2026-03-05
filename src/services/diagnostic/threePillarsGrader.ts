@@ -30,6 +30,10 @@ import {
   PILLAR_2_PRESSURE_HOUSES,
   PILLAR_3_MALEFICS,
   PILLAR_3_BENEFICS,
+  PILLAR_3_SOFT_SPOT_PLANETS,
+  PILLAR_3_SOFT_SPOT_HOUSES,
+  PILLAR_3_PRESSURE_PLANETS,
+  PILLAR_3_PRESSURE_HOUSES,
   LIFE_CYCLE_F_YEARS,
   LIFE_CYCLE_A_YEARS,
   ADDRESS_F_NUMBERS,
@@ -209,6 +213,12 @@ function gradePillar3Relocation(destinationPlanetHouses: PlanetHouseResult[] | n
     if (isAngular && isMalefic) {
       grade = 'F';
       reason = `Malefic ${name} in angular house ${house} at current location`;
+    } else if (PILLAR_3_SOFT_SPOT_PLANETS.has(name) && PILLAR_3_SOFT_SPOT_HOUSES.has(house)) {
+      grade = 'F';
+      reason = `${name} in house ${house} at current location (8th/12th)`;
+    } else if (PILLAR_3_PRESSURE_PLANETS.has(name) && PILLAR_3_PRESSURE_HOUSES.has(house)) {
+      grade = 'C';
+      reason = `${name} in pressure house ${house} at current location (2nd/6th/8th/11th)`;
     } else if (isAngular && isBenefic) {
       grade = 'A';
       reason = `Benefic ${name} in angular house ${house} at current location`;
