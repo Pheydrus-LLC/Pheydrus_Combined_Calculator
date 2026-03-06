@@ -72,7 +72,7 @@ function apt(cx: number, cy: number, r: number, deg: number): [number, number] {
 export function renderSpeedometer(grade: string, score: number): string {
   // Arc: clockwise from 210° to 330°, passing through 270° (top of SVG)
   const cx = 100, cy = 90, r = 66;
-  const W = 200, H = 115;
+  const W = 200, H = 155;
 
   const zones: Array<{ start: number; end: number; color: string }> = [
     { start: 210, end: 250, color: '#16a34a' }, // green  — A
@@ -103,8 +103,8 @@ export function renderSpeedometer(grade: string, score: number): string {
   <line x1="${cx}" y1="${cy}" x2="${nx.toFixed(2)}" y2="${ny.toFixed(2)}" stroke="${gc}" stroke-width="3" stroke-linecap="round"/>
   <circle cx="${cx}" cy="${cy}" r="5" fill="#1f2937"/>
   <circle cx="${cx}" cy="${cy}" r="2.5" fill="white"/>
-  <text x="${cx}" y="${cy + 20}" text-anchor="middle" font-size="26" font-weight="900" fill="${gc}" font-family="Arial,sans-serif">${grade}</text>
-  <text x="${cx}" y="${cy + 33}" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="Arial,sans-serif">Score: ${score % 1 === 0 ? score : score.toFixed(1)}</text>
+  <text x="${cx}" y="${cy + 38}" text-anchor="middle" font-size="42" font-weight="900" fill="${gc}" font-family="Arial,sans-serif">${grade}</text>
+  <text x="${cx}" y="${cy + 58}" text-anchor="middle" font-size="10" fill="#9ca3af" font-family="Arial,sans-serif">Score: ${score % 1 === 0 ? score : score.toFixed(1)}</text>
   <text x="${alx.toFixed(1)}" y="${aly.toFixed(1)}" text-anchor="middle" font-size="9" fill="#16a34a" font-weight="700" font-family="Arial,sans-serif">A</text>
   <text x="${flx.toFixed(1)}" y="${fly.toFixed(1)}" text-anchor="middle" font-size="9" fill="#dc2626" font-weight="700" font-family="Arial,sans-serif">F</text>
 </svg>`;
