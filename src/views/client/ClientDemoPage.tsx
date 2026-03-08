@@ -3,6 +3,9 @@
  * Injects hardcoded sample data and redirects to /client/results
  * so the full report UI can be previewed without filling out the form.
  *
+ * The diagnostic is computed live via gradeThreePillars() so it always
+ * reflects the current grading logic — no manual sync needed.
+ *
  * Access at: /client/demo
  */
 
@@ -10,6 +13,9 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { ConsolidatedResults } from '../../models';
 import type { ClientIntakeData } from '../../models/clientIntake';
+import type { NatalChartResult } from '../../models/calculators';
+import type { PlanetHouseResult } from '../../models/diagnostic';
+import { gradeThreePillars } from '../../services/diagnostic/threePillarsGrader';
 
 // ── Sample intake ─────────────────────────────────────────────────────────────
 
@@ -27,6 +33,125 @@ const DEMO_INTAKE: ClientIntakeData = {
   additionalNotes: '',
 };
 
+// ── Mock natal chart (Pillar 1 input) ────────────────────────────────────────
+
+const DEMO_NATAL_CHART: NatalChartResult = {
+  risingSign: 'Aquarius',
+  aspects: [],
+  angleAspects: { asc: [], dsc: [], mc: [], ic: [] },
+  planets: [
+    { planet: { en: 'Sun' },     house: 7,  fullDegree: 295, normDegree: 25, isRetro: 'False', zodiac_sign: { number: 12, name: { en: 'Pisces' } } },
+    { planet: { en: 'Moon' },    house: 3,  fullDegree: 215, normDegree: 5,  isRetro: 'False', zodiac_sign: { number: 8,  name: { en: 'Scorpio' } } },
+    { planet: { en: 'Mars' },    house: 6,  fullDegree: 320, normDegree: 20, isRetro: 'False', zodiac_sign: { number: 11, name: { en: 'Aquarius' } } },
+    { planet: { en: 'Jupiter' }, house: 11, fullDegree: 95,  normDegree: 5,  isRetro: 'False', zodiac_sign: { number: 4,  name: { en: 'Cancer' } } },
+    { planet: { en: 'Venus' },   house: 6,  fullDegree: 320, normDegree: 20, isRetro: 'False', zodiac_sign: { number: 11, name: { en: 'Aquarius' } } },
+    { planet: { en: 'Saturn' },  house: 5,  fullDegree: 290, normDegree: 20, isRetro: 'False', zodiac_sign: { number: 10, name: { en: 'Capricorn' } } },
+    { planet: { en: 'Uranus' },  house: 5,  fullDegree: 285, normDegree: 15, isRetro: 'False', zodiac_sign: { number: 10, name: { en: 'Capricorn' } } },
+    { planet: { en: 'Neptune' }, house: 5,  fullDegree: 282, normDegree: 12, isRetro: 'False', zodiac_sign: { number: 10, name: { en: 'Capricorn' } } },
+    { planet: { en: 'Pluto' },   house: 3,  fullDegree: 218, normDegree: 8,  isRetro: 'False', zodiac_sign: { number: 8,  name: { en: 'Scorpio' } } },
+  ],
+};
+
+// ── Mock destination planet houses (Pillar 3 input) ──────────────────────────
+
+const DEMO_DESTINATION_PLANET_HOUSES: PlanetHouseResult[] = [
+  { planet: 'Sun',     house: 4  },
+  { planet: 'Moon',    house: 12 },
+  { planet: 'Venus',   house: 3  },
+  { planet: 'Mars',    house: 3  },
+  { planet: 'Jupiter', house: 8  },
+  { planet: 'Saturn',  house: 2  },
+  { planet: 'Uranus',  house: 2  },
+  { planet: 'Neptune', house: 2  },
+  { planet: 'Pluto',   house: 12 },
+];
+
+// ── Sample calculators ────────────────────────────────────────────────────────
+
+const DEMO_CALCULATORS: ConsolidatedResults['calculators'] = {
+  transits: {
+    risingSign: 'Aquarius',
+    transits: [
+      {
+        planet: 'Pluto',
+        planetTheme: 'Transformation & Power',
+        houseNumber: 6,
+        houseTheme: 'Work & Health',
+        pastHouseNumber: 5,
+        pastHouseTheme: 'Creativity & Romance',
+        current: { sign: 'Aquarius', start: '2023', end: '2043', high: 'Transformation', low: 'Destruction' },
+        past: { sign: 'Capricorn', start: '2008', end: '2023', high: 'Mastery', low: 'Control' },
+      },
+      {
+        planet: 'Neptune',
+        planetTheme: 'Illusion & Spirituality',
+        houseNumber: 8,
+        houseTheme: 'Shared Resources & Transformation',
+        pastHouseNumber: 7,
+        pastHouseTheme: 'Partnership',
+        current: { sign: 'Aries', start: '2025', end: '2039', high: 'Inspiration', low: 'Confusion' },
+        past: { sign: 'Pisces', start: '2011', end: '2025', high: 'Compassion', low: 'Illusion' },
+      },
+      {
+        planet: 'Uranus',
+        planetTheme: 'Disruption & Innovation',
+        houseNumber: 10,
+        houseTheme: 'Career & Public Reputation',
+        pastHouseNumber: 9,
+        pastHouseTheme: 'Higher Learning',
+        current: { sign: 'Gemini', start: '2025', end: '2033', high: 'Innovation', low: 'Chaos' },
+        past: { sign: 'Taurus', start: '2018', end: '2025', high: 'Liberation', low: 'Disruption' },
+      },
+      {
+        planet: 'Saturn',
+        planetTheme: 'Discipline & Limitation',
+        houseNumber: 8,
+        houseTheme: 'Shared Resources & Transformation',
+        pastHouseNumber: 7,
+        pastHouseTheme: 'Partnership',
+        current: { sign: 'Aries', start: '2025', end: '2028', high: 'Discipline', low: 'Restriction' },
+        past: { sign: 'Pisces', start: '2023', end: '2025', high: 'Structure', low: 'Limitation' },
+      },
+    ],
+  },
+  natalChart: DEMO_NATAL_CHART,
+  lifePath: {
+    lifePathNumber: 7,
+    dayPathNumber: 6,
+    personalYear: 2,
+    chineseZodiac: 'Goat',
+    meanings: {
+      lifePathMeaning: 'The Seeker',
+      lifePathDescription: 'Deep thinker, analytical, spiritual',
+      personalYearMeaning: 'Cooperation & Patience',
+      personalYearDescription: 'A year of partnerships and reflection',
+    },
+  },
+  relocation: null,
+  addressNumerology: {
+    levels: [
+      { level: 'L1', value: '1234', name: 'Unit',          number: 1,  meaning: 'Independence',  description: '', themes: '', challenges: '', gifts: '', reflection: '' },
+      { level: 'L2', value: '4',    name: 'Street Number', number: 4,  meaning: 'Structure',      description: '', themes: '', challenges: '', gifts: '', reflection: '' },
+      { level: 'L3', value: '11',   name: 'Address Total', number: 11, meaning: 'Master Number',  description: '', themes: '', challenges: '', gifts: '', reflection: '' },
+    ],
+    homeZodiac: 'Scorpio',
+    birthZodiac: 'Capricorn',
+    homeZodiacMeaning: null,
+    birthZodiacMeaning: null,
+    compatibility: 'Moderate',
+  },
+};
+
+// ── Compute diagnostic live via the real grader ───────────────────────────────
+
+const DEMO_DIAGNOSTIC = gradeThreePillars({
+  natalChart: DEMO_NATAL_CHART,
+  transits: DEMO_CALCULATORS.transits,
+  lifePath: DEMO_CALCULATORS.lifePath,
+  destinationPlanetHouses: DEMO_DESTINATION_PLANET_HOUSES,
+  addressNumerology: DEMO_CALCULATORS.addressNumerology,
+});
+
 // ── Sample results ────────────────────────────────────────────────────────────
 
 const DEMO_RESULTS: ConsolidatedResults = {
@@ -40,147 +165,9 @@ const DEMO_RESULTS: ConsolidatedResults = {
     currentLocation: 'Los Angeles, CA',
     address: '1234 Sunset Blvd, Los Angeles, CA 90028',
   },
-  calculators: {
-    transits: {
-      risingSign: 'Aquarius',
-      transits: [
-        {
-          planet: 'Pluto',
-          planetTheme: 'Transformation & Power',
-          houseNumber: 6,
-          houseTheme: 'Work & Health',
-          pastHouseNumber: 5,
-          pastHouseTheme: 'Creativity & Romance',
-          current: { sign: 'Aquarius', start: '2023', end: '2043', high: 'Transformation', low: 'Destruction' },
-          past: { sign: 'Capricorn', start: '2008', end: '2023', high: 'Mastery', low: 'Control' },
-        },
-        {
-          planet: 'Neptune',
-          planetTheme: 'Illusion & Spirituality',
-          houseNumber: 8,
-          houseTheme: 'Shared Resources & Transformation',
-          pastHouseNumber: 7,
-          pastHouseTheme: 'Partnership',
-          current: { sign: 'Aries', start: '2025', end: '2039', high: 'Inspiration', low: 'Confusion' },
-          past: { sign: 'Pisces', start: '2011', end: '2025', high: 'Compassion', low: 'Illusion' },
-        },
-        {
-          planet: 'Uranus',
-          planetTheme: 'Disruption & Innovation',
-          houseNumber: 10,
-          houseTheme: 'Career & Public Reputation',
-          pastHouseNumber: 9,
-          pastHouseTheme: 'Higher Learning',
-          current: { sign: 'Gemini', start: '2025', end: '2033', high: 'Innovation', low: 'Chaos' },
-          past: { sign: 'Taurus', start: '2018', end: '2025', high: 'Liberation', low: 'Disruption' },
-        },
-        {
-          planet: 'Saturn',
-          planetTheme: 'Discipline & Limitation',
-          houseNumber: 8,
-          houseTheme: 'Shared Resources & Transformation',
-          pastHouseNumber: 7,
-          pastHouseTheme: 'Partnership',
-          current: { sign: 'Aries', start: '2025', end: '2028', high: 'Discipline', low: 'Restriction' },
-          past: { sign: 'Pisces', start: '2023', end: '2025', high: 'Structure', low: 'Limitation' },
-        },
-      ],
-    },
-    natalChart: null,
-    lifePath: {
-      lifePathNumber: 7,
-      dayPathNumber: 6,
-      personalYear: 2,
-      chineseZodiac: 'Goat',
-      meanings: {
-        lifePathMeaning: 'The Seeker',
-        lifePathDescription: 'Deep thinker, analytical, spiritual',
-        personalYearMeaning: 'Cooperation & Patience',
-        personalYearDescription: 'A year of partnerships and reflection',
-      },
-    },
-    relocation: null,
-    addressNumerology: {
-      levels: [
-        { level: 'L1', value: '1234', name: 'Unit', number: 1, meaning: 'Independence', description: '', themes: '', challenges: '', gifts: '', reflection: '' },
-        { level: 'L2', value: '4', name: 'Street Number', number: 4, meaning: 'Structure', description: '', themes: '', challenges: '', gifts: '', reflection: '' },
-        { level: 'L3', value: '11', name: 'Address Total', number: 11, meaning: 'Master Number', description: '', themes: '', challenges: '', gifts: '', reflection: '' },
-      ],
-      homeZodiac: 'Scorpio',
-      birthZodiac: 'Capricorn',
-      homeZodiacMeaning: null,
-      birthZodiacMeaning: null,
-      compatibility: 'Moderate',
-    },
-  },
-  diagnostic: {
-    pillars: [
-      {
-        pillar: 1,
-        name: 'Structure',
-        description: 'What you were born with',
-        fCount: 3,
-        cCount: 0,
-        aCount: 1,
-        items: [
-          { source: 'Natal Sun in House 7 (Pisces)', pillar: 1, section: 'Natal Angular', planet: 'Sun', house: 7, grade: 'A', reason: 'Benefic Sun in angular house 7' },
-          { source: 'Natal Moon in House 3 (Scorpio)', pillar: 1, section: 'Natal Angular', planet: 'Moon', house: 3, grade: 'Neutral', reason: 'Moon in house 3 (not angular)' },
-          { source: 'Natal Mars in House 6 (Aquarius)', pillar: 1, section: 'Natal Angular', planet: 'Mars', house: 6, grade: 'Neutral', reason: 'Mars in house 6 (not angular)' },
-          { source: 'Natal Jupiter in House 11 (Cancer)', pillar: 1, section: 'Natal Angular', planet: 'Jupiter', house: 11, grade: 'Neutral', reason: 'Jupiter in house 11 (not angular)' },
-          { source: 'Natal Venus in House 6 (Aquarius)', pillar: 1, section: 'Natal Angular', planet: 'Venus', house: 6, grade: 'Neutral', reason: 'Venus in house 6 (not angular)' },
-          { source: 'Natal Saturn in House 5 (Capricorn)', pillar: 1, section: 'Natal Angular', planet: 'Saturn', house: 5, grade: 'F', reason: 'Malefic Saturn in angular house 5' },
-          { source: 'Natal Uranus in House 5 (Capricorn)', pillar: 1, section: 'Natal Angular', planet: 'Uranus', house: 5, grade: 'F', reason: 'Malefic Uranus in angular house 5' },
-          { source: 'Natal Neptune in House 5 (Capricorn)', pillar: 1, section: 'Natal Angular', planet: 'Neptune', house: 5, grade: 'F', reason: 'Malefic Neptune in angular house 5' },
-          { source: 'Natal Pluto in House 3 (Scorpio)', pillar: 1, section: 'Natal Angular', planet: 'Pluto', house: 3, grade: 'Neutral', reason: 'Pluto in house 3 (not angular)' },
-        ],
-      },
-      {
-        pillar: 2,
-        name: 'Timing',
-        description: 'What is happening now',
-        fCount: 1,
-        cCount: 3,
-        aCount: 0,
-        items: [
-          { source: 'Transit Pluto in House 6 (Aquarius)', pillar: 2, section: 'Transit Angular', planet: 'Pluto', house: 6, grade: 'C', reason: 'Malefic transit Pluto in pressure house 6 (2nd/6th/8th/11th)' },
-          { source: 'Transit Neptune in House 8 (Aries)', pillar: 2, section: 'Transit Angular', planet: 'Neptune', house: 8, grade: 'C', reason: 'Malefic transit Neptune in pressure house 8 (2nd/6th/8th/11th)' },
-          { source: 'Transit Saturn in House 8 (Aries)', pillar: 2, section: 'Transit Angular', planet: 'Saturn', house: 8, grade: 'C', reason: 'Malefic transit Saturn in pressure house 8 (2nd/6th/8th/11th)' },
-          { source: 'Transit Uranus in House 10 (Gemini)', pillar: 2, section: 'Transit Angular', planet: 'Uranus', house: 10, grade: 'F', reason: 'Malefic transit Uranus in angular house 10' },
-          { source: 'Life Cycle Year 2', pillar: 2, section: 'Life Cycle', grade: 'Neutral', reason: 'Personal year 2 is neutral' },
-        ],
-      },
-      {
-        pillar: 3,
-        name: 'Environment',
-        description: 'Where you are living',
-        fCount: 0,
-        cCount: 3,
-        aCount: 1,
-        items: [
-          { source: 'Env Sun in House 4', pillar: 3, section: 'Relocation Angular', planet: 'Sun', house: 4, grade: 'Neutral', reason: 'Sun in house 4 at current location (not angular)' },
-          { source: 'Env Moon in House 12', pillar: 3, section: 'Relocation Angular', planet: 'Moon', house: 12, grade: 'Neutral', reason: 'Moon in house 12 at current location (not angular)' },
-          { source: 'Env Venus in House 3', pillar: 3, section: 'Relocation Angular', planet: 'Venus', house: 3, grade: 'Neutral', reason: 'Venus in house 3 at current location (not angular)' },
-          { source: 'Env Mars in House 3', pillar: 3, section: 'Relocation Angular', planet: 'Mars', house: 3, grade: 'Neutral', reason: 'Mars in house 3 at current location (not angular)' },
-          { source: 'Env Jupiter in House 8', pillar: 3, section: 'Relocation Angular', planet: 'Jupiter', house: 8, grade: 'Neutral', reason: 'Jupiter in house 8 at current location (not angular)' },
-          { source: 'Env Saturn in House 2', pillar: 3, section: 'Relocation Angular', planet: 'Saturn', house: 2, grade: 'C', reason: 'Saturn in pressure house 2 at current location (2nd/6th/8th/11th)' },
-          { source: 'Env Uranus in House 2', pillar: 3, section: 'Relocation Angular', planet: 'Uranus', house: 2, grade: 'C', reason: 'Uranus in pressure house 2 at current location (2nd/6th/8th/11th)' },
-          { source: 'Env Neptune in House 2', pillar: 3, section: 'Relocation Angular', planet: 'Neptune', house: 2, grade: 'C', reason: 'Neptune in pressure house 2 at current location (2nd/6th/8th/11th)' },
-          { source: 'Env Pluto in House 12', pillar: 3, section: 'Relocation Angular', planet: 'Pluto', house: 12, grade: 'Neutral', reason: 'Pluto in house 12 at current location (not angular)' },
-          { source: 'L3: 11', pillar: 3, section: 'Address', grade: 'A', reason: 'L3 number 11 is supportive' },
-        ],
-      },
-    ],
-    totalFs: 4,
-    totalCs: 6,
-    totalAs: 2,
-    score: 7,
-    finalGrade: 'F',
-    allItems: [], // populated below
-  },
+  calculators: DEMO_CALCULATORS,
+  diagnostic: DEMO_DIAGNOSTIC,
 };
-
-// Flatten allItems from pillars
-DEMO_RESULTS.diagnostic!.allItems = DEMO_RESULTS.diagnostic!.pillars.flatMap((p) => p.items);
 
 // ── Page ──────────────────────────────────────────────────────────────────────
 
