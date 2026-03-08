@@ -299,7 +299,7 @@ const RELOCATION_C_INTERP: Record<string, Partial<Record<number, (goal: GoalCate
   Saturn: {
     2: (goal) =>
       `Saturn in your financial house at this location creates a persistent ceiling on your ${goal === 'love' ? 'emotional and relationship resources' : 'income and financial momentum'}. Shadow: chronic scarcity consciousness, under-charging, financial avoidance that limits what you allow yourself to build. Conscious path: using Saturn's discipline to construct the most durable financial foundation of your life — this location rewards the committed builder who shows up consistently.`,
-    6: (goal) =>
+    6: (_goal) =>
       `Saturn in your work house at this location adds a heavy, grinding quality to your daily effort and productivity. Shadow: burnout, overwork without commensurate reward, perfectionism that stalls more than it sharpens. Conscious path: building an exceptionally disciplined daily structure here — Saturn at this address rewards those who systematize their work down to what actually produces results and release the rest.`,
     8: (goal) =>
       `Saturn in your shared resources house at this location creates friction around financial partnerships, investment, and access to outside capital. Shadow: isolation from the collaborative financial opportunities that could scale your ${goal === 'love' ? 'life' : 'work'}. Conscious path: building structured, trustworthy financial agreements from this address — the rigor and seriousness you bring to partnerships here signals reliability that attracts serious collaborators.`,
@@ -307,11 +307,11 @@ const RELOCATION_C_INTERP: Record<string, Partial<Record<number, (goal: GoalCate
       `Saturn in your networks house at this location creates social contraction — the professional and community connections that advance your ${goal === 'love' ? 'love life' : 'career'} feel harder to build and maintain here. Shadow: isolation and missed opportunity through over-selectivity. Conscious path: investing in depth over breadth — this location rewards the alliances you cultivate with real discipline and long-term consistency.`,
   },
   Uranus: {
-    2: (goal) =>
+    2: (_goal) =>
       `Uranus in your financial house at this location amplifies erratic income patterns — financial breakthroughs followed by sudden losses, inconsistent cash flow, and an environment that resists conventional wealth-building approaches. Shadow: impulsive financial decisions made in the volatility this address generates. Conscious path: innovating your income architecture from here — this location rewards unconventional revenue strategies and penalizes traditional ones.`,
-    6: (goal) =>
+    6: (_goal) =>
       `Uranus in your work house at this location creates a disruptive, unpredictable daily work environment. Shadow: inconsistent output and resistance to routine that reads as unreliability to the people you work with. Conscious path: building nonconventional work systems around your unique intelligence — this location amplifies creative disruption in your process that can produce breakthrough results when channeled rather than resisted.`,
-    8: (goal) =>
+    8: (_goal) =>
       `Uranus in your shared resources house at this location creates volatile energy around financial partnerships and joint ventures. Shadow: sudden breakdowns in collaborative agreements, unpredictable access to outside capital. Conscious path: pioneering unconventional financial structures from this address — Uranus here rewards the innovator willing to reshape what partnership and shared capital can look like.`,
     11: (goal) =>
       `Uranus in your networks house at this location creates unstable professional and social communities around you. Shadow: sudden loss of key alliances and chaotic group dynamics that undermine your ${goal === 'love' ? 'social foundation' : 'professional goals'}. Conscious path: leading the disruption in your field from this address — Uranus here amplifies your ability to build visionary communities that don't yet exist elsewhere.`,
@@ -319,21 +319,21 @@ const RELOCATION_C_INTERP: Record<string, Partial<Record<number, (goal: GoalCate
   Neptune: {
     2: (goal) =>
       `Neptune in your financial house at this location creates a foggy relationship with money and ${goal === 'love' ? 'emotional resources' : 'income clarity'}. Shadow: unclear financial boundaries, self-deception about your true financial state, chronic undercharging for your work. Conscious path: aligning your income with genuine creative and spiritual purpose from this address — Neptune here rewards work that carries real meaning and is priced with clarity about its actual worth.`,
-    6: (goal) =>
+    6: (_goal) =>
       `Neptune in your work house at this location blurs your work responsibilities and daily structure. Shadow: unclear boundaries with collaborators, escapism from practical demands, difficulty bringing inspired ideas into executable form. Conscious path: infusing your daily work with genuine vision and creative depth — this location amplifies inspired output when you bring spiritual clarity and practical discipline to your process simultaneously.`,
-    8: (goal) =>
+    8: (_goal) =>
       `Neptune in your shared resources house at this location creates foggy energy around financial partnerships and joint capital. Shadow: potential deception or self-deception in financial agreements, confusion about what each party is actually contributing and receiving. Conscious path: building partnerships grounded in deep alignment of values and fully transparent agreements from this address.`,
-    11: (goal) =>
+    11: (_goal) =>
       `Neptune in your networks house at this location blurs your professional communities and goal clarity. Shadow: idealizing communities that eventually disappoint, diffuse goals that never fully crystallize into action. Conscious path: building community around transcendent shared purpose from here — Neptune amplifies your ability to inspire others toward a vision they couldn't articulate on their own.`,
   },
   Pluto: {
     2: (goal) =>
       `Pluto in your financial house at this location amplifies all-or-nothing energy around money and ${goal === 'love' ? 'emotional security' : 'income'}. Shadow: obsessive financial patterns, power struggles around resources, destroying financial stability as it forms. Conscious path: using Pluto's transformative force at this address to permanently upgrade your relationship with money — not just increase it, but fundamentally change the pattern underneath.`,
-    6: (goal) =>
+    6: (_goal) =>
       `Pluto in your work house at this location intensifies power dynamics and obsessive patterns in your daily work environment. Shadow: burnout from relentless drive, power struggles with collaborators that destroy productive relationships. Conscious path: using this location's intensity to fundamentally transform how you work — eliminating what burns you out and rebuilding around your true highest-power contributions exclusively.`,
-    8: (goal) =>
+    8: (_goal) =>
       `Pluto in your shared resources house at this location creates intense power dynamics around financial partnerships and joint capital. Shadow: controlling or being controlled in financial agreements, all-or-nothing energy that collapses partnerships. Conscious path: transforming your relationship with shared resources from here — using Pluto's depth to build financial structures based on genuine power alignment rather than domination.`,
-    11: (goal) =>
+    11: (_goal) =>
       `Pluto in your networks house at this location creates power dynamics within your professional communities and goal structures. Shadow: power struggles that destroy valuable alliances before they bear fruit. Conscious path: using Pluto's transformative force to permanently upgrade your professional circle from this address — releasing what's limiting you and pulling in the powerful alliances that can actually move you forward.`,
   },
 };
