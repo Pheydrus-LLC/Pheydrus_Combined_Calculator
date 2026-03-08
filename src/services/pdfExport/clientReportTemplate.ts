@@ -177,17 +177,17 @@ export function renderHouseWheel(items: GradeItem[], size = 120): string {
   const segments: string[] = [];
   for (let i = 0; i < 12; i++) {
     const h = i + 1;
-    const startDeg = -90 + i * 30;
-    const endDeg = startDeg + 30;
+    const startDeg = 180 - i * 30;
+    const endDeg = startDeg - 30;
     const grade = houseGrade[h];
     const fill = grade ? (FILL[grade] ?? '#f3f4f6') : '#f3f4f6';
     const stroke = grade ? 'white' : '#e5e7eb';
 
     const [x1, y1] = apt(cx, cy, outerR, startDeg);
     const [x2, y2] = apt(cx, cy, outerR, endDeg);
-    const path = `M ${cx} ${cy} L ${x1.toFixed(2)} ${y1.toFixed(2)} A ${outerR.toFixed(2)} ${outerR.toFixed(2)} 0 0 1 ${x2.toFixed(2)} ${y2.toFixed(2)} Z`;
+    const path = `M ${cx} ${cy} L ${x1.toFixed(2)} ${y1.toFixed(2)} A ${outerR.toFixed(2)} ${outerR.toFixed(2)} 0 0 0 ${x2.toFixed(2)} ${y2.toFixed(2)} Z`;
 
-    const midDeg = startDeg + 15;
+    const midDeg = startDeg - 15;
     const [tx, ty] = apt(cx, cy, labelR, midDeg);
     const fw = grade ? '700' : '400';
     const fc = grade ? '#1f2937' : '#9ca3af';

@@ -78,14 +78,26 @@ function getPillar2MaxEndYear(pillar2Items: GradeItem[], transits: PlanetaryTran
   return max;
 }
 
+function getPillar3MaxEndYear(pillar3Items: GradeItem[], transits: PlanetaryTransit[]): number | null {
+  let max: number | null = null;
+  for (const item of pillar3Items) {
+    if (!item.planet) continue;
+    const y = getTransitEndYear(item.planet, transits);
+    if (y !== null && (max === null || y > max)) max = y;
+  }
+  return max;
+}
+
 function PillarTimeline({
   pillarNum,
   pillar2Items,
+  pillar3Items,
   transits,
   addressMoveDate,
 }: {
   pillarNum: 1 | 2 | 3;
   pillar2Items: GradeItem[];
+  pillar3Items: GradeItem[];
   transits: PlanetaryTransit[];
   addressMoveDate: string;
 }) {
@@ -99,7 +111,9 @@ function PillarTimeline({
     );
   }
 
-  const endYear = getPillar2MaxEndYear(pillar2Items, transits);
+  const endYear = pillarNum === 2
+    ? getPillar2MaxEndYear(pillar2Items, transits)
+    : getPillar3MaxEndYear(pillar3Items, transits);
 
   if (pillarNum === 2) {
     return (
@@ -178,6 +192,7 @@ function PillarDeepDiveCard({
   goal,
   transits,
   pillar2Items,
+  pillar3Items,
   addressMoveDate,
 }: {
   pillar: PillarSummary;
@@ -188,6 +203,7 @@ function PillarDeepDiveCard({
   goal: GoalCategory;
   transits: PlanetaryTransit[];
   pillar2Items: GradeItem[];
+  pillar3Items: GradeItem[];
   addressMoveDate: string;
 }) {
   const scoringItems = pillar.items.filter(
@@ -245,6 +261,7 @@ function PillarDeepDiveCard({
       <PillarTimeline
         pillarNum={index}
         pillar2Items={pillar2Items}
+        pillar3Items={pillar3Items}
         transits={transits}
         addressMoveDate={addressMoveDate}
       />
@@ -487,6 +504,7 @@ export function ClientResultsPage() {
                 goal={goal}
                 transits={transits}
                 pillar2Items={p2.items}
+                pillar3Items={p3.items}
                 addressMoveDate={intake.addressMoveDate}
               />
             ))}

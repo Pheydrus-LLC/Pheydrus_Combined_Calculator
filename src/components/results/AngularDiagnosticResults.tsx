@@ -126,13 +126,13 @@ function computeHouseGrades(items: GradeItem[]): Record<number, 'F' | 'C' | 'A' 
 }
 
 function houseSegmentPath(cx: number, cy: number, outerR: number, innerR: number, startDeg: number): string {
-  const endDeg = startDeg + 30;
+  const endDeg = startDeg - 30;
   const toRad = (d: number) => (d * Math.PI) / 180;
   const s1 = { x: cx + outerR * Math.cos(toRad(startDeg)), y: cy + outerR * Math.sin(toRad(startDeg)) };
   const e1 = { x: cx + outerR * Math.cos(toRad(endDeg)), y: cy + outerR * Math.sin(toRad(endDeg)) };
   const e2 = { x: cx + innerR * Math.cos(toRad(endDeg)), y: cy + innerR * Math.sin(toRad(endDeg)) };
   const s2 = { x: cx + innerR * Math.cos(toRad(startDeg)), y: cy + innerR * Math.sin(toRad(startDeg)) };
-  return `M ${s1.x.toFixed(1)} ${s1.y.toFixed(1)} A ${outerR} ${outerR} 0 0 1 ${e1.x.toFixed(1)} ${e1.y.toFixed(1)} L ${e2.x.toFixed(1)} ${e2.y.toFixed(1)} A ${innerR} ${innerR} 0 0 0 ${s2.x.toFixed(1)} ${s2.y.toFixed(1)} Z`;
+  return `M ${s1.x.toFixed(1)} ${s1.y.toFixed(1)} A ${outerR} ${outerR} 0 0 0 ${e1.x.toFixed(1)} ${e1.y.toFixed(1)} L ${e2.x.toFixed(1)} ${e2.y.toFixed(1)} A ${innerR} ${innerR} 0 0 1 ${s2.x.toFixed(1)} ${s2.y.toFixed(1)} Z`;
 }
 
 function HouseWheel({ items, label }: { items: GradeItem[]; label?: string }) {
@@ -147,7 +147,7 @@ function HouseWheel({ items, label }: { items: GradeItem[]; label?: string }) {
         {Array.from({ length: 12 }, (_, i) => {
           const houseNum = i + 1;
           const startDeg = (180 - i * 30 + 360) % 360;
-          const midDeg = startDeg + 15;
+          const midDeg = startDeg - 15;
           const rad = (midDeg * Math.PI) / 180;
           const grade = houseGrades[houseNum] ?? 'Neutral';
           const lx = cx + labelR * Math.cos(rad);
@@ -309,12 +309,12 @@ export function AngularDiagnosticResults({ result }: AngularDiagnosticResultsPro
                 <p className="text-2xl font-bold text-amber-500">{result.totalCs}</p>
               </div>
               <div className="text-right">
-                <p className="text-xs text-[#6b6188]">Score</p>
-                <p className="text-2xl font-bold text-[#6b6188]">{result.score % 1 === 0 ? result.score : result.score.toFixed(1)}</p>
-              </div>
-              <div className="text-right">
                 <p className="text-xs text-[#6b6188]">Total A&apos;s</p>
                 <p className="text-2xl font-bold text-emerald-600">{result.totalAs}</p>
+              </div>
+              <div className="text-right">
+                <p className="text-xs text-[#6b6188]">Score</p>
+                <p className="text-2xl font-bold text-[#6b6188]">{result.score % 1 === 0 ? result.score : result.score.toFixed(1)}</p>
               </div>
               <div
                 className={`w-16 h-16 rounded-lg flex flex-col items-center justify-center border-2 ${gradeStyle.border} ${gradeStyle.bg}`}
