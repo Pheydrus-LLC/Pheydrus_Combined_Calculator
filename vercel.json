@@ -18,7 +18,7 @@
   ],
   "rewrites": [
     {
-      "source": "/((?!assets|ephe).*)",
+      "source": "/((?!assets|ephe|api|knowledge-base).*)",
       "destination": "/index.html"
     }
   ]
