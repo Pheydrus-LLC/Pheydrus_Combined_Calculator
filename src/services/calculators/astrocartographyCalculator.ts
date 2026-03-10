@@ -25,8 +25,9 @@ import { birthLocalToJulianDay } from '../../utils/astro/time';
 const BENEFIC_PLANETS = ['Sun', 'Moon', 'Venus', 'Jupiter'] as const;
 
 // Latitudes to sample when tracing each line.
+// 6 points keeps reverse-geocoding calls manageable (~96 total).
 // Avoid high latitudes where Placidus can break.
-const SEARCH_LATITUDES = [-55, -45, -35, -25, -15, -5, 5, 15, 25, 35, 45, 55];
+const SEARCH_LATITUDES = [-45, -25, -5, 15, 35, 55];
 
 // Number of binary-search iterations per point (2^15 ≈ 0.01° precision)
 const BINARY_SEARCH_ITERATIONS = 15;
@@ -142,6 +143,29 @@ function getGeographicRegion(lat: number, lon: number): string {
   return 'Southern Pacific';
 }
 
+/**
+ * Reverse geocode a lat/lon to "City, State, Country" using BigDataCloud's
+ * free client-side API (no key required).
+ * Falls back to the broad region label on any network error.
+ */
+async function reverseGeocode(lat: number, lon: number, fallback: string): Promise<string> {
+  try {
+    const res = await fetch(
+      `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=en`
+    );
+    if (!res.ok) return fallback;
+    const data = await res.json();
+    const parts = [
+      data.city || data.locality || data.localityInfo?.administrative?.[2]?.name,
+      data.principalSubdivision,
+      data.countryName,
+    ].filter(Boolean);
+    return parts.length > 0 ? parts.join(', ') : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
 // ─── Main export ─────────────────────────────────────────────────────────────
 
 /**
@@ -194,11 +218,14 @@ export async function calculateAstrocartography(
       for (const lat of SEARCH_LATITUDES) {
         try {
           const { lon, orb } = await binarySearchLongitude(jdUT, lat, searchKey, target);
+          const region = getGeographicRegion(lat, lon);
+          const locationName = await reverseGeocode(lat, lon, region);
           points.push({
             latitude: lat,
             longitude: lon,
             orb,
-            region: getGeographicRegion(lat, lon),
+            region,
+            locationName,
           });
         } catch {
           // Skip latitudes where the ephemeris fails (e.g. polar Placidus issues)

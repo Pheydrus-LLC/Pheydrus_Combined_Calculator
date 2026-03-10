@@ -297,6 +297,7 @@ export interface AstrocartographyPoint {
   longitude: number;
   orb: number;
   region: string;
+  locationName: string; // "City, State, Country" from reverse geocoding
 }
 
 export interface AstrocartographyLine {

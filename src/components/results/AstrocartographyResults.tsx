@@ -63,7 +63,7 @@ function PlanetSection({ line }: { line: AstrocartographyLine }) {
       <ul className="space-y-1">
         {dedupedPoints.map((pt, i) => (
           <li key={i} className="flex items-center justify-between text-xs">
-            <span className="text-[#2d2a3e] font-medium">{pt.region}</span>
+            <span className="text-[#2d2a3e] font-medium">{pt.locationName}</span>
             <span className="text-gray-400 font-mono">{formatCoord(pt.latitude, pt.longitude)}</span>
           </li>
         ))}
