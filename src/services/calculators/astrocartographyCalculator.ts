@@ -25,9 +25,10 @@ import { birthLocalToJulianDay } from '../../utils/astro/time';
 const BENEFIC_PLANETS = ['Sun', 'Moon', 'Venus', 'Jupiter'] as const;
 
 // Latitudes to sample when tracing each line.
-// 6 points keeps reverse-geocoding calls manageable (~96 total).
-// Avoid high latitudes where Placidus can break.
-const SEARCH_LATITUDES = [-45, -25, -5, 15, 35, 55];
+// Denser grid improves chances of hitting land vs. open ocean.
+// 34° is included to cover the Southern California / Mediterranean band.
+// Avoid latitudes above ~58° where Placidus becomes unreliable.
+const SEARCH_LATITUDES = [-45, -30, -18, -5, 5, 15, 25, 34, 42, 50, 56];
 
 // Number of binary-search iterations per point (2^15 ≈ 0.01° precision)
 const BINARY_SEARCH_ITERATIONS = 15;
@@ -146,23 +147,26 @@ function getGeographicRegion(lat: number, lon: number): string {
 /**
  * Reverse geocode a lat/lon to "City, State, Country" using BigDataCloud's
  * free client-side API (no key required).
- * Falls back to the broad region label on any network error.
+ * Returns null when the coordinate is in open water (no countryName),
+ * so callers can skip ocean points entirely.
  */
-async function reverseGeocode(lat: number, lon: number, fallback: string): Promise<string> {
+async function reverseGeocode(lat: number, lon: number): Promise<string | null> {
   try {
     const res = await fetch(
       `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=en`
     );
-    if (!res.ok) return fallback;
+    if (!res.ok) return null;
     const data = await res.json();
+    // Open ocean / unclaimed water — BigDataCloud returns no countryName
+    if (!data.countryName) return null;
     const parts = [
       data.city || data.locality || data.localityInfo?.administrative?.[2]?.name,
       data.principalSubdivision,
       data.countryName,
     ].filter(Boolean);
-    return parts.length > 0 ? parts.join(', ') : fallback;
+    return parts.length > 0 ? parts.join(', ') : null;
   } catch {
-    return fallback;
+    return null;
   }
 }
 
@@ -218,8 +222,9 @@ export async function calculateAstrocartography(
       for (const lat of SEARCH_LATITUDES) {
         try {
           const { lon, orb } = await binarySearchLongitude(jdUT, lat, searchKey, target);
+          const locationName = await reverseGeocode(lat, lon);
+          if (!locationName) continue; // skip open ocean / water points
           const region = getGeographicRegion(lat, lon);
-          const locationName = await reverseGeocode(lat, lon, region);
           points.push({
             latitude: lat,
             longitude: lon,

@@ -32,14 +32,15 @@ function formatCoord(lat: number, lon: number): string {
   return `${Math.abs(lat).toFixed(1)}°${latDir}, ${Math.abs(lon).toFixed(1)}°${lonDir}`;
 }
 
-/** Deduplicate points that fall in the same region, keeping one per region. */
-function deduplicateByRegion(
+/** Deduplicate points by country, keeping one city per country. */
+function deduplicateByCountry(
   points: AstrocartographyLine['points']
 ): AstrocartographyLine['points'] {
   const seen = new Set<string>();
   return points.filter((p) => {
-    if (seen.has(p.region)) return false;
-    seen.add(p.region);
+    const country = p.locationName.split(', ').pop() ?? p.region;
+    if (seen.has(country)) return false;
+    seen.add(country);
     return true;
   });
 }
@@ -50,7 +51,7 @@ function PlanetSection({ line }: { line: AstrocartographyLine }) {
     text: 'text-slate-800',
     border: 'border-slate-200',
   };
-  const dedupedPoints = deduplicateByRegion(line.points);
+  const dedupedPoints = deduplicateByCountry(line.points);
 
   return (
     <div className={`rounded-lg border ${colors.border} ${colors.bg} p-3`}>
