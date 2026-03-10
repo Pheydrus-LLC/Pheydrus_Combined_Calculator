@@ -61,52 +61,81 @@ export function AstrocartographyPage() {
       title="Astrocartography"
       subtitle="Find where in the world your benefic planets are angular"
     >
+      {/* Print styles */}
+      <style>{`
+        @media print {
+          #astro-form, #astro-actions { display: none !important; }
+          header, footer { display: none !important; }
+          body { background: white !important; }
+          .shadow-lg { box-shadow: none !important; }
+        }
+      `}</style>
+
       <div className="space-y-6">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label className={labelClass}>Date of Birth</label>
-            <input
-              type="date"
-              value={dateOfBirth}
-              onChange={(e) => setDateOfBirth(e.target.value)}
-              className={inputClass}
-            />
+        {/* Form — hidden on print */}
+        <div id="astro-form" className="space-y-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className={labelClass}>Date of Birth</label>
+              <input
+                type="date"
+                value={dateOfBirth}
+                onChange={(e) => setDateOfBirth(e.target.value)}
+                className={inputClass}
+              />
+            </div>
+            <div>
+              <label className={labelClass}>Time of Birth (24h)</label>
+              <input
+                type="time"
+                value={timeOfBirth}
+                onChange={(e) => setTimeOfBirth(e.target.value)}
+                className={inputClass}
+              />
+            </div>
           </div>
-          <div>
-            <label className={labelClass}>Time of Birth (24h)</label>
-            <input
-              type="time"
-              value={timeOfBirth}
-              onChange={(e) => setTimeOfBirth(e.target.value)}
-              className={inputClass}
-            />
+
+          <CityAutocomplete
+            value={birthCity}
+            onChange={setBirthCity}
+            label="Birth City"
+            placeholder="Search for your birth city..."
+          />
+
+          <div className="rounded-xl bg-[#f9f6f0] border border-[#e8dcc8] px-4 py-3 text-sm text-[#7a6a50]">
+            <span className="font-semibold">Planets shown:</span> Sun · Moon · Venus · Jupiter
+            &nbsp;&nbsp;|&nbsp;&nbsp;
+            <span className="font-semibold">Angles:</span> ASC · DSC · MC · IC
+            <br />
+            <span className="text-xs text-[#a08c6e]">
+              Checks ~300 major cities worldwide — may take a few seconds.
+              Results are sorted by <span className="font-semibold">tightest orb first</span>: the
+              city at the top of each list is the closest match to the exact line, meaning that
+              planet's influence is strongest there. Cities further down the list are still within
+              range (up to 9°) but with weaker influence.
+            </span>
           </div>
         </div>
 
-        <CityAutocomplete
-          value={birthCity}
-          onChange={setBirthCity}
-          label="Birth City"
-          placeholder="Search for your birth city..."
-        />
+        {/* Buttons — hidden on print */}
+        <div id="astro-actions" className="space-y-3">
+          <button
+            onClick={handleCalculate}
+            disabled={!isReady || isCalculating}
+            className="w-full py-3 bg-[#9a7d4e] hover:bg-[#b8944a] text-white font-bold rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {isCalculating ? 'Calculating lines…' : 'Find My Astrocartography Lines'}
+          </button>
 
-        <div className="rounded-xl bg-[#f9f6f0] border border-[#e8dcc8] px-4 py-3 text-sm text-[#7a6a50]">
-          <span className="font-semibold">Planets shown:</span> Sun · Moon · Venus · Jupiter
-          &nbsp;&nbsp;|&nbsp;&nbsp;
-          <span className="font-semibold">Angles:</span> ASC · DSC · MC · IC
-          <br />
-          <span className="text-xs text-[#a08c6e]">
-            Checks ~300 major cities worldwide — may take a few seconds.
-          </span>
+          {result && (
+            <button
+              onClick={() => window.print()}
+              className="w-full py-2.5 border border-[#9a7d4e] text-[#9a7d4e] hover:bg-[#f9f6f0] font-semibold rounded-xl transition-colors text-sm"
+            >
+              Print / Save as PDF
+            </button>
+          )}
         </div>
-
-        <button
-          onClick={handleCalculate}
-          disabled={!isReady || isCalculating}
-          className="w-full py-3 bg-[#9a7d4e] hover:bg-[#b8944a] text-white font-bold rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          {isCalculating ? 'Calculating lines…' : 'Find My Astrocartography Lines'}
-        </button>
 
         {error && <p className="text-red-500 text-sm">{error}</p>}
 
