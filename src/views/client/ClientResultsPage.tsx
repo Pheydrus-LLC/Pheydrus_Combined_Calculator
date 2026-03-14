@@ -570,7 +570,8 @@ export function ClientResultsPage() {
               href="https://calendly.com/pheydrus_strategy/1-1-alignment-strategy-call-clone-1"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block px-7 py-3.5 bg-[#c4a96b] hover:bg-[#d4b97b] text-white font-bold rounded-xl transition-colors text-sm"
+              className="inline-block px-7 py-3.5 bg-[#c4a96b] hover:bg-[#d4b97b] font-bold rounded-xl transition-colors text-sm"
+              style={{ color: '#ffffff' }}
             >
               Book Your 1:1 Alignment &amp; Strategy Call →
             </a>
