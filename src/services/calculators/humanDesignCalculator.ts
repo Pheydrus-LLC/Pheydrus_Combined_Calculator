@@ -78,6 +78,11 @@ export async function calculateHumanDesign(
   for (const { gate } of Object.values(personalityGates)) allGates.add(gate);
   for (const { gate } of Object.values(designGates)) allGates.add(gate);
 
+  // DEBUG — remove after diagnosis
+  console.log('[HD] personality gates:', JSON.stringify(personalityGates));
+  console.log('[HD] design gates:', JSON.stringify(designGates));
+  console.log('[HD] all active gate numbers:', [...allGates].sort((a, b) => a - b));
+
   const { definedCenters, activeChannels } = getDefinedCentersAndChannels(allGates);
   const { type, authority } = getTypeAndAuthority(definedCenters, allGates);
   const profile = getProfile(personalityGates, designGates);
