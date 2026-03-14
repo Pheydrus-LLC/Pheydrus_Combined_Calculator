@@ -248,6 +248,32 @@ export async function getHouseCusps(
 }
 
 /**
+ * Get a single body's ecliptic longitude for any Julian Day
+ * Used for iterative calculations (e.g. finding Human Design design date)
+ *
+ * @param jdUT - Julian Day in UT
+ * @param bodyId - Swiss Ephemeris body ID (0=Sun, 1=Moon, 11=True Node, etc.)
+ * @returns Ecliptic longitude 0–360
+ */
+export async function calcBodyLongitude(jdUT: number, bodyId: number): Promise<number> {
+  await initEphemeris();
+
+  if (!swe) {
+    throw new Error('Swiss Ephemeris not initialized');
+  }
+
+  const iflag = swe.SEFLG_SWIEPH | swe.SEFLG_SPEED;
+  const data = swe.swe_calc_ut(jdUT, bodyId, iflag);
+  const lon = data[0];
+
+  if (typeof lon !== 'number') {
+    throw new Error(`Invalid longitude for body ID ${bodyId}`);
+  }
+
+  return normalize360(lon);
+}
+
+/**
  * Reset ephemeris (for testing)
  */
 export function resetEphemeris(): void {
