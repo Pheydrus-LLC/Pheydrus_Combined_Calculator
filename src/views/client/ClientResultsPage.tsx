@@ -573,7 +573,7 @@ export function ClientResultsPage() {
               className="inline-block px-7 py-3.5 bg-[#c4a96b] hover:bg-[#d4b97b] font-bold rounded-xl transition-colors text-sm"
               style={{ color: '#ffffff' }}
             >
-              Book Your 1:1 Alignment &amp; Strategy Call →
+              Book Your Complimentary 1:1 Alignment &amp; Strategy Call →
             </a>
             <p className="text-xs text-gray-500 mt-3">
               Complimentary call · No obligation · Limited spots available
