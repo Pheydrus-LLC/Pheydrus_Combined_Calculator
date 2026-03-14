@@ -74,16 +74,15 @@ export async function calculateHumanDesign(
   ]);
 
   // DEBUG — raw longitudes
-  console.log('[HD] personality longitudes:', JSON.stringify(
-    Object.fromEntries(Object.entries(personalityLons).filter(([k]) =>
-      ['Jupiter','Saturn','Uranus','True Node','Sun'].includes(k)
-    ).map(([k, v]) => [k, +v.toFixed(4)]))
-  ));
-  console.log('[HD] design longitudes:', JSON.stringify(
-    Object.fromEntries(Object.entries(designLons).filter(([k]) =>
-      ['Sun','Jupiter','Saturn','Uranus','True Node'].includes(k)
-    ).map(([k, v]) => [k, +v.toFixed(4)]))
-  ));
+  const debugKeys = ['Sun', 'Jupiter', 'Saturn', 'Uranus', 'True Node'];
+  const pDbg: Record<string, number> = {};
+  const dDbg: Record<string, number> = {};
+  for (const k of debugKeys) {
+    if (personalityLons[k] !== undefined) pDbg[k] = Math.round(personalityLons[k] * 10000) / 10000;
+    if (designLons[k] !== undefined) dDbg[k] = Math.round(designLons[k] * 10000) / 10000;
+  }
+  console.log('[HD] personality longitudes:', JSON.stringify(pDbg));
+  console.log('[HD] design longitudes:', JSON.stringify(dDbg));
 
   const [personalityGates, designGates] = await Promise.all([
     getHDGates(birthJD),
