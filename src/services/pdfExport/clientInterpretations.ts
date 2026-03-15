@@ -97,7 +97,7 @@ const F_INTERP: Record<string, Partial<Record<number, { career: string; love: st
     },
     5: {
       career:
-        'Pluto in your fifth house creates obsessive, all-or-nothing creative energy. The shadow pattern: you pour everything into a project, then destroy it just as it peaks — preventing the consistent creative output that builds a professional reputation. The volatility in your creative life directly undermines the sustained presence career advancement requires.',
+        'Pluto in your fifth house creates obsessive, all-or-nothing energy across both creativity and romance. The shadow pattern in your work: you pour everything into a project, then destroy it just as it peaks — preventing the consistent creative output that builds a professional reputation. In romance, the same all-or-nothing intensity creates consuming connections that burn out before real depth can form.',
       love:
         'Pluto in your romance house drives consuming, obsessive connections that feel electric but rarely sustain. The shadow pattern: you chase the feeling of transformation rather than genuine compatibility — and once a relationship no longer transforms you, you move on. The result is a trail of intense short-term connections that leave both parties burned.',
     },
@@ -123,7 +123,7 @@ const F_INTERP: Record<string, Partial<Record<number, { career: string; love: st
     },
     5: {
       career:
-        'Saturn in your fifth house suppresses the creative spontaneity and playful risk-taking that innovative career moves require. The fear of failure has you over-editing and under-delivering — keeping your creative contributions perpetually in draft form rather than the marketplace where they could actually advance your career.',
+        'Saturn in your fifth house suppresses creative spontaneity, playful risk-taking, and romantic openness — all at once. Professionally, the fear of failure keeps your creative contributions in permanent draft form rather than the marketplace. In romance, the same fear of rejection makes you hold back exactly when vulnerability would create something real, keeping love at arm\'s length just as it could land.',
       love:
         'Saturn in your romance house puts a heavy hand on spontaneity, vulnerability, and the playfulness that attracts connection. The deep fear of rejection makes you hold back exactly when opening up would create something real — keeping love at arm\'s length just as it could land.',
     },
@@ -149,7 +149,7 @@ const F_INTERP: Record<string, Partial<Record<number, { career: string; love: st
     },
     5: {
       career:
-        'Uranus in your fifth house drives explosive creative starts followed by sudden loss of interest before completion. The pattern of brilliant beginnings and abandoned follow-through creates a professional reputation for inconsistency that directly undermines advancement and client trust.',
+        'Uranus in your fifth house drives explosive starts — creatively and romantically — followed by sudden loss of interest before anything matures. Professionally, brilliant beginnings and abandoned follow-through create a reputation for inconsistency that undermines client trust and career advancement. In romance, the same pattern means love never receives the sustained attention needed to deepen into something real.',
       love:
         'Uranus in your romance house creates a cycle of thrilling starts followed by sudden departures — either you lose interest when novelty fades, or your energy signals "I\'ll leave" before you do, and partners pull back first. Love never gets the sustained attention needed to deepen.',
     },
@@ -175,7 +175,7 @@ const F_INTERP: Record<string, Partial<Record<number, { career: string; love: st
     },
     5: {
       career:
-        'Mars in your fifth house drives impatient, impulsive approaches to creative work and speculative ventures. The inability to develop ideas patiently leads to premature launches, poor-quality outputs, or financial losses from impulsive decisions that damage your professional track record.',
+        'Mars in your fifth house drives impatient, impulsive energy across both creative work and romance. Professionally, the inability to develop ideas patiently leads to premature launches and poor-quality outputs that damage your track record. In love, the same combustible energy creates cycles of explosive passion and dramatic exits — intensity without the patience to build depth.',
       love:
         'Mars in your romance house makes your love life a cycle of explosive passion and dramatic exits. The intensity is real, but so is the damage. Relationships cycle through combustion and conflict rather than building the depth and safety genuine partnership requires.',
     },
@@ -201,7 +201,7 @@ const F_INTERP: Record<string, Partial<Record<number, { career: string; love: st
     },
     5: {
       career:
-        'Neptune in your fifth house wraps creative work in a fog of idealism — you see the vision clearly but struggle to execute it in concrete, marketable form. The gap between creative inspiration and what actually ships creates a pattern of unrealized potential that limits professional advancement.',
+        'Neptune in your fifth house wraps both creative work and romance in a fog of idealism. Professionally, you see the vision clearly but struggle to execute it in concrete, marketable form — the gap between inspiration and what actually ships creates unrealized potential. In romance, the same fog has you falling in love with the idea of a person rather than the actual person, creating intense starts and confused endings.',
       love:
         'Neptune in your romance house creates a pattern of falling in love with the idea of a person rather than the actual person. The inevitable crash when reality intrudes on the fantasy creates a love life marked by intense starts and confused endings.',
     },
@@ -409,10 +409,10 @@ const HOUSE_BRIEF: Partial<Record<number, string>> = {
   1: 'identity and self-presentation',
   2: 'income and financial security',
   5: 'romance and creative expression',
-  6: 'work and daily productivity',
-  7: 'partnership and one-on-one relationships',
-  8: 'shared resources and transformation',
-  10: 'career, reputation, and public standing',
+  6: 'work, daily productivity, and money',
+  7: 'committed relationships and marriage',
+  8: 'shared resources, money, and transformation',
+  10: 'career, money, reputation, and public standing',
   11: 'networks, goals, and community',
 };
 

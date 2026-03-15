@@ -278,3 +278,76 @@ export type Zodiacs =
   | 'Rooster'
   | 'Dog'
   | 'Pig';
+
+// ============================================================================
+// ASTROCARTOGRAPHY CALCULATOR
+// ============================================================================
+
+export interface AstrocartographyInput {
+  year: number;
+  month: number;
+  day: number;
+  hour: number;
+  minute: number;
+  birthTimeZone: string;
+}
+
+export interface AstrocartographyPoint {
+  latitude: number;
+  longitude: number;
+  orb: number;
+  region: string;
+  locationName: string; // "City, State, Country" from reverse geocoding
+}
+
+export interface AstrocartographyLine {
+  planet: string;
+  angle: 'ASC' | 'DSC' | 'MC' | 'IC';
+  points: AstrocartographyPoint[];
+}
+
+export interface AstrocartographyResult {
+  lines: AstrocartographyLine[];
+  warningLines: AstrocartographyLine[];
+}
+
+// ============================================================================
+// HUMAN DESIGN CALCULATOR (Business Energy Blueprint)
+// ============================================================================
+
+export interface HumanDesignInput {
+  year: number;
+  month: number;
+  day: number;
+  hour: number;
+  minute: number;
+  timeZone: string; // IANA timezone string
+}
+
+export interface HumanDesignGateLine {
+  gate: number;
+  line: number;
+}
+
+export interface HumanDesignActiveChannel {
+  gates: [number, number];
+  centers: [string, string];
+  name: string;
+}
+
+export interface HumanDesignResult {
+  type: string;         // e.g. "Generator"
+  strategy: string;
+  authority: string;    // e.g. "Sacral"
+  profile: string;      // e.g. "3/5"
+  profileLines: [number, number];
+  definedCenters: string[];
+  undefinedCenters: string[];
+  activeChannels: HumanDesignActiveChannel[];
+  /** All 12 personality (conscious/black) planet gate positions */
+  personalityGates: Record<string, HumanDesignGateLine>;
+  /** All 12 design (unconscious/red) planet gate positions */
+  designGates: Record<string, HumanDesignGateLine>;
+  /** Design date ISO string (≈88° solar arc before birth) */
+  designDate: string;
+}

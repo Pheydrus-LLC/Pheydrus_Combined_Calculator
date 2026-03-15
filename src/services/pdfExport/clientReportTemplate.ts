@@ -304,14 +304,17 @@ function renderPage1(results: ConsolidatedResults, intake: ClientIntakeData, goa
     {
       pct: p1pct, color: '#ef4444', badge: 'PILLAR 1', label: 'Structure',
       text: `Your birth chart's permanent energetic architecture. This layer does not expire — malefic placements here are lifelong structural pressures that can be mastered but not removed.`,
+      pathText: 'A combination of 1:1 calls and self-study are well-suited for deconditioning patterns in this pillar.',
     },
     {
       pct: p2pct, color: '#f59e0b', badge: 'PILLAR 2', label: 'Timing',
       text: `Slow-moving outer planets currently transiting specific areas of your chart. This layer is temporary but powerful while active — knowing when it lifts gives you an honest timeline for your situation.`,
+      pathText: 'A combination of 1:1 calls and self-study are well-suited for deconditioning patterns in this pillar.',
     },
     {
       pct: p3pct, color: '#9a7d4e', badge: 'PILLAR 3', label: 'Environment',
       text: p3SecretSauce,
+      pathText: 'A combination of Done-For-You, 1:1 calls, and self-study are suited for reorganizing internal energies and curing external energies.',
     },
   ];
 
@@ -371,7 +374,7 @@ function renderPage1(results: ConsolidatedResults, intake: ClientIntakeData, goa
       <div style="padding:10px 12px;border:1px solid #e5e7eb;border-radius:8px;border-left:3px solid ${d.color};background:#fff;">
         <div style="font-size:11px;font-weight:700;color:${d.color};margin-bottom:3px;font-family:Arial,sans-serif;">${d.badge} — ${d.label} <span style="font-size:16px;font-weight:900;float:right;color:${d.color};">${d.pct}%</span></div>
         <p style="margin:0 0 5px;font-size:11px;color:#4a4560;line-height:1.6;font-family:Arial,sans-serif;">${d.text}</p>
-        ${prefLabel ? `<p style="margin:0;font-size:10px;color:#9a7d4e;font-style:italic;font-family:Arial,sans-serif;">Recommended path: <strong>${esc(prefLabel)}</strong> is well-suited for deconditioning the patterns in this pillar.</p>` : ''}
+        ${prefLabel ? `<p style="margin:0;font-size:10px;color:#9a7d4e;font-style:italic;font-family:Arial,sans-serif;">Recommended path: ${esc(d.pathText)}</p>` : ''}
       </div>`).join('')}
     </div>
   </div>
@@ -481,29 +484,70 @@ function renderPage2(results: ConsolidatedResults, intake: ClientIntakeData, goa
 // ── Page 3: Next Steps ────────────────────────────────────────────────────────
 
 function renderPage3(results: ConsolidatedResults, intake: ClientIntakeData): string {
+  const { finalGrade, pillars } = results.diagnostic!;
+  const [p1, p2, p3] = pillars;
+
+  // Calendly CTA eligibility — same 4 conditions as the web UI
+  const desiredOutcomeWordCount = intake.desiredOutcome.trim().split(/\s+/).filter(Boolean).length;
+  const soughtTherapyOrCoaches = intake.priorHelp.includes('therapy') || intake.priorHelp.includes('coaches');
+  const notMonetizing = intake.currentSituation !== 'monetizing';
+  const scoredCOrWorse = finalGrade === 'C' || finalGrade === 'F';
+  const showCalendlyCTA = desiredOutcomeWordCount > 1 && soughtTherapyOrCoaches && notMonetizing && scoredCOrWorse;
+
+  const activePillars: number[] = [];
+  if (p1.fCount + p1.cCount > 0) activePillars.push(1);
+  if (p2.fCount + p2.cCount > 0) activePillars.push(2);
+  if (p3.fCount + p3.cCount > 0) activePillars.push(3);
+  const pillarListText =
+    activePillars.length === 0 ? 'multiple pillars' :
+    activePillars.length === 1 ? `Pillar ${activePillars[0]}` :
+    activePillars.length === 2 ? `Pillars ${activePillars[0]} and ${activePillars[1]}` :
+    'Pillars 1, 2, and 3';
+
+  const ctaHtml = showCalendlyCTA ? `
+  <div style="background:linear-gradient(135deg,#2d2a3e,#1a1828);border-radius:12px;padding:32px 36px;margin-bottom:28px;color:#fff;">
+    <p style="margin:0 0 10px;font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:0.12em;color:#c4a96b;font-family:Arial,sans-serif;">Your Recommended Next Step</p>
+    <p style="margin:0 0 14px;font-size:17px;font-weight:700;color:#fff;line-height:1.4;font-family:Arial,sans-serif;">
+      Your <span style="color:#c4a96b;">${esc(finalGrade)}-grade</span> result with active pressure in
+      <span style="color:#c4a96b;">${esc(pillarListText)}</span> has a clear, documented path through it.
+    </p>
+    <p style="margin:0 0 12px;font-size:12px;color:#d1d5db;line-height:1.7;font-family:Arial,sans-serif;">
+      The Pheydrus team has worked with hundreds of students carrying the exact pattern configurations
+      showing in your report. For clients with active pressure across ${esc(pillarListText)}, we implement
+      targeted methods that directly address each layer — structural, timing, and environmental — through
+      a precision process built around your exact chart, transits, and location.
+    </p>
+    <p style="margin:0 0 20px;font-size:12px;color:#d1d5db;line-height:1.7;font-family:Arial,sans-serif;">
+      This isn't generic coaching. Students who have gone through this process with us have moved out of
+      these exact patterns in <strong style="color:#fff;">under 90 days</strong> — not by working harder,
+      but by working on the right layer, in the right order, at the right time. Your report tells us
+      exactly where to start.
+    </p>
+    <div style="margin-bottom:8px;">
+      <a href="https://calendly.com/pheydrus_strategy/1-1-alignment-strategy-call-clone-1"
+         style="display:inline-block;padding:12px 24px;background:#c4a96b;color:#ffffff;font-weight:700;font-size:13px;border-radius:10px;text-decoration:none;font-family:Arial,sans-serif;">
+        Book Your Complimentary 1:1 Alignment &amp; Strategy Call &rarr;
+      </a>
+    </div>
+    <p style="margin:0;font-size:10px;color:#6b7280;font-family:Arial,sans-serif;">Complimentary call &nbsp;·&nbsp; No obligation &nbsp;·&nbsp; Limited spots available</p>
+  </div>` : `
+  <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;background:#faf8f5;border-radius:12px;border:2px dashed #d4b896;padding:40px;text-align:center;margin-bottom:28px;">
+    <div style="font-size:36px;margin-bottom:16px;">&#9733;</div>
+    <p style="font-size:15px;font-weight:700;color:#2d2a3e;margin:0 0 8px;font-family:Arial,sans-serif;">Your personalized next-step plan.</p>
+    <p style="font-size:12px;color:#6b7280;margin:0;max-width:320px;line-height:1.6;font-family:Arial,sans-serif;">Based on your goals, obstacle, and 3-pillar results, your Pheydrus advisor will walk you through the specific steps for your path forward.</p>
+  </div>`;
+
   return `
 <!-- PAGE 3: NEXT STEPS -->
 <div style="padding:36px 44px;min-height:900px;display:flex;flex-direction:column;">
   <h2 style="font-size:17px;color:#2d2a3e;margin:0 0 3px;letter-spacing:-0.4px;font-family:Arial,sans-serif;">Your Next Steps</h2>
   <p style="margin:0 0 24px;color:#6b7280;font-size:11px;font-family:Arial,sans-serif;">Personalized guidance based on your 3-pillar assessment.</p>
 
-  <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;background:#faf8f5;border-radius:12px;border:2px dashed #d4b896;padding:40px;text-align:center;">
-    <div style="font-size:36px;margin-bottom:16px;">&#9733;</div>
-    <p style="font-size:15px;font-weight:700;color:#2d2a3e;margin:0 0 8px;font-family:Arial,sans-serif;">Your personalized next-step plan will appear here.</p>
-    <p style="font-size:12px;color:#6b7280;margin:0;max-width:320px;line-height:1.6;font-family:Arial,sans-serif;">This section is being prepared specifically for you based on your goals, your obstacle, and the pattern your 3-pillar analysis reveals.</p>
-  </div>
+  ${ctaHtml}
 
   <div style="margin-top:auto;padding-top:20px;border-top:1px solid #e5e7eb;display:flex;justify-content:space-between;align-items:center;font-family:Arial,sans-serif;">
     <p style="margin:0;font-size:10px;color:#9ca3af;">Pheydrus Proprietary Analysis &nbsp;·&nbsp; Confidential</p>
     <p style="margin:0;font-size:10px;color:#9ca3af;">${esc(results.userInfo.name)} &nbsp;·&nbsp; ${new Date(results.timestamp).toLocaleDateString()}</p>
-  </div>
-
-  <div style="margin-top:14px;padding:12px 14px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;font-size:10px;color:#6b7280;font-family:Arial,sans-serif;">
-    <strong style="color:#4a4560;">Assessment context:</strong>
-    <span style="margin-left:8px;">Preferred format: <strong>${intake.preferredSolution ? esc(PREFERRED_SOLUTION_LABELS[intake.preferredSolution] ?? intake.preferredSolution) : '—'}</strong></span>
-    <span style="margin-left:10px;">Situation: <strong>${intake.currentSituation || '—'}</strong></span>
-    ${intake.patternYear ? `<span style="margin-left:10px;">Pattern since: <strong>${esc(intake.patternYear)}</strong></span>` : ''}
-    ${intake.priorHelp.length > 0 ? `<span style="margin-left:10px;">Prior help: <strong>${esc(intake.priorHelp.join(', '))}</strong></span>` : ''}
   </div>
 </div>
 `;
