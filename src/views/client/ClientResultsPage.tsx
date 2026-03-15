@@ -68,7 +68,10 @@ function SvgChart({ svg }: { svg: string }) {
 
 // ── Pillar timeline ───────────────────────────────────────────────────────────
 
-function getPillar2MaxEndYear(pillar2Items: GradeItem[], transits: PlanetaryTransit[]): number | null {
+function getPillar2MaxEndYear(
+  pillar2Items: GradeItem[],
+  transits: PlanetaryTransit[]
+): number | null {
   let max: number | null = null;
   for (const item of pillar2Items) {
     if (!item.planet) continue;
@@ -78,7 +81,10 @@ function getPillar2MaxEndYear(pillar2Items: GradeItem[], transits: PlanetaryTran
   return max;
 }
 
-function getPillar3MaxEndYear(pillar3Items: GradeItem[], transits: PlanetaryTransit[]): number | null {
+function getPillar3MaxEndYear(
+  pillar3Items: GradeItem[],
+  transits: PlanetaryTransit[]
+): number | null {
   let max: number | null = null;
   for (const item of pillar3Items) {
     if (!item.planet) continue;
@@ -106,21 +112,26 @@ function PillarTimeline({
   if (pillarNum === 1) {
     return (
       <p className={base}>
-        <strong className="text-[#9a7d4e]">⏱ Timeline:</strong> Life-long — this is your permanent structural layer. It does not expire, but it can be consciously mastered.
+        <strong className="text-[#9a7d4e]">⏱ Timeline:</strong> Life-long — this is your permanent
+        structural layer. It does not expire, but it can be consciously mastered.
       </p>
     );
   }
 
-  const endYear = pillarNum === 2
-    ? getPillar2MaxEndYear(pillar2Items, transits)
-    : getPillar3MaxEndYear(pillar3Items, transits);
+  const endYear =
+    pillarNum === 2
+      ? getPillar2MaxEndYear(pillar2Items, transits)
+      : getPillar3MaxEndYear(pillar3Items, transits);
 
   if (pillarNum === 2) {
     return (
       <p className={base}>
         <strong className="text-[#9a7d4e]">⏱ Timeline:</strong>{' '}
         {endYear ? (
-          <>Active <strong className="text-amber-600">{formatDuration(endYear)}</strong>. This window will lift — knowing when is half the advantage.</>
+          <>
+            Active <strong className="text-amber-600">{formatDuration(endYear)}</strong>. This
+            window will lift — knowing when is half the advantage.
+          </>
         ) : (
           'The active timing pressures are relatively short-cycle.'
         )}
@@ -135,10 +146,12 @@ function PillarTimeline({
 
   return (
     <p className={base}>
-      <strong className="text-[#9a7d4e]">⏱ Timeline:</strong>{' '}
-      Amplifies your active transits for{' '}
+      <strong className="text-[#9a7d4e]">⏱ Timeline:</strong> Amplifies your active transits for{' '}
       {endYear ? (
-        <>approximately <strong className="text-amber-600">{formatDuration(endYear)}</strong>, mirroring your active transit window.</>
+        <>
+          approximately <strong className="text-amber-600">{formatDuration(endYear)}</strong>,
+          mirroring your active transit window.
+        </>
       ) : (
         'the duration of your active transit window.'
       )}
@@ -207,7 +220,7 @@ function PillarDeepDiveCard({
   addressMoveDate: string;
 }) {
   const scoringItems = pillar.items.filter(
-    (i) => i.grade === 'F' || i.grade === 'C' || i.grade === 'A',
+    (i) => i.grade === 'F' || i.grade === 'C' || i.grade === 'A'
   );
 
   return (
@@ -237,7 +250,8 @@ function PillarDeepDiveCard({
         <div className="flex-1 min-w-0">
           {scoringItems.length === 0 ? (
             <p className="text-sm text-emerald-600 italic">
-              No significant pressure identified in this pillar — this dimension is working in your favor.
+              No significant pressure identified in this pillar — this dimension is working in your
+              favor.
             </p>
           ) : (
             <div className="space-y-3">
@@ -274,10 +288,9 @@ function PillarDeepDiveCard({
 export function ClientResultsPage() {
   const location = useLocation();
   const navigate = useNavigate();
+  const [isExporting, setIsExporting] = useState(false);
 
-  const state = location.state as
-    | { results: ConsolidatedResults; intake: ClientIntakeData }
-    | null;
+  const state = location.state as { results: ConsolidatedResults; intake: ClientIntakeData } | null;
 
   if (!state?.results) {
     return (
@@ -297,13 +310,14 @@ export function ClientResultsPage() {
   }
 
   const { results, intake } = state;
-  const [isExporting, setIsExporting] = useState(false);
 
   const goal = detectGoalCategory(intake.desiredOutcome);
   const transits = results.calculators.transits?.transits ?? [];
   const [p1, p2, p3] = results.diagnostic!.pillars;
 
-  const s1 = pillarScore(p1), s2 = pillarScore(p2), s3 = pillarScore(p3);
+  const s1 = pillarScore(p1),
+    s2 = pillarScore(p2),
+    s3 = pillarScore(p3);
   const total = s1 + s2 + s3;
   const p1pct = total === 0 ? 0 : Math.round((s1 / total) * 100);
   const p2pct = total === 0 ? 0 : Math.round((s2 / total) * 100);
@@ -358,7 +372,6 @@ export function ClientResultsPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#faf8f5] to-[#f0ebe0] py-12 px-4">
       <div className="max-w-3xl mx-auto space-y-6">
-
         {/* Brand header */}
         <div className="text-center">
           <h1 className="text-3xl font-bold text-[#2d2a3e]">Your Pheydrus Report</h1>
@@ -415,17 +428,24 @@ export function ClientResultsPage() {
               </div>
               <p className="text-sm text-[#4a4560] leading-relaxed mb-2">
                 Here is the breakdown of what is driving the pattern connected to your obstacle of{' '}
-                <em>"{intake.obstacle.slice(0, 80)}{intake.obstacle.length > 80 ? '…' : ''}"</em>
+                <em>
+                  "{intake.obstacle.slice(0, 80)}
+                  {intake.obstacle.length > 80 ? '…' : ''}"
+                </em>
               </p>
               <p className="text-sm text-gray-400 italic leading-relaxed">
-                Based on thousands of sessions, analysis, and data compiled on Pheydrus students,
-                we have discovered life-pattern predictors and how to potentially mitigate them
-                with up to 95% accuracy. Please see your analysis below.
+                Based on thousands of sessions, analysis, and data compiled on Pheydrus students, we
+                have discovered life-pattern predictors and how to potentially mitigate them with up
+                to 95% accuracy. Please see your analysis below.
               </p>
             </div>
             <div className="flex-shrink-0 text-center">
-              <p className="text-[10px] text-[#6b6188] uppercase tracking-widest mb-1">Overall Grade</p>
-              <SvgChart svg={renderSpeedometer(results.diagnostic!.finalGrade, results.diagnostic!.score)} />
+              <p className="text-[10px] text-[#6b6188] uppercase tracking-widest mb-1">
+                Overall Grade
+              </p>
+              <SvgChart
+                svg={renderSpeedometer(results.diagnostic!.finalGrade, results.diagnostic!.score)}
+              />
             </div>
           </div>
         </div>
@@ -436,10 +456,10 @@ export function ClientResultsPage() {
             <h3 className="text-sm font-bold text-red-800 mb-1.5">⏰ Pattern Timeline</h3>
             <p className="text-sm text-red-700 leading-relaxed">
               Your active planetary data points to this pattern persisting{' '}
-              <strong>{formatDuration(longest.endYear)}</strong> if the current approach
-              continues. The primary driver is <strong>{longest.planet}</strong> transiting
-              House {longest.house} — a slow-moving outer planet that defines the window you are
-              working within.
+              <strong>{formatDuration(longest.endYear)}</strong> if the current approach continues.
+              The primary driver is <strong>{longest.planet}</strong> transiting House{' '}
+              {longest.house} — a slow-moving outer planet that defines the window you are working
+              within.
             </p>
           </div>
         )}
@@ -453,9 +473,18 @@ export function ClientResultsPage() {
               <div className="flex-shrink-0 flex flex-col items-center">
                 <SvgChart svg={renderDonutChart(p1pct, p2pct, p3pct)} />
                 <div className="flex flex-col gap-1 mt-2 text-xs text-gray-500">
-                  <span className="flex items-center gap-1.5"><span className="inline-block w-2.5 h-2.5 bg-red-500 rounded-sm" /> Pillar 1 — {p1pct}%</span>
-                  <span className="flex items-center gap-1.5"><span className="inline-block w-2.5 h-2.5 bg-amber-400 rounded-sm" /> Pillar 2 — {p2pct}%</span>
-                  <span className="flex items-center gap-1.5"><span className="inline-block w-2.5 h-2.5 bg-[#9a7d4e] rounded-sm" /> Pillar 3 — {p3pct}%</span>
+                  <span className="flex items-center gap-1.5">
+                    <span className="inline-block w-2.5 h-2.5 bg-red-500 rounded-sm" /> Pillar 1 —{' '}
+                    {p1pct}%
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <span className="inline-block w-2.5 h-2.5 bg-amber-400 rounded-sm" /> Pillar 2 —{' '}
+                    {p2pct}%
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <span className="inline-block w-2.5 h-2.5 bg-[#9a7d4e] rounded-sm" /> Pillar 3 —{' '}
+                    {p3pct}%
+                  </span>
                 </div>
               </div>
 
@@ -463,22 +492,34 @@ export function ClientResultsPage() {
               <div className="flex-1 space-y-3">
                 {[
                   {
-                    num: 1, pct: p1pct, color: 'border-l-red-500', badge: 'bg-red-100 text-red-800',
+                    num: 1,
+                    pct: p1pct,
+                    color: 'border-l-red-500',
+                    badge: 'bg-red-100 text-red-800',
                     title: 'Structure',
                     text: "Your birth chart's permanent energetic architecture. This layer does not expire — malefic placements here are lifelong structural pressures that can be mastered but not removed.",
-                    pathText: 'A combination of 1:1 calls and self-study are well-suited for deconditioning patterns in this pillar.',
+                    pathText:
+                      'A combination of 1:1 calls and self-study are well-suited for deconditioning patterns in this pillar.',
                   },
                   {
-                    num: 2, pct: p2pct, color: 'border-l-amber-400', badge: 'bg-amber-100 text-amber-800',
+                    num: 2,
+                    pct: p2pct,
+                    color: 'border-l-amber-400',
+                    badge: 'bg-amber-100 text-amber-800',
                     title: 'Timing',
                     text: 'Slow-moving outer planets currently transiting specific areas of your chart. This layer is temporary but powerful while active — knowing when it lifts gives you an honest timeline.',
-                    pathText: 'A combination of 1:1 calls and self-study are well-suited for deconditioning patterns in this pillar.',
+                    pathText:
+                      'A combination of 1:1 calls and self-study are well-suited for deconditioning patterns in this pillar.',
                   },
                   {
-                    num: 3, pct: p3pct, color: 'border-l-[#9a7d4e]', badge: 'bg-[#f0ebe0] text-[#78643a]',
+                    num: 3,
+                    pct: p3pct,
+                    color: 'border-l-[#9a7d4e]',
+                    badge: 'bg-[#f0ebe0] text-[#78643a]',
                     title: 'Environment',
                     text: 'This is Pheydrus\' "secret sauce" — your current location and home address carry an energetic signature that can neutralize or offset the negative effects of both Pillar 1 and Pillar 2 when properly aligned. Of the three layers, Pillar 3 is the most immediately actionable.',
-                    pathText: 'A combination of Done-For-You, 1:1 calls, and self-study are suited for reorganizing internal energies and curing external energies.',
+                    pathText:
+                      'A combination of Done-For-You, 1:1 calls, and self-study are suited for reorganizing internal energies and curing external energies.',
                   },
                 ].map((d) => (
                   <div key={d.num} className={`border-l-4 ${d.color} bg-gray-50 rounded-r-lg p-3`}>
@@ -516,11 +557,28 @@ export function ClientResultsPage() {
             A pillar-by-pillar breakdown mapped directly to your stated outcome.
           </p>
           <div className="space-y-4">
-            {([
-              { pillar: p1, index: 1 as const, title: 'Structure', subtitle: 'Your Energetic Blueprint' },
-              { pillar: p2, index: 2 as const, title: 'Timing', subtitle: 'The Window You Are In' },
-              { pillar: p3, index: 3 as const, title: 'Environment', subtitle: 'Location & Address' },
-            ] as const).map(({ pillar, index, title, subtitle }) => (
+            {(
+              [
+                {
+                  pillar: p1,
+                  index: 1 as const,
+                  title: 'Structure',
+                  subtitle: 'Your Energetic Blueprint',
+                },
+                {
+                  pillar: p2,
+                  index: 2 as const,
+                  title: 'Timing',
+                  subtitle: 'The Window You Are In',
+                },
+                {
+                  pillar: p3,
+                  index: 3 as const,
+                  title: 'Environment',
+                  subtitle: 'Location & Address',
+                },
+              ] as const
+            ).map(({ pillar, index, title, subtitle }) => (
               <PillarDeepDiveCard
                 key={index}
                 pillar={pillar}
@@ -545,10 +603,12 @@ export function ClientResultsPage() {
               Your Recommended Next Step
             </p>
             <h2 className="text-xl font-bold mb-3 leading-snug">
-              Your{' '}
-              <span className="text-[#c4a96b]">{finalGrade}-grade</span> result
+              Your <span className="text-[#c4a96b]">{finalGrade}-grade</span> result
               {activePillars.length > 0 && (
-                <> with active pressure in <span className="text-[#c4a96b]">{pillarListText}</span></>
+                <>
+                  {' '}
+                  with active pressure in <span className="text-[#c4a96b]">{pillarListText}</span>
+                </>
               )}{' '}
               has a clear, documented path through it.
             </h2>
@@ -560,11 +620,11 @@ export function ClientResultsPage() {
               process built around your exact chart, transits, and location.
             </p>
             <p className="text-sm text-gray-300 leading-relaxed mb-6">
-              This isn't generic coaching. Students who have gone through this process with us
-              have moved out of these exact patterns in{' '}
-              <strong className="text-white">under 90 days</strong> — not by working harder, but
-              by working on the right layer, in the right order, at the right time. Your report
-              tells us exactly where to start.
+              This isn't generic coaching. Students who have gone through this process with us have
+              moved out of these exact patterns in{' '}
+              <strong className="text-white">under 90 days</strong> — not by working harder, but by
+              working on the right layer, in the right order, at the right time. Your report tells
+              us exactly where to start.
             </p>
             <a
               href="https://calendly.com/pheydrus_strategy/1-1-alignment-strategy-call-clone-1"
