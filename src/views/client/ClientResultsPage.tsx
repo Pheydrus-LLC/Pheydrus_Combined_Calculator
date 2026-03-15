@@ -107,17 +107,30 @@ function ReframeBlock() {
       }}
     >
       <p
-        style={{ fontFamily: CORMORANT, fontStyle: 'italic', color: '#E8D5A3', fontSize: '1.15rem', margin: '0 0 12px', lineHeight: 1.6 }}
+        style={{
+          fontFamily: CORMORANT,
+          fontStyle: 'italic',
+          color: '#E8D5A3',
+          fontSize: '1.15rem',
+          margin: '0 0 12px',
+          lineHeight: 1.6,
+        }}
       >
-        If you've tried everything — the mindset work, the strategies, the coaches — and things are going well enough but that one specific thing you want keeps slipping just out of reach... this is your answer.
+        If you've tried everything — the mindset work, the strategies, the coaches — and things are
+        going well enough but that one specific thing you want keeps slipping just out of reach...
+        this is your answer.
       </p>
       <p className="text-sm leading-relaxed" style={{ color: '#c9c4d8', margin: '0 0 10px' }}>
         That unseen force is real. It's measurable. And it's encoded directly in your chart.
       </p>
       <p className="text-sm leading-relaxed" style={{ color: '#c9c4d8', margin: '0 0 10px' }}>
-        You're not broken. You're not undisciplined. You've been 10x-capable this entire time — just running against an invisible current.
+        You're not broken. You're not undisciplined. You've been 10x-capable this entire time — just
+        running against an invisible current.
       </p>
-      <p className="text-sm leading-relaxed" style={{ color: '#E8D5A3', fontWeight: 600, margin: 0 }}>
+      <p
+        className="text-sm leading-relaxed"
+        style={{ color: '#E8D5A3', fontWeight: 600, margin: 0 }}
+      >
         This report shows you exactly what that current is.
       </p>
     </div>
@@ -126,7 +139,10 @@ function ReframeBlock() {
 
 // ── Pillar timeline ───────────────────────────────────────────────────────────
 
-function getPillar2MaxEndYear(pillar2Items: GradeItem[], transits: PlanetaryTransit[]): number | null {
+function getPillar2MaxEndYear(
+  pillar2Items: GradeItem[],
+  transits: PlanetaryTransit[]
+): number | null {
   let max: number | null = null;
   for (const item of pillar2Items) {
     if (!item.planet) continue;
@@ -136,7 +152,10 @@ function getPillar2MaxEndYear(pillar2Items: GradeItem[], transits: PlanetaryTran
   return max;
 }
 
-function getPillar3MaxEndYear(pillar3Items: GradeItem[], transits: PlanetaryTransit[]): number | null {
+function getPillar3MaxEndYear(
+  pillar3Items: GradeItem[],
+  transits: PlanetaryTransit[]
+): number | null {
   let max: number | null = null;
   for (const item of pillar3Items) {
     if (!item.planet) continue;
@@ -164,21 +183,26 @@ function PillarTimeline({
   if (pillarNum === 1) {
     return (
       <p className={base}>
-        <strong className="text-[#9a7d4e]">⏱ Timeline:</strong> Life-long — this is your permanent structural layer. It does not expire, but it can be consciously mastered.
+        <strong className="text-[#9a7d4e]">⏱ Timeline:</strong> Life-long — this is your permanent
+        structural layer. It does not expire, but it can be consciously mastered.
       </p>
     );
   }
 
-  const endYear = pillarNum === 2
-    ? getPillar2MaxEndYear(pillar2Items, transits)
-    : getPillar3MaxEndYear(pillar3Items, transits);
+  const endYear =
+    pillarNum === 2
+      ? getPillar2MaxEndYear(pillar2Items, transits)
+      : getPillar3MaxEndYear(pillar3Items, transits);
 
   if (pillarNum === 2) {
     return (
       <p className={base}>
         <strong className="text-[#9a7d4e]">⏱ Timeline:</strong>{' '}
         {endYear ? (
-          <>Active <strong className="text-amber-600">{formatDuration(endYear)}</strong>. This window will lift — knowing when is half the advantage.</>
+          <>
+            Active <strong className="text-amber-600">{formatDuration(endYear)}</strong>. This
+            window will lift — knowing when is half the advantage.
+          </>
         ) : (
           'The active timing pressures are relatively short-cycle.'
         )}
@@ -193,10 +217,12 @@ function PillarTimeline({
 
   return (
     <p className={base}>
-      <strong className="text-[#9a7d4e]">⏱ Timeline:</strong>{' '}
-      Amplifies your active transits for{' '}
+      <strong className="text-[#9a7d4e]">⏱ Timeline:</strong> Amplifies your active transits for{' '}
       {endYear ? (
-        <>approximately <strong className="text-amber-600">{formatDuration(endYear)}</strong>, mirroring your active transit window.</>
+        <>
+          approximately <strong className="text-amber-600">{formatDuration(endYear)}</strong>,
+          mirroring your active transit window.
+        </>
       ) : (
         'the duration of your active transit window.'
       )}
@@ -288,7 +314,9 @@ function TestimonialCard({ quote, attribution }: { quote: string; attribution: s
       >
         {quote}
       </p>
-      <p style={{ fontFamily: 'Inter, sans-serif', color: '#888888', fontSize: '0.8rem', margin: 0 }}>
+      <p
+        style={{ fontFamily: 'Inter, sans-serif', color: '#888888', fontSize: '0.8rem', margin: 0 }}
+      >
         — {attribution}
       </p>
     </div>
@@ -306,8 +334,10 @@ const PILLAR_BADGE_CLS: Record<1 | 2 | 3, string> = {
 // Upgrade 3: goal tie-in callout copy per pillar
 const PILLAR_CALLOUT: Record<1 | 2 | 3, (goal: string, loc: string) => string> = {
   1: (goal) => `Here is how Pillar 1 is specifically blocking your goal of ${goal}:`,
-  2: (goal) => `Here is how your current timing window is directly affecting your ability to reach ${goal}:`,
-  3: (goal, loc) => `Here is how your current address${loc ? ` in ${loc}` : ''} is interacting with your goal of ${goal}:`,
+  2: (goal) =>
+    `Here is how your current timing window is directly affecting your ability to reach ${goal}:`,
+  3: (goal, loc) =>
+    `Here is how your current address${loc ? ` in ${loc}` : ''} is interacting with your goal of ${goal}:`,
 };
 
 function PillarDeepDiveCard({
@@ -338,7 +368,7 @@ function PillarDeepDiveCard({
   addressMoveDate: string;
 }) {
   const scoringItems = pillar.items.filter(
-    (i) => i.grade === 'F' || i.grade === 'C' || i.grade === 'A',
+    (i) => i.grade === 'F' || i.grade === 'C' || i.grade === 'A'
   );
   const calloutText = PILLAR_CALLOUT[index](goalShort, location);
 
@@ -386,12 +416,19 @@ function PillarDeepDiveCard({
         <div className="flex-1 min-w-0">
           {scoringItems.length === 0 ? (
             <p className="text-sm text-emerald-600 italic">
-              No significant pressure identified in this pillar — this dimension is working in your favor.
+              No significant pressure identified in this pillar — this dimension is working in your
+              favor.
             </p>
           ) : (
             <div className="space-y-3">
               {scoringItems.map((item, i) => (
-                <InterpBullet key={i} item={item} goal={goal} goalShort={goalShort} transits={transits} />
+                <InterpBullet
+                  key={i}
+                  item={item}
+                  goal={goal}
+                  goalShort={goalShort}
+                  transits={transits}
+                />
               ))}
             </div>
           )}
@@ -449,12 +486,22 @@ function CostOfInaction({ goalShort, endYear }: { goalShort: string; endYear: nu
       </h3>
       <div className="space-y-3 text-sm leading-relaxed" style={{ color: '#c9b8b8' }}>
         <p>Another 12 months of knowing exactly what to do — and watching yourself not do it.</p>
-        <p>Another year of income that almost hits {goalShort}, but resets every time you get close.</p>
-        <p>Another year of brilliant ideas living in your drafts folder instead of the marketplace.</p>
+        <p>
+          Another year of income that almost hits {goalShort}, but resets every time you get close.
+        </p>
+        <p>
+          Another year of brilliant ideas living in your drafts folder instead of the marketplace.
+        </p>
         <p>Another year of telling yourself next month will be different.</p>
         <p>{yearLine}</p>
         {yearsRemaining !== null && yearsRemaining > 0 && (
-          <p>That's <strong style={{ color: '#ef4444' }}>{yearsRemaining} more year{yearsRemaining !== 1 ? 's' : ''}</strong>.</p>
+          <p>
+            That's{' '}
+            <strong style={{ color: '#ef4444' }}>
+              {yearsRemaining} more year{yearsRemaining !== 1 ? 's' : ''}
+            </strong>
+            .
+          </p>
         )}
         <p
           style={{
@@ -476,10 +523,9 @@ function CostOfInaction({ goalShort, endYear }: { goalShort: string; endYear: nu
 export function ClientResultsPage() {
   const location = useLocation();
   const navigate = useNavigate();
+  const [isExporting, setIsExporting] = useState(false);
 
-  const state = location.state as
-    | { results: ConsolidatedResults; intake: ClientIntakeData }
-    | null;
+  const state = location.state as { results: ConsolidatedResults; intake: ClientIntakeData } | null;
 
   if (!state?.results) {
     return (
@@ -499,7 +545,6 @@ export function ClientResultsPage() {
   }
 
   const { results, intake } = state;
-  const [isExporting, setIsExporting] = useState(false);
 
   const goal = detectGoalCategory(intake.desiredOutcome);
   const goalShort = GOAL_SHORT[goal];
@@ -507,7 +552,9 @@ export function ClientResultsPage() {
   const transits = results.calculators.transits?.transits ?? [];
   const [p1, p2, p3] = results.diagnostic!.pillars;
 
-  const s1 = pillarScore(p1), s2 = pillarScore(p2), s3 = pillarScore(p3);
+  const s1 = pillarScore(p1),
+    s2 = pillarScore(p2),
+    s3 = pillarScore(p3);
   const total = s1 + s2 + s3;
   const p1pct = total === 0 ? 0 : Math.round((s1 / total) * 100);
   const p2pct = total === 0 ? 0 : Math.round((s2 / total) * 100);
@@ -528,20 +575,6 @@ export function ClientResultsPage() {
   const showCalendlyCTA =
     desiredOutcomeWordCount > 1 && soughtTherapyOrCoaches && notMonetizing && scoredCOrWorse;
 
-  // Active pillars (have at least one F or C)
-  const activePillars: number[] = [];
-  if (p1.fCount + p1.cCount > 0) activePillars.push(1);
-  if (p2.fCount + p2.cCount > 0) activePillars.push(2);
-  if (p3.fCount + p3.cCount > 0) activePillars.push(3);
-  const pillarListText =
-    activePillars.length === 0
-      ? ''
-      : activePillars.length === 1
-        ? `Pillar ${activePillars[0]}`
-        : activePillars.length === 2
-          ? `Pillars ${activePillars[0]} and ${activePillars[1]}`
-          : `Pillars 1, 2, and 3`;
-
   const pillarIntros: Record<1 | 2 | 3, string> = {
     1: `These are the energetic signatures encoded in your birth chart — the structural blueprint you came in with. They don't expire, but they can be mastered. What follows are the specific placements creating the most friction for your goal of ${GOAL_LABEL[goal].toLowerCase()}.`,
     2: `These are the slow-moving planetary forces currently transiting your chart — the timing window you are in right now. Each one includes how long it runs, giving you an honest timeline rather than an open-ended question mark.`,
@@ -559,10 +592,20 @@ export function ClientResultsPage() {
     }
   }
 
-  const pillarCardProps = (pillar: PillarSummary, index: 1 | 2 | 3, title: string, subtitle: string) => ({
-    pillar, index, title, subtitle,
+  const pillarCardProps = (
+    pillar: PillarSummary,
+    index: 1 | 2 | 3,
+    title: string,
+    subtitle: string
+  ) => ({
+    pillar,
+    index,
+    title,
+    subtitle,
     intro: pillarIntros[index],
-    goal, goalShort, location: clientLocation,
+    goal,
+    goalShort,
+    location: clientLocation,
     transits,
     pillar2Items: p2.items,
     pillar3Items: p3.items,
@@ -572,7 +615,6 @@ export function ClientResultsPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#faf8f5] to-[#f0ebe0] py-12 px-4">
       <div className="max-w-3xl mx-auto space-y-6">
-
         {/* Brand header */}
         <div className="text-center">
           <h1 className="text-3xl font-bold text-[#2d2a3e]">Your Pheydrus Report</h1>
@@ -628,7 +670,8 @@ export function ClientResultsPage() {
             <div className="flex-1">
               <h2 className="text-xl font-bold text-[#2d2a3e] mb-4">Why This Keeps Happening</h2>
               <p className="text-sm text-[#4a4560] leading-relaxed mb-3">
-                You already know what you need to do to reach {goalShort}. You've probably known for months.
+                You already know what you need to do to reach {goalShort}. You've probably known for
+                months.
               </p>
               <p className="text-sm text-[#4a4560] leading-relaxed mb-3">
                 So why does it keep not happening?
@@ -637,15 +680,20 @@ export function ClientResultsPage() {
                 It's not discipline. It's not strategy. It's not even mindset.
               </p>
               <p className="text-sm text-[#4a4560] leading-relaxed mb-3">
-                It's something encoded — in your chart, your timing, and your environment — that most coaches will never show you. Because they can't see it.
+                It's something encoded — in your chart, your timing, and your environment — that
+                most coaches will never show you. Because they can't see it.
               </p>
               <p className="text-sm text-gray-400 italic leading-relaxed">
                 Below is your full diagnosis.
               </p>
             </div>
             <div className="flex-shrink-0 text-center">
-              <p className="text-[10px] text-[#6b6188] uppercase tracking-widest mb-1">Overall Grade</p>
-              <SvgChart svg={renderSpeedometer(results.diagnostic!.finalGrade, results.diagnostic!.score)} />
+              <p className="text-[10px] text-[#6b6188] uppercase tracking-widest mb-1">
+                Overall Grade
+              </p>
+              <SvgChart
+                svg={renderSpeedometer(results.diagnostic!.finalGrade, results.diagnostic!.score)}
+              />
             </div>
           </div>
         </div>
@@ -656,10 +704,10 @@ export function ClientResultsPage() {
             <h3 className="text-sm font-bold text-red-800 mb-1.5">⏰ Pattern Timeline</h3>
             <p className="text-sm text-red-700 leading-relaxed">
               Your active planetary data points to this pattern persisting{' '}
-              <strong>{formatDuration(longest.endYear)}</strong> if the current approach
-              continues. The primary driver is <strong>{longest.planet}</strong> transiting
-              House {longest.house} — a slow-moving outer planet that defines the window you are
-              working within.
+              <strong>{formatDuration(longest.endYear)}</strong> if the current approach continues.
+              The primary driver is <strong>{longest.planet}</strong> transiting House{' '}
+              {longest.house} — a slow-moving outer planet that defines the window you are working
+              within.
             </p>
           </div>
         )}
@@ -673,9 +721,18 @@ export function ClientResultsPage() {
               <div className="flex-shrink-0 flex flex-col items-center">
                 <SvgChart svg={renderDonutChart(p1pct, p2pct, p3pct)} />
                 <div className="flex flex-col gap-1 mt-2 text-xs text-gray-500">
-                  <span className="flex items-center gap-1.5"><span className="inline-block w-2.5 h-2.5 bg-red-500 rounded-sm" /> Pillar 1 — {p1pct}%</span>
-                  <span className="flex items-center gap-1.5"><span className="inline-block w-2.5 h-2.5 bg-amber-400 rounded-sm" /> Pillar 2 — {p2pct}%</span>
-                  <span className="flex items-center gap-1.5"><span className="inline-block w-2.5 h-2.5 bg-[#9a7d4e] rounded-sm" /> Pillar 3 — {p3pct}%</span>
+                  <span className="flex items-center gap-1.5">
+                    <span className="inline-block w-2.5 h-2.5 bg-red-500 rounded-sm" /> Pillar 1 —{' '}
+                    {p1pct}%
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <span className="inline-block w-2.5 h-2.5 bg-amber-400 rounded-sm" /> Pillar 2 —{' '}
+                    {p2pct}%
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <span className="inline-block w-2.5 h-2.5 bg-[#9a7d4e] rounded-sm" /> Pillar 3 —{' '}
+                    {p3pct}%
+                  </span>
                 </div>
               </div>
 
@@ -683,22 +740,34 @@ export function ClientResultsPage() {
               <div className="flex-1 space-y-3">
                 {[
                   {
-                    num: 1, pct: p1pct, color: 'border-l-red-500', badge: 'bg-red-100 text-red-800',
+                    num: 1,
+                    pct: p1pct,
+                    color: 'border-l-red-500',
+                    badge: 'bg-red-100 text-red-800',
                     title: 'Structure',
                     text: "Your birth chart's permanent energetic architecture. This layer does not expire — malefic placements here are lifelong structural pressures that can be mastered but not removed.",
-                    pathText: 'A combination of 1:1 calls and self-study are well-suited for deconditioning patterns in this pillar.',
+                    pathText:
+                      'A combination of 1:1 calls and self-study are well-suited for deconditioning patterns in this pillar.',
                   },
                   {
-                    num: 2, pct: p2pct, color: 'border-l-amber-400', badge: 'bg-amber-100 text-amber-800',
+                    num: 2,
+                    pct: p2pct,
+                    color: 'border-l-amber-400',
+                    badge: 'bg-amber-100 text-amber-800',
                     title: 'Timing',
                     text: 'Slow-moving outer planets currently transiting specific areas of your chart. This layer is temporary but powerful while active — knowing when it lifts gives you an honest timeline.',
-                    pathText: 'A combination of 1:1 calls and self-study are well-suited for deconditioning patterns in this pillar.',
+                    pathText:
+                      'A combination of 1:1 calls and self-study are well-suited for deconditioning patterns in this pillar.',
                   },
                   {
-                    num: 3, pct: p3pct, color: 'border-l-[#9a7d4e]', badge: 'bg-[#f0ebe0] text-[#78643a]',
+                    num: 3,
+                    pct: p3pct,
+                    color: 'border-l-[#9a7d4e]',
+                    badge: 'bg-[#f0ebe0] text-[#78643a]',
                     title: 'Environment',
                     text: 'This is Pheydrus\' "secret sauce" — your current location and home address carry an energetic signature that can neutralize or offset the negative effects of both Pillar 1 and Pillar 2 when properly aligned. Of the three layers, Pillar 3 is the most immediately actionable.',
-                    pathText: 'A combination of Done-For-You, 1:1 calls, and self-study are suited for reorganizing internal energies and curing external energies.',
+                    pathText:
+                      'A combination of Done-For-You, 1:1 calls, and self-study are suited for reorganizing internal energies and curing external energies.',
                   },
                 ].map((d) => (
                   <div key={d.num} className={`border-l-4 ${d.color} bg-gray-50 rounded-r-lg p-3`}>
@@ -737,7 +806,9 @@ export function ClientResultsPage() {
           </p>
           <div className="space-y-4">
             {/* Pillar 1 */}
-            <PillarDeepDiveCard {...pillarCardProps(p1, 1, 'Structure', 'Your Energetic Blueprint')} />
+            <PillarDeepDiveCard
+              {...pillarCardProps(p1, 1, 'Structure', 'Your Energetic Blueprint')}
+            />
             {/* Upgrade 7: Testimonial after Pillar 1 */}
             <TestimonialCard
               quote="[TESTIMONIAL] e.g. — 'I had the exact same Saturn/House 5 configuration. I'd been building the same offer in my head for two years. Within 60 days of working with the Pheydrus team, I launched, signed 3 clients, and finally felt like my energy matched my output.'"
@@ -786,12 +857,21 @@ export function ClientResultsPage() {
             >
               Your Next Step: The Precision Deconditioning Session
             </h2>
-            <p className="text-sm leading-relaxed mb-4" style={{ color: '#d1d5db', maxWidth: '520px', margin: '0 auto 16px' }}>
+            <p
+              className="text-sm leading-relaxed mb-4"
+              style={{ color: '#d1d5db', maxWidth: '520px', margin: '0 auto 16px' }}
+            >
               This is a 45-minute 1:1 session with the Pheydrus team where we:
             </p>
             <ul
               className="text-sm leading-relaxed text-left mb-6 space-y-2"
-              style={{ color: '#d1d5db', maxWidth: '460px', margin: '0 auto 24px', listStyle: 'none', padding: 0 }}
+              style={{
+                color: '#d1d5db',
+                maxWidth: '460px',
+                margin: '0 auto 24px',
+                listStyle: 'none',
+                padding: 0,
+              }}
             >
               <li>→ Map which pillar to activate first for your specific goal of {goalShort}</li>
               <li>→ Decode exactly what your Uranus/House 10 window means for the next 90 days</li>
@@ -807,10 +887,13 @@ export function ClientResultsPage() {
                 lineHeight: 1.6,
               }}
             >
-              This is not a sales call.<br />
+              This is not a sales call.
+              <br />
               It is the beginning of your decondition.
             </p>
-            <p className="text-xs mb-6" style={{ color: '#9ca3af' }}>Limited sessions available this cycle.</p>
+            <p className="text-xs mb-6" style={{ color: '#9ca3af' }}>
+              Limited sessions available this cycle.
+            </p>
             <div>
               <a
                 href="https://calendly.com/pheydrus_strategy/1-1-alignment-strategy-call-clone-1"
@@ -843,12 +926,19 @@ export function ClientResultsPage() {
         {!showCalendlyCTA && (
           <div className="bg-gradient-to-br from-[#2d2a3e] to-[#1a1828] rounded-2xl shadow-lg p-7 text-white text-center">
             <h2
-              style={{ fontFamily: CORMORANT, color: '#C9A84C', fontSize: '1.6rem', fontWeight: 700, margin: '0 0 12px' }}
+              style={{
+                fontFamily: CORMORANT,
+                color: '#C9A84C',
+                fontSize: '1.6rem',
+                fontWeight: 700,
+                margin: '0 0 12px',
+              }}
             >
               Your Next Step: The Precision Deconditioning Session
             </h2>
             <p className="text-sm text-gray-300 leading-relaxed mb-5 max-w-lg mx-auto">
-              A focused 45-minute 1:1 with the Pheydrus team to map your exact decondition sequence — pillar by pillar, in the right order for your chart.
+              A focused 45-minute 1:1 with the Pheydrus team to map your exact decondition sequence
+              — pillar by pillar, in the right order for your chart.
             </p>
             <a
               href="https://calendly.com/pheydrus_strategy/1-1-alignment-strategy-call-clone-1"
