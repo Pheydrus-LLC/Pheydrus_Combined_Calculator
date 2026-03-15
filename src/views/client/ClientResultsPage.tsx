@@ -32,6 +32,8 @@ import {
   PRIOR_HELP_LABELS,
 } from '../../models/clientIntake';
 
+const CORMORANT = "'Cormorant Garamond', Georgia, serif";
+
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
 function pillarScore(p: PillarSummary): number {
@@ -42,6 +44,12 @@ const GOAL_LABEL: Record<GoalCategory, string> = {
   career: 'Career & Financial Growth',
   love: 'Love & Relationships',
   general: 'Your Goals',
+};
+
+const GOAL_SHORT: Record<GoalCategory, string> = {
+  career: 'career & financial growth',
+  love: 'love & relationships',
+  general: 'your goals',
 };
 
 const GRADE_BORDER: Record<string, string> = {
@@ -60,10 +68,60 @@ const GRADE_BADGE: Record<string, string> = {
   A: 'bg-emerald-100 text-emerald-800 border border-emerald-300',
 };
 
+/** Returns the "Does this sound familiar?" mirror line for known planet+house combos. */
+function getMirrorLine(item: GradeItem, goalShort: string): string | null {
+  const prefix = item.section === 'Address' ? 'Env' : '';
+  const key = `${prefix}${item.planet ?? ''}-${item.house ?? 0}`;
+  const lines: Record<string, string> = {
+    'Sun-7': `You naturally draw people in — but converting that energy into paying clients for ${goalShort} feels like a different skill entirely.`,
+    'Saturn-5': `Does this sound familiar? You build the offer, get excited, draft the content — and then pull back right before you publish. Every time.`,
+    'Uranus-5': `You've probably started building toward ${goalShort} more than once — with real momentum — and then watched yourself abandon it before it could pay off.`,
+    'Neptune-5': `You can see the ${goalShort} version of your life clearly. The gap is in the concrete, step-by-step execution of getting there.`,
+    'Pluto-6': `Are you stuck in performative busyness — doing work that feels productive but isn't actually moving the needle toward ${goalShort}?`,
+    'Neptune-8': `Have you felt confused about your pricing or what you're actually worth charging — making ${goalShort} feel like a moving target?`,
+    'Uranus-10': `Does your professional path feel chaotic — like you can't commit to one lane long enough to build real momentum toward ${goalShort}?`,
+    'Saturn-8': `Has accessing the financial partnerships or investment needed to scale toward ${goalShort} felt blocked or fear-inducing?`,
+    'EnvSaturn-2': `Since living at your current address, has there been an invisible ceiling on how much you allow yourself to charge or earn?`,
+    'EnvUranus-2': `Does your income feel erratic — breakthrough months followed by drought — while ${goalShort} stays just out of reach?`,
+    'EnvNeptune-2': `Are you chronically undercharging for your work — or genuinely unclear about what to charge?`,
+  };
+  return lines[key] ?? null;
+}
+
 // ── Inline SVG wrapper ────────────────────────────────────────────────────────
 
 function SvgChart({ svg }: { svg: string }) {
   return <div dangerouslySetInnerHTML={{ __html: svg }} />;
+}
+
+// ── Upgrade 1: Reframe Block ──────────────────────────────────────────────────
+
+function ReframeBlock() {
+  return (
+    <div
+      style={{
+        borderLeft: '4px solid #C9A84C',
+        background: '#1a1828',
+        borderRadius: '12px',
+        padding: '24px 28px',
+      }}
+    >
+      <p
+        style={{ fontFamily: CORMORANT, fontStyle: 'italic', color: '#E8D5A3', fontSize: '1.15rem', margin: '0 0 12px', lineHeight: 1.6 }}
+      >
+        If you've tried everything — the mindset work, the strategies, the coaches — and things are going well enough but that one specific thing you want keeps slipping just out of reach... this is your answer.
+      </p>
+      <p className="text-sm leading-relaxed" style={{ color: '#c9c4d8', margin: '0 0 10px' }}>
+        That unseen force is real. It's measurable. And it's encoded directly in your chart.
+      </p>
+      <p className="text-sm leading-relaxed" style={{ color: '#c9c4d8', margin: '0 0 10px' }}>
+        You're not broken. You're not undisciplined. You've been 10x-capable this entire time — just running against an invisible current.
+      </p>
+      <p className="text-sm leading-relaxed" style={{ color: '#E8D5A3', fontWeight: 600, margin: 0 }}>
+        This report shows you exactly what that current is.
+      </p>
+    </div>
+  );
 }
 
 // ── Pillar timeline ───────────────────────────────────────────────────────────
@@ -147,15 +205,17 @@ function PillarTimeline({
   );
 }
 
-// ── Interpretation bullet ─────────────────────────────────────────────────────
+// ── Upgrade 4: Interpretation bullet with mirror line ─────────────────────────
 
 function InterpBullet({
   item,
   goal,
+  goalShort,
   transits,
 }: {
   item: GradeItem;
   goal: GoalCategory;
+  goalShort: string;
   transits: PlanetaryTransit[];
 }) {
   const text = getItemInterpretation(item, goal, transits);
@@ -163,14 +223,74 @@ function InterpBullet({
   const bgCls = GRADE_BG[item.grade] ?? 'bg-gray-50';
   const badgeCls = GRADE_BADGE[item.grade] ?? 'bg-gray-100 text-gray-600 border border-gray-200';
   const label = item.section === 'Address' ? '🏠 Address Energy' : item.source;
+  const mirror = getMirrorLine(item, goalShort);
 
   return (
     <div className={`border-l-4 ${borderCls} ${bgCls} rounded-r-lg p-3`}>
+      {mirror && (
+        <p
+          className="mb-2 text-[0.85rem] leading-snug"
+          style={{ fontStyle: 'italic', color: '#C9A84C' }}
+        >
+          💭 {mirror}
+        </p>
+      )}
       <div className="flex flex-wrap items-center gap-2 mb-1.5">
         <span className="text-sm font-semibold text-[#2d2a3e]">{label}</span>
         <span className={`text-xs font-bold px-2 py-0.5 rounded ${badgeCls}`}>{item.grade}</span>
       </div>
       <p className="text-sm text-[#4a4560] leading-relaxed">{text}</p>
+    </div>
+  );
+}
+
+// ── Upgrade 7: Testimonial placeholder card ───────────────────────────────────
+
+function TestimonialCard({ quote, attribution }: { quote: string; attribution: string }) {
+  return (
+    // REPLACE WITH REAL TESTIMONIAL
+    <div
+      style={{
+        background: '#1A1A1A',
+        borderLeft: '3px solid #C9A84C',
+        borderRadius: '8px',
+        padding: '20px 24px',
+        position: 'relative',
+        overflow: 'hidden',
+      }}
+    >
+      <span
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          top: '-16px',
+          left: '10px',
+          fontSize: '90px',
+          color: '#C9A84C',
+          opacity: 0.12,
+          fontFamily: CORMORANT,
+          lineHeight: 1,
+          userSelect: 'none',
+        }}
+      >
+        "
+      </span>
+      <p
+        style={{
+          fontFamily: CORMORANT,
+          fontStyle: 'italic',
+          color: '#E8D5A3',
+          fontSize: '1.05rem',
+          lineHeight: 1.65,
+          margin: '0 0 10px',
+          position: 'relative',
+        }}
+      >
+        {quote}
+      </p>
+      <p style={{ fontFamily: 'Inter, sans-serif', color: '#888888', fontSize: '0.8rem', margin: 0 }}>
+        — {attribution}
+      </p>
     </div>
   );
 }
@@ -183,6 +303,13 @@ const PILLAR_BADGE_CLS: Record<1 | 2 | 3, string> = {
   3: 'bg-[#f0ebe0] text-[#78643a] border border-[#c4a96b]',
 };
 
+// Upgrade 3: goal tie-in callout copy per pillar
+const PILLAR_CALLOUT: Record<1 | 2 | 3, (goal: string, loc: string) => string> = {
+  1: (goal) => `Here is how Pillar 1 is specifically blocking your goal of ${goal}:`,
+  2: (goal) => `Here is how your current timing window is directly affecting your ability to reach ${goal}:`,
+  3: (goal, loc) => `Here is how your current address${loc ? ` in ${loc}` : ''} is interacting with your goal of ${goal}:`,
+};
+
 function PillarDeepDiveCard({
   pillar,
   index,
@@ -190,6 +317,8 @@ function PillarDeepDiveCard({
   subtitle,
   intro,
   goal,
+  goalShort,
+  location,
   transits,
   pillar2Items,
   pillar3Items,
@@ -201,6 +330,8 @@ function PillarDeepDiveCard({
   subtitle: string;
   intro: string;
   goal: GoalCategory;
+  goalShort: string;
+  location: string;
   transits: PlanetaryTransit[];
   pillar2Items: GradeItem[];
   pillar3Items: GradeItem[];
@@ -209,6 +340,7 @@ function PillarDeepDiveCard({
   const scoringItems = pillar.items.filter(
     (i) => i.grade === 'F' || i.grade === 'C' || i.grade === 'A',
   );
+  const calloutText = PILLAR_CALLOUT[index](goalShort, location);
 
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
@@ -230,6 +362,23 @@ function PillarDeepDiveCard({
         )}
       </div>
 
+      {/* Upgrade 3: Goal tie-in callout */}
+      <p
+        className="mb-3 pb-3 text-sm leading-relaxed"
+        style={{
+          fontFamily: CORMORANT,
+          fontStyle: 'italic',
+          color: '#E8D5A3',
+          borderBottom: '1px solid rgba(201,168,76,0.25)',
+          background: 'rgba(201,168,76,0.05)',
+          borderRadius: '4px',
+          padding: '8px 12px',
+          margin: '0 0 12px',
+        }}
+      >
+        {calloutText}
+      </p>
+
       <p className="text-sm text-gray-500 italic leading-relaxed mb-4">{intro}</p>
 
       {/* Bullets left, house wheel right */}
@@ -242,7 +391,7 @@ function PillarDeepDiveCard({
           ) : (
             <div className="space-y-3">
               {scoringItems.map((item, i) => (
-                <InterpBullet key={i} item={item} goal={goal} transits={transits} />
+                <InterpBullet key={i} item={item} goal={goal} goalShort={goalShort} transits={transits} />
               ))}
             </div>
           )}
@@ -265,6 +414,59 @@ function PillarDeepDiveCard({
         transits={transits}
         addressMoveDate={addressMoveDate}
       />
+    </div>
+  );
+}
+
+// ── Upgrade 5: Cost of Inaction section ──────────────────────────────────────
+
+function CostOfInaction({ goalShort, endYear }: { goalShort: string; endYear: number | null }) {
+  const yearLine = endYear
+    ? `The pattern in this report has been active for years. Without targeted deconditioning of the specific layers identified above, the data points to ${endYear}.`
+    : `The pattern in this report has been active for years. Without targeted deconditioning of the specific layers identified above, it does not self-resolve.`;
+  const yearsRemaining = endYear ? endYear - new Date().getFullYear() : null;
+
+  return (
+    <div
+      style={{
+        background: '#1A0A0A',
+        borderLeft: '4px solid #C0392B',
+        borderRadius: '12px',
+        padding: '28px 32px',
+      }}
+    >
+      <h3
+        style={{
+          fontFamily: CORMORANT,
+          color: '#ffffff',
+          fontSize: '1.6rem',
+          fontWeight: 700,
+          margin: '0 0 20px',
+          lineHeight: 1.3,
+        }}
+      >
+        What Another Year of This Pattern Costs You
+      </h3>
+      <div className="space-y-3 text-sm leading-relaxed" style={{ color: '#c9b8b8' }}>
+        <p>Another 12 months of knowing exactly what to do — and watching yourself not do it.</p>
+        <p>Another year of income that almost hits {goalShort}, but resets every time you get close.</p>
+        <p>Another year of brilliant ideas living in your drafts folder instead of the marketplace.</p>
+        <p>Another year of telling yourself next month will be different.</p>
+        <p>{yearLine}</p>
+        {yearsRemaining !== null && yearsRemaining > 0 && (
+          <p>That's <strong style={{ color: '#ef4444' }}>{yearsRemaining} more year{yearsRemaining !== 1 ? 's' : ''}</strong>.</p>
+        )}
+        <p
+          style={{
+            fontWeight: 700,
+            fontSize: '1rem',
+            color: '#C9A84C',
+            marginTop: '8px',
+          }}
+        >
+          Or — you begin the decondition now.
+        </p>
+      </div>
     </div>
   );
 }
@@ -300,6 +502,8 @@ export function ClientResultsPage() {
   const [isExporting, setIsExporting] = useState(false);
 
   const goal = detectGoalCategory(intake.desiredOutcome);
+  const goalShort = GOAL_SHORT[goal];
+  const clientLocation = results.userInfo.currentLocation || '';
   const transits = results.calculators.transits?.transits ?? [];
   const [p1, p2, p3] = results.diagnostic!.pillars;
 
@@ -355,6 +559,16 @@ export function ClientResultsPage() {
     }
   }
 
+  const pillarCardProps = (pillar: PillarSummary, index: 1 | 2 | 3, title: string, subtitle: string) => ({
+    pillar, index, title, subtitle,
+    intro: pillarIntros[index],
+    goal, goalShort, location: clientLocation,
+    transits,
+    pillar2Items: p2.items,
+    pillar3Items: p3.items,
+    addressMoveDate: intake.addressMoveDate,
+  });
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#faf8f5] to-[#f0ebe0] py-12 px-4">
       <div className="max-w-3xl mx-auto space-y-6">
@@ -405,22 +619,28 @@ export function ClientResultsPage() {
           </div>
         </div>
 
-        {/* Big Reveal: grade + speedometer + intro */}
+        {/* Upgrade 1: Reframe block */}
+        <ReframeBlock />
+
+        {/* Upgrade 2: "Why This Keeps Happening" (replaces Big Reveal heading/copy) */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
           <div className="flex flex-col sm:flex-row gap-4 items-start justify-between mb-5">
             <div className="flex-1">
-              <h2 className="text-xl font-bold text-[#2d2a3e] mb-1">■ The Big Reveal</h2>
-              <div className="text-xs text-[#9a7d4e] font-semibold uppercase tracking-wide mb-3">
-                Goal focus ({GOAL_LABEL[goal]})
-              </div>
-              <p className="text-sm text-[#4a4560] leading-relaxed mb-2">
-                Here is the breakdown of what is driving the pattern connected to your obstacle of{' '}
-                <em>"{intake.obstacle.slice(0, 80)}{intake.obstacle.length > 80 ? '…' : ''}"</em>
+              <h2 className="text-xl font-bold text-[#2d2a3e] mb-4">Why This Keeps Happening</h2>
+              <p className="text-sm text-[#4a4560] leading-relaxed mb-3">
+                You already know what you need to do to reach {goalShort}. You've probably known for months.
+              </p>
+              <p className="text-sm text-[#4a4560] leading-relaxed mb-3">
+                So why does it keep not happening?
+              </p>
+              <p className="text-sm font-bold leading-relaxed mb-3" style={{ color: '#C9A84C' }}>
+                It's not discipline. It's not strategy. It's not even mindset.
+              </p>
+              <p className="text-sm text-[#4a4560] leading-relaxed mb-3">
+                It's something encoded — in your chart, your timing, and your environment — that most coaches will never show you. Because they can't see it.
               </p>
               <p className="text-sm text-gray-400 italic leading-relaxed">
-                Based on thousands of sessions, analysis, and data compiled on Pheydrus students,
-                we have discovered life-pattern predictors and how to potentially mitigate them
-                with up to 95% accuracy. Please see your analysis below.
+                Below is your full diagnosis.
               </p>
             </div>
             <div className="flex-shrink-0 text-center">
@@ -507,7 +727,7 @@ export function ClientResultsPage() {
         {/* Raw diagnostic report */}
         <AngularDiagnosticResults result={results.diagnostic!} />
 
-        {/* Pillar deep-dive interpretations */}
+        {/* Pillar deep-dive interpretations with testimonials after P1 and P3 */}
         <div>
           <h2 className="text-xl font-bold text-[#2d2a3e] mb-1">
             What's Holding Back Your {GOAL_LABEL[goal]}
@@ -516,67 +736,141 @@ export function ClientResultsPage() {
             A pillar-by-pillar breakdown mapped directly to your stated outcome.
           </p>
           <div className="space-y-4">
-            {([
-              { pillar: p1, index: 1 as const, title: 'Structure', subtitle: 'Your Energetic Blueprint' },
-              { pillar: p2, index: 2 as const, title: 'Timing', subtitle: 'The Window You Are In' },
-              { pillar: p3, index: 3 as const, title: 'Environment', subtitle: 'Location & Address' },
-            ] as const).map(({ pillar, index, title, subtitle }) => (
-              <PillarDeepDiveCard
-                key={index}
-                pillar={pillar}
-                index={index}
-                title={title}
-                subtitle={subtitle}
-                intro={pillarIntros[index]}
-                goal={goal}
-                transits={transits}
-                pillar2Items={p2.items}
-                pillar3Items={p3.items}
-                addressMoveDate={intake.addressMoveDate}
-              />
-            ))}
+            {/* Pillar 1 */}
+            <PillarDeepDiveCard {...pillarCardProps(p1, 1, 'Structure', 'Your Energetic Blueprint')} />
+            {/* Upgrade 7: Testimonial after Pillar 1 */}
+            <TestimonialCard
+              quote="[TESTIMONIAL] e.g. — 'I had the exact same Saturn/House 5 configuration. I'd been building the same offer in my head for two years. Within 60 days of working with the Pheydrus team, I launched, signed 3 clients, and finally felt like my energy matched my output.'"
+              attribution="Jordan M., Los Angeles"
+            />
+            {/* Pillar 2 */}
+            <PillarDeepDiveCard {...pillarCardProps(p2, 2, 'Timing', 'The Window You Are In')} />
+            {/* Pillar 3 */}
+            <PillarDeepDiveCard {...pillarCardProps(p3, 3, 'Environment', 'Location & Address')} />
+            {/* Upgrade 7: Testimonial after Pillar 3 */}
+            <TestimonialCard
+              quote="[TESTIMONIAL] e.g. — 'The environment piece was the one I almost skipped. After my Pillar 3 session I raised my rates by 40% and signed my highest-paying client that same week. The address work is real.'"
+              attribution="Priya K., New York"
+            />
           </div>
         </div>
 
-        {/* Recommendation: Calendly CTA */}
+        {/* Upgrade 5: Cost of Inaction */}
+        <CostOfInaction goalShort={goalShort} endYear={longest?.endYear ?? null} />
+
+        {/* Upgrade 7: Testimonial after Cost of Inaction */}
+        <TestimonialCard
+          quote="[TESTIMONIAL] e.g. — 'I came in skeptical. Three years of coaches and nothing had actually shifted. I left my first session with a sequenced 90-day plan that made more sense than anything I'd tried before.'"
+          attribution="Marcus T., Chicago"
+        />
+
+        {/* Upgrade 6: Precision Deconditioning Session CTA */}
         {showCalendlyCTA && (
-          <div className="bg-gradient-to-br from-[#2d2a3e] to-[#1a1828] rounded-2xl shadow-lg p-7 text-white">
-            <p className="text-lg font-extrabold uppercase tracking-widest text-[#c4a96b] mb-3">
-              Your Recommended Next Step
-            </p>
-            <h2 className="text-xl font-bold mb-3 leading-snug">
-              Your{' '}
-              <span className="text-[#c4a96b]">{finalGrade}-grade</span> result
-              {activePillars.length > 0 && (
-                <> with active pressure in <span className="text-[#c4a96b]">{pillarListText}</span></>
-              )}{' '}
-              has a clear, documented path through it.
+          <div
+            style={{
+              background: 'linear-gradient(135deg, #2d2a3e, #1a1828)',
+              borderRadius: '16px',
+              padding: '36px 40px',
+              textAlign: 'center',
+            }}
+          >
+            <h2
+              style={{
+                fontFamily: CORMORANT,
+                color: '#C9A84C',
+                fontSize: '1.8rem',
+                fontWeight: 700,
+                margin: '0 0 20px',
+                lineHeight: 1.3,
+              }}
+            >
+              Your Next Step: The Precision Deconditioning Session
             </h2>
-            <p className="text-sm text-gray-300 leading-relaxed mb-4">
-              The Pheydrus team has worked with hundreds of students carrying the exact pattern
-              configurations showing in your report. For clients with active pressure across{' '}
-              {pillarListText || 'multiple pillars'}, we implement targeted methods that directly
-              address each layer — structural, timing, and environmental — through a precision
-              process built around your exact chart, transits, and location.
+            <p className="text-sm leading-relaxed mb-4" style={{ color: '#d1d5db', maxWidth: '520px', margin: '0 auto 16px' }}>
+              This is a 45-minute 1:1 session with the Pheydrus team where we:
             </p>
-            <p className="text-sm text-gray-300 leading-relaxed mb-6">
-              This isn't generic coaching. Students who have gone through this process with us
-              have moved out of these exact patterns in{' '}
-              <strong className="text-white">under 90 days</strong> — not by working harder, but
-              by working on the right layer, in the right order, at the right time. Your report
-              tells us exactly where to start.
+            <ul
+              className="text-sm leading-relaxed text-left mb-6 space-y-2"
+              style={{ color: '#d1d5db', maxWidth: '460px', margin: '0 auto 24px', listStyle: 'none', padding: 0 }}
+            >
+              <li>→ Map which pillar to activate first for your specific goal of {goalShort}</li>
+              <li>→ Decode exactly what your Uranus/House 10 window means for the next 90 days</li>
+              <li>→ Determine whether Artist's Way is your aligned next chapter</li>
+            </ul>
+            <p
+              style={{
+                fontFamily: CORMORANT,
+                fontStyle: 'italic',
+                color: '#E8D5A3',
+                fontSize: '1.05rem',
+                margin: '0 0 24px',
+                lineHeight: 1.6,
+              }}
+            >
+              This is not a sales call.<br />
+              It is the beginning of your decondition.
+            </p>
+            <p className="text-xs mb-6" style={{ color: '#9ca3af' }}>Limited sessions available this cycle.</p>
+            <div>
+              <a
+                href="https://calendly.com/pheydrus_strategy/1-1-alignment-strategy-call-clone-1"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'inline-block',
+                  background: 'linear-gradient(135deg, #C9A84C, #E8D5A3)',
+                  color: '#0D0D0D',
+                  fontWeight: 700,
+                  fontSize: '0.95rem',
+                  letterSpacing: '0.08em',
+                  padding: '18px 40px',
+                  borderRadius: '2px',
+                  textDecoration: 'none',
+                  textTransform: 'uppercase' as const,
+                  transition: 'opacity 0.2s',
+                }}
+              >
+                Book Your Precision Deconditioning Session →
+              </a>
+            </div>
+            <p className="text-xs mt-4" style={{ color: '#6b7280' }}>
+              Complimentary · No obligation · Limited availability this cycle
+            </p>
+          </div>
+        )}
+
+        {/* Also show a softer version for non-eligible visitors */}
+        {!showCalendlyCTA && (
+          <div className="bg-gradient-to-br from-[#2d2a3e] to-[#1a1828] rounded-2xl shadow-lg p-7 text-white text-center">
+            <h2
+              style={{ fontFamily: CORMORANT, color: '#C9A84C', fontSize: '1.6rem', fontWeight: 700, margin: '0 0 12px' }}
+            >
+              Your Next Step: The Precision Deconditioning Session
+            </h2>
+            <p className="text-sm text-gray-300 leading-relaxed mb-5 max-w-lg mx-auto">
+              A focused 45-minute 1:1 with the Pheydrus team to map your exact decondition sequence — pillar by pillar, in the right order for your chart.
             </p>
             <a
               href="https://calendly.com/pheydrus_strategy/1-1-alignment-strategy-call-clone-1"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block px-7 py-3.5 bg-[#c4a96b] hover:bg-[#d4b97b] font-bold rounded-xl transition-colors text-sm"
-              style={{ color: '#ffffff' }}
+              style={{
+                display: 'inline-block',
+                background: 'linear-gradient(135deg, #C9A84C, #E8D5A3)',
+                color: '#0D0D0D',
+                fontWeight: 700,
+                fontSize: '0.95rem',
+                letterSpacing: '0.08em',
+                padding: '18px 40px',
+                borderRadius: '2px',
+                textDecoration: 'none',
+                textTransform: 'uppercase' as const,
+              }}
             >
-              Book Your Complimentary 1:1 Alignment &amp; Strategy Call →
+              Book Your Precision Deconditioning Session →
             </a>
-            <p className="text-xs text-gray-500 mt-3">
-              Complimentary call · No obligation · Limited spots available
+            <p className="text-xs mt-4" style={{ color: '#6b7280' }}>
+              Complimentary · No obligation · Limited availability this cycle
             </p>
           </div>
         )}

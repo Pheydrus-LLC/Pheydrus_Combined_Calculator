@@ -58,6 +58,58 @@ const GOAL_LABEL: Record<GoalCategory, string> = {
   general: 'Your Goals',
 };
 
+const GOAL_SHORT: Record<GoalCategory, string> = {
+  career: 'career & financial growth',
+  love: 'love & relationships',
+  general: 'your goals',
+};
+
+const CORMORANT = "'Cormorant Garamond', Georgia, serif";
+
+/** Returns HTML for the "Does this sound familiar?" mirror line, or '' if no match. */
+function getMirrorLineHtml(item: { planet?: string; house?: number; section?: string }, goalShort: string): string {
+  const prefix = item.section === 'Address' ? 'Env' : '';
+  const key = `${prefix}${item.planet ?? ''}-${item.house ?? 0}`;
+  const lines: Record<string, string> = {
+    'Sun-7': `You naturally draw people in — but converting that energy into paying clients for ${esc(goalShort)} feels like a different skill entirely.`,
+    'Saturn-5': `Does this sound familiar? You build the offer, get excited, draft the content — and then pull back right before you publish. Every time.`,
+    'Uranus-5': `You've probably started building toward ${esc(goalShort)} more than once — with real momentum — and then watched yourself abandon it before it could pay off.`,
+    'Neptune-5': `You can see the ${esc(goalShort)} version of your life clearly. The gap is in the concrete, step-by-step execution of getting there.`,
+    'Pluto-6': `Are you stuck in performative busyness — doing work that feels productive but isn't actually moving the needle toward ${esc(goalShort)}?`,
+    'Neptune-8': `Have you felt confused about your pricing or what you're actually worth charging — making ${esc(goalShort)} feel like a moving target?`,
+    'Uranus-10': `Does your professional path feel chaotic — like you can't commit to one lane long enough to build real momentum toward ${esc(goalShort)}?`,
+    'Saturn-8': `Has accessing the financial partnerships or investment needed to scale toward ${esc(goalShort)} felt blocked or fear-inducing?`,
+    'EnvSaturn-2': `Since living at your current address, has there been an invisible ceiling on how much you allow yourself to charge or earn?`,
+    'EnvUranus-2': `Does your income feel erratic — breakthrough months followed by drought — while ${esc(goalShort)} stays just out of reach?`,
+    'EnvNeptune-2': `Are you chronically undercharging for your work — or genuinely unclear about what to charge?`,
+  };
+  const text = lines[key];
+  if (!text) return '';
+  return `<p style="margin:0 0 6px;font-size:11px;font-style:italic;color:#C9A84C;line-height:1.5;font-family:${CORMORANT};">&#x1F4AD; ${text}</p>`;
+}
+
+/** Upgrade 1: Reframe block HTML */
+function renderReframeBlock(): string {
+  return `
+<div style="border-left:4px solid #C9A84C;background:#1a1828;border-radius:10px;padding:20px 24px;margin-bottom:20px;">
+  <p style="margin:0 0 10px;font-size:14px;font-style:italic;color:#E8D5A3;line-height:1.65;font-family:${CORMORANT};">If you've tried everything — the mindset work, the strategies, the coaches — and things are going well enough but that one specific thing you want keeps slipping just out of reach... this is your answer.</p>
+  <p style="margin:0 0 8px;font-size:12px;color:#c9c4d8;line-height:1.65;font-family:Arial,sans-serif;">That unseen force is real. It's measurable. And it's encoded directly in your chart.</p>
+  <p style="margin:0 0 8px;font-size:12px;color:#c9c4d8;line-height:1.65;font-family:Arial,sans-serif;">You're not broken. You're not undisciplined. You've been 10x-capable this entire time — just running against an invisible current.</p>
+  <p style="margin:0;font-size:12px;font-weight:600;color:#E8D5A3;line-height:1.65;font-family:Arial,sans-serif;">This report shows you exactly what that current is.</p>
+</div>`;
+}
+
+/** Upgrade 7: Testimonial placeholder card HTML */
+function renderTestimonialCard(quote: string, attribution: string): string {
+  return `
+<!-- REPLACE WITH REAL TESTIMONIAL -->
+<div style="background:#1A1A1A;border-left:3px solid #C9A84C;border-radius:8px;padding:18px 22px;margin:16px 0;position:relative;overflow:hidden;">
+  <span style="position:absolute;top:-14px;left:10px;font-size:80px;color:#C9A84C;opacity:0.12;font-family:${CORMORANT};line-height:1;">&ldquo;</span>
+  <p style="margin:0 0 8px;font-size:13px;font-style:italic;color:#E8D5A3;line-height:1.65;font-family:${CORMORANT};position:relative;">${esc(quote)}</p>
+  <p style="margin:0;font-size:10px;color:#888888;font-family:Arial,sans-serif;">— ${esc(attribution)}</p>
+</div>`;
+}
+
 function toRad(deg: number): number {
   return (deg * Math.PI) / 180;
 }
@@ -281,9 +333,6 @@ function renderPage1(results: ConsolidatedResults, intake: ClientIntakeData, goa
     ? intake.desiredOutcome.slice(0, 100) + '…'
     : intake.desiredOutcome;
 
-  const obstacleExcerpt = intake.obstacle.length > 80
-    ? intake.obstacle.slice(0, 80) + '…'
-    : intake.obstacle;
 
   const prefLabel = intake.preferredSolution
     ? (PREFERRED_SOLUTION_LABELS[intake.preferredSolution] ?? intake.preferredSolution)
@@ -346,11 +395,17 @@ function renderPage1(results: ConsolidatedResults, intake: ClientIntakeData, goa
 
   ${goalExcerpt ? `<div style="padding:9px 14px;background:#faf8f5;border-left:3px solid #9a7d4e;border-radius:0 6px 6px 0;font-size:12px;color:#4a4560;margin-bottom:18px;font-family:Arial,sans-serif;"><strong style="color:#9a7d4e;">Goal focus (${esc(GOAL_LABEL[goal])}) — 90 days:</strong> ${esc(goalExcerpt)}</div>` : ''}
 
-  <!-- Big Reveal -->
+  <!-- Upgrade 1: Reframe block -->
+  ${renderReframeBlock()}
+
+  <!-- Upgrade 2: Why This Keeps Happening -->
   <div style="margin-bottom:16px;">
-    <h2 style="font-size:16px;color:#2d2a3e;margin:0 0 6px;letter-spacing:-0.3px;font-family:Arial,sans-serif;">&#9632;&nbsp; The Big Reveal</h2>
-    <p style="margin:0 0 4px;font-size:12px;color:#4a4560;line-height:1.65;font-family:Arial,sans-serif;">Here is the breakdown of what is driving the pattern connected to your obstacle of "<em>${esc(obstacleExcerpt)}</em>."</p>
-    <p style="margin:0;font-size:12px;color:#6b7280;line-height:1.65;font-style:italic;font-family:Arial,sans-serif;">Based on thousands of sessions, analysis, and data compiled on Pheydrus students, we have discovered life-pattern predictors and how to potentially mitigate them with up to 95% accuracy. Please see your analysis below.</p>
+    <h2 style="font-size:16px;color:#2d2a3e;margin:0 0 10px;letter-spacing:-0.3px;font-family:Arial,sans-serif;">Why This Keeps Happening</h2>
+    <p style="margin:0 0 6px;font-size:12px;color:#4a4560;line-height:1.65;font-family:Arial,sans-serif;">You already know what you need to do to reach ${esc(GOAL_SHORT[goal])}. You've probably known for months.</p>
+    <p style="margin:0 0 6px;font-size:12px;color:#4a4560;line-height:1.65;font-family:Arial,sans-serif;">So why does it keep not happening?</p>
+    <p style="margin:0 0 6px;font-size:12px;font-weight:700;color:#C9A84C;line-height:1.65;font-family:Arial,sans-serif;">It's not discipline. It's not strategy. It's not even mindset.</p>
+    <p style="margin:0 0 6px;font-size:12px;color:#4a4560;line-height:1.65;font-family:Arial,sans-serif;">It's something encoded — in your chart, your timing, and your environment — that most coaches will never show you. Because they can't see it.</p>
+    <p style="margin:0;font-size:12px;color:#6b7280;line-height:1.65;font-style:italic;font-family:Arial,sans-serif;">Below is your full diagnosis.</p>
   </div>
 
   ${zeroMsg}
@@ -389,6 +444,7 @@ function renderPage1(results: ConsolidatedResults, intake: ClientIntakeData, goa
 function renderPillarBullets(
   pillar: PillarSummary,
   goal: GoalCategory,
+  goalShort: string,
   transits: ConsolidatedResults['calculators']['transits'],
 ): string {
   const scoringItems = pillar.items.filter((i) => i.grade === 'F' || i.grade === 'C' || i.grade === 'A');
@@ -402,10 +458,12 @@ function renderPillarBullets(
       const color = bulletColor(item.grade);
       const isAddress = item.section === 'Address';
       const label = isAddress ? '&#127968;&nbsp; Address Energy' : `&#9679;&nbsp; ${esc(item.source)}`;
+      const mirrorHtml = getMirrorLineHtml(item, goalShort);
       return `
     <div style="display:flex;gap:10px;margin-bottom:12px;align-items:flex-start;">
       <div style="width:3px;min-height:100%;background:${color};border-radius:2px;margin-top:2px;flex-shrink:0;"></div>
       <div style="flex:1;">
+        ${mirrorHtml}
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:3px;flex-wrap:wrap;">
           <span style="font-size:12px;font-weight:700;color:#2d2a3e;font-family:Arial,sans-serif;">${label}</span>
           ${gradeBadge(item.grade)}
@@ -423,11 +481,20 @@ function renderPage2(results: ConsolidatedResults, intake: ClientIntakeData, goa
 
   const [p1, p2, p3] = diagnostic.pillars;
   const transits = results.calculators.transits?.transits ?? [];
+  const goalShort = GOAL_SHORT[goal];
+  const clientLocation = results.userInfo.currentLocation || '';
 
   const pillarIntros: Record<1 | 2 | 3, string> = {
     1: `These are the energetic signatures encoded in your birth chart — the structural blueprint you came in with. They don't expire, but they can be mastered. What follows are the specific placements creating the most friction for your goal of ${GOAL_LABEL[goal].toLowerCase()}.`,
     2: `These are the slow-moving planetary forces currently transiting your chart — the timing window you are in right now. Each one includes how long it runs, giving you an honest timeline rather than an open-ended question mark.`,
     3: `Your current location and home address are either amplifying or dampening every other pressure in your chart. What follows is how your environmental energy is specifically interacting with your goal.`,
+  };
+
+  // Upgrade 3: goal tie-in callout per pillar
+  const pillarCallouts: Record<1 | 2 | 3, string> = {
+    1: `Here is how Pillar 1 is specifically blocking your goal of ${esc(goalShort)}:`,
+    2: `Here is how your current timing window is directly affecting your ability to reach ${esc(goalShort)}:`,
+    3: `Here is how your current address${clientLocation ? ` in ${esc(clientLocation)}` : ''} is interacting with your goal of ${esc(goalShort)}:`,
   };
 
   const pillarStyles: Record<1 | 2 | 3, { badge: string; accent: string }> = {
@@ -446,12 +513,13 @@ function renderPage2(results: ConsolidatedResults, intake: ClientIntakeData, goa
         ${pillar.fCount > 0 ? `<span style="font-size:11px;color:#dc2626;font-weight:600;font-family:Arial,sans-serif;">${pillar.fCount} F${pillar.fCount !== 1 ? "'s" : ''}</span>` : ''}
         ${pillar.cCount > 0 ? `<span style="font-size:11px;color:#d97706;font-weight:600;font-family:Arial,sans-serif;">${pillar.cCount} C${pillar.cCount !== 1 ? "'s" : ''}</span>` : ''}
       </div>
+      <p style="margin:0 0 8px;font-size:11px;font-style:italic;color:#E8D5A3;line-height:1.5;padding:6px 10px;background:rgba(201,168,76,0.08);border-bottom:1px solid rgba(201,168,76,0.2);border-radius:4px;font-family:${CORMORANT};">${pillarCallouts[num]}</p>
       <p style="margin:0 0 12px;font-size:11px;color:#6b7280;font-style:italic;line-height:1.6;font-family:Arial,sans-serif;">${pillarIntros[num]}</p>
 
       <!-- Content: bullets left, house wheel right -->
       <div style="display:flex;gap:14px;align-items:flex-start;">
         <div style="flex:1;">
-          ${renderPillarBullets(pillar, goal, results.calculators.transits)}
+          ${renderPillarBullets(pillar, goal, goalShort, results.calculators.transits)}
         </div>
         <div style="flex-shrink:0;text-align:center;width:120px;">
           ${renderHouseWheel(pillar.items)}
@@ -475,8 +543,20 @@ function renderPage2(results: ConsolidatedResults, intake: ClientIntakeData, goa
   <p style="margin:0 0 22px;color:#6b7280;font-size:11px;font-family:Arial,sans-serif;">A pillar-by-pillar breakdown mapped directly to your stated outcome.</p>
 
   ${renderPillarSection(p1, 1, 'Structure', 'Your Energetic Blueprint')}
+  <!-- Upgrade 7: Testimonial after Pillar 1 -->
+  ${renderTestimonialCard(
+    "[TESTIMONIAL] e.g. — 'I had the exact same Saturn/House 5 configuration. I'd been building the same offer in my head for two years. Within 60 days of working with the Pheydrus team, I launched, signed 3 clients, and finally felt like my energy matched my output.'",
+    'Jordan M., Los Angeles'
+  )}
+
   ${renderPillarSection(p2, 2, 'Timing', 'The Window You Are In')}
+
   ${renderPillarSection(p3, 3, 'Environment', 'Location & Address')}
+  <!-- Upgrade 7: Testimonial after Pillar 3 -->
+  ${renderTestimonialCard(
+    "[TESTIMONIAL] e.g. — 'The environment piece was the one I almost skipped. After my Pillar 3 session I raised my rates by 40% and signed my highest-paying client that same week. The address work is real.'",
+    'Priya K., New York'
+  )}
 </div>
 `;
 }
@@ -486,66 +566,89 @@ function renderPage2(results: ConsolidatedResults, intake: ClientIntakeData, goa
 function renderPage3(results: ConsolidatedResults, intake: ClientIntakeData): string {
   const { finalGrade, pillars } = results.diagnostic!;
   const [p1, p2, p3] = pillars;
+  const goal = detectGoalCategory(intake.desiredOutcome);
+  const goalShort = GOAL_SHORT[goal];
 
-  // Calendly CTA eligibility — same 4 conditions as the web UI
+  // CTA eligibility — same 4 conditions as the web UI
   const desiredOutcomeWordCount = intake.desiredOutcome.trim().split(/\s+/).filter(Boolean).length;
   const soughtTherapyOrCoaches = intake.priorHelp.includes('therapy') || intake.priorHelp.includes('coaches');
   const notMonetizing = intake.currentSituation !== 'monetizing';
   const scoredCOrWorse = finalGrade === 'C' || finalGrade === 'F';
-  const showCalendlyCTA = desiredOutcomeWordCount > 1 && soughtTherapyOrCoaches && notMonetizing && scoredCOrWorse;
+  const showCTA = desiredOutcomeWordCount > 1 && soughtTherapyOrCoaches && notMonetizing && scoredCOrWorse;
 
+  // Active pillars
   const activePillars: number[] = [];
   if (p1.fCount + p1.cCount > 0) activePillars.push(1);
   if (p2.fCount + p2.cCount > 0) activePillars.push(2);
   if (p3.fCount + p3.cCount > 0) activePillars.push(3);
-  const pillarListText =
-    activePillars.length === 0 ? 'multiple pillars' :
-    activePillars.length === 1 ? `Pillar ${activePillars[0]}` :
-    activePillars.length === 2 ? `Pillars ${activePillars[0]} and ${activePillars[1]}` :
-    'Pillars 1, 2, and 3';
 
-  const ctaHtml = showCalendlyCTA ? `
-  <div style="background:linear-gradient(135deg,#2d2a3e,#1a1828);border-radius:12px;padding:32px 36px;margin-bottom:28px;color:#fff;">
-    <p style="margin:0 0 10px;font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:0.12em;color:#c4a96b;font-family:Arial,sans-serif;">Your Recommended Next Step</p>
-    <p style="margin:0 0 14px;font-size:17px;font-weight:700;color:#fff;line-height:1.4;font-family:Arial,sans-serif;">
-      Your <span style="color:#c4a96b;">${esc(finalGrade)}-grade</span> result with active pressure in
-      <span style="color:#c4a96b;">${esc(pillarListText)}</span> has a clear, documented path through it.
-    </p>
-    <p style="margin:0 0 12px;font-size:12px;color:#d1d5db;line-height:1.7;font-family:Arial,sans-serif;">
-      The Pheydrus team has worked with hundreds of students carrying the exact pattern configurations
-      showing in your report. For clients with active pressure across ${esc(pillarListText)}, we implement
-      targeted methods that directly address each layer — structural, timing, and environmental — through
-      a precision process built around your exact chart, transits, and location.
-    </p>
-    <p style="margin:0 0 20px;font-size:12px;color:#d1d5db;line-height:1.7;font-family:Arial,sans-serif;">
-      This isn't generic coaching. Students who have gone through this process with us have moved out of
-      these exact patterns in <strong style="color:#fff;">under 90 days</strong> — not by working harder,
-      but by working on the right layer, in the right order, at the right time. Your report tells us
-      exactly where to start.
-    </p>
-    <div style="margin-bottom:8px;">
-      <a href="https://calendly.com/pheydrus_strategy/1-1-alignment-strategy-call-clone-1"
-         style="display:inline-block;padding:12px 24px;background:#c4a96b;color:#ffffff;font-weight:700;font-size:13px;border-radius:10px;text-decoration:none;font-family:Arial,sans-serif;">
-        Book Your Complimentary 1:1 Alignment &amp; Strategy Call &rarr;
-      </a>
+  // Longest transit year for Cost of Inaction
+  const longest = getLongestMaleficTransit(
+    results.diagnostic!.allItems,
+    results.calculators.transits?.transits ?? [],
+  );
+  const endYear = longest?.endYear ?? null;
+  const yearsRemaining = endYear ? endYear - new Date().getFullYear() : null;
+  const yearLine = endYear
+    ? `The pattern in this report has been active for years. Without targeted deconditioning of the specific layers identified above, the data points to ${endYear}.`
+    : `The pattern in this report has been active for years. Without targeted deconditioning of the specific layers identified above, it does not self-resolve.`;
+
+  // Upgrade 6: Precision Deconditioning CTA
+  const ctaHtml = `
+  <div style="background:linear-gradient(135deg,#2d2a3e,#1a1828);border-radius:12px;padding:28px 32px;margin-bottom:20px;text-align:center;">
+    <h3 style="margin:0 0 14px;font-size:20px;font-weight:700;color:#C9A84C;font-family:${CORMORANT};line-height:1.3;">Your Next Step: The Precision Deconditioning Session</h3>
+    <p style="margin:0 0 10px;font-size:12px;color:#d1d5db;line-height:1.7;font-family:Arial,sans-serif;">This is a 45-minute 1:1 session with the Pheydrus team where we:</p>
+    <div style="text-align:left;max-width:400px;margin:0 auto 14px;">
+      <p style="margin:0 0 5px;font-size:12px;color:#d1d5db;font-family:Arial,sans-serif;">→ Map which pillar to activate first for your specific goal of ${esc(goalShort)}</p>
+      <p style="margin:0 0 5px;font-size:12px;color:#d1d5db;font-family:Arial,sans-serif;">→ Decode exactly what your Uranus/House 10 window means for the next 90 days</p>
+      <p style="margin:0 0 14px;font-size:12px;color:#d1d5db;font-family:Arial,sans-serif;">→ Determine whether Artist's Way is your aligned next chapter</p>
     </div>
-    <p style="margin:0;font-size:10px;color:#6b7280;font-family:Arial,sans-serif;">Complimentary call &nbsp;·&nbsp; No obligation &nbsp;·&nbsp; Limited spots available</p>
-  </div>` : `
-  <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;background:#faf8f5;border-radius:12px;border:2px dashed #d4b896;padding:40px;text-align:center;margin-bottom:28px;">
-    <div style="font-size:36px;margin-bottom:16px;">&#9733;</div>
-    <p style="font-size:15px;font-weight:700;color:#2d2a3e;margin:0 0 8px;font-family:Arial,sans-serif;">Your personalized next-step plan.</p>
-    <p style="font-size:12px;color:#6b7280;margin:0;max-width:320px;line-height:1.6;font-family:Arial,sans-serif;">Based on your goals, obstacle, and 3-pillar results, your Pheydrus advisor will walk you through the specific steps for your path forward.</p>
+    <p style="margin:0 0 14px;font-size:13px;font-style:italic;color:#E8D5A3;font-family:${CORMORANT};line-height:1.6;">This is not a sales call.<br>It is the beginning of your decondition.</p>
+    <p style="margin:0 0 16px;font-size:10px;color:#9ca3af;font-family:Arial,sans-serif;">Limited sessions available this cycle.</p>
+    <a href="https://calendly.com/pheydrus_strategy/1-1-alignment-strategy-call-clone-1"
+       style="display:inline-block;padding:14px 32px;background:linear-gradient(135deg,#C9A84C,#E8D5A3);color:#0D0D0D;font-weight:700;font-size:11px;letter-spacing:0.08em;border-radius:2px;text-decoration:none;font-family:Arial,sans-serif;text-transform:uppercase;">
+      BOOK YOUR PRECISION DECONDITIONING SESSION &rarr;
+    </a>
+    <p style="margin:8px 0 0;font-size:10px;color:#6b7280;font-family:Arial,sans-serif;">Complimentary &nbsp;·&nbsp; No obligation &nbsp;·&nbsp; Limited availability this cycle</p>
+  </div>`;
+
+  const softCtaHtml = `
+  <div style="background:linear-gradient(135deg,#2d2a3e,#1a1828);border-radius:12px;padding:24px 28px;margin-bottom:20px;text-align:center;">
+    <h3 style="margin:0 0 10px;font-size:18px;font-weight:700;color:#C9A84C;font-family:${CORMORANT};">Your Next Step: The Precision Deconditioning Session</h3>
+    <p style="margin:0 0 14px;font-size:12px;color:#d1d5db;line-height:1.65;font-family:Arial,sans-serif;">A focused 45-minute 1:1 with the Pheydrus team to map your exact decondition sequence — pillar by pillar, in the right order for your chart.</p>
+    <a href="https://calendly.com/pheydrus_strategy/1-1-alignment-strategy-call-clone-1"
+       style="display:inline-block;padding:12px 28px;background:linear-gradient(135deg,#C9A84C,#E8D5A3);color:#0D0D0D;font-weight:700;font-size:11px;letter-spacing:0.08em;border-radius:2px;text-decoration:none;font-family:Arial,sans-serif;text-transform:uppercase;">
+      BOOK YOUR PRECISION DECONDITIONING SESSION &rarr;
+    </a>
+    <p style="margin:8px 0 0;font-size:10px;color:#6b7280;font-family:Arial,sans-serif;">Complimentary &nbsp;·&nbsp; No obligation &nbsp;·&nbsp; Limited availability this cycle</p>
   </div>`;
 
   return `
 <!-- PAGE 3: NEXT STEPS -->
-<div style="padding:36px 44px;min-height:900px;display:flex;flex-direction:column;">
-  <h2 style="font-size:17px;color:#2d2a3e;margin:0 0 3px;letter-spacing:-0.4px;font-family:Arial,sans-serif;">Your Next Steps</h2>
-  <p style="margin:0 0 24px;color:#6b7280;font-size:11px;font-family:Arial,sans-serif;">Personalized guidance based on your 3-pillar assessment.</p>
+<div style="padding:36px 44px;">
 
-  ${ctaHtml}
+  <!-- Upgrade 5: Cost of Inaction -->
+  <div style="background:#1A0A0A;border-left:4px solid #C0392B;border-radius:10px;padding:24px 28px;margin-bottom:20px;">
+    <h3 style="margin:0 0 16px;font-size:22px;font-weight:700;color:#ffffff;font-family:${CORMORANT};line-height:1.3;">What Another Year of This Pattern Costs You</h3>
+    <p style="margin:0 0 8px;font-size:12px;color:#c9b8b8;line-height:1.7;font-family:Arial,sans-serif;">Another 12 months of knowing exactly what to do — and watching yourself not do it.</p>
+    <p style="margin:0 0 8px;font-size:12px;color:#c9b8b8;line-height:1.7;font-family:Arial,sans-serif;">Another year of income that almost hits ${esc(goalShort)}, but resets every time you get close.</p>
+    <p style="margin:0 0 8px;font-size:12px;color:#c9b8b8;line-height:1.7;font-family:Arial,sans-serif;">Another year of brilliant ideas living in your drafts folder instead of the marketplace.</p>
+    <p style="margin:0 0 8px;font-size:12px;color:#c9b8b8;line-height:1.7;font-family:Arial,sans-serif;">Another year of telling yourself next month will be different.</p>
+    <p style="margin:0 0 8px;font-size:12px;color:#c9b8b8;line-height:1.7;font-family:Arial,sans-serif;">${yearLine}</p>
+    ${yearsRemaining !== null && yearsRemaining > 0 ? `<p style="margin:0 0 8px;font-size:12px;color:#ef4444;font-weight:700;line-height:1.7;font-family:Arial,sans-serif;">That's ${yearsRemaining} more year${yearsRemaining !== 1 ? 's' : ''}.</p>` : ''}
+    <p style="margin:0;font-size:13px;font-weight:700;color:#C9A84C;line-height:1.7;font-family:Arial,sans-serif;">Or — you begin the decondition now.</p>
+  </div>
 
-  <div style="margin-top:auto;padding-top:20px;border-top:1px solid #e5e7eb;display:flex;justify-content:space-between;align-items:center;font-family:Arial,sans-serif;">
+  <!-- Upgrade 7: Testimonial after Cost of Inaction -->
+  ${renderTestimonialCard(
+    "[TESTIMONIAL] e.g. — 'I came in skeptical. Three years of coaches and nothing had actually shifted. I left my first session with a sequenced 90-day plan that made more sense than anything I'd tried before.'",
+    'Marcus T., Chicago'
+  )}
+
+  <!-- Upgrade 6: Precision Deconditioning CTA -->
+  ${showCTA ? ctaHtml : softCtaHtml}
+
+  <div style="margin-top:24px;padding-top:16px;border-top:1px solid #e5e7eb;display:flex;justify-content:space-between;align-items:center;font-family:Arial,sans-serif;">
     <p style="margin:0;font-size:10px;color:#9ca3af;">Pheydrus Proprietary Analysis &nbsp;·&nbsp; Confidential</p>
     <p style="margin:0;font-size:10px;color:#9ca3af;">${esc(results.userInfo.name)} &nbsp;·&nbsp; ${new Date(results.timestamp).toLocaleDateString()}</p>
   </div>
@@ -568,6 +671,7 @@ export function generateClientReportTemplate(
   <meta charset="UTF-8">
   <title>Pheydrus Report — ${esc(results.userInfo.name)}</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap');
     * { box-sizing: border-box; }
     body {
       font-family: Arial, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
