@@ -154,9 +154,9 @@ function renderVennDiagram(): string {
 </svg>`;
 }
 
-// ── SVG: Dark house wheel (PDF only) ─────────────────────────────────────────
+// ── SVG: Dark house wheel ─────────────────────────────────────────────────────
 
-function renderDarkHouseWheel(items: GradeItem[], size = 108): string {
+export function renderDarkHouseWheel(items: GradeItem[], size = 108): string {
   const cx = size / 2, cy = size / 2;
   const outerR = size * 0.44;
   const innerR = size * 0.22;
