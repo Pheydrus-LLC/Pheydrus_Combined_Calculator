@@ -123,9 +123,9 @@ const F_INTERP: Record<string, Partial<Record<number, { career: string; love: st
     },
     5: {
       career:
-        'Saturn in your fifth house suppresses creative spontaneity, playful risk-taking, and romantic openness — all at once. Professionally, the fear of failure keeps your creative contributions in permanent draft form rather than the marketplace. In romance, the same fear of rejection makes you hold back exactly when vulnerability would create something real, keeping love at arm\'s length just as it could land.',
+        '9 out of 10 clients with this configuration have a fully built offer sitting in their notes app that has never been posted. The work is done. The fear of being seen is what stops the publish button.',
       love:
-        'Saturn in your romance house puts a heavy hand on spontaneity, vulnerability, and the playfulness that attracts connection. The deep fear of rejection makes you hold back exactly when opening up would create something real — keeping love at arm\'s length just as it could land.',
+        '9 out of 10 clients with this configuration have a fully built offer sitting in their notes app that has never been posted. The work is done. The fear of being seen is what stops the publish button.',
     },
     7: {
       career:
@@ -149,9 +149,9 @@ const F_INTERP: Record<string, Partial<Record<number, { career: string; love: st
     },
     5: {
       career:
-        'Uranus in your fifth house drives explosive starts — creatively and romantically — followed by sudden loss of interest before anything matures. Professionally, brilliant beginnings and abandoned follow-through create a reputation for inconsistency that undermines client trust and career advancement. In romance, the same pattern means love never receives the sustained attention needed to deepen into something real.',
+        'One client had launched the same coaching business four separate times over six years — each time with real momentum, real interest, real potential. Each time, she disappeared before the first dollar came in.',
       love:
-        'Uranus in your romance house creates a cycle of thrilling starts followed by sudden departures — either you lose interest when novelty fades, or your energy signals "I\'ll leave" before you do, and partners pull back first. Love never gets the sustained attention needed to deepen.',
+        'One client had launched the same coaching business four separate times over six years — each time with real momentum, real interest, real potential. Each time, she disappeared before the first dollar came in.',
     },
     7: {
       career:
@@ -201,9 +201,9 @@ const F_INTERP: Record<string, Partial<Record<number, { career: string; love: st
     },
     5: {
       career:
-        'Neptune in your fifth house wraps both creative work and romance in a fog of idealism. Professionally, you see the vision clearly but struggle to execute it in concrete, marketable form — the gap between inspiration and what actually ships creates unrealized potential. In romance, the same fog has you falling in love with the idea of a person rather than the actual person, creating intense starts and confused endings.',
+        'Clients with this configuration consistently describe a business that exists in perfect detail in their imagination — and becomes unrecognizable the moment they try to write the sales page. The vision is real. The execution feels like translating a dream.',
       love:
-        'Neptune in your romance house creates a pattern of falling in love with the idea of a person rather than the actual person. The inevitable crash when reality intrudes on the fantasy creates a love life marked by intense starts and confused endings.',
+        'Clients with this configuration consistently describe a business that exists in perfect detail in their imagination — and becomes unrecognizable the moment they try to write the sales page. The vision is real. The execution feels like translating a dream.',
     },
     7: {
       career:
@@ -219,6 +219,12 @@ const F_INTERP: Record<string, Partial<Record<number, { career: string; love: st
     },
   },
   Sun: {
+    7: {
+      career:
+        'A Pheydrus client with this exact placement had a waitlist of people who wanted to work with her — and still couldn\'t close a single paid client. The magnetism was real. The money conversation felt impossible.',
+      love:
+        'A Pheydrus client with this exact placement had a waitlist of people who wanted to work with her — and still couldn\'t close a single paid client. The magnetism was real. The money conversation felt impossible.',
+    },
     8: {
       career:
         'The Sun — your core vitality and identity — sits in the house of hidden power and shared resources. This creates a persistent pattern of giving your power away in partnerships and financial agreements, or keeping your authentic capabilities hidden just as they\'d be most rewarded. The solar force that drives career success is trapped behind a veil of self-doubt around your fundamental worth.',
@@ -254,8 +260,8 @@ const TRANSIT_C_INTERP: Record<string, Partial<Record<number, (year: number) => 
   Pluto: {
     2: (y) =>
       `Pluto is transiting your financial house through ${y} — either a period of wealth destruction or profound financial transformation. Shadow path: obsessive, all-or-nothing financial behavior that creates as much scarcity as it resolves. Conscious path: using Pluto's transformative power to permanently upgrade your relationship with money, eliminating financial patterns that have been limiting you long before this transit.`,
-    6: (y) =>
-      `Pluto is transiting your work house through ${y}. Shadow: obsessive work patterns, power struggles with employees or clients, burning systems before they can produce results. Conscious path: fundamentally transforming how you work — eliminating the performative busyness and rebuilding your daily structure around your highest-power activities exclusively.`,
+    6: (_y) =>
+      `Clients with this transit describe working 10-12 hour days and somehow making less progress than ever. Pluto here doesn't reward more hours — it demands you burn everything that isn't your highest-leverage activity and rebuild from there.`,
     8: (y) =>
       `Pluto is transiting your shared resources house through ${y}. Shadow: financial power struggles with partners, destructive cycles in joint ventures, all-or-nothing energy around other people's money. Conscious path: transforming your relationship with shared capital — becoming someone who can attract, manage, and multiply resources at a new level of mastery.`,
     11: (y) =>
@@ -266,8 +272,8 @@ const TRANSIT_C_INTERP: Record<string, Partial<Record<number, (year: number) => 
       `Saturn is transiting your financial house through ${y} — a period that creates either a financial ceiling of your own making, or the most durable wealth foundation you've ever built. Shadow: scarcity mindset, self-worth blocks that cap income, restriction without reward. Conscious path: disciplined financial systems, charging your actual worth, and playing the long game. Saturn rewards the committed — the gate between paths is discipline without self-punishment.`,
     6: (y) =>
       `Saturn is transiting your work house through ${y}. Shadow: burnout from overwork, chronic underrecognition despite output, perfectionism that stalls more than it improves. Conscious path: building the most efficient, disciplined daily work structure you've ever had — identifying the 20% of effort that produces 80% of results and ruthlessly focusing there.`,
-    8: (y) =>
-      `Saturn is in your shared resources house through ${y}. Shadow: blocked access to capital and financial partnerships, fear of financial dependency keeping you isolated from investment that could scale your work. Conscious path: building structured, trustworthy financial partnerships with clear agreements — the kind that attract serious investors because the rigor you bring signals reliability.`,
+    8: (_y) =>
+      `A client with this transit turned down a $50k investment offer because the paperwork 'felt off.' Saturn here creates a fear of financial entanglement so strong that it blocks the partnerships that could actually scale your work.`,
     11: (y) =>
       `Saturn is in your networks house through ${y}. Shadow: social isolation, feeling locked out of the communities that matter for your goals. Conscious path: building fewer but far more solid professional relationships — depth over breadth, quality over surface networking. Saturn rewards the ones who invest in real alliance.`,
   },
@@ -278,6 +284,8 @@ const TRANSIT_C_INTERP: Record<string, Partial<Record<number, (year: number) => 
       `Uranus is disrupting your daily work routines through ${y}. Shadow: inconsistent output, rebellion against structure that reads as unreliability. Conscious path: innovating how you work — rejecting standard procedures that waste your time and building work systems around your unique intelligence that would look chaotic to others but produce exceptional results for you.`,
     8: (y) =>
       `Uranus is disrupting your shared resources house through ${y}. Shadow: volatile business partnerships, sudden losses from joint ventures. Conscious path: pioneering unconventional approaches to financial partnerships — attracting Uranian investors and collaborators who match your visionary energy and co-creating innovative financial structures that conventional partnerships cannot access.`,
+    10: (_y) =>
+      `Three Pheydrus clients with this transit quit stable jobs in the same 6-month window — none of them planned it. This transit makes conventional career paths feel physically suffocating. The ones who stopped fighting it and built unconventional businesses broke through. The ones who kept trying to 'be normal' stayed stuck.`,
     11: (y) =>
       `Uranus is disrupting your networks and goals house through ${y}. Shadow: unstable communities, sudden loss of allies, chaotic group dynamics. Conscious path: leading the disruption — becoming the visionary within your field whose unconventional ideas attract other innovators and reshape the communities you're part of toward something genuinely new.`,
   },
@@ -286,8 +294,8 @@ const TRANSIT_C_INTERP: Record<string, Partial<Record<number, (year: number) => 
       `Neptune is transiting your financial house through ${y}. Shadow: chronic confusion around money — unclear rates, boundary violations in financial agreements, self-deception about the true state of your finances. Conscious path: aligning your income with your deepest values and creative vision, charging what your work is genuinely worth from a place of spiritual clarity about what you offer and what it's actually worth in the world.`,
     6: (y) =>
       `Neptune is in your work house through ${y}. Shadow: unclear work responsibilities, fuzzy boundaries with collaborators, escapism from practical demands. Conscious path: infusing your daily work with creative vision and genuine meaning — letting Neptune lift your output from transaction to mission, making the quality of your work a direct expression of your highest self.`,
-    8: (y) =>
-      `Neptune is in your shared resources house through ${y}. Shadow: financial confusion and potential deception in partnerships. Conscious path: building partnerships based on genuine alignment of values, with eyes-open clarity about what each party is actually contributing and receiving.`,
+    8: (_y) =>
+      `A client with this transit had been coaching for two years and still flinched every time someone asked her price. She was consistently charging 60% less than her peers — not because of skill, but because this transit creates a fog between your value and what you're willing to ask for.`,
     11: (y) =>
       `Neptune is in your networks and dreams house through ${y}. Shadow: idealizing what your community could be, followed by disillusionment when reality falls short. Conscious path: building community around genuine shared purpose — using Neptune's transcendent energy to inspire others toward a vision they couldn't see without you.`,
   },
@@ -297,8 +305,8 @@ const TRANSIT_C_INTERP: Record<string, Partial<Record<number, (year: number) => 
 
 const RELOCATION_C_INTERP: Record<string, Partial<Record<number, (goal: GoalCategory) => string>>> = {
   Saturn: {
-    2: (goal) =>
-      `Saturn in your financial house at this location creates a persistent ceiling on your ${goal === 'love' ? 'emotional and relationship resources' : 'income and financial momentum'}. Shadow: chronic scarcity consciousness, under-charging, financial avoidance that limits what you allow yourself to build. Conscious path: using Saturn's discipline to construct the most durable financial foundation of your life — this location rewards the committed builder who shows up consistently.`,
+    2: (_goal) =>
+      `A client who moved to her current address noticed her income plateau within 3 months — even though she was working harder than ever before. This address rewards builders who show up with extreme consistency. It punishes those who charge inconsistently or avoid financial conversations.`,
     6: (_goal) =>
       `Saturn in your work house at this location adds a heavy, grinding quality to your daily effort and productivity. Shadow: burnout, overwork without commensurate reward, perfectionism that stalls more than it sharpens. Conscious path: building an exceptionally disciplined daily structure here — Saturn at this address rewards those who systematize their work down to what actually produces results and release the rest.`,
     8: (goal) =>
@@ -308,7 +316,7 @@ const RELOCATION_C_INTERP: Record<string, Partial<Record<number, (goal: GoalCate
   },
   Uranus: {
     2: (_goal) =>
-      `Uranus in your financial house at this location amplifies erratic income patterns — financial breakthroughs followed by sudden losses, inconsistent cash flow, and an environment that resists conventional wealth-building approaches. Shadow: impulsive financial decisions made in the volatility this address generates. Conscious path: innovating your income architecture from here — this location rewards unconventional revenue strategies and penalizes traditional ones.`,
+      `Clients at addresses with this configuration describe the same income pattern: a $8k month, then a $1k month, then $6k, then $500. The breakthroughs are real — but so is the volatility. Unconventional income structures (retainers, packages, asymmetric pricing) stabilize everything. Traditional pricing models collapse.`,
     6: (_goal) =>
       `Uranus in your work house at this location creates a disruptive, unpredictable daily work environment. Shadow: inconsistent output and resistance to routine that reads as unreliability to the people you work with. Conscious path: building nonconventional work systems around your unique intelligence — this location amplifies creative disruption in your process that can produce breakthrough results when channeled rather than resisted.`,
     8: (_goal) =>
@@ -317,8 +325,8 @@ const RELOCATION_C_INTERP: Record<string, Partial<Record<number, (goal: GoalCate
       `Uranus in your networks house at this location creates unstable professional and social communities around you. Shadow: sudden loss of key alliances and chaotic group dynamics that undermine your ${goal === 'love' ? 'social foundation' : 'professional goals'}. Conscious path: leading the disruption in your field from this address — Uranus here amplifies your ability to build visionary communities that don't yet exist elsewhere.`,
   },
   Neptune: {
-    2: (goal) =>
-      `Neptune in your financial house at this location creates a foggy relationship with money and ${goal === 'love' ? 'emotional resources' : 'income clarity'}. Shadow: unclear financial boundaries, self-deception about your true financial state, chronic undercharging for your work. Conscious path: aligning your income with genuine creative and spiritual purpose from this address — Neptune here rewards work that carries real meaning and is priced with clarity about its actual worth.`,
+    2: (_goal) =>
+      `One client raised her rates 40% within 30 days of her Pillar 3 session and signed her highest-paying client that same week. Neptune in the financial house at your address creates a fog around self-worth and money — it's the most immediately fixable layer in this entire report.`,
     6: (_goal) =>
       `Neptune in your work house at this location blurs your work responsibilities and daily structure. Shadow: unclear boundaries with collaborators, escapism from practical demands, difficulty bringing inspired ideas into executable form. Conscious path: infusing your daily work with genuine vision and creative depth — this location amplifies inspired output when you bring spiritual clarity and practical discipline to your process simultaneously.`,
     8: (_goal) =>
