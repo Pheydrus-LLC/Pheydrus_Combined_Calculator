@@ -602,7 +602,7 @@ export function ClientResultsPage() {
               <p key={i} style={{ margin: '0 0 8px', fontSize: '0.82rem', color: '#7A5A1A', lineHeight: 1.6, fontFamily: INTER }}>→ {b}</p>
             ))}
           </div>
-          {(showCTA || true) && (
+          {showCTA && (
             <p style={{ fontFamily: CORMORANT, fontStyle: 'italic', color: '#7A5A1A', fontSize: '0.95rem', margin: '0 0 20px', lineHeight: 1.6 }}>This will be the beginning of your true alignment journey.</p>
           )}
           <a
