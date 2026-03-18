@@ -1,6 +1,6 @@
 /**
- * ClientResultsPage — Dark Edition
- * Mirrors the 4-page dark PDF report on-screen.
+ * ClientResultsPage — Light Edition
+ * White background with dark text, golden accents.
  */
 
 import { useState } from 'react';
@@ -52,10 +52,10 @@ const GOAL_SHORT: Record<GoalCategory, string> = {
 };
 
 const GRADE_COLOR: Record<string, { border: string; bg: string; text: string }> = {
-  A: { border: '#2ecc71', bg: '#0a1a0a', text: '#4ade80' },
-  B: { border: '#60a5fa', bg: '#0a0f1a', text: '#93c5fd' },
-  C: { border: '#C9A84C', bg: '#1a1200', text: '#C9A84C' },
-  F: { border: '#C0392B', bg: '#130000', text: '#f87171' },
+  A: { border: '#2ecc71', bg: '#F0FFF4', text: '#16a34a' },
+  B: { border: '#3b82f6', bg: '#EFF6FF', text: '#1d4ed8' },
+  C: { border: '#C9A84C', bg: '#FFFBEB', text: '#92680A' },
+  F: { border: '#C0392B', bg: '#FFF5F5', text: '#C0392B' },
 };
 
 function gradeColor(g: string) {
@@ -117,13 +117,13 @@ function VennDiagram() {
       <circle cx="67" cy="127" r="58" fill="#7B5EA7" fillOpacity="0.09" stroke="#9B8EC4" strokeWidth="1.5" />
       <circle cx="133" cy="127" r="58" fill="#2E8B7A" fillOpacity="0.09" stroke="#5BB5A5" strokeWidth="1.5" />
       <text x="100" y="14" textAnchor="middle" fontSize="13" fill="#C9A84C" fontFamily="'Cormorant Garamond',Georgia,serif" fontWeight="600">Soul / Karma</text>
-      <text x="100" y="26" textAnchor="middle" fontSize="9" fill="#555" fontFamily="Arial,sans-serif">Pillar 1</text>
+      <text x="100" y="26" textAnchor="middle" fontSize="9" fill="#888" fontFamily="Arial,sans-serif">Pillar 1</text>
       <text x="18" y="178" textAnchor="middle" fontSize="12" fill="#9B8EC4" fontFamily="'Cormorant Garamond',Georgia,serif" fontWeight="600">Timing</text>
-      <text x="18" y="188" textAnchor="middle" fontSize="9" fill="#555" fontFamily="Arial,sans-serif">Pillar 2</text>
+      <text x="18" y="188" textAnchor="middle" fontSize="9" fill="#888" fontFamily="Arial,sans-serif">Pillar 2</text>
       <text x="182" y="178" textAnchor="middle" fontSize="12" fill="#5BB5A5" fontFamily="'Cormorant Garamond',Georgia,serif" fontWeight="600">Environment</text>
-      <text x="182" y="188" textAnchor="middle" fontSize="9" fill="#555" fontFamily="Arial,sans-serif">Pillar 3</text>
-      <text x="100" y="110" textAnchor="middle" fontSize="11" fill="#F5F5F0" fontFamily="'Cormorant Garamond',Georgia,serif" fontStyle="italic">Full</text>
-      <text x="100" y="123" textAnchor="middle" fontSize="11" fill="#F5F5F0" fontFamily="'Cormorant Garamond',Georgia,serif" fontStyle="italic">Alignment</text>
+      <text x="182" y="188" textAnchor="middle" fontSize="9" fill="#888" fontFamily="Arial,sans-serif">Pillar 3</text>
+      <text x="100" y="110" textAnchor="middle" fontSize="11" fill="#1C1A2E" fontFamily="'Cormorant Garamond',Georgia,serif" fontStyle="italic">Full</text>
+      <text x="100" y="123" textAnchor="middle" fontSize="11" fill="#1C1A2E" fontFamily="'Cormorant Garamond',Georgia,serif" fontStyle="italic">Alignment</text>
     </svg>
   );
 }
@@ -133,9 +133,9 @@ function VennDiagram() {
 function TestimonialCard({ quote, attribution }: { quote: string; attribution: string }) {
   return (
     // REPLACE WITH REAL TESTIMONIAL
-    <div style={{ background: '#111111', borderLeft: '3px solid #C9A84C', borderRadius: '4px', padding: '20px 24px', position: 'relative', overflow: 'hidden' }}>
+    <div style={{ background: '#FFFFFF', borderLeft: '3px solid #C9A84C', borderRadius: '4px', padding: '20px 24px', position: 'relative', overflow: 'hidden', border: '1px solid #E8E8E8' }}>
       <span aria-hidden="true" style={{ position: 'absolute', top: '-16px', left: '10px', fontSize: '90px', color: '#C9A84C', opacity: 0.12, fontFamily: CORMORANT, lineHeight: 1, userSelect: 'none' }}>"</span>
-      <p style={{ fontFamily: CORMORANT, fontStyle: 'italic', color: '#E8D5A3', fontSize: '1.05rem', lineHeight: 1.65, margin: '0 0 10px', position: 'relative' }}>{quote}</p>
+      <p style={{ fontFamily: CORMORANT, fontStyle: 'italic', color: '#7A5A1A', fontSize: '1.05rem', lineHeight: 1.65, margin: '0 0 10px', position: 'relative' }}>{quote}</p>
       <p style={{ fontFamily: INTER, color: '#888888', fontSize: '0.8rem', margin: 0 }}>— {attribution}</p>
     </div>
   );
@@ -170,7 +170,7 @@ function PillarTimeline({ pillarNum, pillar2Items, pillar3Items, transits, addre
   transits: PlanetaryTransit[];
   addressMoveDate: string;
 }) {
-  const base: CSSProperties = { marginTop: '12px', paddingLeft: '12px', borderLeft: '2px solid #C9A84C', fontSize: '0.75rem', color: '#888', lineHeight: 1.6, fontFamily: INTER };
+  const base: CSSProperties = { marginTop: '12px', paddingLeft: '12px', borderLeft: '2px solid #C9A84C', fontSize: '0.75rem', color: '#666', lineHeight: 1.6, fontFamily: INTER };
 
   if (pillarNum === 1) {
     return <p style={base}><strong style={{ color: '#C9A84C' }}>⏱ Timeline:</strong> Life-long — this is your permanent structural layer. It does not expire, but it can be consciously mastered.</p>;
@@ -184,7 +184,7 @@ function PillarTimeline({ pillarNum, pillar2Items, pillar3Items, transits, addre
     return (
       <p style={base}>
         <strong style={{ color: '#C9A84C' }}>⏱ Timeline:</strong>{' '}
-        {endYear ? <>Active <strong style={{ color: '#E8D5A3' }}>{formatDuration(endYear)}</strong>. This window will lift — knowing when is half the advantage.</> : 'The active timing pressures are relatively short-cycle.'}
+        {endYear ? <>Active <strong style={{ color: '#7A5A1A' }}>{formatDuration(endYear)}</strong>. This window will lift — knowing when is half the advantage.</> : 'The active timing pressures are relatively short-cycle.'}
       </p>
     );
   }
@@ -193,7 +193,7 @@ function PillarTimeline({ pillarNum, pillar2Items, pillar3Items, transits, addre
   return (
     <p style={base}>
       <strong style={{ color: '#C9A84C' }}>⏱ Timeline:</strong> Amplifies your active transits for{' '}
-      {endYear ? <>approximately <strong style={{ color: '#E8D5A3' }}>{formatDuration(endYear)}</strong>, mirroring your active transit window.</> : 'the duration of your active transit window.'}
+      {endYear ? <>approximately <strong style={{ color: '#7A5A1A' }}>{formatDuration(endYear)}</strong>, mirroring your active transit window.</> : 'the duration of your active transit window.'}
       {addressNote && <em> {addressNote}</em>}
     </p>
   );
@@ -217,21 +217,21 @@ function AspectCard({ item, goal, goalShort, transits }: {
     : null;
 
   return (
-    <div style={{ background: '#111111', borderLeft: `3px solid ${gc.border}`, borderRadius: '4px', padding: '14px 16px', marginBottom: '10px' }}>
+    <div style={{ background: '#FFFFFF', borderLeft: `3px solid ${gc.border}`, borderRadius: '4px', padding: '14px 16px', marginBottom: '10px', border: `1px solid #E8E8E8` }}>
       {mirror && (
         <p style={{ fontFamily: CORMORANT, fontStyle: 'italic', color: '#C9A84C', fontSize: '0.9rem', margin: '0 0 8px', lineHeight: 1.55 }}>
           "{mirror}"
         </p>
       )}
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px', flexWrap: 'wrap' as const }}>
-        <span style={{ fontFamily: INTER, fontSize: '0.8rem', fontWeight: 700, color: '#F5F5F0' }}>{label}</span>
+        <span style={{ fontFamily: INTER, fontSize: '0.8rem', fontWeight: 700, color: '#1C1A2E' }}>{label}</span>
         <span style={{ display: 'inline-block', padding: '2px 8px', borderRadius: '2px', fontSize: '10px', fontWeight: 700, background: gc.bg, color: gc.text, border: `1px solid ${gc.border}`, fontFamily: INTER }}>
           {item.grade}{endYear ? ` · thru ${endYear}` : ''}
         </span>
       </div>
-      <p style={{ fontFamily: INTER, fontSize: '0.72rem', color: '#888', lineHeight: 1.7, margin: transmute ? '0 0 8px' : '0' }}>{interp}</p>
+      <p style={{ fontFamily: INTER, fontSize: '0.72rem', color: '#666', lineHeight: 1.7, margin: transmute ? '0 0 8px' : '0' }}>{interp}</p>
       {transmute && (
-        <div style={{ borderTop: '1px solid #2a2a2a', paddingTop: '7px' }}>
+        <div style={{ borderTop: '1px solid #E0E0E0', paddingTop: '7px' }}>
           <p style={{ fontFamily: INTER, fontSize: '0.72rem', fontStyle: 'italic', color: '#C9A84C', margin: 0, lineHeight: 1.6 }}><strong>Higher octave:</strong> {transmute}</p>
         </div>
       )}
@@ -242,9 +242,9 @@ function AspectCard({ item, goal, goalShort, transits }: {
 // ── Pillar deep-dive card ─────────────────────────────────────────────────────
 
 const PILLAR_BADGE_STYLE: Record<1 | 2 | 3, CSSProperties> = {
-  1: { background: '#2a0808', color: '#f87171', border: '1px solid #C0392B' },
-  2: { background: '#1a1200', color: '#C9A84C', border: '1px solid #C9A84C' },
-  3: { background: '#1a1400', color: '#E8D5A3', border: '1px solid #9a7d4e' },
+  1: { background: '#FFF0F0', color: '#C0392B', border: '1px solid #C0392B' },
+  2: { background: '#FFF9E6', color: '#8B6914', border: '1px solid #C9A84C' },
+  3: { background: '#FDF5E6', color: '#7A5A1A', border: '1px solid #9a7d4e' },
 };
 
 const PILLAR_CALLOUT: Record<1 | 2 | 3, (goal: string, loc: string) => string> = {
@@ -272,31 +272,31 @@ function PillarDeepDiveCard({ pillar, index, title, subtitle, goal, goalShort, l
   const s = pillarScore(pillar);
 
   return (
-    <div style={{ background: '#0f0f0f', border: '1px solid #1e1e1e', borderRadius: '4px', padding: '20px 24px' }}>
+    <div style={{ background: '#FFFFFF', border: '1px solid #E8E8E8', borderRadius: '4px', padding: '20px 24px' }}>
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px', flexWrap: 'wrap' as const }}>
         <span style={{ ...PILLAR_BADGE_STYLE[index], fontSize: '10px', fontWeight: 700, padding: '2px 8px', borderRadius: '2px', fontFamily: INTER }}>PILLAR {index}</span>
-        <span style={{ fontFamily: CORMORANT, fontSize: '1.1rem', fontWeight: 700, color: '#F5F5F0' }}>{title} — {subtitle}</span>
+        <span style={{ fontFamily: CORMORANT, fontSize: '1.1rem', fontWeight: 700, color: '#1C1A2E' }}>{title} — {subtitle}</span>
         <span style={{ marginLeft: 'auto', fontSize: '1.2rem', fontWeight: 900, color: accentColor, fontFamily: INTER }}>{Math.round((s / (s || 1)) * 100 * 0 + 100)}%</span>
       </div>
 
       {/* Goal callout */}
-      <p style={{ fontFamily: CORMORANT, fontStyle: 'italic', color: '#E8D5A3', fontSize: '0.9rem', lineHeight: 1.5, padding: '7px 12px', background: 'rgba(201,168,76,0.06)', borderBottom: '1px solid rgba(201,168,76,0.18)', borderRadius: '4px 4px 0 0', margin: '0 0 14px' }}>{callout}</p>
+      <p style={{ fontFamily: CORMORANT, fontStyle: 'italic', color: '#7A5A1A', fontSize: '0.9rem', lineHeight: 1.5, padding: '7px 12px', background: 'rgba(201,168,76,0.06)', borderBottom: '1px solid rgba(201,168,76,0.18)', borderRadius: '4px 4px 0 0', margin: '0 0 14px' }}>{callout}</p>
 
       {/* Content: house wheel + aspect cards */}
       <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
         <div style={{ flexShrink: 0, textAlign: 'center', width: '108px' }}>
           <SvgChart svg={renderDarkHouseWheel(pillar.items, 108)} />
-          <p style={{ fontSize: '9px', color: '#555', margin: '4px 0 3px', fontFamily: INTER }}>{index === 3 ? 'Env Chart' : index === 2 ? 'Transit Chart' : 'House Chart'}</p>
+          <p style={{ fontSize: '9px', color: '#999', margin: '4px 0 3px', fontFamily: INTER }}>{index === 3 ? 'Env Chart' : index === 2 ? 'Transit Chart' : 'House Chart'}</p>
           <div style={{ fontSize: '8px', fontFamily: INTER }}>
-            <span style={{ display: 'inline-block', width: '7px', height: '7px', background: '#C0392B', borderRadius: '1px', verticalAlign: 'middle' }} /> <span style={{ color: '#666' }}>F</span>&nbsp;
-            <span style={{ display: 'inline-block', width: '7px', height: '7px', background: '#C9A84C', borderRadius: '1px', verticalAlign: 'middle' }} /> <span style={{ color: '#666' }}>C</span>&nbsp;
-            <span style={{ display: 'inline-block', width: '7px', height: '7px', background: '#2ecc71', borderRadius: '1px', verticalAlign: 'middle' }} /> <span style={{ color: '#666' }}>A</span>
+            <span style={{ display: 'inline-block', width: '7px', height: '7px', background: '#C0392B', borderRadius: '1px', verticalAlign: 'middle' }} /> <span style={{ color: '#777' }}>F</span>&nbsp;
+            <span style={{ display: 'inline-block', width: '7px', height: '7px', background: '#C9A84C', borderRadius: '1px', verticalAlign: 'middle' }} /> <span style={{ color: '#777' }}>C</span>&nbsp;
+            <span style={{ display: 'inline-block', width: '7px', height: '7px', background: '#2ecc71', borderRadius: '1px', verticalAlign: 'middle' }} /> <span style={{ color: '#777' }}>A</span>
           </div>
         </div>
         <div style={{ flex: 1 }}>
           {scoringItems.length === 0
-            ? <p style={{ fontSize: '0.8rem', color: '#2ecc71', fontStyle: 'italic', fontFamily: INTER }}>No significant pressure in this pillar — this dimension is working in your favor.</p>
+            ? <p style={{ fontSize: '0.8rem', color: '#16a34a', fontStyle: 'italic', fontFamily: INTER }}>No significant pressure in this pillar — this dimension is working in your favor.</p>
             : scoringItems.map((item, i) => <AspectCard key={i} item={item} goal={goal} goalShort={goalShort} transits={transits} />)
           }
         </div>
@@ -316,8 +316,8 @@ function CostOfInaction({ goalShort, endYear }: { goalShort: string; endYear: nu
     : `Without targeted deconditioning of the specific layers identified above, this pattern does not self-resolve.`;
 
   return (
-    <div style={{ background: '#110808', border: '1px solid #3a1010', borderRadius: '4px', padding: '28px 32px' }}>
-      <h3 style={{ fontFamily: CORMORANT, color: '#F5F5F0', fontSize: '1.6rem', fontWeight: 700, margin: '0 0 20px', lineHeight: 1.3 }}>What Another Year of This Pattern Costs You</h3>
+    <div style={{ background: '#FFF8F8', border: '1px solid #FAEAEA', borderRadius: '4px', padding: '28px 32px' }}>
+      <h3 style={{ fontFamily: CORMORANT, color: '#1C1A2E', fontSize: '1.6rem', fontWeight: 700, margin: '0 0 20px', lineHeight: 1.3 }}>What Another Year of This Pattern Costs You</h3>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
         {[
           `Another 12 months of knowing exactly what to do — and watching yourself not do it.`,
@@ -326,7 +326,7 @@ function CostOfInaction({ goalShort, endYear }: { goalShort: string; endYear: nu
           `Another year of telling yourself next month will be different.`,
           yearLine,
         ].map((line, i) => (
-          <p key={i} style={{ margin: 0, fontSize: '0.85rem', color: '#bbb', lineHeight: 1.7, fontFamily: INTER, borderLeft: '2px solid #C0392B', paddingLeft: '12px' }}>{line}</p>
+          <p key={i} style={{ margin: 0, fontSize: '0.85rem', color: '#444444', lineHeight: 1.7, fontFamily: INTER, borderLeft: '2px solid #C0392B', paddingLeft: '12px' }}>{line}</p>
         ))}
         {yearsRemaining !== null && yearsRemaining > 0 && (
           <p style={{ margin: 0, fontSize: '0.9rem', fontWeight: 700, color: '#C0392B', fontFamily: INTER }}>That's {yearsRemaining} more year{yearsRemaining !== 1 ? 's' : ''}.</p>
@@ -348,11 +348,11 @@ export function ClientResultsPage() {
 
   if (!state?.results) {
     return (
-      <div style={{ minHeight: '100vh', background: '#0D0D0D', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '48px 16px' }}>
-        <div style={{ maxWidth: '480px', background: '#111111', border: '1px solid #2a2a2a', borderRadius: '4px', padding: '40px', textAlign: 'center' }}>
-          <h2 style={{ fontFamily: CORMORANT, color: '#F5F5F0', fontSize: '1.5rem', fontWeight: 700, marginBottom: '12px' }}>No results found</h2>
-          <p style={{ color: '#888', fontSize: '0.9rem', marginBottom: '24px', fontFamily: INTER }}>Please complete the assessment first.</p>
-          <button onClick={() => navigate('/client')} style={{ padding: '12px 28px', background: '#C9A84C', color: '#0D0D0D', fontWeight: 700, borderRadius: '2px', border: 'none', cursor: 'pointer', fontFamily: INTER }}>
+      <div style={{ minHeight: '100vh', background: '#F5F1EB', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '48px 16px' }}>
+        <div style={{ maxWidth: '480px', background: '#FFFFFF', border: '1px solid #E0E0E0', borderRadius: '4px', padding: '40px', textAlign: 'center' }}>
+          <h2 style={{ fontFamily: CORMORANT, color: '#1C1A2E', fontSize: '1.5rem', fontWeight: 700, marginBottom: '12px' }}>No results found</h2>
+          <p style={{ color: '#666', fontSize: '0.9rem', marginBottom: '24px', fontFamily: INTER }}>Please complete the assessment first.</p>
+          <button onClick={() => navigate('/client')} style={{ padding: '12px 28px', background: '#C9A84C', color: '#1C1A2E', fontWeight: 700, borderRadius: '2px', border: 'none', cursor: 'pointer', fontFamily: INTER }}>
             Start Assessment
           </button>
         </div>
@@ -407,20 +407,20 @@ export function ClientResultsPage() {
   const yearsRemaining = endYear ? endYear - new Date().getFullYear() : null;
 
   return (
-    <div style={{ minHeight: '100vh', background: '#0D0D0D', color: '#F5F5F0', padding: '40px 16px', fontFamily: INTER }}>
+    <div style={{ minHeight: '100vh', background: '#F5F1EB', color: '#1C1A2E', padding: '40px 16px', fontFamily: INTER }}>
       <div style={{ maxWidth: '760px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '24px' }}>
 
         {/* ── SECTION 1: COVER ── */}
 
         {/* Header */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: '1px solid #1e1e1e', paddingBottom: '16px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: '1px solid #E8E8E8', paddingBottom: '16px' }}>
           <div>
             <div style={{ fontFamily: CORMORANT, fontSize: '1.5rem', fontWeight: 700, color: '#C9A84C' }}>Pheydrus</div>
-            <div style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.12em', color: '#555', marginTop: '2px' }}>Proprietary 3-Pillar Analysis</div>
+            <div style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.12em', color: '#999', marginTop: '2px' }}>Proprietary 3-Pillar Analysis</div>
           </div>
           <div style={{ textAlign: 'right' }}>
-            <div style={{ fontSize: '0.85rem', color: '#E8D5A3', fontWeight: 600 }}>{results.userInfo.name}</div>
-            <div style={{ fontSize: '10px', color: '#555', marginTop: '2px' }}>{new Date(results.timestamp).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</div>
+            <div style={{ fontSize: '0.85rem', color: '#7A5A1A', fontWeight: 600 }}>{results.userInfo.name}</div>
+            <div style={{ fontSize: '10px', color: '#999', marginTop: '2px' }}>{new Date(results.timestamp).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</div>
           </div>
         </div>
 
@@ -430,16 +430,16 @@ export function ClientResultsPage() {
             <div style={{ width: '90px', height: '90px', borderRadius: '50%', border: `2.5px solid ${gc.border}`, background: gc.bg, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', margin: '0 auto' }}>
               <span style={{ fontFamily: CORMORANT, fontSize: '3rem', fontWeight: 700, color: gc.text, lineHeight: 1 }}>{finalGrade}</span>
             </div>
-            <div style={{ fontSize: '10px', color: '#555', marginTop: '6px' }}>Score: {score % 1 === 0 ? score : score.toFixed(1)}</div>
+            <div style={{ fontSize: '10px', color: '#999', marginTop: '6px' }}>Score: {score % 1 === 0 ? score : score.toFixed(1)}</div>
           </div>
-          <div style={{ flex: 1, background: '#111111', border: '1px solid #2a2a2a', borderRadius: '4px', padding: '16px 20px' }}>
-            <div style={{ fontFamily: CORMORANT, fontSize: '1rem', fontWeight: 700, color: '#F5F5F0', marginBottom: '8px' }}>Overall Deconditioning Score</div>
-            <p style={{ margin: 0, fontSize: '0.8rem', color: '#888', lineHeight: 1.7 }}>The combined karmic, timing, and environmental pressure actively working against your goal. This score is not a verdict — it's a map. Read on.</p>
+          <div style={{ flex: 1, background: '#FFFFFF', border: '1px solid #E0E0E0', borderRadius: '4px', padding: '16px 20px' }}>
+            <div style={{ fontFamily: CORMORANT, fontSize: '1rem', fontWeight: 700, color: '#1C1A2E', marginBottom: '8px' }}>Overall Deconditioning Score</div>
+            <p style={{ margin: 0, fontSize: '0.8rem', color: '#666', lineHeight: 1.7 }}>The combined karmic, timing, and environmental pressure actively working against your goal. This score is not a verdict — it's a map. Read on.</p>
           </div>
         </div>
 
         {/* Intake summary */}
-        <div style={{ background: '#111111', border: '1px solid #1e1e1e', borderRadius: '4px', padding: '20px 24px' }}>
+        <div style={{ background: '#FFFFFF', border: '1px solid #E8E8E8', borderRadius: '4px', padding: '20px 24px' }}>
           <div style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.12em', color: '#C9A84C', marginBottom: '12px' }}>Your Assessment Summary</div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {intake.desiredOutcome && <IntakRow label="90-Day Goal" value={intake.desiredOutcome} />}
@@ -453,18 +453,18 @@ export function ClientResultsPage() {
         </div>
 
         {/* Goal bar */}
-        <div style={{ borderLeft: '4px solid #C9A84C', background: '#0f0d08', padding: '10px 16px', borderRadius: '0 4px 4px 0' }}>
+        <div style={{ borderLeft: '4px solid #C9A84C', background: '#FDFBF6', padding: '10px 16px', borderRadius: '0 4px 4px 0' }}>
           <div style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#C9A84C', marginBottom: '4px' }}>90-Day Goal · {GOAL_LABEL[goal]}</div>
-          <p style={{ margin: 0, fontFamily: CORMORANT, fontStyle: 'italic', color: '#E8D5A3', fontSize: '0.95rem', lineHeight: 1.6 }}>{intake.desiredOutcome}</p>
+          <p style={{ margin: 0, fontFamily: CORMORANT, fontStyle: 'italic', color: '#7A5A1A', fontSize: '0.95rem', lineHeight: 1.6 }}>{intake.desiredOutcome}</p>
         </div>
 
         {/* Reframe block */}
-        <div style={{ borderLeft: '4px solid #C9A84C', background: '#0f0d08', borderRadius: '0 4px 4px 0', padding: '20px 24px' }}>
-          <p style={{ fontFamily: CORMORANT, fontStyle: 'italic', color: '#E8D5A3', fontSize: '1.1rem', margin: '0 0 10px', lineHeight: 1.65 }}>
-            If you've tried everything — the mindset work, the strategies, the coaches — and things are going <strong style={{ color: '#F5F5F0' }}>well enough</strong> but that one specific thing you want keeps slipping just out of reach… this is your answer.
+        <div style={{ borderLeft: '4px solid #C9A84C', background: '#FDFBF6', borderRadius: '0 4px 4px 0', padding: '20px 24px' }}>
+          <p style={{ fontFamily: CORMORANT, fontStyle: 'italic', color: '#7A5A1A', fontSize: '1.1rem', margin: '0 0 10px', lineHeight: 1.65 }}>
+            If you've tried everything — the mindset work, the strategies, the coaches — and things are going <strong style={{ color: '#1C1A2E' }}>well enough</strong> but that one specific thing you want keeps slipping just out of reach… this is your answer.
           </p>
-          <p style={{ margin: '0 0 8px', fontSize: '0.85rem', color: '#888', lineHeight: 1.65 }}>That unseen force is real. It's measurable. And it's encoded directly in your chart.</p>
-          <p style={{ margin: '0 0 8px', fontSize: '0.85rem', color: '#888', lineHeight: 1.65 }}>You're not broken. You're not undisciplined. You've been <strong style={{ color: '#F5F5F0' }}>10x-capable</strong> this entire time — just running against an invisible current.</p>
+          <p style={{ margin: '0 0 8px', fontSize: '0.85rem', color: '#555555', lineHeight: 1.65 }}>That unseen force is real. It's measurable. And it's encoded directly in your chart.</p>
+          <p style={{ margin: '0 0 8px', fontSize: '0.85rem', color: '#555555', lineHeight: 1.65 }}>You're not broken. You're not undisciplined. You've been <strong style={{ color: '#1C1A2E' }}>10x-capable</strong> this entire time — just running against an invisible current.</p>
           <p style={{ margin: 0, fontSize: '0.85rem', color: '#C9A84C', fontWeight: 600 }}>This report shows you exactly what that current is.</p>
         </div>
 
@@ -472,60 +472,60 @@ export function ClientResultsPage() {
         {total > 0 && (
           <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' as const }}>
             {[
-              { num: 1, label: 'Structure', pct: p1pct, color: '#C0392B', border: '#3a0808', path: '1:1 calls & self-study' },
-              { num: 2, label: 'Timing',    pct: p2pct, color: '#C9A84C', border: '#2a2000', path: '1:1 calls & self-study' },
-              { num: 3, label: 'Environment', pct: p3pct, color: '#9a7d4e', border: '#2a1e08', path: 'Done-For-You, 1:1 calls & self-study' },
+              { num: 1, label: 'Structure', pct: p1pct, color: '#C0392B', border: '#FAEAEA', path: '1:1 calls & self-study' },
+              { num: 2, label: 'Timing',    pct: p2pct, color: '#C9A84C', border: '#F0E5C0', path: '1:1 calls & self-study' },
+              { num: 3, label: 'Environment', pct: p3pct, color: '#9a7d4e', border: '#EDE0C0', path: 'Done-For-You, 1:1 calls & self-study' },
             ].map((d) => (
-              <div key={d.num} style={{ flex: '1 1 180px', background: '#111111', border: `1px solid ${d.border}`, borderRadius: '4px', padding: '14px 16px' }}>
-                <div style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#555', marginBottom: '4px' }}>Pillar {d.num}</div>
-                <div style={{ fontFamily: CORMORANT, fontSize: '1rem', color: '#E8D5A3', fontWeight: 600, marginBottom: '6px' }}>{d.label}</div>
+              <div key={d.num} style={{ flex: '1 1 180px', background: '#FFFFFF', border: `1px solid ${d.border}`, borderRadius: '4px', padding: '14px 16px' }}>
+                <div style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#999', marginBottom: '4px' }}>Pillar {d.num}</div>
+                <div style={{ fontFamily: CORMORANT, fontSize: '1rem', color: '#7A5A1A', fontWeight: 600, marginBottom: '6px' }}>{d.label}</div>
                 <div style={{ fontSize: '1.6rem', fontWeight: 900, color: d.color, marginBottom: '8px', fontFamily: INTER }}>{d.pct}%</div>
-                <div style={{ height: '3px', background: '#1e1e1e', borderRadius: '2px', marginBottom: '8px' }}>
+                <div style={{ height: '3px', background: '#E8E8E8', borderRadius: '2px', marginBottom: '8px' }}>
                   <div style={{ height: '3px', width: `${d.pct}%`, background: d.color, borderRadius: '2px' }} />
                 </div>
-                {prefLabel && <p style={{ margin: 0, fontSize: '9px', color: '#555', fontStyle: 'italic' }}>Recommended: {d.path}</p>}
+                {prefLabel && <p style={{ margin: 0, fontSize: '9px', color: '#999', fontStyle: 'italic' }}>Recommended: {d.path}</p>}
               </div>
             ))}
           </div>
         )}
 
         {/* Malefic reframe box */}
-        <div style={{ background: '#0d0a04', border: '1px solid #C9A84C', borderRadius: '4px', padding: '20px 24px' }}>
+        <div style={{ background: '#FDFAF5', border: '1px solid #C9A84C', borderRadius: '4px', padding: '20px 24px' }}>
           <h3 style={{ fontFamily: CORMORANT, color: '#C9A84C', fontSize: '1.2rem', fontWeight: 700, margin: '0 0 12px' }}>The F is not what you think it is.</h3>
-          <p style={{ margin: '0 0 10px', fontSize: '0.82rem', color: '#888', lineHeight: 1.75 }}>Malefic planets — Saturn, Pluto, Uranus, Mars — are not in your chart to make life hard. They are only hard when you don't know how to work with them. Every malefic carries a higher octave: a transmuted version of its energy that becomes your greatest power once decoded.</p>
-          <p style={{ margin: '0 0 14px', fontSize: '0.82rem', color: '#888', lineHeight: 1.75 }}>An F score means you are sitting on top of enormous untapped potential that has been running against you instead of for you. The clients who come to Pheydrus with F scores don't just reach their goals — they exceed them in ways they didn't see coming.</p>
+          <p style={{ margin: '0 0 10px', fontSize: '0.82rem', color: '#555555', lineHeight: 1.75 }}>Malefic planets — Saturn, Pluto, Uranus, Mars — are not in your chart to make life hard. They are only hard when you don't know how to work with them. Every malefic carries a higher octave: a transmuted version of its energy that becomes your greatest power once decoded.</p>
+          <p style={{ margin: '0 0 14px', fontSize: '0.82rem', color: '#555555', lineHeight: 1.75 }}>An F score means you are sitting on top of enormous untapped potential that has been running against you instead of for you. The clients who come to Pheydrus with F scores don't just reach their goals — they exceed them in ways they didn't see coming.</p>
           <div style={{ borderLeft: '3px solid #C9A84C', paddingLeft: '14px' }}>
-            <p style={{ margin: 0, fontFamily: CORMORANT, fontStyle: 'italic', color: '#E8D5A3', fontSize: '0.95rem', lineHeight: 1.7 }}>"Pluto transiting your 1st house? Stop playing nice. Stop softening your edges. Step fully into your power — that is the higher octave." — Pheydrus team</p>
+            <p style={{ margin: 0, fontFamily: CORMORANT, fontStyle: 'italic', color: '#7A5A1A', fontSize: '0.95rem', lineHeight: 1.7 }}>"Pluto transiting your 1st house? Stop playing nice. Stop softening your edges. Step fully into your power — that is the higher octave." — Pheydrus team</p>
           </div>
         </div>
 
         {/* ── SECTION 2: WHY THIS KEEPS HAPPENING ── */}
 
-        <div style={{ background: '#0f0f0f', border: '1px solid #1e1e1e', borderRadius: '4px', padding: '28px 32px' }}>
-          <div style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.14em', color: '#555', marginBottom: '8px' }}>The Pattern</div>
-          <h2 style={{ fontFamily: CORMORANT, fontSize: '2rem', fontWeight: 700, color: '#F5F5F0', margin: '0 0 20px', lineHeight: 1.2 }}>Why This Keeps Happening</h2>
+        <div style={{ background: '#FFFFFF', border: '1px solid #E8E8E8', borderRadius: '4px', padding: '28px 32px' }}>
+          <div style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.14em', color: '#999', marginBottom: '8px' }}>The Pattern</div>
+          <h2 style={{ fontFamily: CORMORANT, fontSize: '2rem', fontWeight: 700, color: '#1C1A2E', margin: '0 0 20px', lineHeight: 1.2 }}>Why This Keeps Happening</h2>
 
           {/* Pull quote */}
-          <div style={{ borderLeft: '4px solid #C9A84C', padding: '12px 20px', marginBottom: '20px', background: '#0f0d08' }}>
-            <p style={{ margin: 0, fontFamily: CORMORANT, fontStyle: 'italic', color: '#E8D5A3', fontSize: '1rem', lineHeight: 1.7 }}>"It's not normal to wake up every day with that quiet ache — knowing you've done everything right. The degree. The career. The inner work. And still feel like you're watching everyone else's life click into place while yours stays just out of reach."</p>
+          <div style={{ borderLeft: '4px solid #C9A84C', padding: '12px 20px', marginBottom: '20px', background: '#FDFBF6' }}>
+            <p style={{ margin: 0, fontFamily: CORMORANT, fontStyle: 'italic', color: '#7A5A1A', fontSize: '1rem', lineHeight: 1.7 }}>"It's not normal to wake up every day with that quiet ache — knowing you've done everything right. The degree. The career. The inner work. And still feel like you're watching everyone else's life click into place while yours stays just out of reach."</p>
           </div>
 
-          <p style={{ margin: '0 0 12px', fontSize: '0.85rem', color: '#bbb', lineHeight: 1.8 }}>You are not behind. You are not broken. What you're experiencing is the friction of three invisible forces pulling against each other simultaneously. When these forces are misaligned, it doesn't matter how hard you work — life feels like pushing through water.</p>
+          <p style={{ margin: '0 0 12px', fontSize: '0.85rem', color: '#444444', lineHeight: 1.8 }}>You are not behind. You are not broken. What you're experiencing is the friction of three invisible forces pulling against each other simultaneously. When these forces are misaligned, it doesn't matter how hard you work — life feels like pushing through water.</p>
           <p style={{ margin: '0 0 12px', fontSize: '0.9rem', fontWeight: 700, color: '#C9A84C', lineHeight: 1.6 }}>When all three align — everything changes. Not gradually. Suddenly.</p>
-          <p style={{ margin: '0 0 24px', fontSize: '0.85rem', color: '#bbb', lineHeight: 1.8 }}>The right people appear. The income shifts. The version of you that you've been reaching for starts to feel like the version of you that simply is. This is what Pheydrus clients describe — not motivation, not mindset — but a fundamental unlocking of what was always already there.</p>
+          <p style={{ margin: '0 0 24px', fontSize: '0.85rem', color: '#444444', lineHeight: 1.8 }}>The right people appear. The income shifts. The version of you that you've been reaching for starts to feel like the version of you that simply is. This is what Pheydrus clients describe — not motivation, not mindset — but a fundamental unlocking of what was always already there.</p>
 
           {/* Venn + legend */}
           <div style={{ display: 'flex', gap: '20px', alignItems: 'flex-start', marginBottom: '24px', flexWrap: 'wrap' as const }}>
             <div style={{ flexShrink: 0 }}><VennDiagram /></div>
             <div style={{ flex: 1, minWidth: '200px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
               {legendCards.map((c) => (
-                <div key={c.label} style={{ background: '#111111', border: '1px solid #2a2a2a', borderRadius: '4px', padding: '12px 14px' }}>
+                <div key={c.label} style={{ background: '#FAFAFA', border: '1px solid #E8E8E8', borderRadius: '4px', padding: '12px 14px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
                     <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: c.dot, flexShrink: 0, display: 'inline-block' }} />
-                    <span style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#555' }}>{c.label}</span>
+                    <span style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#999' }}>{c.label}</span>
                   </div>
                   <p style={{ margin: '0 0 5px', fontFamily: CORMORANT, fontStyle: 'italic', color: '#C9A84C', fontSize: '0.9rem', lineHeight: 1.55 }}>{c.question}</p>
-                  <p style={{ margin: 0, fontSize: '0.75rem', color: '#777', lineHeight: 1.6 }}>{c.desc}</p>
+                  <p style={{ margin: 0, fontSize: '0.75rem', color: '#666', lineHeight: 1.6 }}>{c.desc}</p>
                 </div>
               ))}
             </div>
@@ -533,19 +533,19 @@ export function ClientResultsPage() {
 
           {/* Timeline warning */}
           {longest && (
-            <div style={{ background: '#111111', border: '1px solid #2a2a2a', borderRadius: '4px', padding: '14px 18px', marginBottom: '16px' }}>
+            <div style={{ background: '#FAFAFA', border: '1px solid #E8E8E8', borderRadius: '4px', padding: '14px 18px', marginBottom: '16px' }}>
               <div style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em', color: '#C9A84C', marginBottom: '8px' }}>⚠ Active Pattern Window</div>
-              <p style={{ margin: 0, fontSize: '0.82rem', color: '#888', lineHeight: 1.7 }}>
+              <p style={{ margin: 0, fontSize: '0.82rem', color: '#555555', lineHeight: 1.7 }}>
                 Without intervention, your current configuration is projected to persist{' '}
                 <strong style={{ color: '#C9A84C' }}>through {endYear}{yearsRemaining ? ` — approximately ${yearsRemaining} more years` : ''}</strong>.
-                The primary driver is <strong style={{ color: '#F5F5F0' }}>{longest.planet} transiting House {longest.house}</strong>, defining the exact window you are in right now. Knowing the window is half the advantage.
+                The primary driver is <strong style={{ color: '#1C1A2E' }}>{longest.planet} transiting House {longest.house}</strong>, defining the exact window you are in right now. Knowing the window is half the advantage.
               </p>
             </div>
           )}
 
           {/* Destiny bridge */}
-          <div style={{ background: '#0a0d0a', border: '1px solid #2a3a2a', borderRadius: '4px', padding: '16px 20px' }}>
-            <p style={{ margin: 0, fontFamily: CORMORANT, fontStyle: 'italic', color: '#E8D5A3', fontSize: '0.95rem', lineHeight: 1.75 }}>
+          <div style={{ background: '#F5FBF5', border: '1px solid #C8E6C8', borderRadius: '4px', padding: '16px 20px' }}>
+            <p style={{ margin: 0, fontFamily: CORMORANT, fontStyle: 'italic', color: '#7A5A1A', fontSize: '0.95rem', lineHeight: 1.75 }}>
               The patterns identified in this report aren't just about what's been holding you back. They are the exact conditions that <strong style={{ fontStyle: 'normal', color: '#C9A84C' }}>precede a major identity shift</strong>. You are closer to the breakthrough than you are to the beginning. The question is whether you'll have a map when it arrives.
             </p>
           </div>
@@ -554,7 +554,7 @@ export function ClientResultsPage() {
         {/* ── SECTION 3: PILLAR BREAKDOWN ── */}
 
         <div>
-          <div style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.14em', color: '#555', marginBottom: '8px' }}>What is Holding Back Your {GOAL_LABEL[goal]}</div>
+          <div style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.14em', color: '#999', marginBottom: '8px' }}>What is Holding Back Your {GOAL_LABEL[goal]}</div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             <PillarDeepDiveCard {...pillarCardProps(p1, 1, 'Structure', 'Your Energetic Blueprint')} />
             <TestimonialCard
@@ -580,53 +580,53 @@ export function ClientResultsPage() {
         />
 
         {/* Destiny block */}
-        <div style={{ background: '#080d08', border: '1px solid #1e3a1e', borderRadius: '4px', padding: '20px 24px' }}>
+        <div style={{ background: '#F5FBF5', border: '1px solid #C8E6C8', borderRadius: '4px', padding: '20px 24px' }}>
           <h3 style={{ fontFamily: CORMORANT, color: '#C9A84C', fontSize: '1.3rem', fontWeight: 700, margin: '0 0 12px' }}>This is bigger than fixing what's broken.</h3>
-          <p style={{ margin: '0 0 10px', fontSize: '0.85rem', color: '#ccc', lineHeight: 1.8 }}>The first is <strong style={{ color: '#E8D5A3' }}>closure</strong>. The painful patterns, the blocked seasons, the years of almost — they weren't your fault. They were forces you didn't have a map for.</p>
-          <p style={{ margin: '0 0 10px', fontSize: '0.85rem', color: '#ccc', lineHeight: 1.8 }}>The second purpose — and this is the more important one — is <strong style={{ color: '#E8D5A3' }}>preparation</strong>. Something is shifting. Your chart doesn't lie. The same forces that created the friction are now creating the conditions for the biggest expansion of your life.</p>
-          <div style={{ borderTop: '1px solid #1e3a1e', paddingTop: '14px', marginTop: '4px' }}>
-            <p style={{ margin: 0, fontFamily: CORMORANT, fontStyle: 'italic', color: '#F5F5F0', fontSize: '1.1rem', lineHeight: 1.5 }}>The question is whether you'll have a map when it arrives. <span style={{ fontStyle: 'normal', fontWeight: 700, color: '#C9A84C' }}>This call is how you get ready.</span></p>
+          <p style={{ margin: '0 0 10px', fontSize: '0.85rem', color: '#444444', lineHeight: 1.8 }}>The first is <strong style={{ color: '#7A5A1A' }}>closure</strong>. The painful patterns, the blocked seasons, the years of almost — they weren't your fault. They were forces you didn't have a map for.</p>
+          <p style={{ margin: '0 0 10px', fontSize: '0.85rem', color: '#444444', lineHeight: 1.8 }}>The second purpose — and this is the more important one — is <strong style={{ color: '#7A5A1A' }}>preparation</strong>. Something is shifting. Your chart doesn't lie. The same forces that created the friction are now creating the conditions for the biggest expansion of your life.</p>
+          <div style={{ borderTop: '1px solid #C8E6C8', paddingTop: '14px', marginTop: '4px' }}>
+            <p style={{ margin: 0, fontFamily: CORMORANT, fontStyle: 'italic', color: '#1C1A2E', fontSize: '1.1rem', lineHeight: 1.5 }}>The question is whether you'll have a map when it arrives. <span style={{ fontStyle: 'normal', fontWeight: 700, color: '#C9A84C' }}>This call is how you get ready.</span></p>
           </div>
         </div>
 
         {/* CTA */}
-        <div style={{ background: '#0f0d08', border: '1px solid #C9A84C', borderRadius: '4px', padding: '32px', textAlign: 'center' }}>
+        <div style={{ background: '#FDFBF6', border: '1px solid #C9A84C', borderRadius: '4px', padding: '32px', textAlign: 'center' }}>
           <h2 style={{ fontFamily: CORMORANT, color: '#C9A84C', fontSize: '1.5rem', fontWeight: 700, margin: '0 0 6px' }}>Your Next Step: Alignment Strategy Call</h2>
-          <p style={{ color: '#888', fontSize: '0.8rem', margin: '0 0 20px', fontFamily: INTER }}>30-minute 1:1 with the Pheydrus team</p>
+          <p style={{ color: '#666', fontSize: '0.8rem', margin: '0 0 20px', fontFamily: INTER }}>30-minute 1:1 with the Pheydrus team</p>
           <div style={{ maxWidth: '420px', margin: '0 auto 20px', textAlign: 'left' }}>
             {[
               `Map how to decondition the unseen forces shaping your reality and unlock the parts of you and your environment that can actually 10x your life`,
               `Prepare for the identity shift that's already in motion — and make sure you're ready when it arrives`,
               `Determine whether Artist's Way is your aligned next chapter`,
             ].map((b, i) => (
-              <p key={i} style={{ margin: '0 0 8px', fontSize: '0.82rem', color: '#E8D5A3', lineHeight: 1.6, fontFamily: INTER }}>→ {b}</p>
+              <p key={i} style={{ margin: '0 0 8px', fontSize: '0.82rem', color: '#7A5A1A', lineHeight: 1.6, fontFamily: INTER }}>→ {b}</p>
             ))}
           </div>
           {(showCTA || true) && (
-            <p style={{ fontFamily: CORMORANT, fontStyle: 'italic', color: '#E8D5A3', fontSize: '0.95rem', margin: '0 0 20px', lineHeight: 1.6 }}>This will be the beginning of your true alignment journey.</p>
+            <p style={{ fontFamily: CORMORANT, fontStyle: 'italic', color: '#7A5A1A', fontSize: '0.95rem', margin: '0 0 20px', lineHeight: 1.6 }}>This will be the beginning of your true alignment journey.</p>
           )}
           <a
             href="https://calendly.com/pheydrus_strategy/1-1-alignment-strategy-call-clone-1"
             target="_blank"
             rel="noopener noreferrer"
-            style={{ display: 'block', padding: '15px 24px', background: '#C9A84C', color: '#0D0D0D', fontWeight: 700, fontSize: '0.75rem', letterSpacing: '0.1em', textTransform: 'uppercase', textDecoration: 'none', borderRadius: '2px', fontFamily: INTER, maxWidth: '420px', margin: '0 auto 12px', textAlign: 'center' }}
+            style={{ display: 'block', padding: '15px 24px', background: '#C9A84C', color: '#1C1A2E', fontWeight: 700, fontSize: '0.75rem', letterSpacing: '0.1em', textTransform: 'uppercase', textDecoration: 'none', borderRadius: '2px', fontFamily: INTER, maxWidth: '420px', margin: '0 auto 12px', textAlign: 'center' }}
           >
             BOOK YOUR ALIGNMENT CALL →
           </a>
-          <p style={{ margin: 0, fontSize: '11px', color: '#555', fontFamily: INTER }}>Complimentary · No obligation · Limited availability this cycle</p>
+          <p style={{ margin: 0, fontSize: '11px', color: '#999', fontFamily: INTER }}>Complimentary · No obligation · Limited availability this cycle</p>
         </div>
 
         {/* Action buttons */}
         <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' as const }}>
-          <button onClick={handleExportPDF} disabled={isExporting} style={{ padding: '12px 28px', background: '#C9A84C', color: '#0D0D0D', fontWeight: 700, borderRadius: '2px', border: 'none', cursor: 'pointer', fontFamily: INTER, opacity: isExporting ? 0.6 : 1 }}>
+          <button onClick={handleExportPDF} disabled={isExporting} style={{ padding: '12px 28px', background: '#C9A84C', color: '#1C1A2E', fontWeight: 700, borderRadius: '2px', border: 'none', cursor: 'pointer', fontFamily: INTER, opacity: isExporting ? 0.6 : 1 }}>
             {isExporting ? 'Generating PDF…' : 'Download Your Report (PDF)'}
           </button>
-          <button onClick={() => navigate('/client')} style={{ padding: '12px 28px', background: 'transparent', color: '#888', fontWeight: 600, borderRadius: '2px', border: '1px solid #2a2a2a', cursor: 'pointer', fontFamily: INTER }}>
+          <button onClick={() => navigate('/client')} style={{ padding: '12px 28px', background: 'transparent', color: '#666', fontWeight: 600, borderRadius: '2px', border: '1px solid #E0E0E0', cursor: 'pointer', fontFamily: INTER }}>
             Start New Assessment
           </button>
         </div>
 
-        <p style={{ textAlign: 'center', fontSize: '10px', color: '#333', paddingBottom: '24px', fontFamily: INTER }}>
+        <p style={{ textAlign: 'center', fontSize: '10px', color: '#BBBBBB', paddingBottom: '24px', fontFamily: INTER }}>
           Report generated {new Date(results.timestamp).toLocaleString()}
         </p>
 
@@ -637,9 +637,9 @@ export function ClientResultsPage() {
 
 function IntakRow({ label, value }: { label: string; value: string }) {
   return (
-    <div style={{ borderBottom: '1px solid #1a1a1a', paddingBottom: '8px' }}>
-      <p style={{ color: '#555', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 2px', fontFamily: INTER }}>{label}</p>
-      <p style={{ color: '#E8D5A3', fontSize: '0.85rem', margin: 0, fontFamily: INTER }}>{value}</p>
+    <div style={{ borderBottom: '1px solid #EBEBEB', paddingBottom: '8px' }}>
+      <p style={{ color: '#999', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 2px', fontFamily: INTER }}>{label}</p>
+      <p style={{ color: '#7A5A1A', fontSize: '0.85rem', margin: 0, fontFamily: INTER }}>{value}</p>
     </div>
   );
 }
