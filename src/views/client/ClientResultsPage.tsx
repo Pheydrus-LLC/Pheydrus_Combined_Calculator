@@ -67,10 +67,10 @@ function getMirrorLine(item: GradeItem, goalShort: string): string | null {
   const prefix = item.section === 'Address' ? 'Env' : '';
   const key = `${prefix}${item.planet ?? ''}-${item.house ?? 0}`;
   const lines: Record<string, string> = {
-    'Sun-7':        `You naturally draw people in — but converting that energy into paying clients for ${goalShort} feels like a different skill entirely.`,
-    'Saturn-5':     `Does this sound familiar? You build the offer, get excited, draft the content — and then pull back right before you publish. Every time.`,
-    'Uranus-5':     `You've probably started building toward ${goalShort} more than once — with real momentum — and then watched yourself abandon it before it could pay off.`,
-    'Neptune-5':    `You can see the ${goalShort} version of your life clearly. The gap is in the concrete, step-by-step execution of getting there.`,
+    'Sun-7':        `Your most powerful connections — romantic or professional — tend to find you. But converting that natural draw into lasting partnership for ${goalShort} feels like a different skill entirely.`,
+    'Saturn-5':     `Does this sound familiar? You build the offer, get excited, draft the content — and then pull back right before you publish. Every time. The same wall appears in romance: you open up just enough, then go quiet — not from lack of feeling, but from fear of being truly seen.`,
+    'Uranus-5':     `You've probably started building toward ${goalShort} more than once — with real momentum — and then watched yourself abandon it before it could pay off. In relationships, the same cycle: intense connection, then withdrawal before real intimacy takes hold.`,
+    'Neptune-5':    `You can see the ${goalShort} version of your life clearly — and the relationship you want. The gap is in bridging vision to reality: both in business and in love, the fog lifts only when you commit to what's already in front of you.`,
     'Pluto-6':      `Are you stuck in performative busyness — doing work that feels productive but isn't actually moving the needle toward ${goalShort}?`,
     'Neptune-8':    `Have you felt confused about your pricing or what you're actually worth charging — making ${goalShort} feel like a moving target?`,
     'Uranus-10':    `Does your professional path feel chaotic — like you can't commit to one lane long enough to build real momentum toward ${goalShort}?`,
@@ -87,10 +87,10 @@ function getTransmuteLine(item: GradeItem): string | null {
   const prefix = item.section === 'Address' ? 'Env' : '';
   const key = `${prefix}${item.planet ?? ''}-${item.house ?? 0}`;
   const lines: Record<string, string> = {
-    'Sun-7':        `Once you learn to convert presence into aligned partnership, your natural magnetism becomes your greatest business asset.`,
-    'Saturn-5':     `Once activated, you become the most disciplined, unshakeable builder in your market — the one who ships when others stall.`,
-    'Uranus-5':     `The most innovative, category-defining offer in any market. This is the foundation of what's coming next for you.`,
-    'Neptune-5':    `Once grounded, your visionary capacity becomes your greatest differentiator — the one who sees the offer nobody else can.`,
+    'Sun-7':        `Your highest alignment comes through partnership — in love and in business. The right relationship is not a distraction from your goal. It is the path to it.`,
+    'Saturn-5':     `Once activated, you become the most disciplined, unshakeable builder in your market — and the partner who loves with rare, earned depth. Saturn in H5 blocks both at the same threshold; breaking one breaks both.`,
+    'Uranus-5':     `The most innovative, category-defining offer in any market — and the most electric, committed romantic connection, once the fear of staying is transmuted into the courage to remain.`,
+    'Neptune-5':    `Once grounded, your visionary capacity becomes your greatest differentiator in business — and in love, your depth of feeling becomes a rare gift rather than a source of confusion.`,
     'Pluto-6':      `Pluto in the 6th, activated, builds the most sustainable work machine — systems that compound instead of drain.`,
     'Neptune-8':    `Pricing rooted in genuine purpose becomes your most magnetic quality.`,
     'Uranus-10':    `You're not meant to build a predictable business. You're meant to build one nobody's seen before. That's what's coming next.`,
