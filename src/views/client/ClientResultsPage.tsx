@@ -344,7 +344,101 @@ export function ClientResultsPage() {
   const navigate = useNavigate();
   const [isExporting, setIsExporting] = useState(false);
 
-  const state = location.state as { results: ConsolidatedResults; intake: ClientIntakeData } | null;
+  const isDemo = new URLSearchParams(location.search).get('demo') === 'true';
+
+  const DEMO_STATE: { results: ConsolidatedResults; intake: ClientIntakeData } = {
+    results: {
+      success: true,
+      timestamp: new Date().toISOString(),
+      userInfo: {
+        name: 'Sophia Reyes',
+        dateOfBirth: '1990-06-15',
+        timeOfBirth: '14:30',
+        birthLocation: 'Los Angeles, CA',
+        currentLocation: 'Austin, TX',
+        address: '123 Demo St, Austin, TX',
+      },
+      calculators: {
+        transits: {
+          risingSign: 'Libra',
+          transits: [
+            { planet: 'Uranus', planetTheme: 'Disruption & Liberation', houseNumber: 10, houseTheme: 'Career & Public Image', pastHouseNumber: 9, pastHouseTheme: 'Beliefs & Travel', current: { sign: 'Taurus', start: '2019-01-01', end: '2033-12-31', high: '', low: '' }, past: { sign: 'Aries', start: '2011-01-01', end: '2019-01-01', high: '', low: '' } },
+            { planet: 'Neptune', planetTheme: 'Dissolution & Spirituality', houseNumber: 8, houseTheme: 'Money & Transformation', pastHouseNumber: 7, pastHouseTheme: 'Partnerships', current: { sign: 'Pisces', start: '2011-01-01', end: '2039-12-31', high: '', low: '' }, past: { sign: 'Aquarius', start: '1998-01-01', end: '2011-01-01', high: '', low: '' } },
+            { planet: 'Saturn', planetTheme: 'Structure & Limitation', houseNumber: 8, houseTheme: 'Money & Transformation', pastHouseNumber: 7, pastHouseTheme: 'Partnerships', current: { sign: 'Pisces', start: '2023-01-01', end: '2028-12-31', high: '', low: '' }, past: { sign: 'Aquarius', start: '2020-01-01', end: '2023-01-01', high: '', low: '' } },
+          ],
+        },
+        natalChart: null,
+        lifePath: null,
+        relocation: null,
+        addressNumerology: null,
+      },
+      diagnostic: {
+        pillars: [
+          {
+            pillar: 1,
+            name: 'Structure',
+            description: 'Natal chart angular placements',
+            fCount: 2,
+            cCount: 1,
+            aCount: 1,
+            items: [
+              { source: 'Natal Angular', pillar: 1, section: 'Natal Angular', planet: 'Saturn', house: 5, grade: 'F', reason: 'Saturn in angular house 5' },
+              { source: 'Natal Angular', pillar: 1, section: 'Natal Angular', planet: 'Uranus', house: 5, grade: 'F', reason: 'Uranus in angular house 5' },
+              { source: 'Natal Angular', pillar: 1, section: 'Natal Angular', planet: 'Neptune', house: 5, grade: 'C', reason: 'Neptune in house 5' },
+              { source: 'Natal Angular', pillar: 1, section: 'Natal Angular', planet: 'Sun', house: 7, grade: 'A', reason: 'Sun in angular house 7' },
+            ],
+          },
+          {
+            pillar: 2,
+            name: 'Timing',
+            description: 'Current planetary transits',
+            fCount: 1,
+            cCount: 2,
+            aCount: 0,
+            items: [
+              { source: 'Transit Angular', pillar: 2, section: 'Transit Angular', planet: 'Uranus', house: 10, grade: 'F', reason: 'Transit Uranus in angular house 10' },
+              { source: 'Transit Angular', pillar: 2, section: 'Transit Angular', planet: 'Neptune', house: 8, grade: 'C', reason: 'Transit Neptune in house 8' },
+              { source: 'Transit Angular', pillar: 2, section: 'Transit Angular', planet: 'Saturn', house: 8, grade: 'C', reason: 'Transit Saturn in house 8' },
+            ],
+          },
+          {
+            pillar: 3,
+            name: 'Environment',
+            description: 'Relocation chart for current address',
+            fCount: 0,
+            cCount: 3,
+            aCount: 0,
+            items: [
+              { source: 'Relocation Angular', pillar: 3, section: 'Relocation Angular', planet: 'Saturn', house: 2, grade: 'C', reason: 'Relocated Saturn in house 2' },
+              { source: 'Relocation Angular', pillar: 3, section: 'Relocation Angular', planet: 'Uranus', house: 2, grade: 'C', reason: 'Relocated Uranus in house 2' },
+              { source: 'Relocation Angular', pillar: 3, section: 'Relocation Angular', planet: 'Neptune', house: 2, grade: 'C', reason: 'Relocated Neptune in house 2' },
+            ],
+          },
+        ] as [import('../../models/diagnostic').PillarSummary, import('../../models/diagnostic').PillarSummary, import('../../models/diagnostic').PillarSummary],
+        totalFs: 3,
+        totalCs: 6,
+        totalAs: 1,
+        score: 58,
+        finalGrade: 'C',
+        allItems: [],
+      },
+    },
+    intake: {
+      email: 'sophia@example.com',
+      phone: '',
+      addressMoveDate: '2024',
+      desiredOutcome: 'Grow my income and financial freedom',
+      obstacle: 'Bandwidth and self-doubt',
+      patternYear: '2024',
+      priorHelp: ['coaches'],
+      preferredSolution: 'coaching',
+      currentSituation: 'employed',
+      additionalNotes: '',
+    },
+  };
+
+  const rawState = location.state as { results: ConsolidatedResults; intake: ClientIntakeData } | null;
+  const state = isDemo ? DEMO_STATE : rawState;
 
   if (!state?.results) {
     return (
