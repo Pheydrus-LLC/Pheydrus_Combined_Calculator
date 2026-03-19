@@ -22,11 +22,6 @@ import type { GradeItem, PillarSummary } from '../../models/diagnostic';
 import type { PlanetaryTransit } from '../../models/calculators';
 import type { ConsolidatedResults } from '../../models';
 import type { ClientIntakeData } from '../../models/clientIntake';
-import {
-  PREFERRED_SOLUTION_LABELS,
-  CURRENT_SITUATION_LABELS,
-  PRIOR_HELP_LABELS,
-} from '../../models/clientIntake';
 
 // ── Design tokens ─────────────────────────────────────────────────────────────
 
@@ -470,8 +465,6 @@ export function ClientResultsPage() {
   const longest = getLongestMaleficTransit(results.diagnostic!.allItems, transits);
   const { finalGrade, score } = results.diagnostic!;
   const gc = gradeColor(finalGrade);
-  const prefLabel = intake.preferredSolution ? (PREFERRED_SOLUTION_LABELS[intake.preferredSolution] ?? intake.preferredSolution) : null;
-
   // CTA eligibility
   const wordCount = intake.desiredOutcome.trim().split(/\s+/).filter(Boolean).length;
   const soughtTherapyOrCoaches = intake.priorHelp.includes('therapy') || intake.priorHelp.includes('coaches');
