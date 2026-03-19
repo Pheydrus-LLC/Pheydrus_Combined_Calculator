@@ -743,13 +743,4 @@ export function ClientResultsPage() {
   );
 }
 
-function IntakRow({ label, value }: { label: string; value: string }) {
-  return (
-    <div style={{ borderBottom: '1px solid #EBEBEB', paddingBottom: '8px' }}>
-      <p style={{ color: '#999', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 2px', fontFamily: INTER }}>{label}</p>
-      <p style={{ color: '#7A5A1A', fontSize: '0.85rem', margin: 0, fontFamily: INTER }}>{value}</p>
-    </div>
-  );
-}
-
 export default ClientResultsPage;
