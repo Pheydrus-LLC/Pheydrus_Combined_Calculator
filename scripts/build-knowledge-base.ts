@@ -1,10 +1,10 @@
 /**
- * Build-time script: processes data/Train_CMO into a searchable knowledge base.
+ * Build-time script: processes data/Train_CMO into TWO searchable knowledge bases.
  *
  * Reads .txt, .json, .csv, .docx files directly and extracts text from .pdf files.
  * Outputs:
- *   public/knowledge-base/manifest.json  – document metadata
- *   public/knowledge-base/chunks.json    – text chunks for search
+ *   public/knowledge-base/public/manifest.json + chunks.json   – excludes Sales_Pitches & FloDesk Emails
+ *   public/knowledge-base/private/manifest.json + chunks.json  – all categories
  *
  * Usage: npx tsx scripts/build-knowledge-base.ts
  */
@@ -35,6 +35,9 @@ const CORE_DOCUMENT_NAMES = [
   'rising-sign-database.txt',
   'publiccmoinitialsaleslogic.txt',
 ];
+
+/** Categories excluded from the public knowledge base */
+const PUBLIC_EXCLUDED_CATEGORIES = new Set(['Sales_Pitches', 'FloDesk Emails']);
 
 const TEXT_EXTENSIONS = new Set(['.txt', '.csv', '.json', '.docx']);
 const SKIP_EXTENSIONS = new Set(['.jpg', '.jpeg', '.png', '.gif', '.webp']);
@@ -283,24 +286,58 @@ async function main() {
     processedCount++;
   }
 
-  // Build manifest
-  const categories = [...new Set(documents.map((d) => d.category))].sort();
-  const manifest: Manifest = {
-    generatedAt: new Date().toISOString(),
-    documentCount: documents.length,
-    chunkCount: chunks.length,
-    categories,
-    documents,
-  };
+  // ── Split into public and private sets ────────────────────────────────────
 
-  // Write output files
-  fs.writeFileSync(path.join(OUTPUT_DIR, 'manifest.json'), JSON.stringify(manifest, null, 2));
-  fs.writeFileSync(path.join(OUTPUT_DIR, 'chunks.json'), JSON.stringify(chunks));
+  const publicDocuments = documents.filter((d) => !PUBLIC_EXCLUDED_CATEGORIES.has(d.category));
+  const publicChunks = chunks.filter((c) => !PUBLIC_EXCLUDED_CATEGORIES.has(c.category));
+  const privateDocuments = documents; // all documents
+  const privateChunks = chunks; // all chunks
 
-  // Summary
+  const generatedAt = new Date().toISOString();
+
+  function buildManifest(docs: DocumentMeta[], chnks: Chunk[]): Manifest {
+    const cats = [...new Set(docs.map((d) => d.category))].sort();
+    return {
+      generatedAt,
+      documentCount: docs.length,
+      chunkCount: chnks.length,
+      categories: cats,
+      documents: docs,
+    };
+  }
+
+  function writeKnowledgeBase(subdir: string, docs: DocumentMeta[], chnks: Chunk[]) {
+    const outDir = path.join(OUTPUT_DIR, subdir);
+    fs.mkdirSync(outDir, { recursive: true });
+    const manifest = buildManifest(docs, chnks);
+    fs.writeFileSync(path.join(outDir, 'manifest.json'), JSON.stringify(manifest, null, 2));
+    fs.writeFileSync(path.join(outDir, 'chunks.json'), JSON.stringify(chnks));
+  }
+
+  // Write both knowledge bases
+  writeKnowledgeBase('public', publicDocuments, publicChunks);
+  writeKnowledgeBase('private', privateDocuments, privateChunks);
+
+  // Remove old root-level files if they exist
+  for (const oldFile of ['manifest.json', 'chunks.json']) {
+    const oldPath = path.join(OUTPUT_DIR, oldFile);
+    if (fs.existsSync(oldPath)) {
+      fs.unlinkSync(oldPath);
+      console.log(`  Removed old ${oldFile} from root`);
+    }
+  }
+
+  // ── Summary ───────────────────────────────────────────────────────────────
+
   const coreCount = documents.filter((d) => d.isCore).length;
-  const totalChars = chunks.reduce((sum, c) => sum + c.content.length, 0);
-  const estimatedTokens = Math.round(totalChars / 4);
+  const excludedDocs = documents.filter((d) => PUBLIC_EXCLUDED_CATEGORIES.has(d.category));
+  const excludedByCategory = new Map<string, number>();
+  for (const d of excludedDocs) {
+    excludedByCategory.set(d.category, (excludedByCategory.get(d.category) || 0) + 1);
+  }
+
+  const pubChars = publicChunks.reduce((sum, c) => sum + c.content.length, 0);
+  const privChars = privateChunks.reduce((sum, c) => sum + c.content.length, 0);
 
   console.log('\n  Knowledge base built successfully!');
   console.log(`  ─────────────────────────────────`);
@@ -308,11 +345,30 @@ async function main() {
   console.log(`  Documents skipped:   ${skippedCount} (images/unsupported)`);
   console.log(`  Documents failed:    ${failedCount} (no text extracted)`);
   console.log(`  Core documents:      ${coreCount}`);
-  console.log(`  Total chunks:        ${chunks.length}`);
-  console.log(`  Categories:          ${categories.join(', ')}`);
-  console.log(`  Total text:          ${(totalChars / 1024).toFixed(1)} KB`);
-  console.log(`  Estimated tokens:    ~${estimatedTokens.toLocaleString()}`);
-  console.log(`  Output:              ${path.relative(process.cwd(), OUTPUT_DIR)}/`);
+  console.log('');
+  console.log(`  PUBLIC Knowledge Base:`);
+  console.log(
+    `    Documents: ${publicDocuments.length} | Chunks: ${publicChunks.length} | Categories: ${buildManifest(publicDocuments, publicChunks).categories.length}`
+  );
+  const excludedParts = [...excludedByCategory.entries()]
+    .map(([cat, n]) => `${cat} (${n} docs)`)
+    .join(', ');
+  console.log(`    Excluded:  ${excludedParts}`);
+  console.log(
+    `    Size:      ${(pubChars / 1024).toFixed(1)} KB (~${Math.round(pubChars / 4).toLocaleString()} tokens)`
+  );
+  console.log('');
+  console.log(`  PRIVATE Knowledge Base:`);
+  console.log(
+    `    Documents: ${privateDocuments.length} | Chunks: ${privateChunks.length} | Categories: ${buildManifest(privateDocuments, privateChunks).categories.length}`
+  );
+  console.log(`    All categories included`);
+  console.log(
+    `    Size:      ${(privChars / 1024).toFixed(1)} KB (~${Math.round(privChars / 4).toLocaleString()} tokens)`
+  );
+  console.log('');
+  console.log(`  Output: ${path.relative(process.cwd(), OUTPUT_DIR)}/public/`);
+  console.log(`          ${path.relative(process.cwd(), OUTPUT_DIR)}/private/`);
 }
 
 main().catch((err) => {

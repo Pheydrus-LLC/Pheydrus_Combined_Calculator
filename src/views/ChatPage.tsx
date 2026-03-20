@@ -4,9 +4,10 @@ import { ChatThread } from '../components/chat/ChatThread';
 import { ChatInput } from '../components/chat/ChatInput';
 import { SourcePanel } from '../components/chat/SourcePanel';
 import type { Citation } from '../models/chat';
+import { PUBLIC_STARTER_QUESTIONS } from '../models/chat';
 
 export function ChatPage() {
-  const { messages, isStreaming, error, sendMessage, clearChat } = useChat();
+  const { messages, isStreaming, error, sendMessage, clearChat } = useChat('public');
   const [selectedCitation, setSelectedCitation] = useState<Citation | null>(null);
 
   return (
@@ -32,6 +33,7 @@ export function ChatPage() {
           messages={messages}
           isStreaming={isStreaming}
           onCitationClick={setSelectedCitation}
+          starterQuestions={PUBLIC_STARTER_QUESTIONS}
         />
 
         <ChatInput onSend={sendMessage} disabled={isStreaming} />

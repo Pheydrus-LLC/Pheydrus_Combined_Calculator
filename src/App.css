@@ -313,6 +313,58 @@
   background: rgba(154, 125, 78, 0.06);
 }
 
+/* Private Chat Header */
+.chat-header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.chat-header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.private-badge {
+  background: #7c3aed;
+  color: white;
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.prompt-selector {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.prompt-selector label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #6b7280;
+  white-space: nowrap;
+}
+
+.prompt-selector select {
+  padding: 0.35rem 0.6rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  background: white;
+  cursor: pointer;
+}
+
+.prompt-selector select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 /* Chat Thread */
 .chat-thread {
   flex: 1;

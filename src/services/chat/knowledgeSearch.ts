@@ -1,9 +1,4 @@
-import type { KnowledgeChunk, ContextChunk } from '../../models/chat';
-
-// FlexSearch doesn't have great ESM types — use dynamic import
-let searchIndex: ReturnType<typeof createIndex> | null = null;
-let allChunks: KnowledgeChunk[] = [];
-let loadPromise: Promise<void> | null = null;
+import type { KnowledgeChunk, ContextChunk, ChatMode } from '../../models/chat';
 
 interface SearchIndex {
   add: (id: number, text: string) => void;
@@ -13,11 +8,9 @@ interface SearchIndex {
 function createIndex(): SearchIndex {
   // Simple inverted index fallback — FlexSearch loaded dynamically
   const index = new Map<string, Set<number>>();
-  const items = new Map<number, string>();
 
   return {
     add(id: number, text: string) {
-      items.set(id, text);
       const words = text
         .toLowerCase()
         .split(/\W+/)
@@ -53,38 +46,59 @@ function createIndex(): SearchIndex {
   };
 }
 
-async function loadKnowledgeBase(): Promise<void> {
-  if (allChunks.length > 0) return;
-  if (loadPromise) return loadPromise;
+// ── Per-mode caches ─────────────────────────────────────────────────────────
 
-  loadPromise = (async () => {
-    const response = await fetch('/knowledge-base/chunks.json');
+interface KBCache {
+  chunks: KnowledgeChunk[];
+  index: SearchIndex | null;
+  loadPromise: Promise<void> | null;
+}
+
+const caches: Record<ChatMode, KBCache> = {
+  public: { chunks: [], index: null, loadPromise: null },
+  private: { chunks: [], index: null, loadPromise: null },
+};
+
+async function loadKnowledgeBase(mode: ChatMode): Promise<void> {
+  const cache = caches[mode];
+  if (cache.chunks.length > 0) return;
+  if (cache.loadPromise) return cache.loadPromise;
+
+  cache.loadPromise = (async () => {
+    const response = await fetch(`/knowledge-base/${mode}/chunks.json`);
     if (!response.ok) {
-      throw new Error(`Failed to load knowledge base: ${response.status}`);
+      throw new Error(`Failed to load ${mode} knowledge base: ${response.status}`);
     }
-    allChunks = await response.json();
+    cache.chunks = await response.json();
 
-    searchIndex = createIndex();
-    for (let i = 0; i < allChunks.length; i++) {
-      searchIndex.add(i, `${allChunks[i].title} ${allChunks[i].content}`);
+    cache.index = createIndex();
+    for (let i = 0; i < cache.chunks.length; i++) {
+      cache.index.add(i, `${cache.chunks[i].title} ${cache.chunks[i].content}`);
     }
   })();
 
-  return loadPromise;
+  return cache.loadPromise;
 }
+
+// ── Search ──────────────────────────────────────────────────────────────────
 
 const MAX_CONTEXT_CHARS = 200_000; // ~50K tokens
 
-export async function searchKnowledge(query: string): Promise<ContextChunk[]> {
-  await loadKnowledgeBase();
+export async function searchKnowledge(
+  query: string,
+  mode: ChatMode = 'public'
+): Promise<ContextChunk[]> {
+  await loadKnowledgeBase(mode);
+
+  const cache = caches[mode];
 
   // Always include core documents
-  const coreChunks = allChunks.filter((c) => c.isCore).map(toContextChunk);
+  const coreChunks = cache.chunks.filter((c) => c.isCore).map(toContextChunk);
 
   // Search for relevant chunks
-  const matchedIndices = searchIndex!.search(query, 100);
+  const matchedIndices = cache.index!.search(query, 100);
   const searchChunks = matchedIndices
-    .map((idx) => allChunks[idx])
+    .map((idx) => cache.chunks[idx])
     .filter((c) => !c.isCore) // Don't duplicate core docs
     .map(toContextChunk);
 
@@ -112,6 +126,6 @@ function toContextChunk(chunk: KnowledgeChunk): ContextChunk {
   };
 }
 
-export async function preloadKnowledgeBase(): Promise<void> {
-  return loadKnowledgeBase();
+export async function preloadKnowledgeBase(mode: ChatMode = 'public'): Promise<void> {
+  return loadKnowledgeBase(mode);
 }

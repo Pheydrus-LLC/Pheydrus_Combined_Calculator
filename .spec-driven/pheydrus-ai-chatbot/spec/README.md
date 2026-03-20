@@ -1,6 +1,6 @@
 # Pheydrus AI Chatbot - Feature Specifications
 
-All functional and technical requirements for the 6 sub-features are documented here.
+All functional and technical requirements for the 8 sub-features are documented here.
 
 ## Specifications by Feature
 
@@ -58,6 +58,24 @@ In-browser PDF/text/image viewer for original source documents.
 
 ---
 
+### Feature 6.7: Public & Private Chat Split
+
+Split chat into two routes with separate knowledge bases. Public excludes Sales_Pitches and FloDesk Emails. Private has full access.
+
+- [Functional Requirements](./public-private-chat-split/functional-requirements.md)
+- [Technical Requirements](./public-private-chat-split/technical-requirements.md)
+
+---
+
+### Feature 6.8: Multi-Prompt System
+
+Configurable system prompts per chat mode. Public has one fixed prompt. Private has selectable prompts (General Knowledge, Email Generator) via dropdown.
+
+- [Functional Requirements](./prompt-system/functional-requirements.md)
+- [Technical Requirements](./prompt-system/technical-requirements.md)
+
+---
+
 ## Implementation Order
 
 ```
@@ -71,10 +89,21 @@ In-browser PDF/text/image viewer for original source documents.
              |
              +--► 6.5 Chat Page & Navigation
                    |
+                   +--► 6.7 Public & Private Chat Split  ← NEW
+                   |     (dual knowledge bases, dual routes,
+                   |      dual API endpoints)
+                   |
+                   +--► 6.8 Multi-Prompt System          ← NEW
+                   |     (prompt dropdown for private,
+                   |      starter questions per mode)
+                   |
                    +--► 6.6 Document Viewer (low priority)
 ```
+
+Note: 6.7 and 6.8 are tightly coupled and should be implemented together. 6.7 creates the split infrastructure, 6.8 adds the prompt logic on top.
 
 ---
 
 **Created**: March 8, 2026
+**Updated**: March 20, 2026
 **Status**: SPECIFICATIONS COMPLETE — READY FOR DEVELOPMENT

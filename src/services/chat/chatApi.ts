@@ -1,4 +1,4 @@
-import type { ContextChunk, ChatStreamEvent } from '../../models/chat';
+import type { ContextChunk, ChatStreamEvent, ChatMode } from '../../models/chat';
 
 interface MessagePayload {
   role: 'user' | 'assistant';
@@ -7,12 +7,20 @@ interface MessagePayload {
 
 export async function* streamChatResponse(
   messages: MessagePayload[],
-  context: ContextChunk[]
+  context: ContextChunk[],
+  mode: ChatMode = 'public',
+  promptId?: string
 ): AsyncGenerator<ChatStreamEvent> {
-  const response = await fetch('/api/chat', {
+  const endpoint = mode === 'private' ? '/api/chat-private' : '/api/chat';
+  const body: Record<string, unknown> = { messages, context };
+  if (mode === 'private' && promptId) {
+    body.promptId = promptId;
+  }
+
+  const response = await fetch(endpoint, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ messages, context }),
+    body: JSON.stringify(body),
   });
 
   if (!response.ok) {
