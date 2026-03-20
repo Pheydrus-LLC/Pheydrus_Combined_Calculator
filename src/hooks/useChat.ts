@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef } from 'react';
-import type { ChatMessage, Citation } from '../models/chat';
+import type { ChatMessage, Citation, ChatMode } from '../models/chat';
 import { searchKnowledge } from '../services/chat/knowledgeSearch';
 import { streamChatResponse } from '../services/chat/chatApi';
 
@@ -29,7 +29,7 @@ function extractCitations(text: string): Citation[] {
   return citations;
 }
 
-export function useChat() {
+export function useChat(mode: ChatMode = 'public', promptId?: string) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isStreaming, setIsStreaming] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -69,7 +69,7 @@ export function useChat() {
 
       try {
         // Search knowledge base for relevant context
-        const context = await searchKnowledge(text);
+        const context = await searchKnowledge(text, mode);
 
         // Build message history for API (without IDs/citations)
         const apiMessages = updatedMessages.map((m) => ({
@@ -79,7 +79,7 @@ export function useChat() {
 
         // Stream response
         let fullContent = '';
-        for await (const event of streamChatResponse(apiMessages, context)) {
+        for await (const event of streamChatResponse(apiMessages, context, mode, promptId)) {
           if (abortRef.current) break;
 
           if (event.error) {
@@ -111,7 +111,7 @@ export function useChat() {
         setIsStreaming(false);
       }
     },
-    [messages, isStreaming]
+    [messages, isStreaming, mode, promptId]
   );
 
   const clearChat = useCallback(() => {

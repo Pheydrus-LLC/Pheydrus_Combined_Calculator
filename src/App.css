@@ -313,6 +313,136 @@
   background: rgba(154, 125, 78, 0.06);
 }
 
+/* Private Chat Header */
+.chat-header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.chat-header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.private-badge {
+  background: #7c3aed;
+  color: white;
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.prompt-selector {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.prompt-selector label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #6b7280;
+  white-space: nowrap;
+}
+
+.prompt-selector select {
+  padding: 0.35rem 0.6rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  background: white;
+  cursor: pointer;
+}
+
+.prompt-selector select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Private Chat Password Gate */
+.private-gate {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+  padding: 2rem;
+}
+
+.private-gate-card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 2.5rem;
+  max-width: 380px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.private-gate-title {
+  margin: 0 0 0.5rem;
+  font-size: 1.3rem;
+  color: #2d2a3e;
+}
+
+.private-gate-subtitle {
+  margin: 0 0 1.5rem;
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.private-gate-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.private-gate-input {
+  padding: 0.6rem 0.8rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  text-align: center;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.private-gate-input:focus {
+  border-color: #7c3aed;
+}
+
+.private-gate-input--error {
+  border-color: #ef4444;
+}
+
+.private-gate-error {
+  margin: 0;
+  color: #ef4444;
+  font-size: 0.8rem;
+}
+
+.private-gate-btn {
+  padding: 0.6rem 1.2rem;
+  background: #7c3aed;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.private-gate-btn:hover {
+  background: #6d28d9;
+}
+
 /* Chat Thread */
 .chat-thread {
   flex: 1;

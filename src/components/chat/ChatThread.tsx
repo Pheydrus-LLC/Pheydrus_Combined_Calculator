@@ -6,16 +6,23 @@ interface ChatThreadProps {
   messages: ChatMessageType[];
   isStreaming: boolean;
   onCitationClick?: (citation: Citation) => void;
+  starterQuestions?: string[];
 }
 
-const STARTER_QUESTIONS = [
+const DEFAULT_STARTER_QUESTIONS = [
   'What programs does Pheydrus offer?',
   "What's the difference between Artist's Way and Hero's Journey?",
   'How do I find my Life Path number?',
   'What course is right for someone feeling stuck?',
 ];
 
-export function ChatThread({ messages, isStreaming, onCitationClick }: ChatThreadProps) {
+export function ChatThread({
+  messages,
+  isStreaming,
+  onCitationClick,
+  starterQuestions,
+}: ChatThreadProps) {
+  const starters = starterQuestions || DEFAULT_STARTER_QUESTIONS;
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -32,7 +39,7 @@ export function ChatThread({ messages, isStreaming, onCitationClick }: ChatThrea
             programs.
           </p>
           <div className="chat-starters">
-            {STARTER_QUESTIONS.map((q) => (
+            {starters.map((q) => (
               <button
                 key={q}
                 className="chat-starter-btn"
