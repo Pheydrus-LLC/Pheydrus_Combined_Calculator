@@ -6,7 +6,55 @@ import { SourcePanel } from '../components/chat/SourcePanel';
 import type { Citation } from '../models/chat';
 import { PRIVATE_PROMPT_OPTIONS } from '../models/chat';
 
+const PRIVATE_ACCESS_KEY = 'PheydrusChat123';
+const SESSION_KEY = 'pheydrus_private_chat_auth';
+
+function PasswordGate({ onUnlock }: { onUnlock: () => void }) {
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (password === PRIVATE_ACCESS_KEY) {
+      sessionStorage.setItem(SESSION_KEY, 'true');
+      onUnlock();
+    } else {
+      setError(true);
+      setPassword('');
+    }
+  };
+
+  return (
+    <div className="private-gate">
+      <div className="private-gate-card">
+        <h2 className="private-gate-title">Internal CMO Access</h2>
+        <p className="private-gate-subtitle">Enter the access code to continue.</p>
+        <form onSubmit={handleSubmit} className="private-gate-form">
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => {
+              setPassword(e.target.value);
+              setError(false);
+            }}
+            placeholder="Access code"
+            className={`private-gate-input ${error ? 'private-gate-input--error' : ''}`}
+            autoFocus
+          />
+          {error && <p className="private-gate-error">Incorrect access code</p>}
+          <button type="submit" className="private-gate-btn">
+            Enter
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+}
+
 export function PrivateChatPage() {
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    () => sessionStorage.getItem(SESSION_KEY) === 'true'
+  );
   const [selectedPromptId, setSelectedPromptId] = useState('general');
   const selectedOption = PRIVATE_PROMPT_OPTIONS.find((o) => o.id === selectedPromptId)!;
 
@@ -20,6 +68,10 @@ export function PrivateChatPage() {
     setSelectedPromptId(newPromptId);
     clearChat();
   };
+
+  if (!isAuthenticated) {
+    return <PasswordGate onUnlock={() => setIsAuthenticated(true)} />;
+  }
 
   return (
     <div className={`chat-page ${selectedCitation ? 'chat-page--with-panel' : ''}`}>
