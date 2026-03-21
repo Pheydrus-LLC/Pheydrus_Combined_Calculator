@@ -7,24 +7,14 @@
  *   BLOB_READ_WRITE_TOKEN — from Vercel Blob dashboard
  */
 
+import { list } from '@vercel/blob';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
 async function blobGet(id: string): Promise<unknown | null> {
-  const token = process.env.BLOB_READ_WRITE_TOKEN;
-  if (!token) return null;
-
-  // List blobs with this ID prefix to get the public URL
-  const listRes = await fetch(
-    `https://blob.vercel-storage.com?prefix=results/${id}.json&limit=1`,
-    { headers: { Authorization: `Bearer ${token}` } }
-  );
-  if (!listRes.ok) return null;
-
-  const list = (await listRes.json()) as { blobs: { url: string }[] };
-  const blob = list.blobs[0];
+  const { blobs } = await list({ prefix: `results/${id}.json`, limit: 1 });
+  const blob = blobs[0];
   if (!blob) return null;
 
-  // Fetch the blob content from its public URL
   const dataRes = await fetch(blob.url);
   if (!dataRes.ok) return null;
 

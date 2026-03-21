@@ -11,6 +11,7 @@
  */
 
 import { randomUUID } from 'crypto';
+import { put } from '@vercel/blob';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
 interface Results {
@@ -29,27 +30,12 @@ interface Intake {
 // ── Vercel Blob helpers ───────────────────────────────────────────────────────
 
 async function blobPut(pathname: string, body: string): Promise<string> {
-  const token = process.env.BLOB_READ_WRITE_TOKEN;
-  if (!token) throw new Error('BLOB_READ_WRITE_TOKEN not set');
-
-  const res = await fetch(`https://blob.vercel-storage.com/${pathname}`, {
-    method: 'PUT',
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-      'x-content-type': 'application/json',
-      'x-add-random-suffix': '0',
-    },
-    body,
+  const { url } = await put(pathname, body, {
+    access: 'public',
+    contentType: 'application/json',
+    addRandomSuffix: false,
   });
-
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`Blob PUT failed (${res.status}): ${text}`);
-  }
-
-  const json = (await res.json()) as { url: string };
-  return json.url;
+  return url;
 }
 
 // ── Slack notification ────────────────────────────────────────────────────────
