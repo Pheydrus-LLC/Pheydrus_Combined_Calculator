@@ -58,7 +58,7 @@ async function postToSlack(
   email: string,
   results: Results,
   intake: Intake,
-  resultsUrl: string
+  resultsUrl: string | null
 ): Promise<void> {
   const webhookUrl = process.env.SLACK_WEBHOOK_URL;
   if (!webhookUrl) return;
@@ -90,10 +90,10 @@ async function postToSlack(
       ],
     },
     { type: 'divider' },
-    {
+    ...(resultsUrl ? [{
       type: 'section',
       text: { type: 'mrkdwn', text: `*<${resultsUrl}|View Full Report →>*` },
-    },
+    }] : []),
   ];
 
   const res = await fetch(webhookUrl, {
@@ -130,17 +130,21 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   const id = randomUUID();
 
+  // Try to save to Blob — if it fails, still send Slack without the link
+  let resultsUrl: string | null = null;
   try {
     await blobPut(`results/${id}.json`, JSON.stringify({ results, intake, email, storedAt: new Date().toISOString() }));
-
     const appUrl = process.env.APP_URL ?? `https://${process.env.VERCEL_URL}`;
-    const resultsUrl = `${appUrl}/client/results?id=${id}`;
+    resultsUrl = `${appUrl}/client/results?id=${id}`;
+  } catch (blobErr) {
+    console.error('[store-results] Blob save failed (continuing):', blobErr);
+  }
 
+  try {
     await postToSlack(email, results, intake, resultsUrl);
-
     return res.status(200).json({ ok: true, id });
   } catch (err) {
-    console.error('[store-results]', err);
-    return res.status(500).json({ error: 'Failed to store results' });
+    console.error('[store-results] Slack post failed:', err);
+    return res.status(500).json({ error: 'Failed to post results' });
   }
 }
