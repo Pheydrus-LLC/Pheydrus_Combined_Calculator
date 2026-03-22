@@ -7,7 +7,7 @@
  *   BLOB_READ_WRITE_TOKEN — from Vercel Blob dashboard
  */
 
-import { list, download } from '@vercel/blob';
+import { list } from '@vercel/blob';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
 async function blobGet(id: string): Promise<unknown | null> {
@@ -16,7 +16,10 @@ async function blobGet(id: string): Promise<unknown | null> {
   const blob = blobs[0];
   if (!blob) return null;
 
-  const dataRes = await download(blob.url, { token });
+  // Fetch private blob content using the token as auth
+  const dataRes = await fetch(blob.url, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
   if (!dataRes.ok) return null;
 
   return dataRes.json();
