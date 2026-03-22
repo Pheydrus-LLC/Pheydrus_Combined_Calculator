@@ -17,7 +17,9 @@ async function blobGet(id: string): Promise<unknown | null> {
   if (!blob) return null;
 
   // Fetch private blob content using the token as auth
-  const dataRes = await fetch(blob.url);
+  const dataRes = await fetch(blob.url, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
   if (!dataRes.ok) return null;
 
   return dataRes.json();
