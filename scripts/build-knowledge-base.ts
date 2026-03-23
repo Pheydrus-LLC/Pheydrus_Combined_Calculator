@@ -8,6 +8,10 @@
  *   public/knowledge-base/private/media-manifest.json          – media asset registry for training mode
  *   public/knowledge-base/originals/                           – copied source files for preview
  *
+ * Env flags:
+ *   SKIP_ORIGINALS=true  — skip copying original files (saves ~558MB on Vercel)
+ *   VERCEL=1             — auto-detected on Vercel, also skips originals
+ *
  * Usage: npx tsx scripts/build-knowledge-base.ts
  */
 
