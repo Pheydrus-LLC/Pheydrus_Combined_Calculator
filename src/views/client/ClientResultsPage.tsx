@@ -34,6 +34,13 @@ function pillarScore(p: PillarSummary): number {
   return p.fCount + p.cCount * 0.5;
 }
 
+function pillarScoreToGrade(score: number): string {
+  if (score > 6) return 'F';
+  if (score >= 4) return 'C';
+  if (score >= 2) return 'B';
+  return 'A';
+}
+
 const GOAL_LABEL: Record<GoalCategory, string> = {
   career: 'Career & Financial Growth',
   love: 'Love & Relationships',
@@ -272,7 +279,7 @@ function PillarDeepDiveCard({ pillar, index, title, subtitle, goal, goalShort, l
       <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px', flexWrap: 'wrap' as const }}>
         <span style={{ ...PILLAR_BADGE_STYLE[index], fontSize: '10px', fontWeight: 700, padding: '2px 8px', borderRadius: '2px', fontFamily: INTER }}>PILLAR {index}</span>
         <span style={{ fontFamily: CORMORANT, fontSize: '1.1rem', fontWeight: 700, color: '#1C1A2E' }}>{title} — {subtitle}</span>
-        <span style={{ marginLeft: 'auto', fontSize: '1.2rem', fontWeight: 900, color: accentColor, fontFamily: INTER }}>{Math.round((s / (s || 1)) * 100 * 0 + 100)}%</span>
+        <span style={{ marginLeft: 'auto', fontSize: '1.2rem', fontWeight: 900, color: accentColor, fontFamily: INTER }}>{pillarScoreToGrade(s)}</span>
       </div>
 
       {/* Goal callout */}
@@ -643,9 +650,10 @@ export function ClientResultsPage() {
             <p style={{ margin: 0, fontFamily: CORMORANT, fontStyle: 'italic', color: '#7A5A1A', fontSize: '1rem', lineHeight: 1.7 }}>"It's not normal to wake up every day with that quiet ache — knowing you've done everything right. The degree. The career. The inner work. And still feel like you're watching everyone else's life click into place while yours stays just out of reach."</p>
           </div>
 
-          <p style={{ margin: '0 0 12px', fontSize: '0.85rem', color: '#444444', lineHeight: 1.8 }}>You are not behind. You are not broken. What you're experiencing is the friction of three invisible forces pulling against each other simultaneously. When these forces are misaligned, it doesn't matter how hard you work — life feels like pushing through water.</p>
-          <p style={{ margin: '0 0 12px', fontSize: '0.9rem', fontWeight: 700, color: '#C9A84C', lineHeight: 1.6 }}>When all three align — everything changes. Not gradually. Suddenly.</p>
-          <p style={{ margin: '0 0 24px', fontSize: '0.85rem', color: '#444444', lineHeight: 1.8 }}>The right people appear. The income shifts. The version of you that you've been reaching for starts to feel like the version of you that simply is. This is what Pheydrus clients describe — not motivation, not mindset — but a fundamental unlocking of what was always already there.</p>
+          <p style={{ margin: '0 0 12px', fontSize: '0.85rem', color: '#444444', lineHeight: 1.8, fontWeight: 700 }}>You are not broken. You are mid-shift.</p>
+          <p style={{ margin: '0 0 12px', fontSize: '0.85rem', color: '#444444', lineHeight: 1.8 }}>The patterns in this report aren't holding you back — they are the <strong>EXACT conditions that precede a major identity upgrade</strong>. Three invisible forces have been pulling against each other... and that friction? That's not failure. That's what happens when who you've been can no longer contain who you're becoming.</p>
+          <p style={{ margin: '0 0 12px', fontSize: '0.9rem', fontWeight: 700, color: '#C9A84C', lineHeight: 1.6 }}>The new identity is already forming.</p>
+          <p style={{ margin: '0 0 24px', fontSize: '0.85rem', color: '#444444', lineHeight: 1.8 }}>The question is whether you'll step into it with a map — or stumble into it blind.</p>
 
           {/* Venn + legend */}
           <div style={{ display: 'flex', gap: '20px', alignItems: 'flex-start', marginBottom: '24px', flexWrap: 'wrap' as const }}>
@@ -676,12 +684,7 @@ export function ClientResultsPage() {
             </div>
           )}
 
-          {/* Destiny bridge */}
-          <div style={{ background: '#F5FBF5', border: '1px solid #C8E6C8', borderRadius: '4px', padding: '16px 20px' }}>
-            <p style={{ margin: 0, fontFamily: CORMORANT, fontStyle: 'italic', color: '#7A5A1A', fontSize: '0.95rem', lineHeight: 1.75 }}>
-              The patterns identified in this report aren't just about what's been holding you back. They are the exact conditions that <strong style={{ fontStyle: 'normal', color: '#C9A84C' }}>precede a major identity shift</strong>. You are closer to the breakthrough than you are to the beginning. The question is whether you'll have a map when it arrives.
-            </p>
-          </div>
+
         </div>
 
         {/* ── SECTION 3: PILLAR BREAKDOWN ── */}
@@ -691,13 +694,13 @@ export function ClientResultsPage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             <PillarDeepDiveCard {...pillarCardProps(p1, 1, 'Structure', 'Your Energetic Blueprint')} />
             <TestimonialCard
-              quote="[TESTIMONIAL] e.g. — 'I had the exact same Saturn/House 5 configuration. I'd been building the same offer in my head for two years. Within 60 days of working with the Pheydrus team, I launched, signed 3 clients, and finally felt like my energy matched my output.'"
+              quote="e.g. — 'I had the exact same Saturn/House 5 configuration. I'd been building the same offer in my head for two years. Within 60 days of working with the Pheydrus team, I launched, signed 3 clients, and finally felt like my energy matched my output.'"
               attribution="Jordan M., Los Angeles"
             />
             <PillarDeepDiveCard {...pillarCardProps(p2, 2, 'Timing', 'The Window You Are In')} />
             <PillarDeepDiveCard {...pillarCardProps(p3, 3, 'Environment', 'Location & Address')} />
             <TestimonialCard
-              quote="[TESTIMONIAL] e.g. — 'The environment piece was the one I almost skipped. After my Pillar 3 session I raised my rates by 40% and signed my highest-paying client that same week. The address work is real.'"
+              quote="e.g. — 'The environment piece was the one I almost skipped. After my Pillar 3 session I raised my rates by 40% and signed my highest-paying client that same week. The address work is real.'"
               attribution="Priya K., New York"
             />
           </div>
@@ -708,7 +711,7 @@ export function ClientResultsPage() {
         <CostOfInaction goalShort={goalShort} endYear={longest?.endYear ?? null} />
 
         <TestimonialCard
-          quote="[TESTIMONIAL] e.g. — 'I came in skeptical. Three years of coaches and nothing had actually shifted. I left my first session with a sequenced 90-day plan that made more sense than anything I'd tried before.'"
+          quote="e.g. — 'I came in skeptical. Three years of coaches and nothing had actually shifted. I left my first session with a sequenced 90-day plan that made more sense than anything I'd tried before.'"
           attribution="Marcus T., Chicago"
         />
 

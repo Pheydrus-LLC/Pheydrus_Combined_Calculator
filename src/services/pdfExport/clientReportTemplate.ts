@@ -31,6 +31,13 @@ function pillarScore(p: PillarSummary): number {
   return p.fCount + p.cCount * 0.5;
 }
 
+function pillarScoreToGrade(score: number): string {
+  if (score > 6) return 'F';
+  if (score >= 4) return 'C';
+  if (score >= 2) return 'B';
+  return 'A';
+}
+
 function pct(val: number, total: number): number {
   return total === 0 ? 0 : Math.round((val / total) * 100);
 }
@@ -654,9 +661,10 @@ function renderPage2(results: ConsolidatedResults, _intake: ClientIntakeData, __
   </div>
 
   <!-- Body -->
-  <p style="margin:0 0 14px;font-size:13px;color:#444;line-height:1.8;font-family:${INTER};">You are not behind. You are not broken. What you're experiencing is the friction of three invisible forces pulling against each other simultaneously. When these forces are misaligned, it doesn't matter how hard you work — life feels like pushing through water.</p>
-  <p style="margin:0 0 14px;font-size:14px;font-weight:700;color:#C9A84C;line-height:1.6;font-family:${INTER};">When all three align — everything changes. Not gradually. Suddenly.</p>
-  <p style="margin:0 0 28px;font-size:13px;color:#444;line-height:1.8;font-family:${INTER};">The right people appear. The income shifts. The version of you that you've been reaching for starts to feel like the version of you that simply is. This is what Pheydrus clients describe — not motivation, not mindset — but a fundamental unlocking of what was always already there.</p>
+  <p style="margin:0 0 12px;font-size:13px;color:#444;line-height:1.8;font-family:${INTER};font-weight:700;">You are not broken. You are mid-shift.</p>
+  <p style="margin:0 0 12px;font-size:13px;color:#444;line-height:1.8;font-family:${INTER};">The patterns in this report aren't holding you back — they are the <strong>EXACT conditions that precede a major identity upgrade</strong>. Three invisible forces have been pulling against each other... and that friction? That's not failure. That's what happens when who you've been can no longer contain who you're becoming.</p>
+  <p style="margin:0 0 12px;font-size:14px;font-weight:700;color:#C9A84C;line-height:1.6;font-family:${INTER};">The new identity is already forming.</p>
+  <p style="margin:0 0 28px;font-size:13px;color:#444;line-height:1.8;font-family:${INTER};">The question is whether you'll step into it with a map — or stumble into it blind.</p>
 
   <!-- Venn + Legend -->
   <div style="display:flex;gap:20px;align-items:flex-start;margin-bottom:28px;">
@@ -682,10 +690,6 @@ function renderPage2(results: ConsolidatedResults, _intake: ClientIntakeData, __
     <p style="margin:0;font-size:12px;color:#555;line-height:1.7;font-family:${INTER};">Without intervention, your current configuration is projected to persist ${endYear ? `<strong style="color:#C9A84C;">through ${endYear} — approximately ${yearsRemaining} more years</strong>` : '<strong style="color:#C9A84C;">for several more years</strong>'}. The primary driver is <strong style="color:#1C1A2E;">${longest ? esc(longest.planet) + ' transiting House ' + longest.house : 'the dominant outer planet transit'}</strong>, defining the exact window you are in right now. Knowing the window is half the advantage.</p>
   </div>
 
-  <!-- Destiny bridge -->
-  <div style="background:#F5FBF5;border:1px solid #C8E6C8;border-radius:4px;padding:16px 20px;">
-    <p style="margin:0;font-size:13px;font-style:italic;color:#7A5A1A;line-height:1.75;font-family:${CORMORANT};">The patterns identified in this report aren't just about what's been holding you back. They are the exact conditions that <strong style="font-style:normal;color:#C9A84C;">precede a major identity shift</strong>. You are closer to the breakthrough than you are to the beginning. The question is whether you'll have a map when it arrives.</p>
-  </div>
 
 </div>`;
 }
@@ -698,31 +702,23 @@ function renderPage3(results: ConsolidatedResults, intake: ClientIntakeData, goa
 
   const [p1, p2, p3] = diagnostic.pillars;
   const s1 = pillarScore(p1), s2 = pillarScore(p2), s3 = pillarScore(p3);
-  const total = s1 + s2 + s3;
   const transits = results.calculators.transits?.transits ?? [];
   const goalShort = GOAL_SHORT[goal];
   const clientLocation = results.userInfo.currentLocation || '';
 
-  const p1pct = pct(s1, total);
-  const p2pct = pct(s2, total);
-  const p3pct = pct(s3, total);
+  const p1pct = pillarScoreToGrade(s1);
+  const p2pct = pillarScoreToGrade(s2);
+  const p3pct = pillarScoreToGrade(s3);
 
-  // Build pillar percentage display into the render call
-  function withPct(p: PillarSummary, basePct: number): PillarSummary & { _pct: number } {
-    return Object.assign(Object.create(Object.getPrototypeOf(p)), p, { _pct: basePct }) as PillarSummary & { _pct: number };
-  }
-  const p1x = withPct(p1, p1pct);
-  const p2x = withPct(p2, p2pct);
-  const p3x = withPct(p3, p3pct);
 
-  // Inline pillar block to inject correct pct
+  // Inline pillar block to inject correct grade
   function block(
     pillar: PillarSummary,
     num: 1 | 2 | 3,
     title: string,
     subtitle: string,
     callout: string,
-    pillarPct: number,
+    pillarGrade: string,
     accent: string,
   ): string {
     const scoringItems = pillar.items.filter((i) => i.grade === 'F' || i.grade === 'C' || i.grade === 'A');
@@ -738,7 +734,7 @@ function renderPage3(results: ConsolidatedResults, intake: ClientIntakeData, goa
   <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap;">
     <span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:2px;${badgeSty}font-family:${INTER};">PILLAR ${num}</span>
     <span style="font-size:16px;font-weight:700;color:#1C1A2E;font-family:${CORMORANT};">${title} &mdash; ${subtitle}</span>
-    <span style="margin-left:auto;font-size:18px;font-weight:900;color:${accent};font-family:${INTER};">${pillarPct}%</span>
+    <span style="margin-left:auto;font-size:18px;font-weight:900;color:${accent};font-family:${INTER};">${pillarGrade}</span>
   </div>
   <p style="margin:0 0 12px;font-size:12px;font-style:italic;color:#7A5A1A;line-height:1.5;padding:7px 12px;background:rgba(201,168,76,0.06);border-bottom:1px solid rgba(201,168,76,0.18);border-radius:4px 4px 0 0;font-family:${CORMORANT};">${callout}</p>
   <div style="display:flex;gap:14px;align-items:flex-start;">
@@ -762,10 +758,6 @@ function renderPage3(results: ConsolidatedResults, intake: ClientIntakeData, goa
 </div>`;
   }
 
-  // Suppress unused variable warnings
-  void p1x; void p2x; void p3x;
-  void renderPillarBlock;
-
   return `
 <!-- PAGE 3: PILLAR BREAKDOWN -->
 <div style="background:#F5F1EB;padding:40px 48px;color:#1C1A2E;">
@@ -779,7 +771,7 @@ function renderPage3(results: ConsolidatedResults, intake: ClientIntakeData, goa
 
   <!-- Upgrade 7: Testimonial after Pillar 1 -->
   ${renderTestimonialCard(
-    "[TESTIMONIAL] e.g. — 'I had the exact same Saturn/House 5 configuration. I'd been building the same offer in my head for two years. Within 60 days of working with the Pheydrus team, I launched, signed 3 clients, and finally felt like my energy matched my output.'",
+    "e.g. — 'I had the exact same Saturn/House 5 configuration. I'd been building the same offer in my head for two years. Within 60 days of working with the Pheydrus team, I launched, signed 3 clients, and finally felt like my energy matched my output.'",
     'Jordan M., Los Angeles'
   )}
 
@@ -795,7 +787,7 @@ function renderPage3(results: ConsolidatedResults, intake: ClientIntakeData, goa
 
   <!-- Upgrade 7: Testimonial after Pillar 3 -->
   ${renderTestimonialCard(
-    "[TESTIMONIAL] e.g. — 'The environment piece was the one I almost skipped. After my Pillar 3 session I raised my rates by 40% and signed my highest-paying client that same week. The address work is real.'",
+    "e.g. — 'The environment piece was the one I almost skipped. After my Pillar 3 session I raised my rates by 40% and signed my highest-paying client that same week. The address work is real.'",
     'Priya K., New York'
   )}
 
