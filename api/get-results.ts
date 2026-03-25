@@ -4,14 +4,14 @@
  * Used by the results page when accessed via a shareable link.
  *
  * Required env vars:
- *   BLOB_READ_WRITE_TOKEN — from Vercel Blob dashboard
+ *   BLOB_PUBLIC_READ_WRITE_TOKEN_READ_WRITE_TOKEN — from Vercel Blob dashboard
  */
 
 import { list } from '@vercel/blob';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
 async function blobGet(id: string): Promise<unknown | null> {
-  const token = process.env.BLOB_READ_WRITE_TOKEN;
+  const token = process.env.BLOB_PUBLIC_READ_WRITE_TOKEN_READ_WRITE_TOKEN;
   const { blobs } = await list({ prefix: `results/${id}.json`, limit: 1, token });
   const blob = blobs[0];
   if (!blob) return null;

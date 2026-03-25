@@ -5,7 +5,7 @@
  * and adds the subscriber to Flodesk.
  *
  * Required env vars:
- *   BLOB_READ_WRITE_TOKEN              — from Vercel Blob dashboard
+ *   BLOB_PUBLIC_READ_WRITE_TOKEN_READ_WRITE_TOKEN              — from Vercel Blob dashboard
  *   SLACK_WEBHOOK_URL                  — Slack Incoming Webhook URL
  *   APP_URL                            — e.g. https://yourapp.vercel.app
  *
@@ -34,8 +34,8 @@ interface Intake {
 // ── Vercel Blob ───────────────────────────────────────────────────────────────
 
 async function blobPut(pathname: string, body: string): Promise<string> {
-  const token = process.env.BLOB_READ_WRITE_TOKEN;
-  if (!token) throw new Error('BLOB_READ_WRITE_TOKEN not set');
+  const token = process.env.BLOB_PUBLIC_READ_WRITE_TOKEN_READ_WRITE_TOKEN;
+  if (!token) throw new Error('BLOB_PUBLIC_READ_WRITE_TOKEN_READ_WRITE_TOKEN not set');
   const { url } = await put(pathname, body, {
     access: 'public',
     contentType: 'application/json',
