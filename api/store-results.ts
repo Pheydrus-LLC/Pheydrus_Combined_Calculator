@@ -37,7 +37,7 @@ async function blobPut(pathname: string, body: string): Promise<string> {
   const token = process.env.BLOB2_READ_WRITE_TOKEN;
   if (!token) throw new Error('BLOB2_READ_WRITE_TOKEN not set');
   const { url } = await put(pathname, body, {
-    access: 'public',
+    access: 'private',
     contentType: 'application/json',
     addRandomSuffix: false,
     token,
@@ -161,8 +161,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         storedAt: new Date().toISOString(),
       })
     );
-    const appUrl = process.env.APP_URL ?? `https://${process.env.VERCEL_URL}`;
-    resultsUrl = `${appUrl}/client/results?id=${id}`;
+    const appUrl =
+      process.env.APP_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null);
+    if (appUrl) {
+      resultsUrl = `${appUrl}/client/results?id=${id}`;
+    } else {
+      console.warn(
+        '[store-results] Neither APP_URL nor VERCEL_URL is set — cannot build results link'
+      );
+    }
   } catch (blobErr) {
     blobDebug = blobErr instanceof Error ? blobErr.message : String(blobErr);
     console.error('[store-results] Blob save failed (continuing):', blobErr);
