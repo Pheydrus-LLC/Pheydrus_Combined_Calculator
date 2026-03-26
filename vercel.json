@@ -17,6 +17,6 @@
     }
   ],
   "rewrites": [
-    { "source": "/((?!api/|pheydrus-report).*)", "destination": "/index.html" }
+    { "source": "/((?!api/.*|\\.html$).*)", "destination": "/index.html" }
   ]
 }
