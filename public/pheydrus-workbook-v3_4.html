@@ -23,27 +23,39 @@
   @media print {
     .no-print { display:none !important; }
     body { background:white; }
-    .hero { min-height:auto; padding:60px 40px; }
+    .hero { min-height:auto; padding:40px 40px; }
   }
 
   /* HERO */
   .hero {
     background:var(--dark); color:white;
-    min-height:100vh; display:flex; flex-direction:column;
+    min-height:55vh; display:flex; flex-direction:column;
     align-items:center; justify-content:center;
-    text-align:center; padding:80px 40px; position:relative; overflow:hidden;
+    text-align:center; padding:50px 40px; position:relative; overflow:hidden;
   }
   .hero::before {
     content:''; position:absolute; inset:0;
     background: radial-gradient(ellipse at 30% 50%, rgba(139,26,26,0.38) 0%, transparent 60%),
                 radial-gradient(ellipse at 80% 20%, rgba(139,26,26,0.2) 0%, transparent 50%);
   }
-  .hero-eyebrow { font-size:11px; letter-spacing:0.35em; text-transform:uppercase; color:var(--gold); margin-bottom:24px; position:relative; }
-  .hero h1 { font-family:'Cormorant Garamond',serif; font-size:clamp(48px,8vw,96px); font-weight:300; line-height:1.05; position:relative; max-width:900px; }
+  /* Planet decorations */
+  .hero::after {
+    content:''; position:absolute; width:280px; height:280px; background:radial-gradient(circle at 30% 30%, rgba(201,169,118,0.2), transparent 70%);
+    border-radius:50%; top:-140px; right:-60px; z-index:0; filter:blur(2px);
+  }
+  .hero-planet-1 { position:absolute; width:120px; height:120px; background:radial-gradient(circle at 35% 35%, #FFB366, #CC6633);
+    border-radius:50%; bottom:60px; left:40px; z-index:1; opacity:0.4; filter:blur(1px); animation:float 6s ease-in-out infinite; }
+  .hero-planet-2 { position:absolute; width:80px; height:80px; background:radial-gradient(circle at 30% 30%, #7DB4D9, #4A90B0);
+    border-radius:50%; top:80px; right:60px; z-index:1; opacity:0.3; filter:blur(0.5px); animation:float 8s ease-in-out infinite 1s; }
+  .hero-planet-3 { position:absolute; width:60px; height:60px; background:radial-gradient(circle at 40% 40%, #E5C85A, #9E8A3D);
+    border-radius:50%; top:120px; left:10%; z-index:0; opacity:0.25; filter:blur(1px); animation:float 7s ease-in-out infinite 0.5s; }
+  @keyframes float { 0%, 100% { transform:translateY(0px); } 50% { transform:translateY(-20px); } }
+  .hero-eyebrow { font-size:11px; letter-spacing:0.35em; text-transform:uppercase; color:var(--gold); margin-bottom:20px; position:relative; z-index:2; }
+  .hero h1 { font-family:'Cormorant Garamond',serif; font-size:clamp(42px,7vw,72px); font-weight:300; line-height:1.05; position:relative; max-width:900px; z-index:2; }
   .hero h1 em { font-style:italic; color:var(--gold); }
-  .hero-sub { font-size:15px; color:rgba(255,255,255,0.5); margin-top:28px; max-width:500px; position:relative; }
-  .hero-divider { width:60px; height:1px; background:var(--crimson); margin:36px auto; position:relative; }
-  .scroll-hint { position:absolute; bottom:40px; left:50%; transform:translateX(-50%); font-size:11px; letter-spacing:0.2em; color:rgba(255,255,255,0.25); text-transform:uppercase; }
+  .hero-sub { font-size:14px; color:rgba(255,255,255,0.5); margin-top:20px; max-width:500px; position:relative; z-index:2; }
+  .hero-divider { width:50px; height:1px; background:var(--crimson); margin:24px auto; position:relative; z-index:2; }
+  .scroll-hint { position:absolute; bottom:20px; left:50%; transform:translateX(-50%); font-size:10px; letter-spacing:0.2em; color:rgba(255,255,255,0.2); text-transform:uppercase; }
 
   /* STICKY NAV */
   .toc-nav {
@@ -328,6 +340,10 @@
     .gate-input-row { flex-direction:column; }
     #gateInput { width:100%; }
     .download-pdf-btn { padding: 8px 12px; font-size: 9px; }
+    .hero { min-height:50vh; padding:40px 24px; }
+    .hero-planet-1, .hero-planet-2, .hero-planet-3 { opacity:0.15; }
+    .hero h1 { font-size:clamp(32px,6vw,48px); }
+    .hero-sub { font-size:12px; }
   }
 </style>
 </head>
@@ -335,6 +351,9 @@
 
 <!-- HERO -->
 <div class="hero">
+  <div class="hero-planet-1"></div>
+  <div class="hero-planet-2"></div>
+  <div class="hero-planet-3"></div>
   <div class="hero-eyebrow">Pheydrus · Companion Workbook</div>
   <h1>Business Growth<br>in the <em>Age of Aquarius</em></h1>
   <div class="hero-divider"></div>
