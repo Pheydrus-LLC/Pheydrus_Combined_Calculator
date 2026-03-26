@@ -297,12 +297,37 @@
 
   .footer { background:var(--dark-mid,#111); color:rgba(255,255,255,0.3); text-align:center; padding:32px; font-size:11px; letter-spacing:0.15em; text-transform:uppercase; }
 
+  /* DOWNLOAD BUTTON */
+  .download-pdf-btn {
+    margin-left: auto;
+    background: var(--crimson);
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+  }
+  .download-pdf-btn:hover { background: var(--crimson-light); }
+  .download-pdf-btn:active { transform: scale(0.98); }
+  .download-pdf-btn.loading { opacity: 0.6; pointer-events: none; }
+
   @media (max-width:680px) {
     .suits-grid,.story-grid,.metrics-grid,.tools-grid,.compare,.hd-type-grid,.sign-grid,.sign-result-grid,.gate-result-grid { grid-template-columns:1fr; }
     .section-header { flex-direction:column; gap:16px; }
     .card-number { font-size:48px; }
     .gate-input-row { flex-direction:column; }
     #gateInput { width:100%; }
+    .download-pdf-btn { padding: 8px 12px; font-size: 9px; }
   }
 </style>
 </head>
@@ -330,6 +355,7 @@
     <a href="#tools">AI Tools</a>
     <a href="#appendix">Appendix</a>
     <a href="#cta">Next Step</a>
+    <button id="downloadPdfBtn" class="download-pdf-btn" title="Download as PDF">⬇ PDF</button>
   </div>
 </nav>
 
@@ -1421,6 +1447,61 @@ function selectSign(type, sign, btn) {
   panel.classList.add('visible');
   panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
+
+// =====================
+// PDF DOWNLOAD
+// =====================
+document.getElementById('downloadPdfBtn').addEventListener('click', async function() {
+  const btn = this;
+  btn.classList.add('loading');
+  btn.disabled = true;
+  const originalText = btn.textContent;
+  btn.textContent = '⏳ Generating...';
+
+  try {
+    // Load html2pdf from CDN
+    const script = document.createElement('script');
+    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';
+    document.head.appendChild(script);
+
+    script.onload = function() {
+      const element = document.body;
+      const opt = {
+        margin: 10,
+        filename: 'pheydrus-workbook-v3_4.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, logging: false, useCORS: true },
+        jsPDF: { orientation: 'portrait', unit: 'mm', format: 'a4' }
+      };
+      
+      html2pdf().set(opt).from(element).save().then(() => {
+        btn.classList.remove('loading');
+        btn.disabled = false;
+        btn.textContent = originalText;
+      }).catch(err => {
+        console.error('PDF generation error:', err);
+        btn.classList.remove('loading');
+        btn.disabled = false;
+        btn.textContent = originalText;
+        alert('Failed to generate PDF. Please try again.');
+      });
+    };
+
+    script.onerror = function() {
+      console.error('Failed to load html2pdf library');
+      btn.classList.remove('loading');
+      btn.disabled = false;
+      btn.textContent = originalText;
+      alert('Failed to load PDF library. Please try again.');
+    };
+  } catch (error) {
+    console.error('Error:', error);
+    btn.classList.remove('loading');
+    btn.disabled = false;
+    btn.textContent = originalText;
+    alert('An error occurred. Please try again.');
+  }
+});
 
 // =====================
 // DRAG TO SCROLL for appendix tables
