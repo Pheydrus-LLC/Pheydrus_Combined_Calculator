@@ -406,9 +406,10 @@ function renderAspectCard(
   goal: GoalCategory,
   goalShort: string,
   transits: PlanetaryTransit[],
+  goalText: string
 ): string {
   const gc = gradeColor(item.grade);
-  const interp = getItemInterpretation(item, goal, transits);
+  const interp = getItemInterpretation(item, goal, transits, goalText);
   const mirror = getMirrorLineHtml(item, goalShort);
   const transmute = getTransmuteLine(item);
   const isAddress = item.section === 'Address';
@@ -750,7 +751,7 @@ function renderPage3(results: ConsolidatedResults, intake: ClientIntakeData, goa
     <div style="flex:1;">
       ${scoringItems.length === 0
         ? `<p style="font-size:12px;color:#16a34a;font-style:italic;font-family:${INTER};">No significant pressure in this pillar — this dimension is working in your favor.</p>`
-        : scoringItems.map((item) => renderAspectCard(item, goal, goalShort, transits)).join('')
+        : scoringItems.map((item) => renderAspectCard(item, goal, goalShort, transits, intake.desiredOutcome)).join('')
       }
     </div>
   </div>

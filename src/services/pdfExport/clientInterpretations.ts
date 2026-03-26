@@ -434,13 +434,19 @@ function fallbackC(planet: string, house: number, goal: GoalCategory, dur: strin
 
 // ── Main interpretation dispatcher ───────────────────────────────────────────
 
+function applyGoalText(text: string, goalText?: string): string {
+  if (!goalText || !goalText.trim()) return text;
+  return `Based on your 90-Day Goal of "${goalText}", ${text}`;
+}
+
 export function getItemInterpretation(
   item: GradeItem,
   goal: GoalCategory,
-  transits: PlanetaryTransit[]
+  transits: PlanetaryTransit[],
+  goalText?: string
 ): string {
-  if (item.section === 'Address') return getAddressInterpretation(item, goal);
-  if (item.section === 'Life Cycle') return getLifeCycleInterpretation(item);
+  if (item.section === 'Address') return applyGoalText(getAddressInterpretation(item, goal), goalText);
+  if (item.section === 'Life Cycle') return applyGoalText(getLifeCycleInterpretation(item), goalText);
 
   const { planet, house, grade, pillar } = item;
   if (!planet || !house) return item.reason;
@@ -451,23 +457,24 @@ export function getItemInterpretation(
   // C grade from Pillar 2 pressure houses
   if (pillar === 2 && grade === 'C') {
     const fn = TRANSIT_C_INTERP[planet]?.[house];
-    if (fn && endYear) return fn(endYear);
-    return fallbackC(planet, house, goal, durStr);
+    const text = fn && endYear ? fn(endYear) : fallbackC(planet, house, goal, durStr);
+    return applyGoalText(text, goalText);
   }
 
   // C grade from Pillar 3 relocation pressure houses
   if (pillar === 3 && grade === 'C') {
     const fn = RELOCATION_C_INTERP[planet]?.[house];
-    if (fn) return fn(goal);
-    return fallbackC(planet, house, goal, '');
+    const text = fn ? fn(goal) : fallbackC(planet, house, goal, '');
+    return applyGoalText(text, goalText);
   }
 
   // F grade (natal, relocation, or transit-angular)
   if (grade === 'F') {
     const interp = F_INTERP[planet]?.[house];
-    const text = interp ? (goal === 'love' ? interp.love : interp.career) : fallbackF(planet, house, goal);
-    return endYear ? `${text} This transit runs ${durStr}.` : text;
+    const baseText = interp ? (goal === 'love' ? interp.love : interp.career) : fallbackF(planet, house, goal);
+    const text = endYear ? `${baseText} This transit runs ${durStr}.` : baseText;
+    return applyGoalText(text, goalText);
   }
 
-  return item.reason;
+  return applyGoalText(item.reason, goalText);
 }

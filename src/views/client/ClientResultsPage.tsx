@@ -203,14 +203,15 @@ function PillarTimeline({ pillarNum, pillar2Items, pillar3Items, transits, addre
 
 // ── Aspect card ───────────────────────────────────────────────────────────────
 
-function AspectCard({ item, goal, goalShort, transits }: {
+function AspectCard({ item, goal, goalShort, goalText, transits }: {
   item: GradeItem;
   goal: GoalCategory;
   goalShort: string;
+  goalText: string;
   transits: PlanetaryTransit[];
 }) {
   const gc = gradeColor(item.grade);
-  const interp = getItemInterpretation(item, goal, transits);
+  const interp = getItemInterpretation(item, goal, transits, goalText);
   const mirror = getMirrorLine(item, goalShort);
   const transmute = getTransmuteLine(item);
   const label = item.section === 'Address' ? '🏠 Address Energy' : item.source;
@@ -255,13 +256,14 @@ const PILLAR_CALLOUT: Record<1 | 2 | 3, (goal: string, loc: string) => string> =
   3: (goal, loc) => `Here is how your current address${loc ? ` in ${loc}` : ''} is interacting with your goal of ${goal}:`,
 };
 
-function PillarDeepDiveCard({ pillar, index, title, subtitle, goal, goalShort, location, transits, pillar2Items, pillar3Items, addressMoveDate }: {
+function PillarDeepDiveCard({ pillar, index, title, subtitle, goal, goalShort, goalText, location, transits, pillar2Items, pillar3Items, addressMoveDate }: {
   pillar: PillarSummary;
   index: 1 | 2 | 3;
   title: string;
   subtitle: string;
   goal: GoalCategory;
   goalShort: string;
+  goalText: string;
   location: string;
   transits: PlanetaryTransit[];
   pillar2Items: GradeItem[];
@@ -299,7 +301,7 @@ function PillarDeepDiveCard({ pillar, index, title, subtitle, goal, goalShort, l
         <div style={{ flex: 1 }}>
           {scoringItems.length === 0
             ? <p style={{ fontSize: '0.8rem', color: '#16a34a', fontStyle: 'italic', fontFamily: INTER }}>No significant pressure in this pillar — this dimension is working in your favor.</p>
-            : scoringItems.map((item, i) => <AspectCard key={i} item={item} goal={goal} goalShort={goalShort} transits={transits} />)
+            : scoringItems.map((item, i) => <AspectCard key={i} item={item} goal={goal} goalShort={goalShort} goalText={goalText} transits={transits} />)
           }
         </div>
       </div>
@@ -512,7 +514,7 @@ export function ClientResultsPage() {
   }
 
   const pillarCardProps = (pillar: PillarSummary, index: 1 | 2 | 3, title: string, subtitle: string) => ({
-    pillar, index, title, subtitle, goal, goalShort, location: clientLocation,
+    pillar, index, title, subtitle, goal, goalShort, goalText: intake.desiredOutcome, location: clientLocation,
     transits, pillar2Items: p2.items, pillar3Items: p3.items, addressMoveDate: intake.addressMoveDate,
   });
 
