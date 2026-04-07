@@ -430,6 +430,7 @@ export function ClientResultsPage() {
     intake: {
       email: 'sophia@example.com',
       phone: '',
+      marketingConsent: true,
       addressMoveDate: '2024',
       desiredOutcome: 'Grow my income and financial freedom',
       obstacle: 'Bandwidth and self-doubt',

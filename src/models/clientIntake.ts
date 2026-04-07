@@ -10,6 +10,7 @@ export type PriorHelpOption = 'therapy' | 'coaches' | 'family' | 'media';
 export interface ClientIntakeData {
   email: string;
   phone: string;
+  marketingConsent: boolean;
   addressMoveDate: string; // free text, e.g. "March 2023" or a date
   desiredOutcome: string; // free text — next 90 days goal
   obstacle: string; // free text — what's blocking them
@@ -23,6 +24,7 @@ export interface ClientIntakeData {
 export const EMPTY_CLIENT_INTAKE: ClientIntakeData = {
   email: '',
   phone: '',
+  marketingConsent: false,
   addressMoveDate: '',
   desiredOutcome: '',
   obstacle: '',

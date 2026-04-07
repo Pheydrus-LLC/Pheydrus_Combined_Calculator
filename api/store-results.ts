@@ -11,7 +11,8 @@
  *
  * Optional env vars:
  *   FLODESK_API_KEY                    — Flodesk API key
- *   FLODESK_CALCULATOR_SEGMENT_ID      — Flodesk "VIP Calculator" segment ID
+ *   FLODESK_CALCULATOR_USED_SEGMENT_ID — Flodesk "Calculator-Used" segment ID (preferred)
+ *   FLODESK_CALCULATOR_SEGMENT_ID      — Legacy fallback for old calculator segment config
  */
 
 import { randomUUID } from 'crypto';
@@ -26,9 +27,46 @@ interface Results {
 }
 
 interface Intake {
+  marketingConsent?: boolean;
   desiredOutcome?: string;
   obstacle?: string;
   currentSituation?: string;
+}
+
+function maskEmail(email: string): string {
+  const [localPart, domain = ''] = email.split('@');
+  if (!localPart || !domain) return 'unknown';
+  const visible = localPart.slice(0, Math.min(2, localPart.length));
+  return `${visible}***@${domain}`;
+}
+
+function normalizeSegmentId(rawValue: string | undefined): string | null {
+  if (!rawValue) return null;
+
+  const trimmed = rawValue.trim();
+  if (!trimmed) return null;
+
+  const urlMatch = trimmed.match(/\/segment\/([^/?#]+)/i);
+  if (urlMatch) return urlMatch[1];
+
+  return trimmed;
+}
+
+function getCalculatorUsedSegmentConfig(): { id: string | null; source: string | null } {
+  const preferred = process.env.FLODESK_CALCULATOR_USED_SEGMENT_ID;
+  if (preferred) {
+    return { id: normalizeSegmentId(preferred), source: 'FLODESK_CALCULATOR_USED_SEGMENT_ID' };
+  }
+
+  const legacy = process.env.FLODESK_CALCULATOR_SEGMENT_ID;
+  if (legacy) {
+    console.warn(
+      '[store-results] Using legacy FLODESK_CALCULATOR_SEGMENT_ID. Rename it to FLODESK_CALCULATOR_USED_SEGMENT_ID.'
+    );
+    return { id: normalizeSegmentId(legacy), source: 'FLODESK_CALCULATOR_SEGMENT_ID' };
+  }
+
+  return { id: null, source: null };
 }
 
 // ── Vercel Blob ───────────────────────────────────────────────────────────────
@@ -97,16 +135,41 @@ async function postToSlack(
 
 // ── Flodesk ───────────────────────────────────────────────────────────────────
 
-async function addToFlodesk(name: string, email: string): Promise<void> {
+async function addToFlodesk(
+  name: string,
+  email: string,
+  marketingConsent: boolean | undefined
+): Promise<void> {
   const apiKey = process.env.FLODESK_API_KEY;
-  if (!apiKey) return;
+  const maskedEmail = maskEmail(email);
+  if (!apiKey) {
+    console.info(`[store-results] Flodesk sync skipped for ${maskedEmail}: FLODESK_API_KEY not set`);
+    return;
+  }
+
+  if (!marketingConsent) {
+    console.info(
+      `[store-results] Flodesk sync skipped for ${maskedEmail}: marketing consent not granted`
+    );
+    return;
+  }
 
   const [firstName, ...rest] = name.split(' ');
   const lastName = rest.join(' ');
 
-  const segmentId = process.env.FLODESK_CALCULATOR_SEGMENT_ID;
+  const { id: segmentId, source: segmentSource } = getCalculatorUsedSegmentConfig();
   const body: Record<string, unknown> = { email, first_name: firstName, last_name: lastName };
   if (segmentId) body['segments'] = [{ id: segmentId }];
+
+  if (segmentId && segmentSource) {
+    console.info(
+      `[store-results] Flodesk sync starting for ${maskedEmail}: Calculator-Used segment ${segmentId} via ${segmentSource}`
+    );
+  } else {
+    console.info(
+      `[store-results] Flodesk sync starting for ${maskedEmail}: no Calculator-Used segment configured, subscriber will be upserted only`
+    );
+  }
 
   const res = await fetch('https://api.flodesk.com/v1/subscribers', {
     method: 'POST',
@@ -119,7 +182,18 @@ async function addToFlodesk(name: string, email: string): Promise<void> {
 
   if (!res.ok) {
     const text = await res.text();
-    console.warn('[store-results] Flodesk add failed:', res.status, text);
+    console.warn(`[store-results] Flodesk sync failed for ${maskedEmail}:`, res.status, text);
+    return;
+  }
+
+  if (segmentId) {
+    console.info(
+      `[store-results] Flodesk sync complete for ${maskedEmail}: added to Calculator-Used segment ${segmentId}`
+    );
+  } else {
+    console.info(
+      `[store-results] Flodesk sync complete for ${maskedEmail}: subscriber saved without segment`
+    );
   }
 }
 
@@ -178,7 +252,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     await Promise.all([
       postToSlack(displayName, email, results, resultsUrl),
-      addToFlodesk(displayName, email),
+      addToFlodesk(displayName, email, intake.marketingConsent),
     ]);
     return res.status(200).json({ ok: true, id, blobDebug });
   } catch (err) {

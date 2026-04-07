@@ -585,12 +585,25 @@ export function ClientAssessmentPage() {
                 rows={5}
                 className={inputClass}
               />
+              <label className="flex items-start gap-3 rounded-xl border border-[#e8e0d0] bg-[#fcfaf6] p-4 text-sm text-[#4a4560]">
+                <input
+                  type="checkbox"
+                  checked={intake.marketingConsent}
+                  onChange={(e) => setIntakeField('marketingConsent', e.target.checked)}
+                  className="mt-1 h-4 w-4 rounded border-gray-300 text-[#9a7d4e] focus:ring-[#9a7d4e]"
+                />
+                <span>
+                  I agree to receive calculator follow-up emails and relevant updates from
+                  Pheydrus. I can unsubscribe at any time.
+                </span>
+              </label>
               {/* Mini summary */}
               <div className="bg-[#f8f6f0] border border-[#e8e0d0] rounded-xl p-5 space-y-2 text-sm">
                 <p className="font-bold text-[#2d2a3e] mb-3">Review your details</p>
                 <Row label="Name" value={form.name || '—'} />
                 <Row label="Email" value={intake.email || '—'} />
                 <Row label="Phone" value={intake.phone || '—'} />
+                <Row label="Email consent" value={intake.marketingConsent ? 'Yes' : 'No'} />
                 <Row label="Date of birth" value={form.dateOfBirth || '—'} />
                 <Row label="Time of birth" value={form.timeOfBirth || '—'} />
                 <Row label="Birth city" value={form.birthLocation?.name || '—'} />

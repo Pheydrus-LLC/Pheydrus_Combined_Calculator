@@ -373,6 +373,16 @@ async function createGoogleDoc(title: string, bodyText: string): Promise<{ docId
     });
   }
 
+  await drive.permissions.create({
+    fileId: docId,
+    requestBody: {
+      type: 'anyone',
+      role: 'reader',
+      allowFileDiscovery: false,
+    },
+    fields: 'id',
+  });
+
   const docUrl = `https://docs.google.com/document/d/${docId}/edit`;
   return { docId, docUrl };
 }

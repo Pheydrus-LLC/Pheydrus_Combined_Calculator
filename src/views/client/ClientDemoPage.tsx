@@ -22,6 +22,7 @@ import { gradeThreePillars } from '../../services/diagnostic/threePillarsGrader'
 const DEMO_INTAKE: ClientIntakeData = {
   email: 'alex@example.com',
   phone: '(555) 234-5678',
+  marketingConsent: true,
   addressMoveDate: 'March 2022',
   desiredOutcome:
     'Build my coaching business to $10k/month revenue in the next 90 days and land 5 high-ticket clients',
