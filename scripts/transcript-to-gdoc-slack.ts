@@ -25,9 +25,9 @@ function loadEnvFiles(): void {
   const candidates = [
     path.join(ROOT, '.env'),
     path.join(ROOT, '.env.local'),
-    path.join(ROOT, 'carousel-project:', '.env'),
-    path.join(ROOT, 'carousel-project:', '.env.local'),
-    path.join(ROOT, 'carousel-project:', '.env_1.example'),
+    path.join(ROOT, 'transcribe-videos', '.env'),
+    path.join(ROOT, 'transcribe-videos', '.env.local'),
+    path.join(ROOT, 'transcribe-videos', '.env_1.example'),
   ];
 
   for (const file of candidates) {
@@ -458,7 +458,7 @@ function buildDocBody(title: string, sourceUrl: string, cta: string | null, tran
 }
 
 async function saveLocalCopy(title: string, bodyText: string): Promise<string> {
-  const outputDir = path.join(ROOT, 'carousel-project:', 'transcripts');
+  const outputDir = path.join(ROOT, 'transcribe-videos', 'transcripts');
   fs.mkdirSync(outputDir, { recursive: true });
 
   const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
