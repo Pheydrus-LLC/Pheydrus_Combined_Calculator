@@ -825,7 +825,7 @@ function renderPage4(results: ConsolidatedResults, intake: ClientIntakeData): st
 
     <p style="margin:0 0 18px;font-size:14px;font-style:italic;color:#7A5A1A;font-family:${CORMORANT};line-height:1.6;">This will be the beginning of your true alignment journey.</p>
 
-    <a href="https://calendly.com/pheydrus_strategy/1-1-alignment-strategy-call-clone-1"
+    <a href="https://calendly.com/pheydrus_strategy/1-1-alignment-strategy-call-report"
        style="display:block;width:100%;max-width:420px;margin:0 auto 12px;padding:15px 24px;background:#C9A84C;color:#1C1A2E;font-weight:700;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;border-radius:2px;text-align:center;box-sizing:border-box;font-family:${INTER};">
       BOOK YOUR ALIGNMENT CALL &rarr;
     </a>

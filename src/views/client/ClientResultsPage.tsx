@@ -745,7 +745,7 @@ export function ClientResultsPage() {
             <p style={{ fontFamily: CORMORANT, fontStyle: 'italic', color: '#7A5A1A', fontSize: '0.95rem', margin: '0 0 20px', lineHeight: 1.6 }}>This will be the beginning of your true alignment journey.</p>
           )}
           <a
-            href="https://calendly.com/pheydrus_strategy/1-1-alignment-strategy-call-clone-1"
+            href="https://calendly.com/pheydrus_strategy/1-1-alignment-strategy-call-report"
             target="_blank"
             rel="noopener noreferrer"
             style={{ display: 'block', padding: '15px 24px', background: '#C9A84C', color: '#1C1A2E', fontWeight: 700, fontSize: '0.75rem', letterSpacing: '0.1em', textTransform: 'uppercase', textDecoration: 'none', borderRadius: '2px', fontFamily: INTER, maxWidth: '420px', margin: '0 auto 12px', textAlign: 'center' }}
