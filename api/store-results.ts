@@ -12,6 +12,7 @@
  * Optional env vars:
  *   FLODESK_API_KEY                    — Flodesk API key
  *   FLODESK_CALCULATOR_USED_SEGMENT_ID — Flodesk "Calculator-Used" segment ID (preferred)
+ *   FLODESK_CALCULATOR_USED_SEGMENT_NAME — Flodesk segment name lookup (default: Calculator-Used)
  *   FLODESK_CALCULATOR_SEGMENT_ID      — Legacy fallback for old calculator segment config
  */
 
@@ -31,6 +32,11 @@ interface Intake {
   desiredOutcome?: string;
   obstacle?: string;
   currentSituation?: string;
+}
+
+interface FlodeskSegment {
+  id?: string;
+  name?: string;
 }
 
 function maskEmail(email: string): string {
@@ -58,10 +64,68 @@ function getCalculatorUsedSegmentConfig(): { id: string | null; source: string |
     return { id: normalizeSegmentId(preferred), source: 'FLODESK_CALCULATOR_USED_SEGMENT_ID' };
   }
 
+  return { id: null, source: null };
+}
+
+function parseFlodeskSegments(payload: unknown): FlodeskSegment[] {
+  if (Array.isArray(payload)) return payload as FlodeskSegment[];
+
+  if (payload && typeof payload === 'object') {
+    const p = payload as Record<string, unknown>;
+    if (Array.isArray(p['data'])) return p['data'] as FlodeskSegment[];
+    if (Array.isArray(p['segments'])) return p['segments'] as FlodeskSegment[];
+  }
+
+  return [];
+}
+
+async function resolveCalculatorUsedSegment(
+  apiKey: string
+): Promise<{ id: string | null; source: string | null }> {
+  const configured = getCalculatorUsedSegmentConfig();
+  if (configured.id) return configured;
+
+  const segmentName = (process.env.FLODESK_CALCULATOR_USED_SEGMENT_NAME || 'Calculator-Used')
+    .trim()
+    .toLowerCase();
+
+  try {
+    const res = await fetch('https://api.flodesk.com/v1/segments', {
+      method: 'GET',
+      headers: {
+        Authorization: `Basic ${Buffer.from(`${apiKey}:`).toString('base64')}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!res.ok) {
+      const text = await res.text();
+      console.warn(
+        `[store-results] Failed to fetch Flodesk segments for Calculator-Used lookup (${res.status}): ${text}`
+      );
+    } else {
+      const payload = (await res.json()) as unknown;
+      const segments = parseFlodeskSegments(payload);
+      const matched = segments.find(
+        (segment) =>
+          typeof segment?.name === 'string' && segment.name.trim().toLowerCase() === segmentName
+      );
+
+      if (matched?.id) {
+        return {
+          id: matched.id,
+          source: 'FLODESK_CALCULATOR_USED_SEGMENT_NAME',
+        };
+      }
+    }
+  } catch (err) {
+    console.warn('[store-results] Flodesk segment lookup threw error:', err);
+  }
+
   const legacy = process.env.FLODESK_CALCULATOR_SEGMENT_ID;
   if (legacy) {
     console.warn(
-      '[store-results] Using legacy FLODESK_CALCULATOR_SEGMENT_ID. Rename it to FLODESK_CALCULATOR_USED_SEGMENT_ID.'
+      '[store-results] Falling back to legacy FLODESK_CALCULATOR_SEGMENT_ID (recommended: use FLODESK_CALCULATOR_USED_SEGMENT_ID or FLODESK_CALCULATOR_USED_SEGMENT_NAME).'
     );
     return { id: normalizeSegmentId(legacy), source: 'FLODESK_CALCULATOR_SEGMENT_ID' };
   }
@@ -157,7 +221,7 @@ async function addToFlodesk(
   const [firstName, ...rest] = name.split(' ');
   const lastName = rest.join(' ');
 
-  const { id: segmentId, source: segmentSource } = getCalculatorUsedSegmentConfig();
+  const { id: segmentId, source: segmentSource } = await resolveCalculatorUsedSegment(apiKey);
   const body: Record<string, unknown> = { email, first_name: firstName, last_name: lastName };
   if (segmentId) body['segment_ids'] = [segmentId];
 

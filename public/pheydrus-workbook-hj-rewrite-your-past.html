@@ -37,6 +37,105 @@
       font-family: "Space Grotesk", sans-serif;
     }
 
+    body.gate-locked main {
+      display: none;
+    }
+
+    .lead-gate {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      background:
+        radial-gradient(circle at 75% 20%, rgba(215, 77, 77, 0.22) 0%, transparent 36%),
+        radial-gradient(circle at 20% 80%, rgba(85, 18, 32, 0.35) 0%, transparent 38%),
+        rgba(2, 2, 3, 0.95);
+      backdrop-filter: blur(8px);
+    }
+
+    body.gate-unlocked .lead-gate {
+      display: none;
+    }
+
+    .lead-gate-card {
+      width: min(520px, 100%);
+      border: 1px solid #2b2b31;
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(15, 15, 17, 0.98) 0%, rgba(7, 7, 8, 0.98) 100%);
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.52);
+      padding: 28px;
+    }
+
+    .lead-title {
+      margin: 0 0 10px;
+      font-size: clamp(28px, 6vw, 42px);
+      line-height: 1.06;
+      color: #fff;
+    }
+
+    .lead-copy {
+      margin: 0 0 18px;
+      color: #d0c7bd;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .lead-field {
+      margin-bottom: 12px;
+    }
+
+    .lead-label {
+      display: block;
+      margin-bottom: 6px;
+      color: #c7beb3;
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-family: "Space Mono", monospace;
+    }
+
+    .lead-input {
+      width: 100%;
+      border: 1px solid #3a3a42;
+      background: #111115;
+      color: #f4efe8;
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 14px;
+      font-family: "Space Grotesk", sans-serif;
+    }
+
+    .lead-input:focus {
+      outline: none;
+      border-color: #d74d4d;
+      box-shadow: 0 0 0 2px rgba(215, 77, 77, 0.18);
+    }
+
+    .lead-submit {
+      width: 100%;
+      border: 1px solid #d74d4d;
+      border-radius: 10px;
+      background: linear-gradient(180deg, #df6161 0%, #c24646 100%);
+      color: #fff;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 11px;
+      padding: 12px;
+      cursor: pointer;
+      margin-top: 4px;
+      font-family: "Space Mono", monospace;
+    }
+
+    .lead-error {
+      min-height: 18px;
+      margin-top: 10px;
+      color: #ff9f8c;
+      font-size: 12px;
+    }
+
     .page {
       max-width: 1100px;
       margin: 0 auto;
@@ -146,8 +245,8 @@
     }
 
     .brain-scene {
-      width: 360px;
-      height: 300px;
+      width: 330px;
+      height: 410px;
       perspective: 980px;
       display: grid;
       place-items: center;
@@ -155,12 +254,15 @@
     }
 
     .brain-figure {
-      width: 320px;
-      max-width: 92%;
+      width: 100%;
+      height: 100%;
       transform-style: preserve-3d;
       animation: swayBrain 8.5s ease-in-out infinite;
-      filter: drop-shadow(0 0 14px rgba(255, 255, 255, 0.22));
-      opacity: 0.94;
+      filter: drop-shadow(0 10px 22px rgba(0, 0, 0, 0.45));
+      opacity: 0.98;
+      object-fit: cover;
+      border-radius: 14px;
+      border: 1px solid #2f2f37;
     }
 
     .brain-wire {
@@ -611,10 +713,31 @@
       .card-number { font-size: 48px; }
       .cover-page { grid-template-columns: 1fr; padding-top: 22px; }
       .brain-wrap { min-height: 300px; }
-      .brain-scene { width: 260px; height: 210px; }
-      .brain-figure { width: 220px; }
+      .brain-scene { width: 250px; height: 310px; }
+      .brain-figure { width: 100%; height: 100%; }
       .toc-page { padding: 24px 16px; }
       .page-gap { height: 36px; }
+      .lead-gate-card { padding: 22px; }
+      .roadmap { padding: 22px 16px; }
+      .roadmap-shell { min-height: 0; }
+      .roadmap-line { display: none; }
+      .roadmap-item,
+      .roadmap-item:nth-child(odd),
+      .roadmap-item:nth-child(even) {
+        width: 100%;
+        margin: 0;
+        text-align: left;
+      }
+      .roadmap-link {
+        width: 100%;
+        min-width: 0;
+      }
+      .step-panel {
+        width: 100%;
+      }
+      .step-panel::before {
+        display: none;
+      }
     }
 
     /* ── Floating hero spheres ───────────────────────────── */
@@ -758,6 +881,140 @@
       font-size: 12px;
     }
 
+    .roadmap {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: linear-gradient(180deg, rgba(13, 13, 16, 0.98) 0%, rgba(8, 8, 10, 0.98) 100%);
+      padding: 28px 24px;
+      margin: 0 0 24px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 20px 56px rgba(0, 0, 0, 0.34);
+    }
+
+    .roadmap::after {
+      content: "";
+      position: absolute;
+      right: -80px;
+      top: -80px;
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(215, 77, 77, 0.2) 0%, transparent 66%);
+      pointer-events: none;
+    }
+
+    .roadmap-title {
+      font-size: clamp(24px, 4.2vw, 42px);
+      margin: 4px 0 8px;
+      font-family: "Space Mono", monospace;
+      line-height: 1.08;
+    }
+
+    .roadmap-copy {
+      margin: 0 0 18px;
+      color: #cec3b8;
+      font-size: 14px;
+      line-height: 1.58;
+      max-width: 760px;
+    }
+
+    .roadmap-shell {
+      position: relative;
+      min-height: 330px;
+    }
+
+    .roadmap-line {
+      position: absolute;
+      left: 14%;
+      top: 6px;
+      width: 72%;
+      height: 300px;
+      pointer-events: none;
+      opacity: 0.94;
+    }
+
+    .roadmap-line path {
+      fill: none;
+      stroke: rgba(232, 178, 166, 0.66);
+      stroke-width: 3;
+      stroke-linecap: round;
+      stroke-dasharray: 8 10;
+      animation: roadmapPulse 16s linear infinite;
+      filter: drop-shadow(0 0 8px rgba(215, 77, 77, 0.28));
+    }
+
+    @keyframes roadmapPulse {
+      to { stroke-dashoffset: -180; }
+    }
+
+    .roadmap-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 16px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .roadmap-item {
+      width: min(500px, 82%);
+    }
+
+    .roadmap-item:nth-child(odd) {
+      margin-right: auto;
+    }
+
+    .roadmap-item:nth-child(even) {
+      margin-left: auto;
+      text-align: right;
+    }
+
+    .roadmap-link {
+      display: inline-block;
+      min-width: 270px;
+      border: 1px solid #3a3035;
+      border-radius: 14px;
+      background: linear-gradient(180deg, rgba(33, 22, 27, 0.74) 0%, rgba(19, 14, 18, 0.84) 100%);
+      color: #f2e8dc;
+      text-decoration: none;
+      padding: 12px 14px;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
+      transition: transform 180ms ease, border-color 180ms ease;
+    }
+
+    .roadmap-link:hover {
+      transform: translateY(-2px);
+      border-color: #d74d4d;
+    }
+
+    .roadmap-step {
+      display: block;
+      color: #ffb8b8;
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-family: "Space Mono", monospace;
+      margin-bottom: 6px;
+    }
+
+    .roadmap-name {
+      display: block;
+      font-family: "Space Mono", monospace;
+      font-size: 18px;
+      line-height: 1.1;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .roadmap-note {
+      display: block;
+      color: #d3c8bc;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
     .page-gap {
       height: 46px;
       margin: 10px 0 18px;
@@ -808,6 +1065,43 @@
       margin-bottom: 0;
     }
 
+    .step-panel {
+      width: min(92%, 780px);
+      position: relative;
+    }
+
+    #step1.step-panel,
+    #step3.step-panel {
+      margin-right: auto;
+    }
+
+    #step2.step-panel,
+    #step4.step-panel {
+      margin-left: auto;
+    }
+
+    .step-panel::before {
+      content: "";
+      position: absolute;
+      top: 38px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #d74d4d;
+      box-shadow: 0 0 0 3px rgba(215, 77, 77, 0.22);
+      z-index: 1;
+    }
+
+    #step1.step-panel::before,
+    #step3.step-panel::before {
+      left: -16px;
+    }
+
+    #step2.step-panel::before,
+    #step4.step-panel::before {
+      right: -16px;
+    }
+
     /* ── Compact h2 (Core Framework line) ───────────────── */
     .h2-compact {
       font-size: clamp(14px, 2.1vw, 21px) !important;
@@ -841,7 +1135,26 @@
     }
   </style>
 </head>
-<body>
+<body class="gate-locked">
+  <div class="lead-gate" id="leadGate">
+    <section class="lead-gate-card" aria-labelledby="leadGateTitle">
+      <div class="cover-kicker">Pheydrus Workbook Access</div>
+      <h1 class="lead-title" id="leadGateTitle">Before We Begin</h1>
+      <p class="lead-copy">Please enter your name and email to unlock the Rewrite Your Past workbook.</p>
+      <form id="leadGateForm" novalidate>
+        <div class="lead-field">
+          <label class="lead-label" for="leadName">Name</label>
+          <input class="lead-input" id="leadName" name="name" type="text" autocomplete="name" required />
+        </div>
+        <div class="lead-field">
+          <label class="lead-label" for="leadEmail">Email</label>
+          <input class="lead-input" id="leadEmail" name="email" type="email" autocomplete="email" required />
+        </div>
+        <button class="lead-submit" id="leadSubmit" type="submit">Unlock Workbook</button>
+        <div class="lead-error" id="leadError" aria-live="polite"></div>
+      </form>
+    </section>
+  </div>
   <main>
     <section class="cover-page" id="cover">
       <div class="cover-card">
@@ -859,34 +1172,9 @@
       </div>
       <div class="brain-wrap" aria-hidden="true">
         <div class="brain-scene">
-          <svg class="brain-figure" viewBox="0 0 320 230" role="img" aria-label="Rotating wireframe brain">
-            <path class="brain-wire brain-outline" d="M38 124 C28 102, 30 78, 45 60 C62 40, 84 36, 104 44 C122 24, 153 21, 178 34 C194 30, 217 34, 232 50 C252 51, 270 64, 278 84 C292 100, 294 124, 280 144 C279 164, 265 182, 243 189 C224 203, 198 205, 174 198 C152 206, 128 202, 107 190 C86 190, 66 179, 53 163 C38 154, 31 141, 38 124 Z" />
-            <path class="brain-wire brain-stem" d="M149 180 C155 193, 157 206, 151 219 C146 226, 136 223, 136 214 C137 200, 143 190, 149 180 Z" />
-
-            <path class="brain-wire brain-fold" d="M60 117 C78 102, 103 102, 123 112 C143 121, 163 119, 182 109 C204 96, 228 96, 250 108" />
-            <path class="brain-wire brain-fold" d="M67 88 C84 74, 106 74, 123 84 C142 93, 163 92, 184 83 C207 73, 232 77, 249 91" />
-            <path class="brain-wire brain-fold" d="M78 64 C94 53, 113 54, 128 63 C145 72, 164 72, 181 64 C199 55, 219 57, 234 69" />
-            <path class="brain-wire brain-fold" d="M72 145 C90 134, 114 134, 132 143 C152 152, 174 151, 194 143 C215 134, 237 136, 254 147" />
-            <path class="brain-wire brain-fold" d="M92 169 C110 160, 131 161, 148 168 C165 175, 184 175, 202 169 C219 163, 235 164, 248 171" />
-
-            <path class="brain-wire brain-fine" d="M98 49 C110 58, 119 69, 120 83" />
-            <path class="brain-wire brain-fine" d="M132 40 C145 52, 154 65, 154 80" />
-            <path class="brain-wire brain-fine" d="M166 37 C178 49, 186 62, 186 78" />
-            <path class="brain-wire brain-fine" d="M201 44 C212 56, 219 68, 219 83" />
-            <path class="brain-wire brain-fine" d="M230 59 C240 71, 244 82, 242 96" />
-
-            <path class="brain-wire brain-fine" d="M78 110 C89 119, 97 130, 100 143" />
-            <path class="brain-wire brain-fine" d="M112 110 C123 121, 130 131, 132 145" />
-            <path class="brain-wire brain-fine" d="M146 112 C157 124, 163 133, 164 147" />
-            <path class="brain-wire brain-fine" d="M178 109 C189 120, 196 131, 197 145" />
-            <path class="brain-wire brain-fine" d="M211 110 C222 120, 229 132, 229 146" />
-
-            <path class="brain-wire brain-fine" d="M88 165 C102 175, 119 181, 136 184" />
-            <path class="brain-wire brain-fine" d="M132 168 C145 177, 160 183, 176 186" />
-            <path class="brain-wire brain-fine" d="M176 168 C189 177, 204 181, 219 182" />
-          </svg>
+          <img class="brain-figure" src="/hj-finals-2-of-20-1.jpg" alt="HJ portrait" />
         </div>
-        <div class="brain-label">Rotating Wireframe Brain</div>
+        <div class="brain-label">HJ Portrait</div>
       </div>
     </section>
 
@@ -927,6 +1215,47 @@
         </div>
       </div>
       <div class="scroll-hint">↓ scroll to begin</div>
+    </section>
+
+    <section class="roadmap" aria-labelledby="zigzagRoadmapTitle">
+      <div class="eyebrow">Journey Roadmap</div>
+      <h2 class="roadmap-title" id="zigzagRoadmapTitle">Dream -> Nightmare -> Obstacle -> New Dream</h2>
+      <p class="roadmap-copy">Follow the curved path and move left to right through each chapter of the identity shift.</p>
+      <div class="roadmap-shell" aria-hidden="true">
+        <svg class="roadmap-line" viewBox="0 0 1000 320" preserveAspectRatio="none" role="presentation">
+          <path d="M70 38 C 360 14, 650 56, 920 86 C 650 116, 360 158, 70 190 C 360 220, 650 262, 920 292" />
+        </svg>
+        <ol class="roadmap-list">
+          <li class="roadmap-item">
+            <a class="roadmap-link" href="#step1">
+              <span class="roadmap-step">Step 01</span>
+              <span class="roadmap-name">Dream</span>
+              <span class="roadmap-note">Define the call and choose your identity-level why.</span>
+            </a>
+          </li>
+          <li class="roadmap-item">
+            <a class="roadmap-link" href="#step2">
+              <span class="roadmap-step">Step 02</span>
+              <span class="roadmap-name">Nightmare</span>
+              <span class="roadmap-note">Name the wound or fear loop that blocks your start.</span>
+            </a>
+          </li>
+          <li class="roadmap-item">
+            <a class="roadmap-link" href="#step3">
+              <span class="roadmap-step">Step 03</span>
+              <span class="roadmap-name">Obstacle</span>
+              <span class="roadmap-note">Identify your trigger and define a new response path.</span>
+            </a>
+          </li>
+          <li class="roadmap-item">
+            <a class="roadmap-link" href="#step4">
+              <span class="roadmap-step">Step 04</span>
+              <span class="roadmap-name">New Dream</span>
+              <span class="roadmap-note">Extract meaning and claim your next brave move.</span>
+            </a>
+          </li>
+        </ol>
+      </div>
     </section>
 
     <nav class="toc-nav">
@@ -979,7 +1308,7 @@
 
         <div class="page-gap" aria-hidden="true"></div>
 
-        <article class="panel" id="step1">
+        <article class="panel step-panel" id="step1">
           <div class="section-header">
             <div class="card-number">01</div>
             <div class="section-header-text">
@@ -1016,7 +1345,7 @@
           <div class="tip">Growth mindset: I will pursue this whole-heartedly without attaching to outcome.</div>
         </article>
 
-        <article class="panel" id="step2">
+        <article class="panel step-panel" id="step2">
           <div class="section-header">
             <div class="card-number">02</div>
             <div class="section-header-text">
@@ -1078,7 +1407,7 @@
 
         <div class="page-gap" aria-hidden="true"></div>
 
-        <article class="panel" id="step3">
+        <article class="panel step-panel" id="step3">
           <div class="section-header">
             <div class="card-number">03</div>
             <div class="section-header-text">
@@ -1117,7 +1446,7 @@
 
         <div class="page-gap" aria-hidden="true"></div>
 
-        <article class="panel" id="step4">
+        <article class="panel step-panel" id="step4">
           <div class="section-header">
             <div class="card-number">04</div>
             <div class="section-header-text">
@@ -1262,6 +1591,85 @@
   </main>
 
   <script>
+    const leadStorageKey = "hjRewritePastLeadV1";
+    const bodyEl = document.body;
+    const leadForm = document.getElementById("leadGateForm");
+    const leadNameEl = document.getElementById("leadName");
+    const leadEmailEl = document.getElementById("leadEmail");
+    const leadSubmitEl = document.getElementById("leadSubmit");
+    const leadErrorEl = document.getElementById("leadError");
+
+    async function submitLeadToPastSegment(name, email) {
+      const response = await fetch("/api/flodesk-past", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          source: "rewrite-your-past-workbook"
+        })
+      });
+
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        throw new Error(payload.error || "Unable to save your access details right now. Please try again.");
+      }
+    }
+
+    function isValidEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    function unlockWorkbook() {
+      bodyEl.classList.remove("gate-locked");
+      bodyEl.classList.add("gate-unlocked");
+    }
+
+    function initLeadGate() {
+      leadForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const name = leadNameEl.value.trim();
+        const email = leadEmailEl.value.trim().toLowerCase();
+
+        if (!name || !email) {
+          leadErrorEl.textContent = "Please enter both your name and email.";
+          return;
+        }
+
+        if (!isValidEmail(email)) {
+          leadErrorEl.textContent = "Please enter a valid email address.";
+          return;
+        }
+
+        leadSubmitEl.disabled = true;
+        leadSubmitEl.textContent = "Saving...";
+
+        try {
+          await submitLeadToPastSegment(name, email);
+        } catch (err) {
+          leadErrorEl.textContent = err instanceof Error ? err.message : "Unable to save your access details right now. Please try again.";
+          leadSubmitEl.disabled = false;
+          leadSubmitEl.textContent = "Unlock Workbook";
+          return;
+        }
+
+        localStorage.setItem(
+          leadStorageKey,
+          JSON.stringify({
+            name,
+            email,
+            submittedAt: new Date().toISOString()
+          })
+        );
+
+        leadErrorEl.textContent = "";
+        unlockWorkbook();
+      });
+    }
+
     const ids = [
       "dream",
       "knownZone",
@@ -1521,6 +1929,7 @@
     document.getElementById("generateBtn").addEventListener("click", generateSummary);
     document.getElementById("downloadBtn").addEventListener("click", downloadSummary);
 
+    initLeadGate();
     loadProgress();
     updateSelfLedShiftSample();
     refreshProgress();
