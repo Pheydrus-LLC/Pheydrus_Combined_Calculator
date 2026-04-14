@@ -1492,94 +1492,61 @@ function selectSign(type, sign, btn) {
 // =====================
 // PDF DOWNLOAD
 // =====================
+
 function setupPdfDownload(btnId) {
-  const btn = document.getElementById(btnId);
+  var btn = document.getElementById(btnId);
   if (!btn) return;
-  
+
   btn.addEventListener('click', async function() {
-    const button = this;
+    var button       = this;
+    var originalText = button.textContent;
     button.classList.add('loading');
-    button.disabled = true;
-    const originalText = button.textContent;
-    button.textContent = '⏳ Generating...';
+    button.disabled  = true;
+    button.textContent = '⏳ Generating…';
 
     try {
-      // Wait for page to fully render (including dynamic content)
-      await new Promise(resolve => setTimeout(resolve, 500));
+      // Collect current form values so the server can inject them before rendering
+      var textareas = Array.from(document.querySelectorAll('textarea')).map(function(ta) {
+        return ta.value;
+      });
+      var inputs = Array.from(document.querySelectorAll('input')).map(function(inp) {
+        return inp.value;
+      });
 
-      // Load html2pdf from CDN
-      const script = document.createElement('script');
-      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';
-      document.head.appendChild(script);
+      var response = await fetch('/api/workbook-pdf', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ textareas: textareas, inputs: inputs })
+      });
 
-      script.onload = function() {
-        // Hide elements that shouldn't be in PDF
-        const nav = document.querySelector('.toc-nav');
-        const downloadSection = document.querySelector('.footer-download');
-        const footer = document.querySelector('.footer');
-        
-        if (nav) nav.style.display = 'none';
-        if (downloadSection) downloadSection.style.display = 'none';
-        if (footer) footer.style.display = 'none';
+      if (!response.ok) {
+        var detail = '';
+        try { detail = (await response.json()).detail || ''; } catch {}
+        throw new Error('Server error ' + response.status + (detail ? ': ' + detail : ''));
+      }
 
-        // Use body but exclude hidden elements
-        const element = document.body;
-        const opt = {
-          margin: [10, 10, 10, 10],
-          filename: 'pheydrus-workbook-v3_4.pdf',
-          image: { type: 'jpeg', quality: 0.98 },
-          html2canvas: { 
-            scale: 2, 
-            logging: false, 
-            useCORS: true,
-            allowTaint: true,
-            backgroundColor: '#ffffff'
-          },
-          jsPDF: { orientation: 'portrait', unit: 'mm', format: 'a4', compress: true }
-        };
-        
-        html2pdf().set(opt).from(element).save().then(() => {
-          // Restore hidden elements
-          if (nav) nav.style.display = '';
-          if (downloadSection) downloadSection.style.display = '';
-          if (footer) footer.style.display = '';
-          
-          button.classList.remove('loading');
-          button.disabled = false;
-          button.textContent = originalText;
-        }).catch(err => {
-          console.error('PDF generation error:', err);
-          
-          // Restore hidden elements
-          if (nav) nav.style.display = '';
-          if (downloadSection) downloadSection.style.display = '';
-          if (footer) footer.style.display = '';
-          
-          button.classList.remove('loading');
-          button.disabled = false;
-          button.textContent = originalText;
-          alert('Failed to generate PDF. Please try again.');
-        });
-      };
+      // Trigger browser download of the returned PDF blob
+      var blob = await response.blob();
+      var url  = URL.createObjectURL(blob);
+      var a    = document.createElement('a');
+      a.href     = url;
+      a.download = 'pheydrus-workbook-v3_4.pdf';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
 
-      script.onerror = function() {
-        console.error('Failed to load html2pdf library');
-        button.classList.remove('loading');
-        button.disabled = false;
-        button.textContent = originalText;
-        alert('Failed to load PDF library. Please try again.');
-      };
-    } catch (error) {
-      console.error('Error:', error);
+    } catch (err) {
+      console.error('PDF error:', err);
+      alert(err.message || 'Failed to generate PDF. Please try again.');
+    } finally {
       button.classList.remove('loading');
-      button.disabled = false;
+      button.disabled    = false;
       button.textContent = originalText;
-      alert('An error occurred. Please try again.');
     }
   });
 }
 
-// Setup both download buttons
 setupPdfDownload('downloadPdfBtn');
 setupPdfDownload('bottomDownloadBtn');
 
