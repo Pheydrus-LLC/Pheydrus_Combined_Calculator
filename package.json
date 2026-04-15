@@ -33,6 +33,7 @@
     "flexsearch": "^0.8.212",
     "googleapis": "^150.0.1",
     "html2pdf.js": "^0.14.0",
+    "puppeteer": "^24.0.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-markdown": "^10.1.0",
