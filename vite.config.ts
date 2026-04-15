@@ -133,11 +133,15 @@ function workbookPdfPlugin(env: Record<string, string>): Plugin {
               // Inject user-filled form values before rendering
               if (textareas.length > 0 || inputs.length > 0) {
                 await page.evaluate(
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
                   ({ taValues, inValues }: { taValues: string[]; inValues: string[] }) => {
-                    document.querySelectorAll<HTMLTextAreaElement>('textarea').forEach((el, i) => {
+                    // runs inside browser context — document/DOM are available
+                    // @ts-ignore
+                    (document as any).querySelectorAll('textarea').forEach((el: any, i: number) => {
                       if (taValues[i] !== undefined) el.value = taValues[i];
                     });
-                    document.querySelectorAll<HTMLInputElement>('input').forEach((el, i) => {
+                    // @ts-ignore
+                    (document as any).querySelectorAll('input').forEach((el: any, i: number) => {
                       if (inValues[i] !== undefined) el.value = inValues[i];
                     });
                   },
