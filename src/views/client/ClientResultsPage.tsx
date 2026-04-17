@@ -41,6 +41,79 @@ function pillarScoreToGrade(score: number): string {
   return 'A';
 }
 
+/** Detect which program to recommend based on pillar scores and business house activation */
+function recommendProgram(p1: PillarSummary, p2: PillarSummary, p3: PillarSummary, allItems: GradeItem[]): {
+  route: 'hero' | 'artists-way' | 'business' | null;
+  title: string;
+  description: string;
+  link: string;
+} {
+  const s1 = pillarScore(p1);
+  const s2 = pillarScore(p2);
+  const s3 = pillarScore(p3);
+
+  // Detect business house activation (2, 6, 8, 10)
+  const businessHouses = [2, 6, 8, 10];
+  const hasBusinessHouseActivation = allItems.some(item => 
+    businessHouses.includes(item.house ?? 0)
+  );
+
+  // If business house activation is primary signal, recommend Business Growth
+  if (hasBusinessHouseActivation) {
+    // Check if it's in Pillar 1, 2, or 3
+    const inPillar123 = allItems.some(item => 
+      businessHouses.includes(item.house ?? 0) && [1, 2, 3].includes(item.pillar ?? 0)
+    );
+    if (inPillar123) {
+      return {
+        route: 'business',
+        title: 'Business Growth',
+        description: "Suddenly feeling the urge to launch something, rebrand, or make money in a completely new way? All 3 pillars are literally telling you it's time. The question is whether you know how to move with it...or against it.",
+        link: 'https://pheydrusmetaverse.com/business-growth/',
+      };
+    }
+  }
+
+  // Route 1: Hero's Journey
+  // Pillar 1 is worst (C or below) OR (Pillar 2 worst AND Pillar 1 second worst)
+  const p1Grade = pillarScoreToGrade(s1);
+  const p2Grade = pillarScoreToGrade(s2);
+
+  const p1IsCOrWorse = p1Grade === 'C' || p1Grade === 'F';
+  const isP1Worst = s1 >= s2 && s1 >= s3;
+  const isP2Worst = s2 >= s1 && s2 >= s3;
+  const isP1SecondWorst = (s1 >= s2 && s1 < s3) || (s1 < s2 && s1 >= s3);
+
+  if ((isP1Worst && p1IsCOrWorse) || (isP2Worst && isP1SecondWorst)) {
+    return {
+      route: 'hero',
+      title: `Hero's Journey`,
+      description: "Do you always find yourself contorting to fit in, because people keep telling you you're too much, too intense, too difficult? Your blueprint explains exactly why, and how to turn it into your greatest strengths.",
+      link: 'https://pheydrusmetaverse.com/heros-journey/',
+    };
+  }
+
+  // Route 2: Artist's Way
+  // Pillar 3 is worst (C or below) OR (Pillar 2 worst AND Pillar 3 second worst) OR (Pillar 2 AND Pillar 3 both low regardless of Pillar 1)
+  const p3Grade = pillarScoreToGrade(s3);
+  const p3IsCOrWorse = p3Grade === 'C' || p3Grade === 'F';
+  const isP3Worst = s3 >= s1 && s3 >= s2;
+  const isP3SecondWorst = (s3 >= s1 && s3 < s2) || (s3 < s1 && s3 >= s2);
+  const bothP2P3Low = (p2Grade === 'C' || p2Grade === 'D' || p2Grade === 'F') &&
+                      (p3Grade === 'C' || p3Grade === 'D' || p3Grade === 'F');
+
+  if ((isP3Worst && p3IsCOrWorse) || (isP2Worst && isP3SecondWorst) || bothP2P3Low) {
+    return {
+      route: 'artists-way',
+      title: `Artist's Way`,
+      description: "Have you done all the inner work and still can't figure out why your outside life won't catch up? Your environment and timing might be working against everything you've built inside.",
+      link: 'https://pheydrusmetaverse.com/artists-way/#',
+    };
+  }
+
+  return { route: null, title: '', description: '', link: '' };
+}
+
 const GOAL_LABEL: Record<GoalCategory, string> = {
   career: 'Career & Financial Growth',
   love: 'Love & Relationships',
@@ -382,27 +455,31 @@ export function ClientResultsPage() {
             pillar: 1,
             name: 'Structure',
             description: 'Natal chart angular placements',
-            fCount: 2,
-            cCount: 1,
-            aCount: 1,
+            fCount: 5,
+            cCount: 3,
+            aCount: 0,
             items: [
               { source: 'Natal Angular', pillar: 1, section: 'Natal Angular', planet: 'Saturn', house: 5, grade: 'F', reason: 'Saturn in angular house 5' },
               { source: 'Natal Angular', pillar: 1, section: 'Natal Angular', planet: 'Uranus', house: 5, grade: 'F', reason: 'Uranus in angular house 5' },
-              { source: 'Natal Angular', pillar: 1, section: 'Natal Angular', planet: 'Neptune', house: 5, grade: 'C', reason: 'Neptune in house 5' },
-              { source: 'Natal Angular', pillar: 1, section: 'Natal Angular', planet: 'Sun', house: 7, grade: 'A', reason: 'Sun in angular house 7' },
+              { source: 'Natal Angular', pillar: 1, section: 'Natal Angular', planet: 'Neptune', house: 5, grade: 'F', reason: 'Neptune in house 5' },
+              { source: 'Natal Angular', pillar: 1, section: 'Natal Angular', planet: 'Pluto', house: 8, grade: 'F', reason: 'Pluto in angular house 8' },
+              { source: 'Natal Angular', pillar: 1, section: 'Natal Angular', planet: 'Chiron', house: 1, grade: 'F', reason: 'Chiron in angular house 1' },
+              { source: 'Natal Angular', pillar: 1, section: 'Natal Angular', planet: 'Mercury', house: 6, grade: 'C', reason: 'Mercury in house 6' },
+              { source: 'Natal Angular', pillar: 1, section: 'Natal Angular', planet: 'Venus', house: 8, grade: 'C', reason: 'Venus in house 8' },
+              { source: 'Natal Angular', pillar: 1, section: 'Natal Angular', planet: 'Mars', house: 12, grade: 'C', reason: 'Mars in house 12' },
             ],
           },
           {
             pillar: 2,
             name: 'Timing',
             description: 'Current planetary transits',
-            fCount: 1,
-            cCount: 2,
-            aCount: 0,
+            fCount: 0,
+            cCount: 1,
+            aCount: 2,
             items: [
-              { source: 'Transit Angular', pillar: 2, section: 'Transit Angular', planet: 'Uranus', house: 10, grade: 'F', reason: 'Transit Uranus in angular house 10' },
-              { source: 'Transit Angular', pillar: 2, section: 'Transit Angular', planet: 'Neptune', house: 8, grade: 'C', reason: 'Transit Neptune in house 8' },
-              { source: 'Transit Angular', pillar: 2, section: 'Transit Angular', planet: 'Saturn', house: 8, grade: 'C', reason: 'Transit Saturn in house 8' },
+              { source: 'Transit Angular', pillar: 2, section: 'Transit Angular', planet: 'Jupiter', house: 11, grade: 'A', reason: 'Transit Jupiter in angular house 11' },
+              { source: 'Transit Angular', pillar: 2, section: 'Transit Angular', planet: 'Venus', house: 9, grade: 'A', reason: 'Transit Venus in house 9' },
+              { source: 'Transit Angular', pillar: 2, section: 'Transit Angular', planet: 'Mercury', house: 3, grade: 'C', reason: 'Transit Mercury in house 3' },
             ],
           },
           {
@@ -410,20 +487,20 @@ export function ClientResultsPage() {
             name: 'Environment',
             description: 'Relocation chart for current address',
             fCount: 0,
-            cCount: 3,
-            aCount: 0,
+            cCount: 2,
+            aCount: 1,
             items: [
+              { source: 'Relocation Angular', pillar: 3, section: 'Relocation Angular', planet: 'Sun', house: 10, grade: 'A', reason: 'Relocated Sun in house 10' },
               { source: 'Relocation Angular', pillar: 3, section: 'Relocation Angular', planet: 'Saturn', house: 2, grade: 'C', reason: 'Relocated Saturn in house 2' },
               { source: 'Relocation Angular', pillar: 3, section: 'Relocation Angular', planet: 'Uranus', house: 2, grade: 'C', reason: 'Relocated Uranus in house 2' },
-              { source: 'Relocation Angular', pillar: 3, section: 'Relocation Angular', planet: 'Neptune', house: 2, grade: 'C', reason: 'Relocated Neptune in house 2' },
             ],
           },
         ] as [import('../../models/diagnostic').PillarSummary, import('../../models/diagnostic').PillarSummary, import('../../models/diagnostic').PillarSummary],
-        totalFs: 3,
+        totalFs: 5,
         totalCs: 6,
-        totalAs: 1,
-        score: 58,
-        finalGrade: 'C',
+        totalAs: 3,
+        score: 35,
+        finalGrade: 'F',
         allItems: [],
       },
     },
@@ -728,32 +805,247 @@ export function ClientResultsPage() {
           </div>
         </div>
 
-        {/* CTA */}
-        <div style={{ background: '#FDFBF6', border: '1px solid #C9A84C', borderRadius: '4px', padding: '32px', textAlign: 'center' }}>
-          <h2 style={{ fontFamily: CORMORANT, color: '#C9A84C', fontSize: '1.5rem', fontWeight: 700, margin: '0 0 6px' }}>Your Next Step: Alignment Strategy Call</h2>
-          <p style={{ color: '#666', fontSize: '0.8rem', margin: '0 0 20px', fontFamily: INTER }}>30-minute 1:1 with the Pheydrus team</p>
-          <div style={{ maxWidth: '420px', margin: '0 auto 20px', textAlign: 'left' }}>
-            {[
-              `Map how to decondition the unseen forces shaping your reality and unlock the parts of you and your environment that can actually 10x your life`,
-              `Prepare for the identity shift that's already in motion — and make sure you're ready when it arrives`,
-              `Determine whether Artist's Way is your aligned next chapter`,
-            ].map((b, i) => (
-              <p key={i} style={{ margin: '0 0 8px', fontSize: '0.82rem', color: '#7A5A1A', lineHeight: 1.6, fontFamily: INTER }}>→ {b}</p>
-            ))}
-          </div>
-          {showCTA && (
-            <p style={{ fontFamily: CORMORANT, fontStyle: 'italic', color: '#7A5A1A', fontSize: '0.95rem', margin: '0 0 20px', lineHeight: 1.6 }}>This will be the beginning of your true alignment journey.</p>
-          )}
-          <a
-            href="https://calendly.com/pheydrus_strategy/1-1-alignment-strategy-call-report"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ display: 'block', padding: '15px 24px', background: '#C9A84C', color: '#1C1A2E', fontWeight: 700, fontSize: '0.75rem', letterSpacing: '0.1em', textTransform: 'uppercase', textDecoration: 'none', borderRadius: '2px', fontFamily: INTER, maxWidth: '420px', margin: '0 auto 12px', textAlign: 'center' }}
+        {/* Transition bridge */}
+        <div
+          style={{
+            background: '#FDFBF6',
+            borderTop: '1px solid #E8E0C8',
+            borderBottom: '1px solid #E8E0C8',
+            borderRadius: '4px',
+            padding: '20px 24px',
+            textAlign: 'center',
+          }}
+        >
+          <div
+            style={{
+              fontSize: '11px',
+              textTransform: 'uppercase',
+              letterSpacing: '0.12em',
+              color: '#9A8650',
+              fontWeight: 700,
+              fontFamily: INTER,
+              marginBottom: '8px',
+            }}
           >
-            BOOK YOUR ALIGNMENT CALL →
-          </a>
-          <p style={{ margin: 0, fontSize: '11px', color: '#999', fontFamily: INTER }}>Complimentary · No obligation · Limited availability this cycle</p>
+            Next Step
+          </div>
+          <h3
+            style={{
+              margin: '0 0 8px',
+              fontFamily: CORMORANT,
+              fontSize: '1.45rem',
+              fontWeight: 700,
+              color: '#1C1A2E',
+            }}
+          >
+            What's next is simple.
+          </h3>
+          <p
+            style={{
+              margin: 0,
+              fontSize: '0.9rem',
+              color: '#555',
+              fontFamily: INTER,
+              lineHeight: 1.7,
+            }}
+          >
+            You now have clarity on the pattern. The next step is execution: Start with your recommended path below, or book a call for a personalized map.
+          </p>
         </div>
+
+        {/* PROGRAM RECOMMENDATION + BOOK A CALL OPTIONS */}
+        {(() => {
+          const rec = recommendProgram(p1, p2, p3, results.diagnostic!.allItems);
+          const recommendation = rec.route
+            ? rec
+            : {
+                route: 'artists-way' as const,
+                title: "Artist's Way",
+                description:
+                  "Have you done all the inner work and still can't figure out why your outside life won't catch up? Your environment and timing might be working against everything you've built inside.",
+                link: 'https://pheydrusmetaverse.com/artists-way/#',
+              };
+
+          const optionCardStyle: CSSProperties = {
+            background: '#FDFBF6',
+            border: '1px solid #C9A84C',
+            borderRadius: '4px',
+            padding: '32px',
+          };
+
+          return (
+            <>
+              <div style={optionCardStyle}>
+                <div
+                  style={{
+                    fontSize: '11px',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.12em',
+                    fontWeight: 700,
+                    color: '#1d4ed8',
+                    marginBottom: '10px',
+                    fontFamily: INTER,
+                  }}
+                >
+                  #1 Option
+                </div>
+                <h2
+                  style={{
+                    fontFamily: CORMORANT,
+                    color: '#1d4ed8',
+                    fontSize: '1.7rem',
+                    fontWeight: 700,
+                    margin: '0 0 16px',
+                  }}
+                >
+                  Watch this Video: {recommendation.title}
+                </h2>
+
+                <div style={{ display: 'flex', gap: '18px', alignItems: 'stretch', flexWrap: 'wrap' as const }}>
+                  <div style={{ flex: 1, minWidth: '260px' }}>
+                    <p
+                      style={{
+                        margin: '0 0 18px',
+                        fontSize: '0.95rem',
+                        color: '#444444',
+                        lineHeight: 1.8,
+                        fontFamily: INTER,
+                      }}
+                    >
+                      {recommendation.description}
+                    </p>
+                    <a
+                      href={recommendation.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        display: 'inline-block',
+                        padding: '12px 20px',
+                        background: '#C9A84C',
+                        color: '#1C1A2E',
+                        fontWeight: 700,
+                        fontSize: '0.75rem',
+                        letterSpacing: '0.1em',
+                        textTransform: 'uppercase',
+                        textDecoration: 'none',
+                        borderRadius: '2px',
+                        fontFamily: INTER,
+                      }}
+                    >
+                      Watch the Video →
+                    </a>
+                  </div>
+
+                  <div style={{ width: '210px', flexShrink: 0 }}>
+                    <img
+                      src="/hj-finals-2-of-20-1.jpg"
+                      alt="Pheydrus program preview"
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        minHeight: '200px',
+                        objectFit: 'cover',
+                        borderRadius: '4px',
+                        border: '1px solid #E3D4AA',
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div style={optionCardStyle}>
+                <div
+                  style={{
+                    fontSize: '11px',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.12em',
+                    fontWeight: 700,
+                    color: '#b91c1c',
+                    marginBottom: '10px',
+                    fontFamily: INTER,
+                  }}
+                >
+                  #2 Option
+                </div>
+                <h2
+                  style={{
+                    fontFamily: CORMORANT,
+                    color: '#b91c1c',
+                    fontSize: '1.7rem',
+                    fontWeight: 700,
+                    margin: '0 0 6px',
+                    textAlign: 'center',
+                  }}
+                >
+                  OR Book Your Alignment Call
+                </h2>
+                <p
+                  style={{
+                    color: '#666',
+                    fontSize: '0.8rem',
+                    margin: '0 0 20px',
+                    fontFamily: INTER,
+                    textAlign: 'center',
+                  }}
+                >
+                  30-minute 1:1 with the Pheydrus team
+                </p>
+                <div style={{ maxWidth: '420px', margin: '0 auto 20px', textAlign: 'left' }}>
+                  {[
+                    `Map how to decondition the unseen forces shaping your reality and unlock the parts of you and your environment that can actually 10x your life`,
+                    `Prepare for the identity shift that's already in motion — and make sure you're ready when it arrives`,
+                    `Get clarity on your aligned next chapter`,
+                  ].map((b, i) => (
+                    <p key={i} style={{ margin: '0 0 8px', fontSize: '0.82rem', color: '#7A5A1A', lineHeight: 1.6, fontFamily: INTER }}>
+                      → {b}
+                    </p>
+                  ))}
+                </div>
+                {showCTA && (
+                  <p
+                    style={{
+                      fontFamily: CORMORANT,
+                      fontStyle: 'italic',
+                      color: '#7A5A1A',
+                      fontSize: '0.95rem',
+                      margin: '0 0 20px',
+                      lineHeight: 1.6,
+                      textAlign: 'center',
+                    }}
+                  >
+                    This will be the beginning of your true alignment journey.
+                  </p>
+                )}
+                <a
+                  href="https://calendly.com/pheydrus_strategy/1-1-alignment-strategy-call-report"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: 'block',
+                    padding: '15px 24px',
+                    background: '#C9A84C',
+                    color: '#1C1A2E',
+                    fontWeight: 700,
+                    fontSize: '0.75rem',
+                    letterSpacing: '0.1em',
+                    textTransform: 'uppercase',
+                    textDecoration: 'none',
+                    borderRadius: '2px',
+                    fontFamily: INTER,
+                    maxWidth: '420px',
+                    margin: '0 auto 12px',
+                    textAlign: 'center',
+                  }}
+                >
+                  BOOK YOUR ALIGNMENT CALL →
+                </a>
+                <p style={{ margin: 0, fontSize: '11px', color: '#999', fontFamily: INTER, textAlign: 'center' }}>
+                  Complimentary · No obligation · Limited availability this cycle
+                </p>
+              </div>
+            </>
+          );
+        })()}
 
         {/* Action buttons */}
         <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' as const }}>
