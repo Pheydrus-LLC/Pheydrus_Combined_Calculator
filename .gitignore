@@ -35,3 +35,6 @@ public/knowledge-base
 
 # Large video files (exceed GitHub 100MB limit)
 data/Train_CMO/**/*.mp4
+
+# Local data exports — contains real client PII
+exports/
