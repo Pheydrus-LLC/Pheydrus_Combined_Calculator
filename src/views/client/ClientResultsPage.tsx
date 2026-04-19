@@ -2254,7 +2254,7 @@ export function ClientResultsPage() {
                       fontFamily: INTER,
                     }}
                   >
-                    #2 Option
+                    #1 Option
                   </div>
                   <div style={{ maxWidth: '360px', margin: '0 auto 14px' }}>
                     <img
@@ -2359,7 +2359,7 @@ export function ClientResultsPage() {
                       fontFamily: INTER,
                     }}
                   >
-                    #1 Option
+                    #2 Option
                   </div>
                   <h2
                     style={{
