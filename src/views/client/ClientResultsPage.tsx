@@ -2113,7 +2113,7 @@ export function ClientResultsPage() {
                 margin: '0 0 12px',
               }}
             >
-              This is bigger than fixing what's broken.
+              THIS IS BIGGER THAN FIXING WHAT'S BROKEN
             </h3>
             <p
               style={{ margin: '0 0 10px', fontSize: '0.85rem', color: '#444444', lineHeight: 1.8 }}
@@ -2128,7 +2128,7 @@ export function ClientResultsPage() {
             <p
               style={{ margin: '0 0 10px', fontSize: '0.85rem', color: '#444444', lineHeight: 1.8 }}
             >
-              For <strong>Pillar 1</strong> — we use a sequential deconditioning method that goes directly into your energetic blindspots (desires, addictions, dreams, etc). This isn't talk therapy or journaling. A specific, structured process that helps you identify the unconscious karmic patterns running your decisions — and consciously transmute them into your greatest assets.
+              For <strong>Pillar 1</strong> — we use a sequential deconditioning method that goes directly into your energetic blindspots (desires, addictions, dreams, etc). This isn’t talk therapy or journaling. A specific, structured process that helps you identify the unconscious karmic patterns running your decisions — and consciously transmute them into your greatest assets.
             </p>
             <p
               style={{ margin: '0 0 10px', fontSize: '0.85rem', color: '#444444', lineHeight: 1.8 }}
@@ -2138,7 +2138,7 @@ export function ClientResultsPage() {
             <p
               style={{ margin: '0 0 10px', fontSize: '0.85rem', color: '#444444', lineHeight: 1.8 }}
             >
-              For <strong>Pillar 3</strong> — we use our proprietary Feng Shui × Astrocartography × Real Estate Numerology to find the best addresses and places in the world that accelerate your goals. This is different for everyone. And it works even if you can't move yet. There are ways to shift the energetic frequency of your space, and protect yourself against unseen environmental forces that have been holding you back for years.
+              For <strong>Pillar 3</strong> — we use our proprietary Feng Shui × Astrocartography x Real Estate Numerology to find the best addresses+places in the world that accelerate your goals. This is different for everything. And it works even if you can't move yet. There are ways to shift the energetic frequency of your space, and protect yourself against unseel environmental forces that have been holding you back for years.
             </p>
             <div style={{ borderTop: '1px solid #C8E6C8', paddingTop: '14px', marginTop: '4px' }}>
               <p
