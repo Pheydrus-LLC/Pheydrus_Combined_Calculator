@@ -309,6 +309,31 @@ function buildPillarSummary(
   };
 }
 
+function getPillarLetterGrade(summary: PillarSummary): 'A' | 'C' | 'F' {
+  if (summary.fCount > 0) return 'F';
+  if (summary.cCount > 0) return 'C';
+  return 'A';
+}
+
+function applyPillarGradeGuardrails(
+  baseGrade: FinalGrade,
+  pillarGrades: Array<'A' | 'C' | 'F'>
+): FinalGrade {
+  const failedPillars = pillarGrades.filter((g) => g === 'F').length;
+  const cautionPillars = pillarGrades.filter((g) => g === 'C').length;
+
+  // Guardrail: if two or more pillars are failing, overall cannot be better than F.
+  if (failedPillars >= 2) return 'F';
+
+  // Guardrail: if one pillar is failing, overall cannot be better than C.
+  if (failedPillars === 1 && (baseGrade === 'A' || baseGrade === 'B')) return 'C';
+
+  // Guardrail: if two+ pillars are caution-level, overall cannot be A.
+  if (failedPillars === 0 && cautionPillars >= 2 && baseGrade === 'A') return 'B';
+
+  return baseGrade;
+}
+
 export function gradeThreePillars(input: GraderInput): AngularDiagnosticResult {
   // Grade each section
   const p1Items = gradePillar1(input.natalChart);
@@ -335,7 +360,12 @@ export function gradeThreePillars(input: GraderInput): AngularDiagnosticResult {
   const totalCs = allItems.filter((i) => i.grade === 'C').length;
   const totalAs = allItems.filter((i) => i.grade === 'A').length;
   const score = Math.ceil(Math.max(0, totalFs + totalCs * 0.5 - totalAs * 0.5));
-  const finalGrade: FinalGrade = computeFinalGrade(score);
+  const baseGrade: FinalGrade = computeFinalGrade(score);
+  const finalGrade: FinalGrade = applyPillarGradeGuardrails(baseGrade, [
+    getPillarLetterGrade(pillar1),
+    getPillarLetterGrade(pillar2),
+    getPillarLetterGrade(pillar3),
+  ]);
 
   return {
     pillars: [pillar1, pillar2, pillar3],

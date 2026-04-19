@@ -5,7 +5,7 @@
  * Pheydrus IP: Angular Houses = {1, 5, 7, 10, 11}
  * Malefics in angular houses → F (Pressure)
  * Benefics in angular houses → A (Support)
- * Final grade determined solely by total F count
+ * Final grade: weighted item score with pillar-level guardrails
  */
 
 export type PillarGrade = 'F' | 'C' | 'A' | 'Neutral';
