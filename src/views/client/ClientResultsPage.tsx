@@ -57,21 +57,21 @@ const PROGRAM_DETAILS: Record<ProgramRoute, ProgramRecommendation> = {
     route: 'hero',
     title: `Hero's Journey`,
     description:
-      "Do you always find yourself contorting to fit in, because people keep telling you you're too much, too intense, too difficult? Your blueprint explains exactly why, and how to turn it into your greatest strengths.",
+      "Have you spent years being told you're too much, too difficult, too intense — no matter how much you work on yourself? That's not a personality flaw. That's a Pillar 1 pattern running unchecked. We use a proprietary sequential deconditioning method to decode your exact angular house placements — and turn what's been misread as your weakness into your most powerful asset.",
     link: 'https://pheydrusmetaverse.com/heros-journey/',
   },
   'artists-way': {
     route: 'artists-way',
     title: `Artist's Way`,
     description:
-      "Have you done all the inner work and still can't figure out why your outside life won't catch up? Your environment and timing might be working against everything you've built inside.",
+      "Have you done all the inner work and still can't figure out why your outside life won't catch up? Your environment and timing are probably working against everything you've built inside. Through our Feng Shui × Astrocartography method and transit mapping — even if you can't move — we realign your external reality to match who you've already become.",
     link: 'https://pheydrusmetaverse.com/artists-way/#',
   },
   business: {
     route: 'business',
     title: 'Business Growth',
     description:
-      "Suddenly feeling the urge to launch something, rebrand, or make money in a completely new way? All 3 pillars are literally telling you it's time. The question is whether you know how to move with it...or against it.",
+      "Suddenly feeling the urge to launch, pivot, or make money in a completely new way? That's not restlessness — that's your business houses activated. All 3 pillars are telling you it's time. The question is whether you know how to move with that window — or let it pass.",
     link: 'https://pheydrusmetaverse.com/business-growth/',
   },
 };
@@ -2118,17 +2118,27 @@ export function ClientResultsPage() {
             <p
               style={{ margin: '0 0 10px', fontSize: '0.85rem', color: '#444444', lineHeight: 1.8 }}
             >
-              The first is <strong style={{ color: '#7A5A1A' }}>closure</strong>. The painful
-              patterns, the blocked seasons, the years of almost — they weren't your fault. They
-              were forces you didn't have a map for.
+              The first is <strong style={{ color: '#7A5A1A' }}>closure</strong>. You were handed a lie: that struggle means growth. It doesn't. It means you've been placed in an energetic grid working against you.
             </p>
             <p
               style={{ margin: '0 0 10px', fontSize: '0.85rem', color: '#444444', lineHeight: 1.8 }}
             >
-              The second purpose — and this is the more important one — is{' '}
-              <strong style={{ color: '#7A5A1A' }}>preparation</strong>. Something is shifting. Your
-              chart doesn't lie. The same forces that created the friction are now creating the
-              conditions for the biggest expansion of your life.
+              The second — and more important — is <strong style={{ color: '#7A5A1A' }}>preparation</strong>. That grid is already shifting. And to move with it, you need to attack all three pillars at once — because they don't work in isolation. Your blueprint, your timing, and your environment are always talking to each other. Fix one and ignore the others — and you'll keep hitting the same ceiling in a different room.
+            </p>
+            <p
+              style={{ margin: '0 0 10px', fontSize: '0.85rem', color: '#444444', lineHeight: 1.8 }}
+            >
+              For <strong>Pillar 1</strong> — we use a sequential deconditioning method that goes directly into your energetic blindspots (desires, addictions, dreams, etc). This isn't talk therapy or journaling. A specific, structured process that helps you identify the unconscious karmic patterns running your decisions — and consciously transmute them into your greatest assets.
+            </p>
+            <p
+              style={{ margin: '0 0 10px', fontSize: '0.85rem', color: '#444444', lineHeight: 1.8 }}
+            >
+              For <strong>Pillar 2</strong> — we map your current and upcoming planetary transits so you're never caught off guard again. We show you exactly which seasons to push, which to rest, and how to prepare for the windows that — if you move correctly — will be the most expansive periods of your life.
+            </p>
+            <p
+              style={{ margin: '0 0 10px', fontSize: '0.85rem', color: '#444444', lineHeight: 1.8 }}
+            >
+              For <strong>Pillar 3</strong> — we use our proprietary Feng Shui × Astrocartography × Real Estate Numerology to find the best addresses and places in the world that accelerate your goals. This is different for everyone. And it works even if you can't move yet. There are ways to shift the energetic frequency of your space, and protect yourself against unseen environmental forces that have been holding you back for years.
             </p>
             <div style={{ borderTop: '1px solid #C8E6C8', paddingTop: '14px', marginTop: '4px' }}>
               <p
@@ -2141,10 +2151,7 @@ export function ClientResultsPage() {
                   lineHeight: 1.5,
                 }}
               >
-                The question is whether you'll have a map when it arrives.{' '}
-                <span style={{ fontStyle: 'normal', fontWeight: 700, color: '#C9A84C' }}>
-                  This call is how you get ready.
-                </span>
+                When all three are addressed together — that's when people stop reacting to their lives and start actually getting ahead of them.
               </p>
             </div>
           </div>
@@ -2205,8 +2212,29 @@ export function ClientResultsPage() {
                 lineHeight: 1.7,
               }}
             >
-              You now have clarity on the pattern. The next step is execution: Start with your
-              recommended path below, or book a call for a personalized map.
+              You now have clarity on which forces have been running your life. The next step is working with a team that knows exactly how to shift them — not one at a time, but all three together.
+            </p>
+            <p
+              style={{
+                margin: '10px 0 0',
+                fontSize: '0.9rem',
+                color: '#555',
+                fontFamily: INTER,
+                lineHeight: 1.7,
+              }}
+            >
+              Hundreds of students around the world have broken these exact patterns through our 3-pillar method. People who couldn't move. People mid-divorce. People who had tried everything and couldn't figure out why nothing was landing. The breakthroughs they'd been chasing for years — unlocked once they had the right map.
+            </p>
+            <p
+              style={{
+                margin: '10px 0 0',
+                fontSize: '0.9rem',
+                color: '#555',
+                fontFamily: INTER,
+                lineHeight: 1.7,
+              }}
+            >
+              Start with your recommended path below — or book a call and we'll build yours together.
             </p>
           </div>
 
@@ -2398,40 +2426,23 @@ export function ClientResultsPage() {
                     30-minute 1:1 with the Pheydrus team
                   </p>
                   <div style={{ maxWidth: '420px', margin: '0 auto 20px', textAlign: 'left' }}>
-                    {[
-                      `Map how to decondition the unseen forces shaping your reality and unlock the parts of you and your environment that can actually 10x your life`,
-                      `Prepare for the identity shift that's already in motion — and make sure you're ready when it arrives`,
-                      `Get clarity on your aligned next chapter`,
-                    ].map((b, i) => (
-                      <p
-                        key={i}
-                        style={{
-                          margin: '0 0 8px',
-                          fontSize: '0.82rem',
-                          color: '#7A5A1A',
-                          lineHeight: 1.6,
-                          fontFamily: INTER,
-                        }}
-                      >
-                        → {b}
-                      </p>
-                    ))}
+                    <p style={{ margin: '0 0 8px', fontSize: '0.82rem', color: '#7A5A1A', lineHeight: 1.6, fontFamily: INTER }}>→ We map exactly which invisible forces are running your life right now — and build a personalized roadmap to shift all three simultaneously</p>
+                    <p style={{ margin: '0 0 8px', fontSize: '0.82rem', color: '#7A5A1A', lineHeight: 1.6, fontFamily: INTER }}>→ We show you what's coming next in your chart — and how to prepare for the identity shift that's already in motion so you're ready when it arrives</p>
+                    <p style={{ margin: '0 0 8px', fontSize: '0.82rem', color: '#7A5A1A', lineHeight: 1.6, fontFamily: INTER }}>→ We identify the specific <strong>Pillar 1</strong> deconditioning work, <strong>Pillar 2</strong> transit windows, and <strong>Pillar 3</strong> environmental shifts that will move the needle fastest for YOUR specific situation</p>
                   </div>
-                  {showCTA && (
-                    <p
-                      style={{
-                        fontFamily: CORMORANT,
-                        fontStyle: 'italic',
-                        color: '#7A5A1A',
-                        fontSize: '0.95rem',
-                        margin: '0 0 20px',
-                        lineHeight: 1.6,
-                        textAlign: 'center',
-                      }}
-                    >
-                      This will be the beginning of your true alignment journey.
-                    </p>
-                  )}
+                  <p
+                    style={{
+                      fontSize: '0.82rem',
+                      color: '#7A5A1A',
+                      margin: '0 0 20px',
+                      lineHeight: 1.6,
+                      fontFamily: INTER,
+                      textAlign: 'center',
+                      fontStyle: 'italic',
+                    }}
+                  >
+                    Hundreds of students have transformed patterns they couldn't crack for years — not because they tried harder, but because they finally had the right map. This call is how you get yours.
+                  </p>
                   <a
                     href="https://calendly.com/pheydrus_strategy/1-1-alignment-strategy-call-report"
                     target="_blank"
