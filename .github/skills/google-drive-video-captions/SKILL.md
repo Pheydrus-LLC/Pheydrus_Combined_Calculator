@@ -9,15 +9,15 @@ and uploads the captioned version back to the same Drive folder with a `-sitecap
 ## Caption Style (Reference Standard)
 Always use these ffmpeg `force_style` settings when burning captions:
 ```
-PlayResX=1080,PlayResY=1920,FontName=Arial,FontSize=8,PrimaryColour=&H00FFFFFF,OutlineColour=&H00000000,BorderStyle=1,Outline=1,Shadow=0,MarginL=24,MarginR=24,MarginV=140,Alignment=2,WrapStyle=2
+PlayResX=1080,PlayResY=1920,FontName=Arial,FontSize=10,PrimaryColour=&H00FFFFFF,OutlineColour=&H00000000,BorderStyle=1,Outline=1,Shadow=0,MarginL=24,MarginR=24,MarginV=140,Alignment=2,WrapStyle=2
 ```
 - **White text** with **thin black outline** — no box background
-- **FontSize=8 + PlayResX/PlayResY** — keeps captions consistently small on vertical shorts
+- **FontSize=10 + PlayResX/PlayResY** — keeps captions consistently small on vertical shorts
 - **MarginV=140** — places captions in lower-third, below top heading blocks and away from center overlays
 - **Alignment=2** — bottom-center
 
 If the video has a bottom obstruction (e.g. CTA sticker), lower `MarginV` slightly (e.g. 110–130).
-If captions are still too large, reduce `FontSize` to `7` while keeping PlayRes fixed.
+If captions are still too large, reduce `FontSize` to `8` while keeping PlayRes fixed.
 
 ## What It Produces
 For every source video `pile-1.mp4` it creates:
