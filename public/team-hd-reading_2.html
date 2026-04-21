@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pheydrus Team — Human Design Reading</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F8F4EE;
+    --warm-white: #FDFAF6;
+    --ink: #1C1917;
+    --ink-soft: #44403C;
+    --ink-muted: #78716C;
+    --ink-faint: #A8A29E;
+    --gold: #B8860B;
+    --gold-light: #F5E6B2;
+    --gold-mid: #D4A853;
+    --purple: #4C3D6E;
+    --purple-light: #EDE8F5;
+    --rose: #8B3A52;
+    --rose-light: #F5E8ED;
+    --teal: #2A6B5A;
+    --teal-light: #E3F0EC;
+    --blue: #2C4E7E;
+    --blue-light: #E5EEFB;
+    --amber: #7A4E1A;
+    --amber-light: #FDF0DC;
+    --border: rgba(28,25,23,0.1);
+    --border-soft: rgba(28,25,23,0.06);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  .page-header {
+    background: var(--ink);
+    color: var(--cream);
+    padding: 60px 48px 48px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .page-header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    border: 1px solid rgba(248,244,238,0.08);
+  }
+
+  .page-header::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; left: 40%;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    border: 1px solid rgba(248,244,238,0.05);
+  }
+
+  .header-eyebrow {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold-mid);
+    margin-bottom: 16px;
+  }
+
+  .header-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 5vw, 58px);
+    font-weight: 300;
+    line-height: 1.1;
+    margin-bottom: 12px;
+    letter-spacing: -0.01em;
+  }
+
+  .header-sub {
+    font-size: 13px;
+    color: rgba(248,244,238,0.55);
+    font-weight: 300;
+    max-width: 480px;
+  }
+
+  .main { max-width: 900px; margin: 0 auto; padding: 48px 24px 80px; }
+
+  .section { margin-bottom: 56px; }
+
+  .section-eyebrow {
+    font-size: 9.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-eyebrow::after {
+    content: '';
+    flex: 1;
+    height: 0.5px;
+    background: var(--border);
+  }
+
+  .section-heading {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 400;
+    color: var(--ink);
+    margin-bottom: 24px;
+    line-height: 1.2;
+  }
+
+  .person-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    margin-bottom: 0;
+  }
+
+  .person-card {
+    background: var(--warm-white);
+    border: 0.5px solid var(--border);
+    border-radius: 16px;
+    padding: 20px 16px;
+    position: relative;
+  }
+
+  .person-card-accent {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    border-radius: 16px 16px 0 0;
+  }
+
+  .avatar {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 500;
+    margin-bottom: 12px;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .p-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 2px;
+    line-height: 1.2;
+  }
+
+  .p-role {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 10px;
+  }
+
+  .p-type { font-size: 11.5px; color: var(--ink-soft); margin-bottom: 6px; }
+
+  .pill {
+    display: inline-block;
+    font-size: 9.5px;
+    padding: 2px 7px;
+    border-radius: 20px;
+    margin: 1px 1px 1px 0;
+    line-height: 1.5;
+  }
+
+  .sun-block { margin-top: 10px; }
+  .sun-label { font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 3px; }
+  .sun-val { font-size: 11px; color: var(--ink-soft); line-height: 1.5; }
+  .sun-val strong { color: var(--ink); font-weight: 500; }
+
+  .channel-row { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+  .ch-pill {
+    font-size: 9.5px;
+    background: rgba(28,25,23,0.05);
+    border-radius: 20px;
+    padding: 2px 7px;
+    color: var(--ink-soft);
+  }
+  .ch-pill span { font-weight: 500; color: var(--ink); }
+
+  .deep-card {
+    background: var(--warm-white);
+    border: 0.5px solid var(--border);
+    border-radius: 16px;
+    padding: 24px 28px;
+    margin-bottom: 12px;
+  }
+
+  .deep-card-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 14px;
+    line-height: 1.3;
+  }
+
+  .row-item {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    margin-bottom: 10px;
+  }
+
+  .row-dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    margin-top: 7px;
+    flex-shrink: 0;
+  }
+
+  .row-text { font-size: 13px; color: var(--ink-soft); line-height: 1.7; }
+  .row-text strong { color: var(--ink); font-weight: 500; }
+
+  .divider { border: none; border-top: 0.5px solid var(--border); margin: 14px 0; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+  .mini-card {
+    background: var(--warm-white);
+    border: 0.5px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 18px;
+  }
+
+  .mini-label { font-size: 9.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 6px; }
+  .mini-val { font-size: 12px; color: var(--ink-soft); line-height: 1.6; }
+  .mini-val strong { color: var(--ink); font-weight: 500; }
+
+  .flag-row {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    padding: 12px 0;
+    border-bottom: 0.5px solid var(--border-soft);
+  }
+
+  .flag-row:last-child { border-bottom: none; padding-bottom: 0; }
+
+  .tag {
+    font-size: 9px;
+    padding: 3px 8px;
+    border-radius: 20px;
+    white-space: nowrap;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-top: 1px;
+    font-weight: 500;
+  }
+
+  .tag-tension { background: #FAE8E8; color: #7A2828; }
+  .tag-power { background: #E8F2E8; color: #2A5C2A; }
+  .tag-gold { background: #FDF0DC; color: #7A4E1A; }
+  .tag-note { background: #EDE8F5; color: #4C3D6E; }
+
+  .toc {
+    background: var(--warm-white);
+    border: 0.5px solid var(--border);
+    border-radius: 16px;
+    padding: 28px 32px;
+    margin-bottom: 56px;
+  }
+
+  .toc-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 20px;
+  }
+
+  .toc-list { list-style: none; }
+
+  .toc-item {
+    display: flex;
+    align-items: baseline;
+    gap: 0;
+    padding: 7px 0;
+    border-bottom: 0.5px solid var(--border-soft);
+  }
+
+  .toc-item:last-child { border-bottom: none; }
+
+  .toc-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    color: var(--ink-faint);
+    width: 28px;
+    flex-shrink: 0;
+  }
+
+  .toc-link {
+    font-size: 13px;
+    color: var(--ink-soft);
+    text-decoration: none;
+    flex: 1;
+    transition: color 0.15s;
+  }
+
+  .toc-link:hover { color: var(--ink); }
+
+  .toc-dot {
+    flex: 1;
+    border-bottom: 0.5px dotted var(--border);
+    margin: 0 10px;
+    margin-bottom: 3px;
+  }
+
+  .toc-label {
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  .person-protocol {
+    border-top: 0.5px solid var(--border);
+    padding-top: 24px;
+    margin-top: 24px;
+  }
+
+  .person-protocol-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .person-protocol-avatar {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 500;
+    flex-shrink: 0;
+  }
+
+  .person-protocol-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.2;
+  }
+
+  .person-protocol-role {
+    font-size: 10px;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  .reflector-hero {
+    background: var(--ink);
+    color: var(--cream);
+    border-radius: 20px;
+    padding: 36px 36px;
+    margin-bottom: 12px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .reflector-hero::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 180px; height: 180px;
+    border-radius: 50%;
+    border: 1px solid rgba(248,244,238,0.07);
+  }
+
+  .reflector-hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    font-weight: 400;
+    margin-bottom: 8px;
+    color: var(--cream);
+  }
+
+  .reflector-hero-sub {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold-mid);
+    margin-bottom: 20px;
+  }
+
+  .reflector-hero p { font-size: 13.5px; line-height: 1.8; color: rgba(248,244,238,0.8); margin-bottom: 12px; }
+  .reflector-hero p:last-child { margin-bottom: 0; }
+  .reflector-hero strong { color: var(--cream); font-weight: 500; }
+
+  .ref-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .ref-grid-item {
+    background: rgba(248,244,238,0.06);
+    border: 0.5px solid rgba(248,244,238,0.1);
+    border-radius: 12px;
+    padding: 14px 16px;
+  }
+
+  .ref-grid-label { font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold-mid); margin-bottom: 6px; }
+  .ref-grid-val { font-size: 12px; color: rgba(248,244,238,0.75); line-height: 1.6; }
+  .ref-grid-val strong { color: var(--cream); font-weight: 500; }
+
+  .protocol-card {
+    background: var(--warm-white);
+    border: 0.5px solid var(--border);
+    border-radius: 16px;
+    padding: 24px 28px;
+    margin-top: 12px;
+  }
+
+  .protocol-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+
+  .protocol-item {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 10px 0;
+    border-bottom: 0.5px solid var(--border-soft);
+  }
+
+  .protocol-item:last-child { border-bottom: none; padding-bottom: 0; }
+
+  .protocol-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    color: var(--ink-faint);
+    line-height: 1;
+    width: 24px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .protocol-text { font-size: 13px; color: var(--ink-soft); line-height: 1.7; }
+  .protocol-text strong { color: var(--ink); font-weight: 500; }
+
+  .footer {
+    text-align: center;
+    padding: 32px 24px;
+    border-top: 0.5px solid var(--border);
+    font-size: 11px;
+    color: var(--ink-faint);
+    letter-spacing: 0.05em;
+  }
+
+  @media (max-width: 640px) {
+    .page-header { padding: 40px 24px 36px; }
+    .main { padding: 32px 16px 60px; }
+    .two-col, .three-col, .ref-grid { grid-template-columns: 1fr; }
+    .deep-card { padding: 18px 20px; }
+    .reflector-hero { padding: 24px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <p class="header-eyebrow">Human Design · Team Reading · 2025</p>
+  <h1 class="header-title">Pheydrus<br>Team</h1>
+  <p class="header-sub">A deep reading of gates, channels, Sun placements, and role-design alignment for five people — Keely, Irene, Krish, HeyJune, and Victoria.</p>
+</div>
+
+<div class="main">
+
+  <!-- TABLE OF CONTENTS -->
+  <div class="toc" id="toc">
+    <p class="toc-title">Contents</p>
+    <ul class="toc-list">
+      <li class="toc-item">
+        <span class="toc-num">01</span>
+        <a href="#section-five" class="toc-link">The five — at a glance</a>
+        <span class="toc-dot"></span>
+        <span class="toc-label">Overview</span>
+      </li>
+      <li class="toc-item">
+        <span class="toc-num">02</span>
+        <a href="#section-sun" class="toc-link">Sun gate analysis</a>
+        <span class="toc-dot"></span>
+        <span class="toc-label">Gates</span>
+      </li>
+      <li class="toc-item">
+        <span class="toc-num">03</span>
+        <a href="#section-channels" class="toc-link">Channel highlights</a>
+        <span class="toc-dot"></span>
+        <span class="toc-label">Circuits</span>
+      </li>
+      <li class="toc-item">
+        <span class="toc-num">04</span>
+        <a href="#section-reflector" class="toc-link">The Reflector dynamic — deep read</a>
+        <span class="toc-dot"></span>
+        <span class="toc-label">HeyJune</span>
+      </li>
+      <li class="toc-item">
+        <span class="toc-num">05</span>
+        <a href="#section-protocols" class="toc-link">Practical protocols for each person</a>
+        <span class="toc-dot"></span>
+        <span class="toc-label">How to work together</span>
+      </li>
+      <li class="toc-item">
+        <span class="toc-num">06</span>
+        <a href="#section-alignment" class="toc-link">Role-to-design alignment</a>
+        <span class="toc-dot"></span>
+        <span class="toc-label">Fit scores</span>
+      </li>
+      <li class="toc-item">
+        <span class="toc-num">07</span>
+        <a href="#section-dynamics" class="toc-link">Key dynamics to navigate</a>
+        <span class="toc-dot"></span>
+        <span class="toc-label">Tensions + superpowers</span>
+      </li>
+    </ul>
+  </div>
+
+  <!-- THE FIVE -->
+  <div class="section" id="section-five">
+    <p class="section-eyebrow">The five</p>
+    <div class="person-grid">
+
+      <div class="person-card">
+        <div class="person-card-accent" style="background:#4C3D6E;"></div>
+        <div class="avatar" style="background:#EDE8F5;color:#4C3D6E;">KS</div>
+        <p class="p-name">Keely</p>
+        <p class="p-role">Marketing Director</p>
+        <p class="p-type">Manifesting Generator · 5/1 · Sacral</p>
+        <span class="pill" style="background:#EDE8F5;color:#4C3D6E;">Split definition</span>
+        <div class="sun-block">
+          <p class="sun-label">Personality Sun</p>
+          <p class="sun-val"><strong>Gate 35</strong> — Change & Adventure. Born to move things forward and tell stories of progress.</p>
+        </div>
+        <div class="sun-block">
+          <p class="sun-label">Design Sun</p>
+          <p class="sun-val"><strong>Gate 22</strong> — Grace. Opens doors through social intelligence and charm.</p>
+        </div>
+        <div class="sun-block">
+          <p class="sun-label">Incarnation Cross</p>
+          <p class="sun-val">Left Angle Cross of Separation — bridges worlds, carries wisdom across divides</p>
+        </div>
+        <div class="channel-row">
+          <span class="ch-pill"><span>17-62</span> Acceptance</span>
+          <span class="ch-pill"><span>1-8</span> Inspiration</span>
+          <span class="ch-pill"><span>15-5</span> Rhythm</span>
+        </div>
+      </div>
+
+      <div class="person-card">
+        <div class="person-card-accent" style="background:#8B3A52;"></div>
+        <div class="avatar" style="background:#F5E8ED;color:#8B3A52;">IH</div>
+        <p class="p-name">Irene</p>
+        <p class="p-role">Sales Director</p>
+        <p class="p-type">Manifesting Generator · 5/2 · Sacral</p>
+        <span class="pill" style="background:#F5E8ED;color:#8B3A52;">Split definition</span>
+        <div class="sun-block">
+          <p class="sun-label">Personality Sun</p>
+          <p class="sun-val"><strong>Gate 59</strong> — Intimacy. Dissolves resistance, creates rapid trust. Born closer.</p>
+        </div>
+        <div class="sun-block">
+          <p class="sun-label">Design Sun</p>
+          <p class="sun-val"><strong>Gate 16</strong> — Enthusiasm. Contagious excitement that builds momentum.</p>
+        </div>
+        <div class="sun-block">
+          <p class="sun-label">Profile</p>
+          <p class="sun-val">5/2 Self-Motivated Hero — people project capability onto her; natural field commander</p>
+        </div>
+        <div class="channel-row">
+          <span class="ch-pill"><span>59-6</span> Mating</span>
+          <span class="ch-pill"><span>20-34</span> Charisma</span>
+          <span class="ch-pill"><span>16-48</span> Wavelength</span>
+        </div>
+      </div>
+
+      <div class="person-card">
+        <div class="person-card-accent" style="background:#2C4E7E;"></div>
+        <div class="avatar" style="background:#E5EEFB;color:#2C4E7E;">KR</div>
+        <p class="p-name">Krish</p>
+        <p class="p-role">AI & Data Eng.</p>
+        <p class="p-type">Generator · 1/3 · Sacral</p>
+        <div class="sun-block">
+          <p class="sun-label">Personality Sun</p>
+          <p class="sun-val"><strong>Gate 25</strong> — Innocence. Pure, agenda-free perception. Sees clearly without bias.</p>
+        </div>
+        <div class="sun-block">
+          <p class="sun-label">Design Sun</p>
+          <p class="sun-val"><strong>Gate 10</strong> — Behavior of the Self. Authenticity as foundation; self-love as engine.</p>
+        </div>
+        <div class="sun-block">
+          <p class="sun-label">Profile</p>
+          <p class="sun-val">1/3 Establisher of Truth — builds from deep research, corrects through lived testing</p>
+        </div>
+        <div class="channel-row">
+          <span class="ch-pill"><span>17-62</span> Acceptance</span>
+          <span class="ch-pill"><span>47-64</span> Abstraction</span>
+          <span class="ch-pill"><span>15-5</span> Rhythm</span>
+        </div>
+      </div>
+
+      <div class="person-card">
+        <div class="person-card-accent" style="background:#2A6B5A;"></div>
+        <div class="avatar" style="background:#E3F0EC;color:#2A6B5A;">HJ</div>
+        <p class="p-name">HeyJune</p>
+        <p class="p-role">CEO</p>
+        <p class="p-type">Reflector · 4/6 · Outer Authority</p>
+        <div class="sun-block">
+          <p class="sun-label">Personality Sun</p>
+          <p class="sun-val"><strong>Gate 36</strong> — Crisis & Depth. Holds the team through intensity; forged by experience.</p>
+        </div>
+        <div class="sun-block">
+          <p class="sun-label">Design Sun</p>
+          <p class="sun-val"><strong>Gate 11</strong> — Ideas & Peace. Continuous visionary ideation; sees what could be.</p>
+        </div>
+        <div class="sun-block">
+          <p class="sun-label">Profile</p>
+          <p class="sun-val">4/6 Regal Authority Figure — networker turned role model; embodies lived wisdom post-30</p>
+        </div>
+        <div class="channel-row">
+          <span class="ch-pill">No defined channels</span>
+        </div>
+      </div>
+
+      <div class="person-card">
+        <div class="person-card-accent" style="background:#7A4E1A;"></div>
+        <div class="avatar" style="background:#FDF0DC;color:#7A4E1A;">VM</div>
+        <p class="p-name">Victoria</p>
+        <p class="p-role">Content Edit + Sched.</p>
+        <p class="p-type">Generator · 1/3 · Emotional</p>
+        <div class="sun-block">
+          <p class="sun-label">Personality Sun</p>
+          <p class="sun-val"><strong>Gate 37</strong> — Friendship. The clan-builder; makes everyone feel safe and included.</p>
+        </div>
+        <div class="sun-block">
+          <p class="sun-label">Design Sun</p>
+          <p class="sun-val"><strong>Gate 9</strong> — Focus & Detail. Hyper-attentive; catches what everyone else misses.</p>
+        </div>
+        <div class="sun-block">
+          <p class="sun-label">Profile</p>
+          <p class="sun-val">1/3 Establisher of Truth — learns through testing, corrects through experience</p>
+        </div>
+        <div class="channel-row">
+          <span class="ch-pill"><span>37-40</span> Community</span>
+          <span class="ch-pill"><span>44-26</span> Surrender</span>
+          <span class="ch-pill"><span>54-32</span> Transformation</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SUN GATE ANALYSIS -->
+  <div class="section" id="section-sun">
+    <p class="section-eyebrow">Sun gate analysis</p>
+    <div class="two-col">
+      <div class="deep-card">
+        <p class="deep-card-title">Gate 35 + Gate 59 — the Marketing-Sales bridge</p>
+        <div class="row-item">
+          <div class="row-dot" style="background:#4C3D6E;"></div>
+          <p class="row-text"><strong>Keely's Gate 35 (Change)</strong> wants to explore new territory and narrate stories of progress. Every campaign she runs should be a story of transformation and adventure. This gate literally channels "what's next" as a life force — she needs to be placed at the frontier of the brand story.</p>
+        </div>
+        <div class="row-item">
+          <div class="row-dot" style="background:#8B3A52;"></div>
+          <p class="row-text"><strong>Irene's Gate 59 (Intimacy)</strong> is the most powerful gate for dissolving resistance and creating closeness — essentially the biology of sales. Her Sun here means her entire aura is designed to break down walls and build rapid trust. This is not a skill she learned; it is her field.</p>
+        </div>
+        <div class="row-item" style="margin-bottom:0;">
+          <div class="row-dot" style="background:#2A6B5A;"></div>
+          <p class="row-text"><strong>Together:</strong> Keely creates the narrative pull (Gate 35 wants the story of adventure); Irene closes because her field makes people feel safe enough to say yes. Role-to-gate alignment here is near-perfect.</p>
+        </div>
+      </div>
+      <div class="deep-card">
+        <p class="deep-card-title">Gate 36 + Gate 25 — the CEO-Engineer axis</p>
+        <div class="row-item">
+          <div class="row-dot" style="background:#2A6B5A;"></div>
+          <p class="row-text"><strong>HeyJune's Gate 36 (Crisis)</strong> means she is built to hold emotional intensity and navigate the team through dark or uncertain seasons. Reflector CEOs with Gate 36 don't lead through command — they lead through presence and emotional containment. When the company hits a wall, she doesn't panic; she becomes the eye of the storm.</p>
+        </div>
+        <div class="row-item" style="margin-bottom:0;">
+          <div class="row-dot" style="background:#2C4E7E;"></div>
+          <p class="row-text"><strong>Krish's Gate 25 (Innocence)</strong> as Sun is striking for an AI engineer — it's the gate of pure, agenda-free perception. His data outputs carry unusual objectivity. He isn't trying to prove a point with data; he genuinely just sees what is there. Rare and valuable in a world of motivated reasoning.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHANNEL ANALYSIS -->
+  <div class="section" id="section-channels">
+    <p class="section-eyebrow">Channel highlights</p>
+    <div class="deep-card">
+      <div class="row-item">
+        <div class="row-dot" style="background:#4C3D6E;"></div>
+        <p class="row-text"><strong>Channel 17-62 (Acceptance) — Keely + Krish.</strong> Both have this defined. Gate 17 is Opinion; Gate 62 is Detail. This activates a strong logical circuit around forming fact-backed opinions and communicating them precisely. For data-driven marketing, this is gold — they'll speak the same analytical language naturally. Let them co-own the data-to-narrative pipeline.</p>
+      </div>
+      <hr class="divider">
+      <div class="row-item">
+        <div class="row-dot" style="background:#8B3A52;"></div>
+        <p class="row-text"><strong>Channel 20-34 (Charisma) — Irene.</strong> One of the most powerful channels in the system — it connects Throat to Sacral directly, meaning Irene can act and speak simultaneously with raw, immediate power. She doesn't need to think before she moves. In sales calls, her body and voice fire together. This is the channel of the natural performer and persuader.</p>
+      </div>
+      <hr class="divider">
+      <div class="row-item">
+        <div class="row-dot" style="background:#7A4E1A;"></div>
+        <p class="row-text"><strong>Channel 37-40 (Community) — Victoria.</strong> Gate 37 (Friendship) + Gate 40 (Aloneness/Willpower). This is the channel of the clan — it holds the social fabric of a group through bargaining and mutual support. Victoria's Sun on Gate 37 AND this channel defined means she is the invisible glue of the team. She knows when group energy is off, who needs what, and how to restore harmony.</p>
+      </div>
+      <hr class="divider">
+      <div class="row-item">
+        <div class="row-dot" style="background:#2C4E7E;"></div>
+        <p class="row-text"><strong>Channel 47-64 (Abstraction) — Krish.</strong> Gate 64 (Before Completion) + Gate 47 (Realization). The channel of making sense of complexity. For an AI engineer, this means Krish has a defined cognitive circuit for moving from confusion to clarity. Allow him long think cycles; his mind will always land on understanding — do not rush the process.</p>
+      </div>
+      <hr class="divider">
+      <div class="row-item" style="margin-bottom:0;">
+        <div class="row-dot" style="background:#2A6B5A;"></div>
+        <p class="row-text"><strong>HeyJune: no defined channels.</strong> This is the Reflector reality — she has no fixed circuitry of her own. Instead she samples and mirrors all the channels above. In meetings she will temporarily "become" each person's energy field as they speak. This makes her the team's most accurate diagnostician — but she needs decompression time after intense group sessions.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- REFLECTOR DEEP DIVE -->
+  <div class="section" id="section-reflector">
+    <p class="section-eyebrow">The Reflector dynamic — deep read</p>
+
+    <div class="reflector-hero">
+      <p class="reflector-hero-sub">HeyJune · Reflector · 4/6 · Outer Authority · CEO</p>
+      <h2 class="reflector-hero-title">The Rarest Configuration Leading the Team</h2>
+      <p>Only about <strong>1% of humanity</strong> is a Reflector. HeyJune has no consistently defined energy centers — meaning she is completely open to the environment around her. Where the four Generators and MGs on this team have fixed, reliable motors and circuits, HeyJune has none. She is a <strong>living mirror of the collective</strong>.</p>
+      <p>This is not a weakness. It is her most extraordinary gift. A Reflector CEO is able to sense the true health of a company with a precision that no other type can match — because she literally absorbs and reflects back what is actually present, without the filter of a fixed aura distorting the signal.</p>
+      <div class="ref-grid">
+        <div class="ref-grid-item">
+          <p class="ref-grid-label">What she absorbs from this team</p>
+          <p class="ref-grid-val">Keely's MG drive, Irene's intimacy field, Krish's logical clarity, Victoria's clan-holding warmth — HeyJune will <strong>temporarily amplify all of it</strong> in her presence. She feels the whole team simultaneously.</p>
+        </div>
+        <div class="ref-grid-item">
+          <p class="ref-grid-label">Her 28-day lunar authority</p>
+          <p class="ref-grid-val">Major decisions require a <strong>full lunar cycle</strong> to be felt through. Her position on a topic will shift across those 28 days — that's correct, not inconsistent. The final position, after the cycle, is her truth.</p>
+        </div>
+        <div class="ref-grid-item">
+          <p class="ref-grid-label">Her 4/6 profile in this role</p>
+          <p class="ref-grid-val">The 4th line makes her a <strong>natural networker</strong> — her opportunities and this company's growth will come through relationship, not cold outreach. The 6th line means she is a Role Model; post-30, people follow her by who she is, not what she says.</p>
+        </div>
+        <div class="ref-grid-item">
+          <p class="ref-grid-label">Gate 36 Sun — crisis leadership</p>
+          <p class="ref-grid-val">Gate 36 is the gate of <strong>emotional depth and crisis navigation</strong>. She has been forged through intensity. When the team hits its hardest moments, she will be the calmest person in the room — not because she doesn't feel it, but because feeling it fully is how she's designed to hold it.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="deep-card">
+      <p class="deep-card-title">The gift of being truly seen — what Reflectors do that no other type can</p>
+      <div class="row-item">
+        <div class="row-dot" style="background:#2A6B5A;"></div>
+        <p class="row-text"><strong>She sees each person without projection.</strong> Every other type on this team — the MGs, the Generators — has defined centers that create a consistent energetic filter. They experience others through the lens of their own fixed design. HeyJune has no such filter. When she is with Keely, she temporarily becomes Keely's energy. When she is with Krish, she feels Krish's world from the inside. This means the people around her experience something rare and profound: the sensation of being <em>actually seen</em>, without agenda, without projection, without the other person's ego in the way. This is why people often feel inexplicably understood in HeyJune's presence — because she is, in a literal energetic sense, holding their frequency back to them.</p>
+      </div>
+      <hr class="divider">
+      <div class="row-item">
+        <div class="row-dot" style="background:#2A6B5A;"></div>
+        <p class="row-text"><strong>She reflects people's highest potential back to them.</strong> Because she amplifies what she absorbs, a Reflector in a healthy state doesn't just mirror who you are — she mirrors who you are at your best. When HeyJune is with Keely, she may amplify Keely's Gate 35 adventurousness and Gate 22 grace, making Keely feel more expansive and capable than usual. Team members often report feeling unusually clear, inspired, or "like themselves" after time with a healthy Reflector. This is not accidental — it is the design function. She holds the space for people to meet their own depth.</p>
+      </div>
+      <hr class="divider">
+      <div class="row-item">
+        <div class="row-dot" style="background:#2A6B5A;"></div>
+        <p class="row-text"><strong>She reads between the words.</strong> Defined centers create consistent noise — a defined Sacral always hums, a defined Solar Plexus always carries emotional coloring. HeyJune has none of that background hum. She receives what is actually being communicated beneath the words — the hesitation behind Krish's "yes," the exhaustion under Irene's enthusiasm, the quiet resentment brewing before Victoria says anything. Other leaders use intuition. HeyJune uses direct perception. It is a categorically different instrument.</p>
+      </div>
+      <hr class="divider">
+      <div class="row-item">
+        <div class="row-dot" style="background:#2A6B5A;"></div>
+        <p class="row-text"><strong>She experiences the full range of human possibility.</strong> The other four people on this team each have a fixed energetic identity — their aura is consistent and bounded. HeyJune's openness means she has, over her lifetime, temporarily inhabited every energy type, every emotional frequency, every flavor of human experience as she's moved through different environments. This gives her an unusually wide map of human nature. She doesn't just understand that Keely needs to move fast and Krish needs to go deep — she has <em>felt</em> what it is to be both of those things. Her empathy is not conceptual. It is experiential.</p>
+      </div>
+      <hr class="divider">
+      <div class="row-item">
+        <div class="row-dot" style="background:#2A6B5A;"></div>
+        <p class="row-text"><strong>How she is different from every other type as a leader.</strong> Manifestors lead by initiating and declaring. Generators lead by building and sustaining. Manifesting Generators lead by demonstrating and activating. Projectors lead by guiding and directing. But Reflectors lead by <em>witnessing</em>. HeyJune's primary leadership act is not doing — it is being fully present to what is real. In a team culture that mistakes busyness for leadership, this can be misread as passivity. It is the opposite. A Reflector CEO who is given the right conditions to operate — time, space, the right environment — will see around corners the rest of the team cannot, because she has no fixed vantage point obscuring her view. She sees the whole board.</p>
+      </div>
+      <hr class="divider">
+      <div class="row-item" style="margin-bottom:0;">
+        <div class="row-dot" style="background:#2A6B5A;"></div>
+        <p class="row-text"><strong>The gift she gives each person on this team specifically.</strong> For Keely — a CEO who genuinely feels her momentum and won't mistake her speed for recklessness. For Irene — a leader who can see through the projection field and know who Irene actually is beneath what everyone needs her to be. For Krish — a boss who feels his confusion as a legitimate process, not a problem to solve. For Victoria — someone who notices the quiet ones, who senses when the glue of the group is wearing thin before anyone names it. This is the irreplaceable gift of HeyJune as CEO: each person gets to be truly known.</p>
+      </div>
+    </div>
+
+    <div class="deep-card">
+      <p class="deep-card-title">Reflector vs. the four Sacral beings — the core tension</p>
+      <div class="row-item">
+        <div class="row-dot" style="background:#8B3A52;"></div>
+        <p class="row-text"><strong>Speed mismatch.</strong> The two MGs (Keely, Irene) respond instantly from the Sacral — they can go from idea to action in minutes. Krish and Victoria as Generators also respond quickly from gut and emotion respectively. HeyJune operates on lunar time. In a team dominated by fast-responding Sacral energy, there is constant pressure to decide quickly. HeyJune will feel this pressure acutely — and if she caves to it, she will make decisions she later regrets, and the team will sense something is off without being able to name why.</p>
+      </div>
+      <hr class="divider">
+      <div class="row-item">
+        <div class="row-dot" style="background:#4C3D6E;"></div>
+        <p class="row-text"><strong>Energy amplification effect.</strong> When the three MGs and Generators are in a highly activated, excited state about something new — HeyJune will feel that excitement too, amplified. She may appear to endorse an idea simply because she is reflecting the room's enthusiasm. The team must learn to distinguish HeyJune's genuine clarity from her mirroring of collective excitement. Ask her again in a week. And again the week after.</p>
+      </div>
+      <hr class="divider">
+      <div class="row-item">
+        <div class="row-dot" style="background:#2A6B5A;"></div>
+        <p class="row-text"><strong>She is the team health barometer.</strong> This is non-negotiable. If HeyJune feels persistently depleted, disoriented, or emotionally flat — the team is misaligned. Not maybe misaligned. Misaligned. The Reflector's wellbeing is a leading indicator, not a lagging one. Weekly check-ins with HeyJune's subjective state should be treated as a strategic instrument, not pastoral care.</p>
+      </div>
+      <hr class="divider">
+      <div class="row-item">
+        <div class="row-dot" style="background:#7A4E1A;"></div>
+        <p class="row-text"><strong>Decompression is non-negotiable.</strong> After every team meeting, intensive creative session, or high-stakes call, HeyJune needs time alone in a neutral environment to "clear" the absorbed energies. Without this, she will carry the team's emotional residue into her next decisions. This isn't optional for her — it's how her design functions correctly. Protect her post-meeting space.</p>
+      </div>
+      <hr class="divider">
+      <div class="row-item" style="margin-bottom:0;">
+        <div class="row-dot" style="background:#2C4E7E;"></div>
+        <p class="row-text"><strong>The right environment as strategy.</strong> Because she has no defined centers, HeyJune's clarity of mind and quality of leadership is directly tied to the environment she's in — physical space, the people around her, the emotional tone of the room. This team should be thoughtful about where major decisions are made. A calm, neutral space will produce her clearest thinking. A charged, anxious environment will produce distorted outputs from her, no matter how capable she is.</p>
+      </div>
+    </div>
+
+    <div class="protocol-card" id="section-protocols">
+      <p class="protocol-title">Practical protocols — for everyone</p>
+      <p style="font-size:12.5px;color:var(--ink-muted);line-height:1.7;margin-bottom:20px;">How to work with each person's design in practice — their decision style, what they need to thrive, and what will quietly break them.</p>
+
+      <!-- HEYJUNE -->
+      <div class="person-protocol" style="border-top:none;padding-top:0;margin-top:0;">
+        <div class="person-protocol-header">
+          <div class="person-protocol-avatar" style="background:#E3F0EC;color:#2A6B5A;">HJ</div>
+          <div>
+            <p class="person-protocol-name">HeyJune</p>
+            <p class="person-protocol-role">CEO · Reflector · 4/6 · Outer Authority</p>
+          </div>
+        </div>
+        <div class="protocol-item">
+          <p class="protocol-num">01</p>
+          <p class="protocol-text"><strong>The 28-day hold for major decisions.</strong> Any strategic pivot, hire, partnership, or spend over a significant threshold should not require HeyJune's final sign-off until she's had at least 2–3 weeks to feel through it. Build this into your operating rhythm — not as an exception, but as standard practice.</p>
+        </div>
+        <div class="protocol-item">
+          <p class="protocol-num">02</p>
+          <p class="protocol-text"><strong>The idea capture buffer.</strong> HeyJune's Gate 11 (Design Sun) will generate a continuous stream of ideas and visions. Create a shared "HeyJune ideas vault" — captured, dated, and reviewed on a 28-day cycle. This prevents the team from reacting to every new idea as urgent, while giving HeyJune the satisfaction of being heard.</p>
+        </div>
+        <div class="protocol-item">
+          <p class="protocol-num">03</p>
+          <p class="protocol-text"><strong>Weekly state check-in as a team KPI.</strong> At the start of each week, HeyJune rates the team's energy on a simple 1–5 scale: how does the company feel to her right now? Track it. Drops should trigger a team retrospective — not a check-in on HeyJune, but on the company's alignment.</p>
+        </div>
+        <div class="protocol-item">
+          <p class="protocol-num">04</p>
+          <p class="protocol-text"><strong>Protect her from the Sacral vortex.</strong> When Keely and Irene are both lit up about something new, their combined MG energy creates a powerful current HeyJune will feel as her own excitement. Norm: after a high-energy pitch from the MGs, give HeyJune 48 hours before asking for her read.</p>
+        </div>
+        <div class="protocol-item">
+          <p class="protocol-num">05</p>
+          <p class="protocol-text"><strong>Solitude as a business asset.</strong> If HeyJune asks to skip a meeting, work remotely, or take a slow morning — this is the Reflector self-correcting, not disengaging. A rested, cleared HeyJune makes better decisions for the whole company. Protect her solitude proactively.</p>
+        </div>
+      </div>
+
+      <!-- KEELY -->
+      <div class="person-protocol">
+        <div class="person-protocol-header">
+          <div class="person-protocol-avatar" style="background:#EDE8F5;color:#4C3D6E;">KS</div>
+          <div>
+            <p class="person-protocol-name">Keely</p>
+            <p class="person-protocol-role">Marketing Director · MG · 5/1 · Sacral · Split Definition</p>
+          </div>
+        </div>
+        <div class="protocol-item">
+          <p class="protocol-num">01</p>
+          <p class="protocol-text"><strong>Let her skip steps — selectively.</strong> As an MG, Keely is designed to move fast and skip the "obvious" middle stages. Don't force her through every sub-task of a process. Instead, assign her the start and the outcome, and trust her to find the fastest path. Micromanaging her workflow creates frustration and kills output quality.</p>
+        </div>
+        <div class="protocol-item">
+          <p class="protocol-num">02</p>
+          <p class="protocol-text"><strong>Respond to her, don't initiate at her.</strong> Keely's Sacral authority means her most powerful yes comes as a response — to a question, a prompt, a piece of work. Don't hand her a blank slate and say "come up with something." Show her something to react to. Ask "does this feel right?" Her gut will fire immediately and accurately.</p>
+        </div>
+        <div class="protocol-item">
+          <p class="protocol-num">03</p>
+          <p class="protocol-text"><strong>Honor her Split Definition integration time.</strong> Keely's two definition halves are connected by transiting planets — meaning she needs time (and sometimes the right people around her) to feel whole and integrated before major decisions. If she seems scattered or pulled in two directions, don't push for resolution. Give her a day or two; she'll land.</p>
+        </div>
+        <div class="protocol-item">
+          <p class="protocol-num">04</p>
+          <p class="protocol-text"><strong>Give her the Cross of Separation as a brief.</strong> Her incarnation cross means she bridges worlds and carries wisdom between different contexts. The best marketing briefs for Keely are ones that ask her to connect two seemingly unrelated territories — brand and culture, data and emotion, product and story. This is where she is cosmically at her best.</p>
+        </div>
+        <div class="protocol-item">
+          <p class="protocol-num">05</p>
+          <p class="protocol-text"><strong>Watch for 5th-line burnout.</strong> As a 5/1, people constantly project "she'll have the solution" onto Keely. Over time this projection exhausts her if she can't meet it. Check in on whether she feels like she's being called upon as a savior vs. a collaborator. Clear scope agreements prevent resentment from building quietly.</p>
+        </div>
+      </div>
+
+      <!-- IRENE -->
+      <div class="person-protocol">
+        <div class="person-protocol-header">
+          <div class="person-protocol-avatar" style="background:#F5E8ED;color:#8B3A52;">IH</div>
+          <div>
+            <p class="person-protocol-name">Irene</p>
+            <p class="person-protocol-role">Sales Director · MG · 5/2 · Sacral · Split Definition</p>
+          </div>
+        </div>
+        <div class="protocol-item">
+          <p class="protocol-num">01</p>
+          <p class="protocol-text"><strong>Protect her hermit time.</strong> The 2nd line is a natural hermit — Irene has a gift she doesn't always see in herself, and it needs space to develop undisturbed. If she withdraws, goes quiet, or wants to work alone for a stretch — this is the 2nd line recharging its genius. Don't pull her back into group activities when she signals the need to disappear.</p>
+        </div>
+        <div class="protocol-item">
+          <p class="protocol-num">02</p>
+          <p class="protocol-text"><strong>Let her body lead in sales.</strong> Channel 20-34 (Charisma) means her body and voice fire simultaneously — she doesn't need a script. Irene performs best when she has a clear outcome to aim for but full freedom in how she gets there. Over-scripting or rigid sales decks will dampen her greatest advantage.</p>
+        </div>
+        <div class="protocol-item">
+          <p class="protocol-num">03</p>
+          <p class="protocol-text"><strong>Manage the projection field consciously.</strong> As a 5/2, Irene will frequently be approached with "you're the only one who can help me with this." This is energetically real — her field creates it. But if she takes on every projection, she'll burn out fast. Help her build clear intake criteria for what she actually takes on, and who gets her direct attention.</p>
+        </div>
+        <div class="protocol-item">
+          <p class="protocol-num">04</p>
+          <p class="protocol-text"><strong>Use her Gate 16 enthusiasm strategically.</strong> Gate 16 (Design Sun) is pure contagious enthusiasm for skills and mastery. Before big pitches or team presentations, give Irene time to get genuinely excited about the thing she's presenting — her enthusiasm is not performance, it's a field effect that moves the room. Brief her early so she has time to genuinely absorb and fall in love with the story.</p>
+        </div>
+        <div class="protocol-item">
+          <p class="protocol-num">05</p>
+          <p class="protocol-text"><strong>Domain clarity over Keely.</strong> Both Keely and Irene carry the 5th line. Establish clearly: Keely owns the narrative, Irene owns the relationship. When a client situation arises that blurs this line, default to "whose relationship is it?" — that's Irene's domain, full stop.</p>
+        </div>
+      </div>
+
+      <!-- KRISH -->
+      <div class="person-protocol">
+        <div class="person-protocol-header">
+          <div class="person-protocol-avatar" style="background:#E5EEFB;color:#2C4E7E;">KR</div>
+          <div>
+            <p class="person-protocol-name">Krish</p>
+            <p class="person-protocol-role">AI & Data Engineer · Generator · 1/3 · Sacral</p>
+          </div>
+        </div>
+        <div class="protocol-item">
+          <p class="protocol-num">01</p>
+          <p class="protocol-text"><strong>Treat his failures as R&D, not mistakes.</strong> The 3rd line is a trial-and-error profile — Krish literally learns through bumping into things that don't work. Every "failed" experiment he runs is building the foundation of his authority. If his tests break things or produce unexpected results, celebrate the data. Never shame the process.</p>
+        </div>
+        <div class="protocol-item">
+          <p class="protocol-num">02</p>
+          <p class="protocol-text"><strong>Give him the research phase first.</strong> Krish's 1st line requires deep foundation before he can act with confidence. Before asking him to build, ask him to research. Build "Krish research sprints" into the project cycle — his output quality will be dramatically higher when he's had the chance to master the domain first.</p>
+        </div>
+        <div class="protocol-item">
+          <p class="protocol-num">03</p>
+          <p class="protocol-text"><strong>Don't rush Channel 47-64.</strong> His Abstraction channel means he moves from confusion to clarity — but on his own schedule. If Krish says "I'm still processing" or "I'm not sure yet," that is his design working correctly. The answer will come. Pressuring him for premature conclusions produces worse results, not faster ones.</p>
+        </div>
+        <div class="protocol-item">
+          <p class="protocol-num">04</p>
+          <p class="protocol-text"><strong>Ask yes/no questions for decisions.</strong> Sacral authority responds best to direct, binary prompts. Rather than "what do you think about X?", ask "does X feel right to you?" Listen for the gut sound — an "mm-hmm" or energetic yes vs. a flat "I don't know." That silence or hesitation is a no.</p>
+        </div>
+        <div class="protocol-item">
+          <p class="protocol-num">05</p>
+          <p class="protocol-text"><strong>Honor his age and profile simultaneously.</strong> At 17, Krish is still in the early bumping phase of the 1/3 profile's life arc. He will have more certainty and authority in his mid-20s. For now, give him enough rope to experiment and enough safety to report the results honestly. The team that creates psychological safety for Krish's iteration phase gets exponential returns later.</p>
+        </div>
+      </div>
+
+      <!-- VICTORIA -->
+      <div class="person-protocol">
+        <div class="person-protocol-header">
+          <div class="person-protocol-avatar" style="background:#FDF0DC;color:#7A4E1A;">VM</div>
+          <div>
+            <p class="person-protocol-name">Victoria</p>
+            <p class="person-protocol-role">Content Edit + Scheduler · Generator · 1/3 · Emotional Authority</p>
+          </div>
+        </div>
+        <div class="protocol-item">
+          <p class="protocol-num">01</p>
+          <p class="protocol-text"><strong>Never push her for an immediate answer.</strong> Victoria's Emotional authority means she is literally not designed to know in the moment. Asking "what do you think — yes or no right now?" will produce either a forced answer she regrets, or a non-answer that frustrates both of you. Instead: "Take a day or two and let me know how you feel about this." That space is not stalling — it's how she accesses her truth.</p>
+        </div>
+        <div class="protocol-item">
+          <p class="protocol-num">02</p>
+          <p class="protocol-text"><strong>Trust her content edits without needing justification.</strong> Gate 9 (Design Sun) gives her hyper-focus on what matters within a piece of content. Her Channel 54-32 gives her pattern-recognition across what survives and what doesn't. When Victoria cuts something or says a post doesn't feel right, ask her to feel into why — but trust the instinct first. She's reading the content's energetic resonance, not just its grammar.</p>
+        </div>
+        <div class="protocol-item">
+          <p class="protocol-num">03</p>
+          <p class="protocol-text"><strong>Protect her solitude quota.</strong> Channel 37-40 carries Gate 40 (Aloneness) — the price of holding the community is requiring deep alone time to replenish. Victoria will over-give before she asks for space. Build explicit breaks into her workflow. If she goes quiet or seems withdrawn, that's the 40 gate asking for decompression, not disengagement.</p>
+        </div>
+        <div class="protocol-item">
+          <p class="protocol-num">04</p>
+          <p class="protocol-text"><strong>Use her clan-reading as a team diagnostic.</strong> Victoria's Gate 37 Sun means she has an instinctive read on the group's social temperature. If she starts feeling uneasy about team dynamics or mentions something "feels off" between people — take it seriously. She's not being dramatic; she's reading a real signal through her Tribal circuit.</p>
+        </div>
+        <div class="protocol-item">
+          <p class="protocol-num">05</p>
+          <p class="protocol-text"><strong>Recognize her strategically, not just functionally.</strong> Victoria's role sits in the operational layer of content — easy to take for granted. But her design is doing something the rest of the team genuinely cannot do: holding the emotional coherence of the brand's voice over time. Name that explicitly and regularly. A Victoria who feels seen and valued by the team will activate Channel 37-40 into full clan-holding power. An unacknowledged Victoria will quietly withdraw — and the team will feel the loss without being able to name it.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ROLE ALIGNMENT -->
+  <div class="section" id="section-alignment">
+    <p class="section-eyebrow">Role-to-design alignment</p>
+    <div class="three-col">
+      <div class="mini-card">
+        <p class="mini-label">Keely — Marketing Director</p>
+        <p class="mini-val"><strong>Gate 35 Sun = storytelling + change + adventure.</strong> Channel 1-8 (Inspiration) gives her a creative individual voice. Channel 17-62 gives her logic to back the message. Her 5/1 profile means the market projects solutions onto her campaigns. Near-perfect alignment.</p>
+      </div>
+      <div class="mini-card">
+        <p class="mini-label">Irene — Sales Director</p>
+        <p class="mini-val"><strong>Gate 59 Sun = dissolves resistance, creates intimacy.</strong> Channel 20-34 (Charisma) fires action and voice simultaneously — she IS the pitch. Channel 16-48 adds technical depth paired with infectious enthusiasm. Design doesn't get more sales-native than this.</p>
+      </div>
+      <div class="mini-card">
+        <p class="mini-label">Krish — AI & Data Engineer</p>
+        <p class="mini-val"><strong>Gate 25 Sun = pure, unbiased perception.</strong> Channel 47-64 (Abstraction) is the "make sense of complexity" circuit. Channel 17-62 adds precise logical output. His 1/3 profile demands deep research before committing — ideal for building AI systems that actually work.</p>
+      </div>
+      <div class="mini-card">
+        <p class="mini-label">HeyJune — CEO</p>
+        <p class="mini-val"><strong>Gate 36 Sun = depth, crisis navigation.</strong> Gate 11 Design Sun = visionary ideation. Reflector as CEO sees the company's true health with rare clarity. Her 4/6 means her network IS the business. Unconventional but deeply potent — if the team honors her design.</p>
+      </div>
+      <div class="mini-card">
+        <p class="mini-label">Victoria — Content Edit + Scheduler</p>
+        <p class="mini-val"><strong>Gate 9 Design Sun = hyper-focus on detail.</strong> Channel 37-40 = holds the social fabric. Gate 37 Sun = friendship and relational intelligence. Emotional authority means her edits are emotionally calibrated — she senses what will land. Structurally vital, chronically underestimated.</p>
+      </div>
+      <div class="mini-card">
+        <p class="mini-label">Victoria's hidden superpower</p>
+        <p class="mini-val"><strong>Channel 54-32 (Transformation)</strong> connects ambition to continuity — she has a nose for what will survive and what won't. Channel 44-26 (Surrender) adds pattern-recognition across time. Trust her instinct on what content should stay and what should go.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- DYNAMICS -->
+  <div class="section" id="section-dynamics">
+    <p class="section-eyebrow">Key dynamics to navigate</p>
+    <div class="deep-card">
+      <div class="flag-row">
+        <span class="tag tag-power">circuit lock</span>
+        <p class="row-text"><strong>Keely + Krish share Channel 17-62.</strong> They will naturally form a logical opinion-fact feedback loop, finishing each other's analytical sentences. Lean into this: let them co-own the data-to-message pipeline — Krish supplies data insight, Keely translates to market narrative.</p>
+      </div>
+      <div class="flag-row">
+        <span class="tag tag-power">circuit lock</span>
+        <p class="row-text"><strong>Irene's Gate 59 + Victoria's Gate 37</strong> — both are Tribal circuit relational gates. Irene breaks barriers to create connection; Victoria sustains warmth and safety once it's created. In client relationships, they're a natural tag team: Irene opens, Victoria nurtures.</p>
+      </div>
+      <div class="flag-row">
+        <span class="tag tag-gold">interesting</span>
+        <p class="row-text"><strong>HeyJune (Gate 36) + Victoria (Emotional authority).</strong> Both navigate through emotional depth rather than gut instinct. They will understand each other's need to "ride the wave" before committing. Make them allies in pushing back on MG urgency when the team is moving too fast.</p>
+      </div>
+      <div class="flag-row">
+        <span class="tag tag-gold">interesting</span>
+        <p class="row-text"><strong>Keely's Gate 22 (Design Sun) = Social-emotional grace.</strong> She's not just a logical marketer — she has a deeply emotional, socially intelligent undercurrent that bridges Throat to Solar Plexus. When she trusts it, she can carry emotional resonance into marketing that purely analytical brands cannot match. Don't let her stay purely in data mode.</p>
+      </div>
+      <div class="flag-row">
+        <span class="tag tag-tension">watch</span>
+        <p class="row-text"><strong>Double-5 projection (Keely 5/1 + Irene 5/2).</strong> Both carry the 5th line — the "heretic/savior" that people project their salvation onto. With two 5s on the same team, there's an unconscious rivalry for who gets to be the one. Fix: give them crystal-clear domain ownership. Keely owns the narrative. Irene owns the relationship. No overlap.</p>
+      </div>
+      <div class="flag-row">
+        <span class="tag tag-tension">watch</span>
+        <p class="row-text"><strong>Two 1/3 profiles (Krish + Victoria) with different authorities.</strong> Krish responds from Sacral (instant gut yes/no). Victoria responds from Emotional wave (needs time). Both learn by bumping into things — but Krish will try things quickly, Victoria needs emotional clarity first. They can frustrate each other on timelines if this isn't named.</p>
+      </div>
+      <div class="flag-row">
+        <span class="tag tag-tension">watch</span>
+        <p class="row-text"><strong>Victoria's Channel 37-40 shadow: over-giving.</strong> Gate 40 (Aloneness) is the price of holding community — it demands deep solitude to recover. If Victoria is scheduling everyone's content while also emotionally holding the group, she will quietly deplete. Protect her alone time proactively. If she goes quiet, that's her 40 gate asking for space — not disengagement.</p>
+      </div>
+      <div class="flag-row" style="border-bottom:none;padding-bottom:0;">
+        <span class="tag tag-note">big picture</span>
+        <p class="row-text"><strong>The team's collective shadow is frustration meeting urgency meeting slowness.</strong> MG frustration (from not being responded to), Sacral urgency (fast gut responses), Emotional wave timing (Victoria), and Lunar timing (HeyJune) create four different decision-making speeds operating simultaneously. The team that explicitly names and respects these different rhythms will outperform. The team that doesn't will mistake design-appropriate slowness for laziness or indecision.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  Human Design Team Reading · Generated with Claude · Pheydrus Team · 2025
+</div>
+
+</body>
+</html>

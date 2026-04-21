@@ -1,0 +1,30 @@
+🚀 Team Handoff: Pheydrus Automations Ready for Rebuild
+
+I've documented everything you need to rebuild the key automations in Claude.ai.
+
+📋 What's built:
+• Transcript workflow: social video URL → Google Doc → watermark-free download → Drive upload → Slack notification
+• Client report submission: submit report → store results → Slack notification
+• Calendly booking webhook: booking event → Slack notification
+• FloDesk sync: explicitly disabled by default on client submissions (safe default)
+
+📖 Handoff docs are in the repo:
+https://github.com/Pheydrus-LLC/Pheydrus_Combined_Calculator/tree/main/docs/claude-rebuild-pack
+
+Start here:
+1. Read 01-handoff-overview.md (2 min overview)
+2. Reference 02-env-vars.md (environment contract)
+3. Paste prompts from 03-rebuild-prompts.md into Claude.ai
+4. Use 04-validation-checklist.md to verify your rebuild
+
+🔑 Key control points:
+• FLODESK_ENABLE_STORE_RESULTS_SYNC must be true to enable FloDesk sync (currently disabled)
+• All required env vars are documented per workflow
+• Slack notifications are resilient: optional integrations fail soft
+
+Next steps:
+• Assign owners for each workflow (transcript, report, calendly, flodesk)
+• Run one test per workflow after rebuild
+• Reply in thread with test results + timestamp
+
+Questions? Check the docs first—they cover all required env vars and failure troubleshooting.
