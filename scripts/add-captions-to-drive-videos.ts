@@ -4,7 +4,7 @@
  * For each video in a Google Drive folder:
  *   1. Download the video temporarily
  *   2. Transcribe audio via OpenAI Whisper → SRT
- *   3. Mux the SRT as a soft subtitle track (no video/audio re-encode)
+ *   3. Burn captions into the video (always visible)
  *   4. Re-upload the captioned video to Drive (new file, original untouched)
  *
  * Usage:
@@ -195,6 +195,14 @@ async function downloadFile(
   // Fallback: public two-step download (handles Google virus-scan confirmation page)
   const directUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
   const firstRes = await fetch(directUrl, { redirect: 'follow' });
+  const contentType = firstRes.headers.get('content-type') ?? '';
+
+  if (contentType.startsWith('video/')) {
+    const arrayBuf = await firstRes.arrayBuffer();
+    fs.writeFileSync(destPath, Buffer.from(arrayBuf));
+    return;
+  }
+
   const html = await firstRes.text();
 
   // Check for virus-scan confirmation form
@@ -204,11 +212,6 @@ async function downloadFile(
   let downloadUrl: string;
   if (confirmMatch?.[1] && uuidMatch?.[1]) {
     downloadUrl = `https://drive.usercontent.google.com/download?id=${fileId}&export=download&confirm=${confirmMatch[1]}&uuid=${uuidMatch[1]}`;
-  } else if (firstRes.headers.get('content-type')?.startsWith('video/')) {
-    // Small file — first response was the file itself
-    const buffer = Buffer.from(html, 'binary');
-    fs.writeFileSync(destPath, buffer);
-    return;
   } else {
     // Try direct usercontent URL without confirmation
     downloadUrl = `https://drive.usercontent.google.com/download?id=${fileId}&export=download`;

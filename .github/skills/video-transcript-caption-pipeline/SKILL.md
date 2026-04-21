@@ -40,6 +40,16 @@ And safe-wrap rules:
 - CAPTION_MAX_LINES=3
 
 ## Execution Order
+### One-command option (recommended)
+Run the unified command:
+
+npm run "victorias google video" -- "<drive_video_link>"
+
+This command handles:
+- burned-in captions upload
+- transcript Google Doc creation
+- one consolidated Slack message with original + captioned + doc links
+
 ### Step 1: Transcript to Google Doc
 Run transcript pipeline against original_video_link when possible:
 
