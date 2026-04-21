@@ -305,8 +305,8 @@ function extractAudio(ffmpeg: string, videoPath: string, audioPath: string): voi
 //   - Lower-third placement to stay below top text overlays
 //
 const CAPTION_STYLE =
-  'PlayResX=1080,PlayResY=1920,FontName=Arial,FontSize=10,PrimaryColour=&H00FFFFFF,' +
-  'OutlineColour=&H00000000,BorderStyle=1,Outline=1,Shadow=0,MarginL=24,MarginR=24,' +
+  'PlayResX=1080,PlayResY=1920,FontName=Arial,FontSize=25,PrimaryColour=&H00FFFFFF,' +
+  'OutlineColour=&H00000000,BorderStyle=1,Bold=0,Outline=0.75,Shadow=0,MarginL=24,MarginR=24,' +
   'MarginV=140,Alignment=2,WrapStyle=2';
 
 function muxSubtitle(
