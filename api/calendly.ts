@@ -8,8 +8,9 @@
  *   3. Add subscriber to Flodesk (optional)
  *
  * Required env vars:
- *   SLACK_WEBHOOK_URL            — Slack Incoming Webhook URL
- *   CALENDLY_WEBHOOK_SIGNING_KEY — from Calendly webhook dashboard
+ *   SLACK_WEBHOOK_URL                  — Slack Incoming Webhook URL (fallback)
+ *   SLACK_HJ_BOOKED_CALLS_WEBHOOK_URL  — Slack webhook for #hj-booked-calls (preferred)
+ *   CALENDLY_WEBHOOK_SIGNING_KEY       — from Calendly webhook dashboard
  *
  * Optional env vars:
  *   FLODESK_API_KEY              — Flodesk API key (skip Flodesk if absent)
@@ -48,28 +49,27 @@ function verifySignature(rawBody: string, header: string): boolean {
 
 // ── Slack notification ────────────────────────────────────────────────────────
 
-async function postToSlack(name: string, email: string): Promise<void> {
-  const webhookUrl = process.env.SLACK_WEBHOOK_URL;
+interface BookingInfo {
+  inviteeEmail: string;
+  hostEmail: string;
+  eventTypeName: string;
+}
+
+async function postToSlack(info: BookingInfo): Promise<void> {
+  const webhookUrl =
+    process.env.SLACK_HJ_BOOKED_CALLS_WEBHOOK_URL || process.env.SLACK_WEBHOOK_URL;
   if (!webhookUrl) return;
 
-  const blocks = [
-    {
-      type: 'header',
-      text: { type: 'plain_text', text: '📅 New Pheydrus Call Booked', emoji: true },
-    },
-    {
-      type: 'section',
-      text: {
-        type: 'mrkdwn',
-        text: `*${name}* (${email}) just booked a call.`,
-      },
-    },
-  ];
+  const text =
+    `📅 *New Call Booked*\n` +
+    `1. *Closer:* ${info.hostEmail}\n` +
+    `2. *Invitee:* ${info.inviteeEmail}\n` +
+    `3. *Event type:* ${info.eventTypeName}`;
 
   await fetch(webhookUrl, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ blocks }),
+    body: JSON.stringify({ text }),
   });
 }
 
@@ -259,10 +259,12 @@ interface CalendlyWebhookBody {
           name?: string;
           scheduling_url?: string;
           uri?: string;
+          profile?: { owner?: string; name?: string };
         };
     scheduled_event?: {
       name?: string;
       uri?: string;
+      event_memberships?: Array<{ user_email?: string }>;
       event_type?:
         | string
         | {
@@ -272,6 +274,24 @@ interface CalendlyWebhookBody {
           };
     };
   };
+}
+
+function extractBookingInfo(payload: CalendlyWebhookBody['payload']): BookingInfo {
+  const inviteeEmail = payload.invitee.email;
+
+  // Host email: prefer event_memberships (v2 API), fallback to event_type profile owner
+  const memberEmail = payload.scheduled_event?.event_memberships?.[0]?.user_email;
+  const profileOwner =
+    typeof payload.event_type === 'object' ? payload.event_type?.profile?.owner : undefined;
+  const hostEmail = memberEmail || profileOwner || 'unknown';
+
+  // Event type name
+  const eventTypeName =
+    (typeof payload.event_type === 'object' ? payload.event_type?.name : undefined) ||
+    payload.scheduled_event?.name ||
+    'Unknown Event';
+
+  return { inviteeEmail, hostEmail, eventTypeName };
 }
 
 // ── Handler ───────────────────────────────────────────────────────────────────
@@ -297,9 +317,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   const { name, email } = body.payload.invitee;
   const shouldAddToHJCalendlyLeads = isTargetCalendlyEvent(body.payload);
+  const bookingInfo = extractBookingInfo(body.payload);
 
   try {
-    await postToSlack(name, email);
+    await postToSlack(bookingInfo);
 
     if (shouldAddToHJCalendlyLeads) {
       await addToFlodeskHJCalendlyLeads(name, email);
