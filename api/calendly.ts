@@ -23,6 +23,13 @@
 import { createHmac } from 'crypto';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
+// Use raw body so Calendly signature verification is performed against exact bytes.
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
+
 // ── Calendly signature verification ──────────────────────────────────────────
 
 function verifySignature(rawBody: string, header: string): boolean {
@@ -45,6 +52,16 @@ function verifySignature(rawBody: string, header: string): boolean {
     .digest('hex');
 
   return expected === v1;
+}
+
+async function readRawBody(req: VercelRequest): Promise<string> {
+  const chunks: Buffer[] = [];
+
+  for await (const chunk of req) {
+    chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
+  }
+
+  return Buffer.concat(chunks).toString('utf8');
 }
 
 // ── Slack notification ────────────────────────────────────────────────────────
@@ -306,16 +323,25 @@ function extractBookingInfo(payload: CalendlyWebhookBody['payload']): BookingInf
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') return res.status(405).end();
 
-  // Verify Calendly signature
   const sigHeader = req.headers['calendly-webhook-signature'] as string | undefined;
-  const rawBody = JSON.stringify(req.body);
+  const rawBody = await readRawBody(req);
 
+  if (!rawBody) {
+    return res.status(400).json({ error: 'Empty request body' });
+  }
+
+  // Verify Calendly signature against raw request payload.
   if (sigHeader && !verifySignature(rawBody, sigHeader)) {
     console.warn('[calendly] Signature verification failed');
     return res.status(401).json({ error: 'Invalid signature' });
   }
 
-  const body = req.body as CalendlyWebhookBody;
+  let body: CalendlyWebhookBody;
+  try {
+    body = JSON.parse(rawBody) as CalendlyWebhookBody;
+  } catch {
+    return res.status(400).json({ error: 'Invalid JSON payload' });
+  }
 
   // Only handle new bookings
   if (body.event !== 'invitee.created') {
