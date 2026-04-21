@@ -295,7 +295,7 @@ function extractAudio(ffmpeg: string, videoPath: string, audioPath: string): voi
   );
 }
 
-// ── Mux subtitle into video (soft subtitle, no re-encode) ─────────────────────
+// ── Burn subtitle into video (hardcoded, always visible) ──────────────────────
 
 function muxSubtitle(
   ffmpeg: string,
@@ -303,9 +303,11 @@ function muxSubtitle(
   srtPath: string,
   outputPath: string
 ): void {
-  // -c copy keeps original video/audio streams intact; mov_text for MP4 subtitles
+  // Burn captions directly into video pixels so they're visible on all players/platforms.
+  // Escape path for ffmpeg filter — backslashes and colons need escaping on all platforms.
+  const escapedSrt = srtPath.replace(/\\/g, '/').replace(/:/g, '\\:').replace(/'/g, "\\'");
   execSync(
-    `"${ffmpeg}" -y -i "${videoPath}" -i "${srtPath}" -c:v copy -c:a copy -c:s mov_text -metadata:s:s:0 language=${LANGUAGE} "${outputPath}"`,
+    `"${ffmpeg}" -y -i "${videoPath}" -vf "subtitles='${escapedSrt}'" -c:a copy "${outputPath}"`,
     { stdio: 'pipe' }
   );
 }
