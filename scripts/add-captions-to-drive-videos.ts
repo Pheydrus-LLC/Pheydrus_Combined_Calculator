@@ -61,6 +61,8 @@ function extractDriveId(raw: string): string {
 const DRIVE_ID = extractDriveId(RAW_ARG);
 const LANGUAGE = process.env.CAPTION_LANGUAGE || 'en';
 const DRY_RUN = process.env.DRY_RUN === 'true';
+const CAPTION_MAX_CHARS = Number(process.env.CAPTION_MAX_CHARS || '24');
+const CAPTION_MAX_LINES = Number(process.env.CAPTION_MAX_LINES || '3');
 
 // Resolve ffmpeg — use imageio_ffmpeg binary if system ffmpeg not found
 function getFfmpegPath(): string {
@@ -295,6 +297,50 @@ function extractAudio(ffmpeg: string, videoPath: string, audioPath: string): voi
   );
 }
 
+function wrapTextByWords(text: string, maxCharsPerLine: number): string[] {
+  const words = text.trim().split(/\s+/).filter(Boolean);
+  if (words.length === 0) return [''];
+
+  const lines: string[] = [];
+  let current = '';
+
+  for (const word of words) {
+    const candidate = current ? `${current} ${word}` : word;
+    if (candidate.length <= maxCharsPerLine) {
+      current = candidate;
+      continue;
+    }
+
+    if (current) lines.push(current);
+    current = word;
+  }
+
+  if (current) lines.push(current);
+  return lines;
+}
+
+function wrapSrtForSafeArea(srt: string, maxCharsPerLine: number, maxLinesPerCue: number): string {
+  const normalized = srt.replace(/\r\n/g, '\n').trim();
+  if (!normalized) return srt;
+
+  const blocks = normalized.split(/\n\s*\n/);
+  const rewritten = blocks.map((block) => {
+    const lines = block.split('\n');
+    if (lines.length < 3) return block;
+
+    const indexLine = lines[0] ?? '';
+    const timeLine = lines[1] ?? '';
+    const text = lines.slice(2).join(' ').replace(/\s+/g, ' ').trim();
+
+    const wrapped = wrapTextByWords(text, maxCharsPerLine);
+    const clamped = wrapped.slice(0, Math.max(1, maxLinesPerCue));
+
+    return [indexLine, timeLine, ...clamped].join('\n');
+  });
+
+  return `${rewritten.join('\n\n')}\n`;
+}
+
 // ── Burn subtitle into video (hardcoded, always visible) ──────────────────────
 //
 // Style: small white text with black outline, bottom-center, high MarginV so it
@@ -306,7 +352,7 @@ function extractAudio(ffmpeg: string, videoPath: string, audioPath: string): voi
 //
 const CAPTION_STYLE =
   'PlayResX=1080,PlayResY=1920,FontName=Arial,FontSize=35,PrimaryColour=&H00FFFFFF,' +
-  'OutlineColour=&H00000000,BorderStyle=1,Bold=0,Outline=0.75,Shadow=0,MarginL=24,MarginR=24,' +
+  'OutlineColour=&H00000000,BorderStyle=1,Bold=0,Outline=0.75,Shadow=0,MarginL=72,MarginR=72,' +
   'MarginV=140,Alignment=2,WrapStyle=2';
 
 function muxSubtitle(
@@ -405,7 +451,8 @@ async function main(): Promise<void> {
       const srt = openai
         ? await transcribeToSrt(openai, audioPath)
         : transcribeToSrtLocalWhisper(audioPath);
-      fs.writeFileSync(srtPath, srt, 'utf8');
+      const wrappedSrt = wrapSrtForSafeArea(srt, CAPTION_MAX_CHARS, CAPTION_MAX_LINES);
+      fs.writeFileSync(srtPath, wrappedSrt, 'utf8');
       process.stdout.write(' muxing...');
       muxSubtitle(ffmpeg, videoPath, srtPath, outputPath);
       process.stdout.write(' uploading...');
