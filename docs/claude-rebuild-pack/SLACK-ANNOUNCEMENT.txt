@@ -4,9 +4,17 @@ I've documented everything you need to rebuild the key automations in Claude.ai.
 
 📋 What's built:
 • Transcript workflow: social video URL → Google Doc → watermark-free download → Drive upload → Slack notification
+• Unified Drive full pipeline: one command for captioned video + Google Doc + consolidated Slack post
+• Captions-only workflow: add burned-in captions to Drive links/folders
 • Client report submission: submit report → store results → Slack notification
 • Calendly booking webhook: booking event → Slack notification
 • FloDesk sync: explicitly disabled by default on client submissions (safe default)
+
+🧭 New command shortcuts:
+• Full Drive pipeline:
+	npm run "victorias google video" -- <drive_video_link>
+• Captions-only:
+	npm run captions:add -- <drive_video_link_or_folder_id>
 
 📖 Handoff docs are in the repo:
 https://github.com/Pheydrus-LLC/Pheydrus_Combined_Calculator/tree/main/docs/claude-rebuild-pack

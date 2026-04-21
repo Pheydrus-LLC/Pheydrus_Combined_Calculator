@@ -2,6 +2,21 @@
 
 Use this checklist after your team rebuilds in Claude.ai.
 
+## A0. Victorias Google Video (Unified Drive Full Pipeline)
+
+Run:
+- npm run "victorias google video" -- <drive_video_link>
+
+Pass criteria:
+1. Command completes captions step and uploads a new captioned Drive file.
+2. Command creates a transcript Google Doc.
+3. Command posts one Slack message containing original + captioned + doc links.
+4. Terminal output prints all three links and final success/failure counts.
+5. Original file remains unchanged.
+
+Optional:
+- Run with --skip-slack and confirm everything except Slack still completes.
+
 ## A. Transcript Workflow
 
 Run:
@@ -18,6 +33,16 @@ Failure triage:
 - Transcription fails -> check GETTRANSCRIBE_KEY
 - Google Doc/Drive fails -> check Google OAuth/service account vars
 - Slack fails -> check transcript or fallback webhook vars
+
+## A1. Captions-Only Workflow
+
+Run:
+- npm run captions:add -- <drive_video_link_or_folder_id>
+
+Pass criteria:
+1. New _captioned file appears in Drive.
+2. Captions are burned-in and always visible.
+3. Captions respect style defaults (size/margins/wrapping) in output video.
 
 ## B. Client Report Submission Workflow
 

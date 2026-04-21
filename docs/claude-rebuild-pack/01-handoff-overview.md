@@ -5,9 +5,18 @@ Recreate the key automations built in this repository inside Claude.ai with pred
 
 ## Current Production Behavior
 1. Transcript workflow is active.
+2. Unified Drive video workflow is available via one command for full pipeline (captions + Google Doc + Slack).
 2. Client report submission posts to Slack.
 3. Client report submission does not sync to FloDesk by default.
 4. Calendly booking webhook posts to Slack.
+
+## Command Quick Reference
+- Full pipeline (recommended for Drive videos):
+	- npm run "victorias google video" -- <drive_video_link>
+- Captions only (no doc, no consolidated Slack post):
+	- npm run captions:add -- <drive_video_link_or_folder_id>
+- Transcript only:
+	- npm run transcript:only -- <video_url>
 
 ## Workflow 1: Transcript -> Google Doc -> Watermark-Free Video -> Google Drive -> Slack
 Trigger:
@@ -33,6 +42,33 @@ Key implementation files:
 - scripts/transcript-to-gdoc-slack.ts
 - scripts/upload-to-drive.ts
 - watermark-free download/download_video.py
+
+## Workflow 1B: Drive Video Full Pipeline (Victorias Google Video)
+Trigger:
+- Run one command with a Google Drive file link.
+
+Primary command:
+- npm run "victorias google video" -- <drive_video_link>
+
+What it does:
+1. Runs captions pipeline on the Drive video.
+2. Creates transcript Google Doc from the same source link.
+3. Posts one consolidated Slack message containing original video, captioned video, and Google Doc links.
+
+Outputs:
+- Original Drive video link
+- Captioned Drive video link
+- Google Doc link
+
+Key implementation files:
+- scripts/victorias-google-video.ts
+- scripts/add-captions-to-drive-videos.ts
+- scripts/transcript-to-gdoc-slack.ts
+
+Caption style defaults used by this flow:
+- FontSize=35, Bold=0, Outline=0.75
+- MarginL=72, MarginR=72, MarginV=140
+- CAPTION_MAX_CHARS=24, CAPTION_MAX_LINES=3
 
 ## Workflow 2: Client Calculator Report Submission -> Slack
 Trigger:

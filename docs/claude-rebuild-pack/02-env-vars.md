@@ -29,6 +29,46 @@ Optional:
 - SLACK_TRANSCRIPT_CHANNEL
   - Defaults to #video-transcripts
 
+## Victorias Google Video (Drive Full Pipeline)
+
+Command:
+- npm run "victorias google video" -- <drive_video_link>
+
+Required:
+- GETTRANSCRIBE_KEY
+- GOOGLE_OAUTH_CLIENT_ID
+- GOOGLE_OAUTH_CLIENT_SECRET
+- GOOGLE_OAUTH_REFRESH_TOKEN
+- SLACK_TRANSCRIPT_WEBHOOK_URL (or SLACK_WEBHOOK_URL)
+
+Optional:
+- OPENAI_API_KEY
+  - If missing, local Whisper fallback is used in captions step
+- CAPTION_LANGUAGE
+- CAPTION_MAX_CHARS
+- CAPTION_MAX_LINES
+- SLACK_TRANSCRIPT_CHANNEL
+
+Notes:
+- This command runs captions + transcript + one consolidated Slack post.
+- Captions are burned-in with fixed style defaults unless code is changed.
+
+## Captions-Only Workflow
+
+Command:
+- npm run captions:add -- <drive_video_link_or_folder_id>
+
+Required:
+- GOOGLE_OAUTH_CLIENT_ID
+- GOOGLE_OAUTH_CLIENT_SECRET
+- GOOGLE_OAUTH_REFRESH_TOKEN
+
+Optional:
+- OPENAI_API_KEY
+- CAPTION_LANGUAGE
+- CAPTION_MAX_CHARS
+- CAPTION_MAX_LINES
+
 ## Client Report Submission Workflow (/api/store-results)
 
 Required:

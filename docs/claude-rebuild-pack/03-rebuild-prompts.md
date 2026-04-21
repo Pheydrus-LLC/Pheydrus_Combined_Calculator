@@ -73,3 +73,28 @@ Create commands and simple tests/check scripts that prove:
 4. Calendly webhook posts to Slack for invitee.created.
 
 Output expected sample logs and expected success/failure states.
+
+## Prompt 6: Unified Drive Full Pipeline Command (Victorias Google Video)
+
+Implement a single command and skill-like workflow named victorias google video.
+
+Command:
+- npm run "victorias google video" -- <drive_video_link> [more_links...] [--skip-slack]
+
+Behavior per input link:
+1. Run captions pipeline on the Drive link.
+2. Run transcript to Google Doc.
+3. Post one consolidated Slack message with:
+	 - Original Drive link
+	 - Captioned Drive output link
+	 - Google Doc link
+4. Print all three links in terminal output.
+
+Constraints:
+- Preserve burned-in caption style defaults:
+	- FontSize=35, Bold=0, Outline=0.75
+	- MarginL=72, MarginR=72, MarginV=140
+	- CAPTION_MAX_CHARS=24, CAPTION_MAX_LINES=3
+- If one link fails, continue with remaining links and report final success/failure counts.
+- Keep Slack posting optional with --skip-slack.
+- Do not mutate original Drive files; always upload a new captioned file.
