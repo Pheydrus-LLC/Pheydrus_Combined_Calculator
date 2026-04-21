@@ -1,156 +1,62 @@
-# Google Drive Video Captions
+# Burned-In Video Captions Only
 
 ## Purpose
-Use this skill when the user asks to add captions/subtitles to videos stored in Google Drive.
-The workflow downloads each video locally, transcribes audio via OpenAI Whisper, then burns the
-captions directly into the video frames (hardcoded, always visible — no player toggle needed)
-and uploads the captioned version back to the same Drive folder with a `-sitecap` suffix.
+Use this skill only when the user wants captions burned directly into the video itself.
+This skill does not do transcript docs, watermark work, or Slack posting.
 
-## Caption Style (Reference Standard)
-Always use these ffmpeg `force_style` settings when burning captions:
-```
-PlayResX=1080,PlayResY=1920,FontName=Arial,FontSize=35,PrimaryColour=&H00FFFFFF,OutlineColour=&H00000000,BorderStyle=1,Bold=0,Outline=0.75,Shadow=0,MarginL=72,MarginR=72,MarginV=140,Alignment=2,WrapStyle=2
-```
-- **White text** with **thin black outline** and **non-bold weight** — no box background
-- **FontSize=35 + PlayResX/PlayResY** — tuned for clearer readability on vertical shorts
-- **MarginV=140** — places captions in lower-third, below top heading blocks and away from center overlays
-- **MarginL/MarginR=72** — keeps text inside an invisible left/right safe border
-- **Alignment=2** — bottom-center
+## Scope
+1. Input video from Google Drive folder, Google Drive file link, or bare Drive ID
+2. Transcribe audio to SRT
+3. Burn captions into video frames (hardcoded, always visible)
+4. Upload captioned file back to Drive
 
-## Safe Wrapping Rules (Prevent Off-Screen Text)
-Before burn-in, rewrite each SRT cue with hard wrapping:
-- `CAPTION_MAX_CHARS=24` (default)
-- `CAPTION_MAX_LINES=3` (default)
-
-This ensures long Whisper lines are wrapped inside the video frame instead of running off-screen.
-
-If the video has a bottom obstruction (e.g. CTA sticker), lower `MarginV` slightly (e.g. 110–130).
-If captions are still too large, reduce `FontSize` to `8` while keeping PlayRes fixed.
-
-## What It Produces
-For every source video `pile-1.mp4` it creates:
-- `pile-1.srt` — plain text SRT caption file
-- `pile-1-sitecap.mp4` — captions burned into video frames (visible on all players, TikTok, IG, etc.)
+## Script
+scripts/add-captions-to-drive-videos.ts
 
 ## Required Env Vars
-Set these in `.env.local` or pass inline:
-- `GOOGLE_OAUTH_CLIENT_ID`
-- `GOOGLE_OAUTH_CLIENT_SECRET`
-- `GOOGLE_OAUTH_REFRESH_TOKEN`
-- `OPENAI_API_KEY`
+- GOOGLE_OAUTH_CLIENT_ID
+- GOOGLE_OAUTH_CLIENT_SECRET
+- GOOGLE_OAUTH_REFRESH_TOKEN
 
 ## Optional Env Vars
-- `CAPTION_LANGUAGE` — ISO-639-1 code (default: `en`)
-- `DRY_RUN=true` — list files without processing
+- OPENAI_API_KEY (if missing, local Whisper fallback is used)
+- CAPTION_LANGUAGE (default: en)
+- DRY_RUN=true (list only)
+- CAPTION_MAX_CHARS (default: 24)
+- CAPTION_MAX_LINES (default: 3)
 
-## Dependencies
-- `npm install openai googleapis` (already in this repo)
-- `ffmpeg` — install via `brew install ffmpeg`, OR use the bundled binary:
-  `python3 -c "import imageio_ffmpeg; print(imageio_ffmpeg.get_ffmpeg_exe())"`
-  The script auto-detects whichever is available.
+## Canonical Caption Style (Persist This)
+Always use this ffmpeg force_style preset:
 
-## The Script
-`scripts/add-captions-to-drive-videos.ts`
+PlayResX=1080,PlayResY=1920,FontName=Arial,FontSize=35,PrimaryColour=&H00FFFFFF,OutlineColour=&H00000000,BorderStyle=1,Bold=0,Outline=0.75,Shadow=0,MarginL=72,MarginR=72,MarginV=140,Alignment=2,WrapStyle=2
 
-Supports both `.mp4` and `.mov` files. Skips any file already containing `-sitecap` in the name.
+### Style Intent
+- White text
+- Thin black outline
+- Not bold
+- Bottom-centered
+- Left/right safe margins so text stays inside frame
 
-## How to Run
+## Safe Wrap Rules (Prevent Off-Screen Overflow)
+Before burn-in, rewrite each SRT cue with:
+- CAPTION_MAX_CHARS=24
+- CAPTION_MAX_LINES=3
 
-### Dry run first (lists files, no processing):
-```bash
-DRY_RUN=true npx tsx scripts/add-captions-to-drive-videos.ts <DRIVE_FOLDER_ID>
-```
+This keeps subtitles inside an invisible safe border and avoids text running off left/right edges.
 
-### Run for real:
-```bash
-npx tsx scripts/add-captions-to-drive-videos.ts <DRIVE_FOLDER_ID>
-```
+## Run
+Dry run:
 
-Or via npm script:
-```bash
-npm run captions:add -- <DRIVE_FOLDER_ID>
-```
+DRY_RUN=true npx tsx scripts/add-captions-to-drive-videos.ts "<drive_folder_or_file_link>"
 
-### Run for a specific subfolder on disk (no Drive download needed):
-If videos are already local (e.g. Google Drive synced via Drive for Desktop at
-`~/My Drive/PAC - Shorts/`), use the local variant script instead — see below.
+Real run:
 
-## Source Options — Where Videos Can Come From
-This skill works with videos from any of these sources:
+npx tsx scripts/add-captions-to-drive-videos.ts "<drive_folder_or_file_link>"
 
-| Source | How to handle |
-|---|---|
-| Google Drive folder (by folder ID or URL) | Script lists all videos in folder, processes each |
-| Single Google Drive file link | Script processes just that one file, uploads captioned version to the same folder |
-| Local folder synced via Drive for Desktop | Script reads/writes files directly on disk (no API download needed) |
-| Any local folder | Same as above — just point the script at the folder path |
+Or:
 
-Always ask the user: **"Where are the videos?"** — accept a Drive folder URL, a single Drive file link, or a local path.
+npm run captions:add -- "<drive_folder_or_file_link>"
 
-### Accepted input formats:
-```
-https://drive.google.com/file/d/FILE_ID/view       ← single file
-https://drive.google.com/drive/folders/FOLDER_ID   ← whole folder
-FOLDER_ID or FILE_ID (bare)                        ← auto-detected via Drive API
-```
-
-The script automatically detects whether the ID is a file or folder and behaves accordingly. For a single file, the captioned output is uploaded to the same parent folder.
-
-## PAC Shorts Example (for reference)
-Previously used for the PAC tarot video library at `~/My Drive/PAC - Shorts/`.
-Folder convention used:
-```
-PAC - Shorts/
-  1 - same as #11/
-    pile-1.mov
-    pile-1-transcript.txt   ← existing transcript (skip Whisper to save cost)
-    pile-1.srt              ← generated
-    pile-1-sitecap.mov      ← final output
-```
-
-### To check which videos in a local folder are missing sitecap versions:
-```bash
-TARGET_DIR="<PATH_TO_FOLDER>"
-for f in "$TARGET_DIR"/**/*.{mov,mp4}(N); do
-  [[ "$f" == *-sitecap* ]] && continue
-  base="${f%.*}"; ext="${f##*.}"
-  sitecap="${base}-sitecap.${ext}"
-  [ ! -f "$sitecap" ] && echo "MISSING: $f"
-done
-```
-
-## Process Steps (what the script does)
-1. List all video files in the target Drive folder (or local path)
-2. For each video:
-   a. Download (or read locally)
-   b. Extract audio → MP3 at 16kHz mono (via ffmpeg)
-   c. Send to OpenAI Whisper API → get SRT response
-   d. Write `.srt` file
-   e. Mux SRT into video with `ffmpeg -c:v copy -c:a copy -c:s mov_text` (no re-encode)
-   f. Upload captioned video back to Drive (or save locally)
-3. Skip any file already named `-sitecap`
-
-## ffmpeg Mux Command (reference)
-```bash
-ffmpeg -y -i "input.mp4" -i "input.srt" \
-  -c:v copy -c:a copy -c:s mov_text \
-  -metadata:s:s:0 language=en \
-  "output-sitecap.mp4"
-```
-
-## Common Issues
-- **`mov_text` codec error with .mov files**: Use `-c:s mov_text` for MP4 containers.
-  For `.mov` containers, try `-c:s copy` or convert to MP4 first.
-- **Whisper file size limit**: Whisper API accepts up to 25MB per file. For longer videos,
-  split audio with `ffmpeg -ss 0 -t 600 -vn ...` before sending.
-- **Google OAuth refresh token expired**: Re-run the OAuth flow and update `GOOGLE_OAUTH_REFRESH_TOKEN`.
-- **Drive quota**: Large batch jobs may hit Drive API rate limits — add `sleep 1` between uploads if needed.
-
-## This Repo's Google OAuth Setup
-Auth credentials are stored as env vars and used via `googleapis`:
-```ts
-const auth = new google.auth.OAuth2({ clientId, clientSecret });
-auth.setCredentials({ refresh_token: refreshToken });
-const drive = google.drive({ version: 'v3', auth });
-```
-See `scripts/upload-to-drive.ts` for the established pattern.
+## Output
+For input source.mp4, output is source_captioned.mp4 uploaded to Drive.
+Original source remains unchanged.
