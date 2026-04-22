@@ -309,14 +309,14 @@ async function appendToGoogleSheet(
   resultsUrl: string | null
 ): Promise<void> {
   const spreadsheetId = process.env.GOOGLE_SHEETS_SPREADSHEET_ID;
-  const clientEmail = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
-  const privateKey = process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY?.replace(/\\n/g, '\n');
+  const jsonBase64 = process.env.GOOGLE_SERVICE_ACCOUNT_JSON_BASE64;
 
-  if (!spreadsheetId || !clientEmail || !privateKey) {
+  if (!spreadsheetId || !jsonBase64) {
     console.info('[store-results] Google Sheets sync skipped: missing env vars');
     return;
   }
 
+  const credentials = JSON.parse(Buffer.from(jsonBase64, 'base64').toString('utf-8')) as Record<string, unknown>;
   const tabName = process.env.GOOGLE_SHEETS_TAB_NAME || 'Submissions';
   const userInfo = results.userInfo ?? {};
 
@@ -346,7 +346,7 @@ async function appendToGoogleSheet(
   ];
 
   const auth = new google.auth.GoogleAuth({
-    credentials: { client_email: clientEmail, private_key: privateKey },
+    credentials,
     scopes: ['https://www.googleapis.com/auth/spreadsheets'],
   });
 
