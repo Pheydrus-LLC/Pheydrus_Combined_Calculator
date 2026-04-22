@@ -2,7 +2,7 @@
  * POST /api/store-results
  * Called immediately after runAllCalculators() succeeds on the frontend.
  * Saves the full report to Vercel Blob, posts a Slack notification,
- * and adds the subscriber to Flodesk.
+ * adds the subscriber to Flodesk, and appends a row to Google Sheets.
  *
  * Required env vars:
  *   BLOB_PUBLIC_READ_WRITE_TOKEN_READ_WRITE_TOKEN              — from Vercel Blob dashboard
@@ -15,13 +15,30 @@
  *   FLODESK_CALCULATOR_USED_SEGMENT_ID — Flodesk "Calculator-Used" segment ID (preferred)
  *   FLODESK_CALCULATOR_USED_SEGMENT_NAME — Flodesk segment name lookup (default: Calculator-Used)
  *   FLODESK_CALCULATOR_SEGMENT_ID      — Legacy fallback for old calculator segment config
+ *
+ * Google Sheets env vars (all required to enable):
+ *   GOOGLE_SHEETS_SPREADSHEET_ID       — The spreadsheet ID from the Google Sheets URL
+ *   GOOGLE_SERVICE_ACCOUNT_EMAIL       — Service account email (e.g. name@project.iam.gserviceaccount.com)
+ *   GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY — Private key from service account JSON (\\n escaped)
+ *   GOOGLE_SHEETS_TAB_NAME             — Sheet tab name (default: "Submissions")
  */
 
 import { randomUUID } from 'crypto';
 import { put } from '@vercel/blob';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
+import { google } from 'googleapis';
+
+interface UserInfo {
+  name?: string;
+  dateOfBirth?: string;
+  timeOfBirth?: string;
+  birthLocation?: string;
+  currentLocation?: string;
+  address?: string;
+}
 
 interface Results {
+  userInfo?: UserInfo;
   diagnostic?: {
     finalGrade?: string;
     score?: number;
@@ -33,6 +50,12 @@ interface Intake {
   desiredOutcome?: string;
   obstacle?: string;
   currentSituation?: string;
+  preferredSolution?: string;
+  phone?: string;
+  patternYear?: string;
+  priorHelp?: string[];
+  addressMoveDate?: string;
+  additionalNotes?: string;
 }
 
 interface FlodeskSegment {
@@ -270,6 +293,75 @@ async function addToFlodesk(
   }
 }
 
+// ── Google Sheets ─────────────────────────────────────────────────────────────
+
+function extractPostalCode(address: string | undefined): string {
+  if (!address) return '';
+  const parts = address.split(',').map((p) => p.trim());
+  return parts[parts.length - 1] ?? '';
+}
+
+async function appendToGoogleSheet(
+  name: string,
+  email: string,
+  results: Results,
+  intake: Intake,
+  resultsUrl: string | null
+): Promise<void> {
+  const spreadsheetId = process.env.GOOGLE_SHEETS_SPREADSHEET_ID;
+  const clientEmail = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
+  const privateKey = process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY?.replace(/\\n/g, '\n');
+
+  if (!spreadsheetId || !clientEmail || !privateKey) {
+    console.info('[store-results] Google Sheets sync skipped: missing env vars');
+    return;
+  }
+
+  const tabName = process.env.GOOGLE_SHEETS_TAB_NAME || 'Submissions';
+  const userInfo = results.userInfo ?? {};
+
+  const row = [
+    new Date().toISOString(),
+    name || userInfo.name || '',
+    email,
+    intake.phone || '',
+    userInfo.dateOfBirth || '',
+    userInfo.timeOfBirth || '',
+    userInfo.birthLocation || '',
+    userInfo.currentLocation || '',
+    userInfo.address || '',
+    extractPostalCode(userInfo.address),
+    results.diagnostic?.finalGrade ?? '',
+    results.diagnostic?.score ?? '',
+    intake.desiredOutcome || '',
+    intake.obstacle || '',
+    intake.currentSituation || '',
+    intake.preferredSolution || '',
+    Array.isArray(intake.priorHelp) ? intake.priorHelp.join(', ') : '',
+    intake.patternYear || '',
+    intake.addressMoveDate || '',
+    intake.additionalNotes || '',
+    intake.marketingConsent ? 'Yes' : 'No',
+    resultsUrl || '',
+  ];
+
+  const auth = new google.auth.GoogleAuth({
+    credentials: { client_email: clientEmail, private_key: privateKey },
+    scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+  });
+
+  const sheets = google.sheets({ version: 'v4', auth });
+
+  await sheets.spreadsheets.values.append({
+    spreadsheetId,
+    range: `${tabName}!A1`,
+    valueInputOption: 'USER_ENTERED',
+    requestBody: { values: [row] },
+  });
+
+  console.info(`[store-results] Google Sheets row appended for ${maskEmail(email)}`);
+}
+
 // ── Handler ───────────────────────────────────────────────────────────────────
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -326,6 +418,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     await Promise.all([
       postToSlack(displayName, email, results, resultsUrl),
       addToFlodesk(displayName, email, intake.marketingConsent),
+      appendToGoogleSheet(displayName, email, results, intake, resultsUrl),
     ]);
     return res.status(200).json({ ok: true, id, blobDebug });
   } catch (err) {
