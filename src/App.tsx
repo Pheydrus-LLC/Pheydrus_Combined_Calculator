@@ -8,8 +8,6 @@ import {
   ClientResultsPage,
   ClientDemoPage,
 } from './views';
-import { ChatPage } from './views/ChatPage';
-import { PrivateChatPage } from './views/PrivateChatPage';
 import {
   TransitsPage,
   LifePathPage,
@@ -33,8 +31,6 @@ function App() {
           <Route index element={<HomePage />} />
           <Route path="calculator" element={<CalculatorPage />} />
           <Route path="results" element={<ResultsPage />} />
-          <Route path="chat" element={<ChatPage />} />
-          <Route path="chat/private" element={<PrivateChatPage />} />
         </Route>
         {/* Client-facing assessment (no layout shell) */}
         <Route path="client" element={<ClientAssessmentPage />} />

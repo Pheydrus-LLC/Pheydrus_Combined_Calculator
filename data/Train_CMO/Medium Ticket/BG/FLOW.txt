@@ -1,5 +1,0 @@
-Lane: BG
-Current stage: Medium Ticket
-Previous stage: Low Ticket/BG
-Next upsell stage: High Ticket/BG
-Use case: Deeper implementation, commitment validation, upgrade bridge.
