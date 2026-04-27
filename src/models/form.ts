@@ -27,6 +27,7 @@ export interface FormData {
   streetNumber: string; // building/house number
   l2: string; // street name
   postalCode: string;
+  addressCountry: string; // country (display only, does not affect numerology)
   homeBuiltYear: string; // YYYY or empty
 }
 
@@ -44,6 +45,7 @@ export const EMPTY_FORM: FormData = {
   streetNumber: '',
   l2: '',
   postalCode: '',
+  addressCountry: '',
   homeBuiltYear: '',
 };
 

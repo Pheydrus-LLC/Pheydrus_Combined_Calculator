@@ -275,9 +275,8 @@ function fallbackC(planet: string, house: number, goal: GoalCategory, dur: strin
 
 // ── Main interpretation dispatcher ───────────────────────────────────────────
 
-function applyGoalText(text: string, goalText?: string): string {
-  if (!goalText || !goalText.trim()) return text;
-  return `Based on your 90-Day Goal of "${goalText}", ${text}`;
+function applyGoalText(text: string, _goalText?: string): string {
+  return `Based on your 90-day goal, ${text}`;
 }
 
 export function getItemInterpretation(

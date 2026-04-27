@@ -11,6 +11,7 @@ export interface ClientIntakeData {
   email: string;
   phone: string;
   marketingConsent: boolean;
+  tosConsent: boolean;
   addressMoveDate: string; // free text, e.g. "March 2023" or a date
   desiredOutcome: string; // free text — next 90 days goal
   obstacle: string; // free text — what's blocking them
@@ -25,6 +26,7 @@ export const EMPTY_CLIENT_INTAKE: ClientIntakeData = {
   email: '',
   phone: '',
   marketingConsent: false,
+  tosConsent: false,
   addressMoveDate: '',
   desiredOutcome: '',
   obstacle: '',

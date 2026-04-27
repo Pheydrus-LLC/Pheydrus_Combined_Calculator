@@ -392,7 +392,7 @@ export function ClientAssessmentPage() {
           <div>
             <p className={questionClass}>Tell us about your home.</p>
             <p className={subClass}>
-              Your address number reveals your environment's energy. All fields are optional.
+              Your address number reveals your environment's energy. All these inputs factor into your final score for Pillar 3.
             </p>
             <div className="space-y-5">
               <div>
@@ -437,15 +437,27 @@ export function ClientAssessmentPage() {
                   className={inputClass}
                 />
               </div>
-              <div>
-                <label className={labelClass}>Postal code</label>
-                <input
-                  type="text"
-                  value={form.postalCode}
-                  onChange={(e) => setField('postalCode', e.target.value)}
-                  placeholder="e.g., 10001"
-                  className={inputClass}
-                />
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className={labelClass}>Postal code</label>
+                  <input
+                    type="text"
+                    value={form.postalCode}
+                    onChange={(e) => setField('postalCode', e.target.value)}
+                    placeholder="e.g., 10001"
+                    className={inputClass}
+                  />
+                </div>
+                <div>
+                  <label className={labelClass}>Country</label>
+                  <input
+                    type="text"
+                    value={form.addressCountry}
+                    onChange={(e) => setField('addressCountry', e.target.value)}
+                    placeholder="e.g., United States"
+                    className={inputClass}
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -530,7 +542,7 @@ export function ClientAssessmentPage() {
             <div className="space-y-8">
               <div>
                 <label className={labelClass}>
-                  What solution works best for you? <span className="text-[#9a7d4e]">*</span>
+                  If I were to help you solve your patterns, what format do you prefer? <span className="text-[#9a7d4e]">*</span>
                 </label>
                 <div className="space-y-3">
                   {(Object.entries(PREFERRED_SOLUTION_LABELS) as [PreferredSolution, string][]).map(
@@ -595,6 +607,19 @@ export function ClientAssessmentPage() {
                 <span>
                   I agree to receive calculator follow-up emails and relevant updates from
                   Pheydrus. I can unsubscribe at any time.
+                </span>
+              </label>
+              <label className="flex items-start gap-3 rounded-xl border border-[#e8e0d0] bg-[#fcfaf6] p-4 text-sm text-[#4a4560]">
+                <input
+                  type="checkbox"
+                  checked={intake.tosConsent}
+                  onChange={(e) => setIntakeField('tosConsent', e.target.checked)}
+                  className="mt-1 h-4 w-4 rounded border-gray-300 text-[#9a7d4e] focus:ring-[#9a7d4e]"
+                />
+                <span>
+                  I understand that this calculator is for my personal use only. Sharing,
+                  redistributing, or forwarding this link is a violation of Pheydrus' Terms of Use
+                  and will be pursued legally. All access is recorded for security purposes.
                 </span>
               </label>
               {/* Mini summary */}

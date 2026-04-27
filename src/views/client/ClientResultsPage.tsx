@@ -481,7 +481,8 @@ function AspectCard({
 }) {
   const gc = gradeColor(item.grade);
   const libraryEntry = getLibraryEntry(item.planet, item.house, item.pillar);
-  const label = item.section === 'Address' ? '🏠 Address Energy' : item.source;
+  const addressLevel = item.section === 'Address' && item.source ? ` (${item.source.split(':')[0]})` : '';
+  const label = item.section === 'Address' ? `🏠 Address Energy${addressLevel}` : item.source;
   const endYear =
     item.section === 'Transit Angular' || item.section === 'Life Cycle'
       ? getTransitEndYear(item.planet ?? '', transits)
@@ -590,7 +591,7 @@ function AspectCard({
             margin: 0,
           }}
         >
-          <strong style={{ color: '#1C1A2E' }}>Steps:</strong> {libraryEntry.steps}
+          <strong style={{ color: '#16a34a' }}>✅ Do This:</strong> {libraryEntry.steps}
         </p>
       </div>
     );
@@ -754,11 +755,15 @@ function PillarDeepDiveCard({
     return true;
   });
 
-  // Sort: F first, C second, A last
+  // Sort: F first, C second, A last; Life Cycle and Address always last regardless of grade
   const GRADE_ORDER: Record<string, number> = { F: 0, C: 1, A: 2, Neutral: 3 };
-  const scoringItems = [...dedupedItems].sort(
-    (a, b) => (GRADE_ORDER[a.grade] ?? 3) - (GRADE_ORDER[b.grade] ?? 3)
-  );
+  const isFooterSection = (i: GradeItem) => i.section === 'Life Cycle' || i.section === 'Address';
+  const scoringItems = [...dedupedItems].sort((a, b) => {
+    const aFooter = isFooterSection(a) ? 1 : 0;
+    const bFooter = isFooterSection(b) ? 1 : 0;
+    if (aFooter !== bFooter) return aFooter - bFooter;
+    return (GRADE_ORDER[a.grade] ?? 3) - (GRADE_ORDER[b.grade] ?? 3);
+  });
 
   const callout = PILLAR_CALLOUT[index](goalShort, location);
   const accentColor = index === 1 ? '#C0392B' : index === 2 ? '#C9A84C' : '#9a7d4e';
@@ -1252,6 +1257,7 @@ export function ClientResultsPage() {
       email: 'sophia@example.com',
       phone: '',
       marketingConsent: true,
+      tosConsent: true,
       addressMoveDate: '2024',
       desiredOutcome: 'Grow my income and financial freedom',
       obstacle: 'Bandwidth and self-doubt',
@@ -1636,6 +1642,40 @@ export function ClientResultsPage() {
             </div>
           </div>
 
+          {/* Goal bar — sits above the grade */}
+          <div
+            style={{
+              borderLeft: '4px solid #C9A84C',
+              background: '#FDFBF6',
+              padding: '10px 16px',
+              borderRadius: '0 4px 4px 0',
+            }}
+          >
+            <div
+              style={{
+                fontSize: '10px',
+                textTransform: 'uppercase',
+                letterSpacing: '0.1em',
+                color: '#C9A84C',
+                marginBottom: '4px',
+              }}
+            >
+              90-Day Goal · {GOAL_LABEL[goal]}
+            </div>
+            <p
+              style={{
+                margin: 0,
+                fontFamily: CORMORANT,
+                fontStyle: 'italic',
+                color: '#7A5A1A',
+                fontSize: '0.95rem',
+                lineHeight: 1.6,
+              }}
+            >
+              {intake.desiredOutcome}
+            </p>
+          </div>
+
           {/* Hero card — grade + headline + dynamic description */}
           {(() => {
             const hl: Record<string, [string, string]> = {
@@ -1725,8 +1765,25 @@ export function ClientResultsPage() {
                   >
                     {h1} <em style={{ color: '#8B6914' }}>{h2}</em>
                   </div>
-                  <p style={{ margin: 0, fontSize: '0.82rem', color: '#555', lineHeight: 1.75 }}>
+                  <p style={{ margin: '0 0 12px', fontSize: '0.82rem', color: '#555', lineHeight: 1.75 }}>
                     {descLine}
+                  </p>
+                  <p style={{ margin: '0 0 10px', fontSize: '0.82rem', color: '#555', lineHeight: 1.75 }}>
+                    The forces showing up in your report aren't there to make life hard — they're only hard when you don't know how to work with them. Every pressure point carries a higher octave: a transmuted version that becomes your greatest advantage once decoded.
+                  </p>
+                  <div style={{ borderLeft: '3px solid #C9A84C', paddingLeft: '12px', marginBottom: '12px' }}>
+                    <p style={{ margin: 0, fontFamily: CORMORANT, fontStyle: 'italic', color: '#7A5A1A', fontSize: '0.9rem', lineHeight: 1.7 }}>
+                      "Pluto transiting your 1st house? Stop playing nice. Stop softening your edges. Step fully into your power — that is the higher octave." — Pheydrus team
+                    </p>
+                  </div>
+                  <p style={{ margin: '0 0 8px', fontSize: '0.82rem', color: '#555', lineHeight: 1.75 }}>
+                    If you've tried everything — the mindset work, the strategies, the coaches — and things are going <strong style={{ color: '#1C1A2E' }}>well enough</strong> but that one specific thing you want keeps slipping just out of reach…
+                  </p>
+                  <p style={{ margin: '0 0 8px', fontSize: '0.82rem', color: '#555', lineHeight: 1.75 }}>
+                    You're not factoring in the unseen forces that <strong style={{ color: '#1C1A2E' }}>cannot be intellectually solved.</strong>
+                  </p>
+                  <p style={{ margin: 0, fontSize: '0.82rem', color: '#555', lineHeight: 1.75 }}>
+                    You've been 10x-capable this entire time. This report maps the forces working against you.
                   </p>
                 </div>
               </div>
@@ -1862,113 +1919,6 @@ export function ClientResultsPage() {
               );
             })()}
 
-          {/* Goal bar */}
-          <div
-            style={{
-              borderLeft: '4px solid #C9A84C',
-              background: '#FDFBF6',
-              padding: '10px 16px',
-              borderRadius: '0 4px 4px 0',
-            }}
-          >
-            <div
-              style={{
-                fontSize: '10px',
-                textTransform: 'uppercase',
-                letterSpacing: '0.1em',
-                color: '#C9A84C',
-                marginBottom: '4px',
-              }}
-            >
-              90-Day Goal · {GOAL_LABEL[goal]}
-            </div>
-            <p
-              style={{
-                margin: 0,
-                fontFamily: CORMORANT,
-                fontStyle: 'italic',
-                color: '#7A5A1A',
-                fontSize: '0.95rem',
-                lineHeight: 1.6,
-              }}
-            >
-              {intake.desiredOutcome}
-            </p>
-          </div>
-
-          {/* Reframe block */}
-          <div
-            style={{
-              borderLeft: '4px solid #C9A84C',
-              background: '#FDFBF6',
-              borderRadius: '0 4px 4px 0',
-              padding: '20px 24px',
-            }}
-          >
-            <p
-              style={{
-                fontFamily: CORMORANT,
-                fontStyle: 'italic',
-                color: '#7A5A1A',
-                fontSize: '1.1rem',
-                margin: 0,
-                lineHeight: 1.75,
-              }}
-            >
-              If you've tried everything — the mindset work, the strategies, the coaches — and
-              things are going{' '}
-              <strong style={{ fontStyle: 'normal', color: '#1C1A2E' }}>well enough</strong> but
-              that one specific thing you want keeps slipping just out of reach… you're not
-              factoring in the unseen forces that{' '}
-              <strong style={{ fontStyle: 'normal', color: '#1C1A2E' }}>
-                cannot be intellectually solved.
-              </strong>{' '}
-              You've been 10x-capable this entire time. This report maps the forces working against
-              you.
-            </p>
-          </div>
-
-          {/* Malefic box */}
-          <div
-            style={{
-              background: '#FDFAF5',
-              border: '1px solid #E8E0C8',
-              borderRadius: '4px',
-              padding: '20px 24px',
-            }}
-          >
-            <div
-              style={{
-                fontSize: '0.9rem',
-                fontWeight: 700,
-                color: '#C9A84C',
-                marginBottom: '10px',
-                fontFamily: INTER,
-              }}
-            >
-              Your score is not a verdict. It's an entry point.
-            </div>
-            <p style={{ margin: '0 0 12px', fontSize: '0.82rem', color: '#555', lineHeight: 1.75 }}>
-              The forces showing up in your report aren't there to make life hard — they're only
-              hard when you don't know how to work with them. Every pressure point carries a higher
-              octave: a transmuted version that becomes your greatest advantage once decoded.
-            </p>
-            <div style={{ borderLeft: '3px solid #C9A84C', paddingLeft: '14px' }}>
-              <p
-                style={{
-                  margin: 0,
-                  fontFamily: CORMORANT,
-                  fontStyle: 'italic',
-                  color: '#7A5A1A',
-                  fontSize: '0.9rem',
-                  lineHeight: 1.7,
-                }}
-              >
-                "Pluto transiting your 1st house? Stop playing nice. Stop softening your edges. Step
-                fully into your power — that is the higher octave." — Pheydrus team
-              </p>
-            </div>
-          </div>
         </section>
 
         {/* ── SECTION 2: WHY THIS KEEPS HAPPENING ── */}
@@ -2194,17 +2144,18 @@ export function ClientResultsPage() {
 
         <section id="pillars" data-report-section style={{ scrollMarginTop: '120px' }}>
           <div>
-            <div
+            <h2
               style={{
-                fontSize: '10px',
-                textTransform: 'uppercase',
-                letterSpacing: '0.14em',
-                color: '#999',
-                marginBottom: '8px',
+                fontFamily: CORMORANT,
+                fontSize: '2rem',
+                fontWeight: 700,
+                color: '#1C1A2E',
+                margin: '0 0 20px',
+                lineHeight: 1.2,
               }}
             >
               What is Holding Back Your {GOAL_LABEL[goal]}
-            </div>
+            </h2>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               <PillarDeepDiveCard
                 {...pillarCardProps(p1, 1, 'Structure', 'Your Energetic Blueprint')}
@@ -2320,54 +2271,54 @@ export function ClientResultsPage() {
               borderTop: '1px solid #E8E0C8',
               borderBottom: '1px solid #E8E0C8',
               borderRadius: '4px',
-              padding: '20px 24px',
-              textAlign: 'center',
+              padding: '28px 32px',
             }}
           >
-            <h3
-              style={{
-                margin: '0 0 8px',
-                fontFamily: CORMORANT,
-                fontSize: '1.45rem',
-                fontWeight: 700,
-                color: '#1C1A2E',
-              }}
-            >
-              Two No-Brainer Paths
-            </h3>
-            <p
-              style={{
-                margin: 0,
-                fontSize: '0.9rem',
-                color: '#555',
-                fontFamily: INTER,
-                lineHeight: 1.7,
-              }}
-            >
-              You now know what's been running your life. The next step is shifting it — all three forces, together, with a team that's done this thousands of times.
-            </p>
-            <p
-              style={{
-                margin: '10px 0 0',
-                fontSize: '0.9rem',
-                color: '#555',
-                fontFamily: INTER,
-                lineHeight: 1.7,
-              }}
-            >
-              People who couldn't move. People mid-divorce. People who'd tried everything. The breakthrough they'd been chasing for years — unlocked once they had the right map.
-            </p>
-            <p
-              style={{
-                margin: '10px 0 0',
-                fontSize: '0.9rem',
-                color: '#555',
-                fontFamily: INTER,
-                lineHeight: 1.7,
-              }}
-            >
-              Start below. Or book a call and we'll build yours.
-            </p>
+            <div style={{ display: 'flex', gap: '32px', alignItems: 'flex-start', flexWrap: 'wrap' as const }}>
+              <div style={{ flex: 1, minWidth: '260px' }}>
+                <h3
+                  style={{
+                    margin: '0 0 18px',
+                    fontFamily: CORMORANT,
+                    fontSize: '1.6rem',
+                    fontWeight: 700,
+                    color: '#1C1A2E',
+                  }}
+                >
+                  What Now?
+                </h3>
+                <p style={{ margin: '0 0 14px', fontSize: '0.88rem', color: '#555', fontFamily: INTER, lineHeight: 1.75 }}>
+                  You now have the map, but a map only works if you're willing to make the journey. This report is not a magic bullet.
+                </p>
+                <p style={{ margin: '0 0 14px', fontSize: '0.88rem', color: '#555', fontFamily: INTER, lineHeight: 1.75 }}>
+                  The students who transformed through this work got deeply curious about each pillar, challenged what they thought they knew about their own reality, and were willing to question the belief systems and values they had since childhood.
+                </p>
+                <p style={{ margin: '0 0 14px', fontSize: '0.88rem', color: '#555', fontFamily: INTER, lineHeight: 1.75 }}>
+                  Is it true that everything works out if you go to a good school, get a good job, and find a decent partner? Or move to the greatest city in the world? Better yet, what if you've done all of those things — and you feel like something is just…off? This report is the beginning of you trying to unpack why.
+                </p>
+                <p style={{ margin: '0 0 14px', fontSize: '0.88rem', color: '#555', fontFamily: INTER, lineHeight: 1.75 }}>
+                  The ones who got results committed, stayed patient, studied, had faith, and made a conscious choice to work with these forces instead of against them. That choice is yours.
+                </p>
+                <p style={{ margin: '0 0 14px', fontSize: '0.88rem', color: '#555', fontFamily: INTER, lineHeight: 1.75 }}>
+                  Below you'll find some resources to help you start going deeper into what this report surfaced. But more importantly, <strong style={{ color: '#1C1A2E' }}>stay on our emails.</strong> We regularly share complimentary live trainings, classes, and tools that will make this information more real and more actionable over time.
+                </p>
+                <p style={{ margin: 0, fontSize: '1rem', color: '#7A5A1A', fontFamily: CORMORANT, fontStyle: 'italic', lineHeight: 1.6 }}>
+                  The door is open. Walking through it is the work.
+                </p>
+              </div>
+              <div style={{ flexShrink: 0, width: '220px' }}>
+                <img
+                  src="/hj-finals-2-of-20-1.jpg"
+                  alt="HeyJune Jeon — Pheydrus"
+                  style={{
+                    width: '100%',
+                    borderRadius: '4px',
+                    border: '1px solid #E8E0C8',
+                    objectFit: 'cover',
+                  }}
+                />
+              </div>
+            </div>
           </div>
 
           {/* PROGRAM RECOMMENDATION + BOOK A CALL OPTIONS */}
@@ -2390,102 +2341,132 @@ export function ClientResultsPage() {
                       textTransform: 'uppercase',
                       letterSpacing: '0.12em',
                       fontWeight: 700,
-                      color: '#b91c1c',
+                      color: '#16a34a',
                       marginBottom: '10px',
                       fontFamily: INTER,
                     }}
                   >
                     #1 Option
                   </div>
-                  <div style={{ maxWidth: '360px', margin: '0 auto 14px' }}>
-                    <img
-                      src="/option-2-call-visual-v2.png"
-                      alt="Pheydrus alignment preview"
-                      style={{
-                        width: '100%',
-                        height: '210px',
-                        objectFit: 'cover',
-                        objectPosition: 'center 18%',
-                        borderRadius: '4px',
-                        border: '1px solid #E3D4AA',
-                      }}
-                    />
-                  </div>
                   <h2
                     style={{
                       fontFamily: CORMORANT,
-                      color: '#b91c1c',
+                      color: '#16a34a',
                       fontSize: '1.7rem',
                       fontWeight: 700,
                       margin: '0 0 6px',
-                      textAlign: 'center',
                     }}
                   >
-                    Book Your Alignment Call
+                    Start With Our 101 Trainings at 50% Off 💸
                   </h2>
                   <p
                     style={{
-                      color: '#666',
-                      fontSize: '0.8rem',
-                      margin: '0 0 20px',
-                      fontFamily: INTER,
-                      textAlign: 'center',
-                    }}
-                  >
-                    30-minute 1:1 with the Pheydrus team
-                  </p>
-                  <div style={{ maxWidth: '420px', margin: '0 auto 20px', textAlign: 'left' }}>
-                    <p style={{ margin: '0 0 8px', fontSize: '0.82rem', color: '#7A5A1A', lineHeight: 1.6, fontFamily: INTER }}>→ We map exactly which invisible forces are running your life right now — and build a personalized roadmap to shift all three simultaneously</p>
-                    <p style={{ margin: '0 0 8px', fontSize: '0.82rem', color: '#7A5A1A', lineHeight: 1.6, fontFamily: INTER }}>→ We show you what's coming next in your chart — and how to prepare for the identity shift that's already in motion so you're ready when it arrives</p>
-                    <p style={{ margin: '0 0 8px', fontSize: '0.82rem', color: '#7A5A1A', lineHeight: 1.6, fontFamily: INTER }}>→ We identify the specific <strong>Pillar 1</strong> deconditioning work, <strong>Pillar 2</strong> transit windows, and <strong>Pillar 3</strong> environmental shifts that will move the needle fastest for YOUR specific situation</p>
-                  </div>
-                  <p
-                    style={{
+                      color: '#555',
                       fontSize: '0.82rem',
-                      color: '#7A5A1A',
                       margin: '0 0 20px',
+                      fontFamily: INTER,
                       lineHeight: 1.6,
-                      fontFamily: INTER,
-                      textAlign: 'center',
-                      fontStyle: 'italic',
                     }}
                   >
-                    Hundreds of students have transformed patterns they couldn't crack for years — not because they tried harder, but because they finally had the right map. This call is how you get yours.
+                    Recommend our 101 trainings at <strong>50% off</strong> — use code <strong style={{ color: '#16a34a' }}>"VIPTraining"</strong> at checkout.
                   </p>
-                  <a
-                    href="https://calendly.com/pheydrus_strategy/1-1-alignment-strategy-call-report"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{
-                      display: 'block',
-                      padding: '15px 24px',
-                      background: '#C9A84C',
-                      color: '#1C1A2E',
-                      fontWeight: 700,
-                      fontSize: '0.75rem',
-                      letterSpacing: '0.1em',
-                      textTransform: 'uppercase',
-                      textDecoration: 'none',
-                      borderRadius: '2px',
-                      fontFamily: INTER,
-                      maxWidth: '420px',
-                      margin: '0 auto 12px',
-                      textAlign: 'center',
-                    }}
-                  >
-                    BOOK YOUR ALIGNMENT CALL →
-                  </a>
-                  <p
-                    style={{
-                      margin: 0,
-                      fontSize: '11px',
-                      color: '#999',
-                      fontFamily: INTER,
-                      textAlign: 'center',
-                    }}
-                  >
-                    Complimentary · No obligation · Limited availability this cycle
-                  </p>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                    {[
+                      {
+                        pillar: 'Pillar 1: Structure',
+                        title: '4 Steps to Rewriting Your Past',
+                        desc: 'Want to finally release the "story" that your emotional body is still holding onto? Check out our most transformational training →',
+                        link: 'https://pheydrusacademy.mysamcart.com/checkout/rsvp-4-steps-to-letting-go',
+                        cta: 'Get Access →',
+                      },
+                      {
+                        pillar: 'Pillar 2: Timing',
+                        title: 'Outer Planets & Your Next 20 Years',
+                        desc: 'Want to know exactly what\'s coming in the next 20 years — and how to use it strategically? Check out our most popular timing training →',
+                        link: 'https://pheydrusmetaverse.com/checkout/outer-planets',
+                        cta: 'Get Access →',
+                      },
+                      {
+                        pillar: 'Pillar 3: Environment',
+                        title: 'Energetically Change Your Address',
+                        desc: 'Want to know if your home is amplifying your life — or quietly working against it? Check out our most viral training →',
+                        link: 'https://pheydrusmetaverse.com/checkout/energetically-change-your-address',
+                        cta: 'Get Access →',
+                      },
+                    ].map((item) => (
+                      <div
+                        key={item.pillar}
+                        style={{
+                          background: '#F0FFF4',
+                          border: '1px solid #86efac',
+                          borderRadius: '4px',
+                          padding: '16px 18px',
+                          display: 'flex',
+                          gap: '12px',
+                          alignItems: 'flex-start',
+                        }}
+                      >
+                        <span style={{ fontSize: '1.1rem', lineHeight: 1, marginTop: '2px' }}>✓</span>
+                        <div style={{ flex: 1 }}>
+                          <div
+                            style={{
+                              fontSize: '10px',
+                              textTransform: 'uppercase',
+                              letterSpacing: '0.08em',
+                              color: '#16a34a',
+                              fontWeight: 700,
+                              fontFamily: INTER,
+                              marginBottom: '2px',
+                            }}
+                          >
+                            {item.pillar}
+                          </div>
+                          <div
+                            style={{
+                              fontFamily: CORMORANT,
+                              fontSize: '1.1rem',
+                              fontWeight: 700,
+                              color: '#1C1A2E',
+                              marginBottom: '4px',
+                            }}
+                          >
+                            {item.title}
+                          </div>
+                          <p
+                            style={{
+                              margin: '0 0 8px',
+                              fontSize: '0.8rem',
+                              color: '#444',
+                              lineHeight: 1.6,
+                              fontFamily: INTER,
+                            }}
+                          >
+                            {item.desc}
+                          </p>
+                          <a
+                            href={item.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{
+                              display: 'inline-block',
+                              padding: '8px 16px',
+                              background: '#16a34a',
+                              color: '#fff',
+                              fontWeight: 700,
+                              fontSize: '0.72rem',
+                              letterSpacing: '0.08em',
+                              textTransform: 'uppercase',
+                              textDecoration: 'none',
+                              borderRadius: '2px',
+                              fontFamily: INTER,
+                            }}
+                          >
+                            {item.cta}
+                          </a>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
 
                 <div style={optionCardStyle}>
@@ -2659,6 +2640,24 @@ export function ClientResultsPage() {
             </button>
           </div>
 
+          <p
+            style={{
+              textAlign: 'center',
+              fontSize: '10px',
+              color: '#BBBBBB',
+              paddingTop: '16px',
+              paddingBottom: '8px',
+              fontFamily: INTER,
+              lineHeight: 1.6,
+              borderTop: '1px solid #E8E8E8',
+              maxWidth: '520px',
+              margin: '0 auto',
+            }}
+          >
+            This calculator is for Pheydrus customers only. Sharing, redistributing, or forwarding
+            this link is a violation of Pheydrus' Terms of Use and will be pursued legally. All
+            access is recorded for security purposes.
+          </p>
           <p
             style={{
               textAlign: 'center',

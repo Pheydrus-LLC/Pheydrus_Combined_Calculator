@@ -23,6 +23,7 @@ const DEMO_INTAKE: ClientIntakeData = {
   email: 'alex@example.com',
   phone: '(555) 234-5678',
   marketingConsent: true,
+  tosConsent: true,
   addressMoveDate: 'March 2022',
   desiredOutcome:
     'Build my coaching business to $10k/month revenue in the next 90 days and land 5 high-ticket clients',
@@ -119,21 +120,22 @@ const DEMO_CALCULATORS: ConsolidatedResults['calculators'] = {
   lifePath: {
     lifePathNumber: 7,
     dayPathNumber: 6,
-    personalYear: 2,
+    personalYear: 4,
     chineseZodiac: 'Goat',
     meanings: {
       lifePathMeaning: 'The Seeker',
       lifePathDescription: 'Deep thinker, analytical, spiritual',
-      personalYearMeaning: 'Cooperation & Patience',
-      personalYearDescription: 'A year of partnerships and reflection',
+      personalYearMeaning: 'Hard Work & Discipline',
+      personalYearDescription: 'A year of building foundations and facing limitations',
     },
   },
   relocation: null,
   addressNumerology: {
     levels: [
-      { level: 'L1', value: '1234', name: 'Unit',          number: 1,  meaning: 'Independence',  description: '', themes: '', challenges: '', gifts: '', reflection: '' },
-      { level: 'L2', value: '4',    name: 'Street Number', number: 4,  meaning: 'Structure',      description: '', themes: '', challenges: '', gifts: '', reflection: '' },
-      { level: 'L3', value: '11',   name: 'Address Total', number: 11, meaning: 'Master Number',  description: '', themes: '', challenges: '', gifts: '', reflection: '' },
+      { level: 'L1', value: '7A',          name: 'Unit Number',           number: 7,  meaning: 'The Seeker',    description: '', themes: '', challenges: '', gifts: '', reflection: '' },
+      { level: 'L2', value: '742',          name: 'Building/House Number', number: 4,  meaning: 'The Worker',    description: '', themes: '', challenges: '', gifts: '', reflection: '' },
+      { level: 'L3', value: 'Sunset',       name: 'Street Name',           number: 8,  meaning: 'The Achiever',  description: '', themes: '', challenges: '', gifts: '', reflection: '' },
+      { level: 'L4', value: '7A + 742 + Sunset', name: 'L3',              number: 8,  meaning: 'The Achiever',  description: '', themes: '', challenges: '', gifts: '', reflection: '' },
     ],
     homeZodiac: 'Scorpio',
     birthZodiac: 'Capricorn',
