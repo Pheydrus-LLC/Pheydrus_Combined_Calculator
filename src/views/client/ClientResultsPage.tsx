@@ -16,7 +16,7 @@ import {
   getTransitEndYear,
   type GoalCategory,
 } from '../../services/pdfExport/clientInterpretations';
-import { getLibraryEntry, MALEFIC_PLANETS, BENEFIC_PLANETS } from '../../data/planetHouseLibrary';
+import { getLibraryEntry, BENEFIC_PLANETS } from '../../data/planetHouseLibrary';
 import type { GradeItem, PillarSummary } from '../../models/diagnostic';
 import type { PlanetaryTransit } from '../../models/calculators';
 import type { ConsolidatedResults } from '../../models';
@@ -488,15 +488,15 @@ function AspectCard({
       ? getTransitEndYear(item.planet ?? '', transits)
       : null;
 
-  const isMalefic = item.planet ? MALEFIC_PLANETS.has(item.planet) : false;
-  const isBenefic = item.planet ? BENEFIC_PLANETS.has(item.planet) : false;
-
   if (libraryEntry) {
-    const hurtHelpLabel = isMalefic
-      ? { text: '⚡ Hurts Goal', bg: '#FFF5F5', color: '#C0392B', border: '#C0392B' }
-      : isBenefic
-        ? { text: '✓ Helps Goal', bg: '#F0FFF4', color: '#16a34a', border: '#2ecc71' }
-        : null;
+    const hurtHelpLabel =
+      item.grade === 'F'
+        ? { text: '⚡ Hurts Goal', bg: '#FFF5F5', color: '#C0392B', border: '#C0392B' }
+        : item.grade === 'C'
+          ? { text: '⚠️ Caution', bg: '#FFFBEB', color: '#B45309', border: '#C9A84C' }
+          : item.grade === 'A'
+            ? { text: '✓ Helps Goal', bg: '#F0FFF4', color: '#16a34a', border: '#2ecc71' }
+            : null;
 
     return (
       <div
