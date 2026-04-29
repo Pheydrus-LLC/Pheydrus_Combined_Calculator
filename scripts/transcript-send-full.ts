@@ -89,11 +89,17 @@ function postJsonToSlack(webhookUrl: string, body: object): Promise<void> {
   });
 }
 
-async function postDriveLinkToSlack(driveViewUrl: string, videoUrl: string, skipSlack: boolean): Promise<void> {
+async function postCombinedSlack(
+  driveViewUrl: string,
+  videoUrl: string,
+  docUrl: string,
+  title: string,
+  skipSlack: boolean
+): Promise<void> {
   if (skipSlack) return;
   const webhookUrl = process.env.SLACK_TRANSCRIPT_WEBHOOK_URL || process.env.SLACK_WEBHOOK_URL;
   if (!webhookUrl) {
-    console.warn('[transcript:send] No Slack webhook set; skipping Drive link notification.');
+    console.warn('[transcript:send] No Slack webhook set; skipping Slack notification.');
     return;
   }
 
@@ -105,14 +111,18 @@ async function postDriveLinkToSlack(driveViewUrl: string, videoUrl: string, skip
         type: 'section',
         text: {
           type: 'mrkdwn',
-          text: `📹 *Watermark-Free Video uploaded to Drive*\n*Drive:* <${driveViewUrl}|Open video>\n*Source:* <${videoUrl}|Original post>`,
+          text:
+            `*${title}*\n` +
+            `*Watermark-Free:* <${driveViewUrl}|Open video>\n` +
+            `*Transcript:* <${docUrl}|Open document>\n` +
+            `*Source:* <${videoUrl}|Original post>`,
         },
       },
     ],
   };
 
   await postJsonToSlack(webhookUrl, body);
-  console.log('[transcript:send] Drive link posted to Slack.');
+  console.log('[transcript:send] Combined notification posted to Slack.');
 }
 
 async function main(): Promise<void> {
@@ -149,18 +159,23 @@ async function main(): Promise<void> {
     'Step 2/3: Upload video to Google Drive'
   );
 
-  // Parse Drive view link and post it to Slack
   const driveViewMatch = uploadOutput.match(/WEB_VIEW=(.+)/);
   const driveViewUrl = driveViewMatch?.[1]?.trim();
-  if (driveViewUrl) {
-    await postDriveLinkToSlack(driveViewUrl, videoUrl, skipSlack);
-  }
 
-  runCommand(
+  const transcriptOutput = runCommand(
     'npx',
-    ['tsx', 'scripts/transcript-to-gdoc-slack.ts', ...forwardedArgs],
-    'Step 3/3: Generate transcript and notify Slack'
+    ['tsx', 'scripts/transcript-to-gdoc-slack.ts', ...forwardedArgs, '--no-slack'],
+    'Step 3/3: Generate transcript'
   );
+
+  const docUrlMatch = transcriptOutput.match(/^Google Doc:\s+(https:\/\/\S+)/m);
+  const titleMatch = transcriptOutput.match(/^Title Used:\s+(.+)$/m);
+  const docUrl = docUrlMatch?.[1]?.trim();
+  const title = titleMatch?.[1]?.trim() || 'Video Transcript';
+
+  if (driveViewUrl && docUrl) {
+    await postCombinedSlack(driveViewUrl, videoUrl, docUrl, title, skipSlack);
+  }
 
   console.log('\nDONE: Full flow complete (download + Drive upload + transcript/slack).');
 }
