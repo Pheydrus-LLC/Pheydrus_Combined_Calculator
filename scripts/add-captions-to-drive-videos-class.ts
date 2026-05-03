@@ -51,7 +51,7 @@ if (!RAW_ARG) {
 
 let OUTPUT_FOLDER = '';
 let CUSTOM_CAPTION_STYLE = '';
-let PRESERVE_FILENAME = false;
+let PRESERVE_FILENAME = true;
 for (let i = 1; i < args.length; i++) {
   if (args[i] === '--output-folder' && args[i+1]) {
     OUTPUT_FOLDER = args[i+1];
@@ -268,8 +268,8 @@ import os, sys
 audio_path = sys.argv[1]
 out_dir = sys.argv[2]
 
-model = whisper.load_model("base")
-result = model.transcribe(audio_path, language="en")
+model = whisper.load_model("small")
+result = model.transcribe(audio_path, language="en", word_timestamps=True)
 writer = get_writer("srt", out_dir)
 writer(result, audio_path)
 `.trimStart();
@@ -374,9 +374,10 @@ function wrapSrtForSafeArea(srt: string, maxCharsPerLine: number, maxLinesPerCue
 
 function getCaptionStyle(): string {
   if (CUSTOM_CAPTION_STYLE) return CUSTOM_CAPTION_STYLE;
-  return 'PlayResX=1080,PlayResY=1920,FontName=Arial,FontSize=35,PrimaryColour=&H00FFFFFF,' +
-    'OutlineColour=&H00000000,BorderStyle=1,Bold=0,Outline=0.75,Shadow=0,MarginL=72,MarginR=72,' +
-    'MarginV=140,Alignment=2,WrapStyle=2';
+  // Class video style: landscape 1920x1080, larger font, semi-transparent black box for readability
+  return 'PlayResX=1920,PlayResY=1080,FontName=Arial,FontSize=56,PrimaryColour=&H00FFFFFF,' +
+    'BackColour=&H80000000,BorderStyle=4,Bold=0,Outline=0,Shadow=0,MarginL=120,MarginR=120,' +
+    'MarginV=60,Alignment=2,WrapStyle=2';
 }
 
 function muxSubtitle(
@@ -496,9 +497,8 @@ async function main(): Promise<void> {
     const audioPath = path.join(tmpDir, `${base}.mp3`);
     const srtPath = path.join(tmpDir, `${base}.srt`);
 
-    let outputName = `${base}_captioned${ext}`;
-    if (PRESERVE_FILENAME) outputName = video.name;
-    const outputPath = path.join(tmpDir, outputName);
+    const outputName = PRESERVE_FILENAME ? video.name : `${base}_captioned${ext}`;
+    const outputPath = path.join(tmpDir, `${base}_out${ext}`);
 
     try {
       process.stdout.write(`${label} — downloading...`);
