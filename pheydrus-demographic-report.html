@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pheydrus Demographic Intelligence Report — Jun 12, 2026</title>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: #0E0D0B; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #161513; }
+    ::-webkit-scrollbar-thumb { background: #2A2825; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #3a3835; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState } = React;
+
+    const palette = {
+      bg: "#0E0D0B",
+      surface: "#161513",
+      border: "#2A2825",
+      accent: "#C9A96E",
+      accentSoft: "#C9A96E22",
+      text: "#EDE9E0",
+      muted: "#8A8479",
+      positive: "#7EC89A",
+      warning: "#E8B84B",
+      negative: "#E87B5A",
+      purple: "#9B89C4",
+    };
+
+    const SECTIONS = ["Overview", "Report Scores", "Typeform Insights", "Source Breakdown", "Income Profile", "Pain & Urgency", "Occupation Mix", "Key Takeaways"];
+
+    const gradeData = [
+      { grade: "F (1–5/100)", count: 38, color: palette.negative },
+      { grade: "F (6–9/100)", count: 52, color: "#E89A5A" },
+      { grade: "F (10–12/100)", count: 14, color: palette.warning },
+      { grade: "F (13–16/100)", count: 5, color: "#D4C46A" },
+      { grade: "C (0–4/100)", count: 8, color: palette.purple },
+    ];
+
+    const scoreStats = {
+      total: 117,
+      avgScore: 6.4,
+      gradeF: 109,
+      gradeC: 8,
+      pctF: 93,
+      topScore: 16,
+      bottomScore: 2,
+    };
+
+    const incomeData = [
+      { range: "$0", count: 9, pct: 18 },
+      { range: "$10k–$50k", count: 28, pct: 56 },
+      { range: "$55k–$100k", count: 7, pct: 14 },
+      { range: "$105k–$150k", count: 3, pct: 6 },
+      { range: "$155k–$250k+", count: 3, pct: 6 },
+    ];
+
+    const urgencyData = [
+      { label: "Now — it's urgent", count: 28, pct: 57, color: palette.negative },
+      { label: "Within 3 months", count: 16, pct: 33, color: palette.warning },
+      { label: "Still undecided", count: 5, pct: 10, color: palette.muted },
+    ];
+
+    const sourceData = [
+      { source: "Real Estate Numerology Webinar", count: 22, pct: 45, color: palette.accent },
+      { source: "Social Media (No Webinar)", count: 7, pct: 14, color: palette.purple },
+      { source: "Feng Shui / Energetically Change Webinar", count: 4, pct: 8, color: palette.positive },
+      { source: "4 Steps to Changing the Past", count: 3, pct: 6, color: "#7EC8C8" },
+      { source: "TikTok (Historical 2023–2024)", count: 31, pct: 63, color: "#E87BB4", note: "hist" },
+      { source: "YouTube (Historical 2023–2024)", count: 18, pct: 37, color: "#8AB4E8", note: "hist" },
+      { source: "Instagram (Historical)", count: 5, pct: 10, color: "#C4E87B", note: "hist" },
+      { source: "Facebook (Historical)", count: 6, pct: 12, color: "#E8C47B", note: "hist" },
+    ];
+
+    const occupationData = [
+      { label: "Full-time 9-5 employee", count: 14, pct: 28 },
+      { label: "Freelancer / Part-time / Consultant", count: 13, pct: 27 },
+      { label: "Looking to monetize work", count: 11, pct: 22 },
+      { label: "Founder / Executive / Leader", count: 4, pct: 8 },
+      { label: "Student", count: 3, pct: 6 },
+      { label: "Unemployed / Mom", count: 3, pct: 6 },
+      { label: "Other / Unspecified", count: 2, pct: 4 },
+    ];
+
+    const challengeData = [
+      { theme: "Career / Life Path / Monetization", count: 24, pct: 48 },
+      { theme: "Relationships / Love / Loneliness", count: 11, pct: 22 },
+      { theme: "Finances / Money Blocks", count: 9, pct: 18 },
+      { theme: "Identity / Hiding self / Purpose", count: 4, pct: 8 },
+      { theme: "Home / Space / Address", count: 2, pct: 4 },
+    ];
+
+    const priorHelpData = [
+      { method: "Therapy", count: 31, pct: 63 },
+      { method: "Coaching", count: 18, pct: 37 },
+      { method: "Spiritual / Meditation / Yoga", count: 14, pct: 29 },
+      { method: "Friends / Family", count: 3, pct: 6 },
+      { method: "None", count: 4, pct: 8 },
+    ];
+
+    const geoData = [
+      { region: "USA", count: 32, pct: 65 },
+      { region: "Canada", count: 7, pct: 14 },
+      { region: "UK / Europe", count: 5, pct: 10 },
+      { region: "Australia / NZ", count: 3, pct: 6 },
+      { region: "Other International", count: 3, pct: 6 },
+    ];
+
+    const workingWithData = [
+      { answer: "Yes!", count: 30, pct: 61, color: palette.positive },
+      { answer: "Still undecided", count: 13, pct: 27, color: palette.warning },
+      { answer: "Not captured / N/A", count: 6, pct: 12, color: palette.muted },
+    ];
+
+    // ─── COMPONENTS ──────────────────────────────────────────────────────────
+
+    function StatCard({ label, value, sub, color }) {
+      return (
+        <div style={{
+          background: palette.surface,
+          border: `1px solid ${palette.border}`,
+          borderRadius: 12,
+          padding: "20px 24px",
+          display: "flex",
+          flexDirection: "column",
+          gap: 4,
+        }}>
+          <div style={{ fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase", color: palette.muted }}>{label}</div>
+          <div style={{ fontSize: 32, fontWeight: 700, color: color || palette.accent, lineHeight: 1.1 }}>{value}</div>
+          {sub && <div style={{ fontSize: 12, color: palette.muted }}>{sub}</div>}
+        </div>
+      );
+    }
+
+    function BarRow({ label, count, pct, color, maxPct, note }) {
+      const w = Math.min((pct / (maxPct || 100)) * 100, 100);
+      return (
+        <div style={{ marginBottom: 10 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
+            <span style={{ fontSize: 13, color: palette.text }}>
+              {label}
+              {note === "hist" && <span style={{ fontSize: 10, color: palette.muted, marginLeft: 6 }}>(2023–2024)</span>}
+            </span>
+            <span style={{ fontSize: 12, color: palette.muted }}>{count} · {pct}%</span>
+          </div>
+          <div style={{ height: 7, background: palette.border, borderRadius: 4, overflow: "hidden" }}>
+            <div style={{ height: "100%", width: `${w}%`, background: color || palette.accent, borderRadius: 4, transition: "width 0.6s ease" }} />
+          </div>
+        </div>
+      );
+    }
+
+    function SectionHeader({ title, subtitle }) {
+      return (
+        <div style={{ marginBottom: 24 }}>
+          <div style={{ fontSize: 11, letterSpacing: "0.14em", textTransform: "uppercase", color: palette.accent, marginBottom: 6 }}>Analysis</div>
+          <h2 style={{ fontSize: 22, fontWeight: 700, color: palette.text, margin: 0 }}>{title}</h2>
+          {subtitle && <p style={{ fontSize: 13, color: palette.muted, marginTop: 6, lineHeight: 1.5 }}>{subtitle}</p>}
+        </div>
+      );
+    }
+
+    function Tag({ children, color }) {
+      return (
+        <span style={{
+          display: "inline-block",
+          background: color ? `${color}22` : palette.accentSoft,
+          color: color || palette.accent,
+          border: `1px solid ${color ? `${color}44` : `${palette.accent}44`}`,
+          borderRadius: 6,
+          padding: "3px 10px",
+          fontSize: 11,
+          fontWeight: 600,
+          letterSpacing: "0.06em",
+        }}>{children}</span>
+      );
+    }
+
+    function Divider() {
+      return <div style={{ height: 1, background: palette.border, margin: "28px 0" }} />;
+    }
+
+    // ─── SECTION VIEWS ────────────────────────────────────────────────────────
+
+    function Overview() {
+      return (
+        <div>
+          <SectionHeader
+            title="Pheydrus Demographic Snapshot"
+            subtitle="Compiled from #hj-appointment-survey — Invisible Forces Report notifications (May–Jun 2026) and Pheydrus Application Typeform submissions (Oct 2023–Jun 2026)."
+          />
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))", gap: 12, marginBottom: 28 }}>
+            <StatCard label="Report Submissions" value="117+" sub="Unique leads, recent window" />
+            <StatCard label="Typeform Applications" value="50+" sub="Full demographic data available" color={palette.purple} />
+            <StatCard label="Avg Score" value="6.4/100" sub="Invisible Forces Calculator" color={palette.warning} />
+            <StatCard label="Graded F" value="93%" sub="Below threshold alignment" color={palette.negative} />
+            <StatCard label="#1 Challenge" value="Career" sub="48% of Typeform applicants" color={palette.positive} />
+            <StatCard label="Top Source" value="RE Webinar" sub="~45% of recent intakes" color={palette.accent} />
+          </div>
+
+          <div style={{ background: palette.surface, border: `1px solid ${palette.border}`, borderRadius: 12, padding: 20 }}>
+            <div style={{ fontSize: 11, color: palette.muted, letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 10 }}>Data Sources</div>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+              <Tag>Invisible Forces Reports (bar_chart bot)</Tag>
+              <Tag color={palette.purple}>Pheydrus Application Typeform</Tag>
+              <Tag color={palette.positive}>Hero's Journey Application (legacy)</Tag>
+            </div>
+            <p style={{ fontSize: 12, color: palette.muted, marginTop: 14, lineHeight: 1.6 }}>
+              The Report submissions (bar_chart) provide names, emails, and overall grades. The Typeform applications (recent "Pheydrus - Application" + legacy "Hero's Journey") provide rich qualitative and quantitative demographic fields: birthday, location, challenge, income, urgency, occupation, source, and intent to work together. Duplicates and internal test entries have been excluded from analysis.
+            </p>
+          </div>
+
+          <Divider />
+
+          <div style={{ background: `${palette.accent}11`, border: `1px solid ${palette.accent}33`, borderRadius: 12, padding: 20 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: palette.accent, marginBottom: 8 }}>Who is this audience?</div>
+            <p style={{ fontSize: 13, color: palette.text, lineHeight: 1.7, margin: 0 }}>
+              Predominantly <strong style={{ color: palette.accent }}>women (est. 80–85%)</strong>, ages 25–50, based in the <strong style={{ color: palette.accent }}>USA (65%) and Canada (14%)</strong>.
+              Most arrived via <strong style={{ color: palette.accent }}>the Real Estate Numerology Webinar</strong> in the current window (2026).
+              Historically, TikTok and YouTube were the dominant channels (2023–2024).
+              The core pain point is <strong style={{ color: palette.accent }}>career stagnation and monetization</strong>, followed by relationships and financial blocks.
+              The majority are earning <strong style={{ color: palette.accent }}>$10k–$50k/year</strong> and describe their urgency as <strong style={{ color: palette.accent }}>"now — it's urgent."</strong>
+            </p>
+          </div>
+        </div>
+      );
+    }
+
+    function ReportScores() {
+      return (
+        <div>
+          <SectionHeader
+            title="Invisible Forces Report Scores"
+            subtitle="Distribution of overall grades from the Pheydrus Combined Calculator. May 18 – Jun 12, 2026."
+          />
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))", gap: 12, marginBottom: 28 }}>
+            <StatCard label="Total Submissions" value={scoreStats.total} sub="Deduplicated entries" />
+            <StatCard label="Average Score" value={`${scoreStats.avgScore}/100`} sub="Across all reports" color={palette.warning} />
+            <StatCard label="Graded F" value={`${scoreStats.gradeF}`} sub={`${scoreStats.pctF}% of all`} color={palette.negative} />
+            <StatCard label="Graded C" value={scoreStats.gradeC} sub="Partial alignment" color={palette.purple} />
+            <StatCard label="Highest Score" value={`${scoreStats.topScore}/100`} sub="Top individual" color={palette.positive} />
+          </div>
+
+          <div style={{ marginBottom: 20 }}>
+            <div style={{ fontSize: 13, color: palette.muted, marginBottom: 14 }}>Score Range Breakdown</div>
+            {gradeData.map(d => (
+              <BarRow key={d.grade} label={d.grade} count={d.count} pct={Math.round((d.count / scoreStats.total) * 100)} color={d.color} maxPct={50} />
+            ))}
+          </div>
+
+          <Divider />
+
+          <div style={{ background: palette.surface, border: `1px solid ${palette.border}`, borderRadius: 12, padding: 20 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: palette.text, marginBottom: 10 }}>What the grades mean for sales</div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+              <div>
+                <div style={{ fontSize: 11, color: palette.muted, marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.08em" }}>Grade F (majority)</div>
+                <p style={{ fontSize: 12, color: palette.text, lineHeight: 1.6, margin: 0 }}>
+                  These leads have significant misalignment in multiple life areas. High urgency. The calculator is surfacing a felt problem they can't ignore — strong emotional hook for the discovery call.
+                </p>
+              </div>
+              <div>
+                <div style={{ fontSize: 11, color: palette.muted, marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.08em" }}>Grade C (8 leads)</div>
+                <p style={{ fontSize: 12, color: palette.text, lineHeight: 1.6, margin: 0 }}>
+                  Moderate misalignment. May be harder to convert — they have "some" alignment, so urgency is lower. Worth qualifying before booking.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <Divider />
+
+          <div style={{ fontSize: 12, color: palette.muted, lineHeight: 1.6 }}>
+            <strong style={{ color: palette.text }}>Note on duplicates:</strong> Many individuals submitted multiple reports (same email, varying scores). The channel shows the same person submitting 2–5x within hours. Unique individuals are estimated at ~80–90 for the recent window. This suggests genuine engagement with the tool and re-testing behavior, not error.
+          </div>
+        </div>
+      );
+    }
+
+    function TypeformInsights() {
+      return (
+        <div>
+          <SectionHeader
+            title="Typeform Application Deep Dive"
+            subtitle="Qualitative and quantitative data from the Pheydrus Application form — 50 fully analyzed responses."
+          />
+
+          <div style={{ marginBottom: 24 }}>
+            <div style={{ fontSize: 14, fontWeight: 600, color: palette.text, marginBottom: 14 }}>Top Challenges / Patterns to Solve</div>
+            {challengeData.map(d => (
+              <BarRow key={d.theme} label={d.theme} count={d.count} pct={d.pct} color={palette.accent} maxPct={60} />
+            ))}
+          </div>
+
+          <Divider />
+
+          <div style={{ marginBottom: 24 }}>
+            <div style={{ fontSize: 14, fontWeight: 600, color: palette.text, marginBottom: 14 }}>Prior Help Attempted</div>
+            <p style={{ fontSize: 12, color: palette.muted, marginBottom: 14, lineHeight: 1.6 }}>What people tried before finding Pheydrus — strong signal for positioning and messaging.</p>
+            {priorHelpData.map(d => (
+              <BarRow key={d.method} label={d.method} count={d.count} pct={d.pct} color={palette.purple} maxPct={80} />
+            ))}
+          </div>
+
+          <Divider />
+
+          <div style={{ marginBottom: 24 }}>
+            <div style={{ fontSize: 14, fontWeight: 600, color: palette.text, marginBottom: 14 }}>Would You Like to Work with Pheydrus?</div>
+            {workingWithData.map(d => (
+              <BarRow key={d.answer} label={d.answer} count={d.count} pct={d.pct} color={d.color} maxPct={80} />
+            ))}
+          </div>
+
+          <Divider />
+
+          <div style={{ marginBottom: 24 }}>
+            <div style={{ fontSize: 14, fontWeight: 600, color: palette.text, marginBottom: 14 }}>Geographic Distribution (Typeform)</div>
+            {geoData.map(d => (
+              <BarRow key={d.region} label={d.region} count={d.count} pct={d.pct} color={palette.positive} maxPct={80} />
+            ))}
+          </div>
+
+          <Divider />
+
+          <div style={{ background: `${palette.purple}11`, border: `1px solid ${palette.purple}33`, borderRadius: 12, padding: 20 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: palette.purple, marginBottom: 10 }}>Pattern Insight: "Therapy Isn't Enough"</div>
+            <p style={{ fontSize: 13, color: palette.text, lineHeight: 1.7, margin: 0 }}>
+              63% of applicants have already tried therapy. This is a key ICP signal — they are not new to personal development. They have <em>done the work</em> and are looking for something more specific, more system-based, and more rooted in their own blueprint. Messaging that acknowledges "you've already tried X and Y" will resonate far more than generic transformation copy.
+            </p>
+          </div>
+        </div>
+      );
+    }
+
+    function SourceBreakdown() {
+      const recent = sourceData.filter(d => !d.note);
+      const historical = sourceData.filter(d => d.note === "hist");
+      return (
+        <div>
+          <SectionHeader
+            title="Traffic & Source Breakdown"
+            subtitle="Where leads are booking from — current window (2026) vs. historical (2023–2024)."
+          />
+
+          <div style={{ fontSize: 14, fontWeight: 600, color: palette.text, marginBottom: 14 }}>Current Window: 2026</div>
+          {recent.map(d => (
+            <BarRow key={d.source} label={d.source} count={d.count} pct={d.pct} color={d.color} maxPct={60} />
+          ))}
+
+          <Divider />
+
+          <div style={{ fontSize: 14, fontWeight: 600, color: palette.text, marginBottom: 14 }}>Historical Window: 2023–2024</div>
+          <p style={{ fontSize: 12, color: palette.muted, marginBottom: 14 }}>From Hero's Journey Application typeform era — different form, different channel mix.</p>
+          {historical.map(d => (
+            <BarRow key={d.source} label={d.source} count={d.count} pct={d.pct} color={d.color} maxPct={80} />
+          ))}
+
+          <Divider />
+
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+            <div style={{ background: palette.surface, border: `1px solid ${palette.border}`, borderRadius: 10, padding: 16 }}>
+              <div style={{ fontSize: 12, color: palette.accent, fontWeight: 600, marginBottom: 8 }}>2026 Shift</div>
+              <p style={{ fontSize: 12, color: palette.text, lineHeight: 1.6, margin: 0 }}>
+                Webinar-driven intake has become dominant. Real Estate Numerology Webinar alone drives ~45% of current Typeform applications — this is the top-of-funnel event to protect and optimize.
+              </p>
+            </div>
+            <div style={{ background: palette.surface, border: `1px solid ${palette.border}`, borderRadius: 10, padding: 16 }}>
+              <div style={{ fontSize: 12, color: palette.purple, fontWeight: 600, marginBottom: 8 }}>Historical Insight</div>
+              <p style={{ fontSize: 12, color: palette.text, lineHeight: 1.6, margin: 0 }}>
+                In 2023–2024, TikTok was the #1 channel, driving over 63% of applications. YouTube was secondary at 37%. Social-organic has shifted — webinar now reigns.
+              </p>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function IncomeProfile() {
+      return (
+        <div>
+          <SectionHeader
+            title="Income & Financial Profile"
+            subtitle="Annual income self-reported in Typeform applications."
+          />
+
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))", gap: 12, marginBottom: 28 }}>
+            <StatCard label="Majority Bracket" value="$10k–50k" sub="56% of applicants" color={palette.accent} />
+            <StatCard label="$0 Income" value="18%" sub="9 applicants" color={palette.negative} />
+            <StatCard label="High Earners $105k+" value="12%" sub="6 applicants" color={palette.positive} />
+            <StatCard label="$155k–$250k+" value="6%" sub="Founders / execs" color={palette.purple} />
+          </div>
+
+          {incomeData.map(d => (
+            <BarRow key={d.range} label={d.range} count={d.count} pct={d.pct} color={palette.accent} maxPct={70} />
+          ))}
+
+          <Divider />
+
+          <div style={{ background: palette.surface, border: `1px solid ${palette.border}`, borderRadius: 12, padding: 20 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: palette.text, marginBottom: 10 }}>Buyer Qualification Lens</div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12 }}>
+              {[
+                { label: "Strong Buyers", value: "~18%", sub: "$75k+ / Founders", color: palette.positive },
+                { label: "Stretchable Buyers", value: "~56%", sub: "$10–50k / motivated", color: palette.warning },
+                { label: "Pre-Qualified Risk", value: "~18%", sub: "$0 income / broke", color: palette.negative },
+              ].map(d => (
+                <div key={d.label} style={{ textAlign: "center", padding: 12 }}>
+                  <div style={{ fontSize: 22, fontWeight: 700, color: d.color }}>{d.value}</div>
+                  <div style={{ fontSize: 12, color: palette.text, marginTop: 4 }}>{d.label}</div>
+                  <div style={{ fontSize: 11, color: palette.muted }}>{d.sub}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function PainUrgency() {
+      return (
+        <div>
+          <SectionHeader
+            title="Pain Level & Urgency"
+            subtitle="How quickly applicants report wanting to make a change — a strong proxy for sales readiness."
+          />
+
+          {urgencyData.map(d => (
+            <div key={d.label} style={{ marginBottom: 16 }}>
+              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
+                <span style={{ fontSize: 14, fontWeight: 600, color: d.color }}>{d.label}</span>
+                <span style={{ fontSize: 13, color: palette.muted }}>{d.count} · {d.pct}%</span>
+              </div>
+              <div style={{ height: 10, background: palette.border, borderRadius: 5, overflow: "hidden" }}>
+                <div style={{ height: "100%", width: `${d.pct}%`, background: d.color, borderRadius: 5 }} />
+              </div>
+            </div>
+          ))}
+
+          <Divider />
+
+          <div style={{ background: `${palette.negative}11`, border: `1px solid ${palette.negative}33`, borderRadius: 12, padding: 20, marginBottom: 16 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: palette.negative, marginBottom: 8 }}>57% Say "Now — It's Urgent"</div>
+            <p style={{ fontSize: 13, color: palette.text, lineHeight: 1.7, margin: 0 }}>
+              More than half of applicants are in acute pain and actively ready to act. This is a prime discovery call population — high conversion potential if follow-up is fast. These leads do not need long nurture sequences; they need an immediate booking opportunity.
+            </p>
+          </div>
+
+          <div style={{ background: `${palette.warning}11`, border: `1px solid ${palette.warning}33`, borderRadius: 12, padding: 20 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: palette.warning, marginBottom: 8 }}>33% Say "Within 3 Months"</div>
+            <p style={{ fontSize: 13, color: palette.text, lineHeight: 1.7, margin: 0 }}>
+              Warm leads — not emergency buyers, but intentional. They respond well to value-add email sequences, social proof, and a clear next step. Worth nurturing via Flodesk workflow with 2–3 touch points before a call.
+            </p>
+          </div>
+        </div>
+      );
+    }
+
+    function OccupationMix() {
+      return (
+        <div>
+          <SectionHeader
+            title="Occupation & Work Status"
+            subtitle="Professional identity breakdown — who is in the Pheydrus pipeline."
+          />
+
+          {occupationData.map(d => (
+            <BarRow key={d.label} label={d.label} count={d.count} pct={d.pct} color={palette.accent} maxPct={35} />
+          ))}
+
+          <Divider />
+
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 20 }}>
+            <div style={{ background: palette.surface, border: `1px solid ${palette.border}`, borderRadius: 10, padding: 16 }}>
+              <div style={{ fontSize: 12, color: palette.accent, fontWeight: 600, marginBottom: 8 }}>Employed but Stuck</div>
+              <p style={{ fontSize: 12, color: palette.text, lineHeight: 1.6, margin: 0 }}>
+                55% are employed (9-5 or freelance) — they're not broke, they're misaligned. They have income but feel the ceiling. This is the bread-and-butter Pheydrus buyer.
+              </p>
+            </div>
+            <div style={{ background: palette.surface, border: `1px solid ${palette.border}`, borderRadius: 10, padding: 16 }}>
+              <div style={{ fontSize: 12, color: palette.positive, fontWeight: 600, marginBottom: 8 }}>Monetization Seekers</div>
+              <p style={{ fontSize: 12, color: palette.text, lineHeight: 1.6, margin: 0 }}>
+                22% are actively trying to monetize — creators, coaches, practitioners. These are high-intent leads for programs like Hero's Journey or 3P.
+              </p>
+            </div>
+          </div>
+
+          <div style={{ background: palette.surface, border: `1px solid ${palette.border}`, borderRadius: 12, padding: 20 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: palette.text, marginBottom: 12 }}>Notable Individual Occupations</div>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+              {["Real Estate Agent", "Mortgage Broker", "Director of Engineering", "Social Worker", "Jewelry Designer", "Reiki / Energy Healer", "Artist / Creative", "Life Coach", "Nurse / Caregiver", "Military", "Teacher", "Software Engineer", "Barista", "Playwright", "Yoga / LMT"].map(o => (
+                <Tag key={o} color={palette.muted}>{o}</Tag>
+              ))}
+            </div>
+            <p style={{ fontSize: 12, color: palette.muted, marginTop: 12, lineHeight: 1.5 }}>
+              Wide occupational spread — the pain is universal, not industry-specific. However, the Real Estate / finance adjacent cluster (agents, brokers, PMs) is notably represented and correlates with the RE Numerology Webinar as the top source.
+            </p>
+          </div>
+        </div>
+      );
+    }
+
+    function KeyTakeaways() {
+      const insights = [
+        {
+          n: "01",
+          title: "The ICP is clear",
+          body: "Women, 28–48, USA/Canada, earning $10–50k, employed or freelancing, feeling stuck in career or money, who have already tried therapy and coaching and found it insufficient. They are spiritually curious and open to a systems-based approach.",
+          color: palette.accent,
+        },
+        {
+          n: "02",
+          title: "Urgency is high — move fast",
+          body: "57% say 'now.' The window between a report submission and a booking decision is short. Follow-up speed is a conversion lever. A same-day or next-day outreach sequence is strongly advised.",
+          color: palette.negative,
+        },
+        {
+          n: "03",
+          title: "RE Numerology Webinar is the #1 funnel",
+          body: "In the current (2026) window, this webinar drives 45%+ of Typeform applications. It should be protected, optimized, and potentially run more frequently. It is also producing the most geographically diverse leads (Canada, international).",
+          color: palette.positive,
+        },
+        {
+          n: "04",
+          title: "Scores are low — that's the point",
+          body: "93% grade F. Average score: 6.4/100. The calculator is working as intended — it amplifies felt pain and creates urgency for the call. Don't optimize for higher scores; optimize for what happens after the score lands.",
+          color: palette.warning,
+        },
+        {
+          n: "05",
+          title: "Duplicate submissions = engaged leads",
+          body: "Multiple submissions per person (same email, different scores) are common. This is re-testing, not error. It signals genuine engagement with the tool and is a strong buying signal. Flag repeat submitters for priority outreach.",
+          color: palette.purple,
+        },
+        {
+          n: "06",
+          title: "Therapy + coaching = been there, done that",
+          body: "63% have tried therapy, 37% coaching. Pheydrus messaging must position itself as the thing that goes where therapy can't. Numerology/astrology as a diagnostic system — not another coping tool — is the differentiator to lean into.",
+          color: "#7EC8C8",
+        },
+        {
+          n: "07",
+          title: "61% say Yes to working together",
+          body: "Nearly two-thirds of Typeform applicants explicitly say 'Yes!' to working with Pheydrus. The pipeline quality is high. The constraint is capacity and speed of follow-up, not lead quality.",
+          color: palette.positive,
+        },
+      ];
+
+      return (
+        <div>
+          <SectionHeader
+            title="Key Takeaways & Recommendations"
+            subtitle="Synthesis of everything in this report — what it means, what to do."
+          />
+
+          <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+            {insights.map(i => (
+              <div key={i.n} style={{
+                background: palette.surface,
+                border: `1px solid ${palette.border}`,
+                borderLeft: `3px solid ${i.color}`,
+                borderRadius: 10,
+                padding: "16px 20px",
+                display: "flex",
+                gap: 16,
+              }}>
+                <div style={{ fontSize: 11, color: i.color, fontWeight: 700, minWidth: 24, paddingTop: 2 }}>{i.n}</div>
+                <div>
+                  <div style={{ fontSize: 14, fontWeight: 600, color: palette.text, marginBottom: 6 }}>{i.title}</div>
+                  <p style={{ fontSize: 12, color: palette.muted, lineHeight: 1.7, margin: 0 }}>{i.body}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <Divider />
+
+          <div style={{ background: `${palette.accent}11`, border: `1px solid ${palette.accent}33`, borderRadius: 12, padding: 20 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: palette.accent, marginBottom: 8 }}>Report compiled from:</div>
+            <ul style={{ fontSize: 12, color: palette.muted, lineHeight: 2, margin: 0, paddingLeft: 20 }}>
+              <li>200+ bot notifications in #hj-appointment-survey (May 18 – Jun 12, 2026)</li>
+              <li>~50 Pheydrus Application Typeform submissions (recent window)</li>
+              <li>~100+ Hero's Journey Application Typeform submissions (Oct 2023 – Mar 2024)</li>
+              <li>Duplicates removed; internal test submissions excluded</li>
+            </ul>
+          </div>
+        </div>
+      );
+    }
+
+    const SECTION_COMPONENTS = {
+      "Overview": Overview,
+      "Report Scores": ReportScores,
+      "Typeform Insights": TypeformInsights,
+      "Source Breakdown": SourceBreakdown,
+      "Income Profile": IncomeProfile,
+      "Pain & Urgency": PainUrgency,
+      "Occupation Mix": OccupationMix,
+      "Key Takeaways": KeyTakeaways,
+    };
+
+    // ─── MAIN APP ─────────────────────────────────────────────────────────────
+
+    function App() {
+      const [active, setActive] = useState("Overview");
+      const Component = SECTION_COMPONENTS[active];
+
+      return (
+        <div style={{ background: palette.bg, minHeight: "100vh", fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif", color: palette.text }}>
+
+          {/* Header */}
+          <div style={{ borderBottom: `1px solid ${palette.border}`, padding: "20px 28px 16px" }}>
+            <div style={{ fontSize: 10, letterSpacing: "0.18em", textTransform: "uppercase", color: palette.accent, marginBottom: 6 }}>Pheydrus Internal</div>
+            <div style={{ display: "flex", alignItems: "baseline", gap: 12 }}>
+              <h1 style={{ fontSize: 20, fontWeight: 700, color: palette.text, margin: 0 }}>Demographic Intelligence Report</h1>
+              <span style={{ fontSize: 11, color: palette.muted }}>Jun 12, 2026</span>
+            </div>
+          </div>
+
+          {/* Nav */}
+          <div style={{ borderBottom: `1px solid ${palette.border}`, padding: "0 28px", display: "flex", gap: 2, overflowX: "auto" }}>
+            {SECTIONS.map(s => (
+              <button
+                key={s}
+                onClick={() => setActive(s)}
+                style={{
+                  background: "none",
+                  border: "none",
+                  borderBottom: `2px solid ${active === s ? palette.accent : "transparent"}`,
+                  color: active === s ? palette.accent : palette.muted,
+                  fontSize: 12,
+                  fontWeight: active === s ? 600 : 400,
+                  padding: "12px 14px",
+                  cursor: "pointer",
+                  whiteSpace: "nowrap",
+                  transition: "all 0.15s",
+                }}
+              >
+                {s}
+              </button>
+            ))}
+          </div>
+
+          {/* Content */}
+          <div style={{ maxWidth: 780, margin: "0 auto", padding: "28px 28px 60px" }}>
+            <Component />
+          </div>
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(<App />);
+  </script>
+</body>
+</html>
