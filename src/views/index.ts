@@ -1,6 +1,6 @@
 export { HomePage } from './HomePage';
 export { CalculatorPage } from './CalculatorPage';
 export { ResultsPage } from './ResultsPage';
-export { ClientAssessmentPage } from './client/ClientAssessmentPage';
-export { ClientResultsPage } from './client/ClientResultsPage';
-export { ClientDemoPage } from './client/ClientDemoPage';
+export { InvisibleForcesReportPage } from './client/InvisibleForcesReportPage';
+export { InvisibleForcesResultsPage } from './client/InvisibleForcesResultsPage';
+export { InvisibleForcesDemoPage } from './client/InvisibleForcesDemoPage';

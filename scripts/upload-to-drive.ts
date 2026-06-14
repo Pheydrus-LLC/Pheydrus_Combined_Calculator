@@ -5,12 +5,12 @@ import { google } from 'googleapis';
 
 function usageAndExit(message?: string): never {
   if (message) console.error(`ERROR: ${message}`);
-  console.error('Usage: npx tsx scripts/upload-to-drive.ts <local_file_path> <drive_folder_id>');
+  console.error('Usage: npx tsx scripts/upload-to-drive.ts <local_file_path> <drive_folder_id> [drive_file_name]');
   process.exit(1);
 }
 
 async function main(): Promise<void> {
-  const [fileArg, folderId] = process.argv.slice(2);
+  const [fileArg, folderId, driveFileNameArg] = process.argv.slice(2);
   if (!fileArg || !folderId) usageAndExit('Missing required arguments.');
 
   loadDotenv({ path: '.env.local', override: false });
@@ -31,9 +31,10 @@ async function main(): Promise<void> {
   auth.setCredentials({ refresh_token: refreshToken });
 
   const drive = google.drive({ version: 'v3', auth });
+  const driveFileName = (driveFileNameArg || '').trim() || path.basename(filePath);
   const response = await drive.files.create({
     requestBody: {
-      name: path.basename(filePath),
+      name: driveFileName,
       parents: [folderId],
     },
     media: {

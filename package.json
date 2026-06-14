@@ -7,6 +7,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "transcript:send": "npx tsx scripts/transcript-send-full.ts",
+    "reel-pipeline": "npx tsx scripts/transcript-send-full.ts",
+    "reel-pipline": "npx tsx scripts/transcript-send-full.ts",
     "transcript:only": "npx tsx scripts/transcript-to-gdoc-slack.ts",
     "captions:add": "npx tsx scripts/add-captions-to-drive-videos.ts",
     "captions:add-class": "npx tsx scripts/add-captions-to-drive-videos-class.ts",

@@ -36,6 +36,17 @@ export {
 // Human Design Calculator
 export { calculateHumanDesign, validateHumanDesignInput } from './humanDesignCalculator';
 
+// Rewrite Your Past Calculator
+export {
+  calculateRewriteYourPast,
+  calculateScore,
+  scoreBand,
+  getCompletionPercent,
+  validateRewriteYourPastInput,
+  buildSummary,
+  getSelfLedShiftSample,
+} from './rewriteYourPastCalculator';
+
 // Re-export types
 export type {
   TransitsInput,
@@ -52,4 +63,6 @@ export type {
   AstrocartographyResult,
   HumanDesignInput,
   HumanDesignResult,
+  RewriteYourPastFormData,
+  RewriteYourPastResult,
 } from '../models/calculators';

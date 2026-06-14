@@ -1,5 +1,5 @@
 /**
- * ClientDemoPage
+ * InvisibleForcesDemoPage
  * Injects hardcoded sample data and redirects to /client/results
  * so the full report UI can be previewed without filling out the form.
  *
@@ -174,7 +174,7 @@ const DEMO_RESULTS: ConsolidatedResults = {
 
 // ── Page ──────────────────────────────────────────────────────────────────────
 
-export function ClientDemoPage() {
+export function InvisibleForcesDemoPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -191,4 +191,4 @@ export function ClientDemoPage() {
   );
 }
 
-export default ClientDemoPage;
+export default InvisibleForcesDemoPage;

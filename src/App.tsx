@@ -4,9 +4,9 @@ import {
   HomePage,
   CalculatorPage,
   ResultsPage,
-  ClientAssessmentPage,
-  ClientResultsPage,
-  ClientDemoPage,
+  InvisibleForcesReportPage,
+  InvisibleForcesResultsPage,
+  InvisibleForcesDemoPage,
 } from './views';
 import {
   TransitsPage,
@@ -19,6 +19,7 @@ import {
   FengShuiPage,
   AstrocartographyPage,
   BusinessEnergyBlueprintPage,
+  RewriteYourPastPage,
 } from './views/standalone';
 import './App.css';
 
@@ -33,9 +34,9 @@ function App() {
           <Route path="results" element={<ResultsPage />} />
         </Route>
         {/* Client-facing assessment (no layout shell) */}
-        <Route path="client" element={<ClientAssessmentPage />} />
-        <Route path="client/results" element={<ClientResultsPage />} />
-        <Route path="client/demo" element={<ClientDemoPage />} />
+        <Route path="client" element={<InvisibleForcesReportPage />} />
+        <Route path="client/results" element={<InvisibleForcesResultsPage />} />
+        <Route path="client/demo" element={<InvisibleForcesDemoPage />} />
         {/* Standalone calculator pages (no layout shell) */}
         <Route path="transits" element={<TransitsPage />} />
         <Route path="life-path" element={<LifePathPage />} />
@@ -47,6 +48,7 @@ function App() {
         <Route path="feng-shui" element={<FengShuiPage />} />
         <Route path="astrocartography" element={<AstrocartographyPage />} />
         <Route path="pheydrus-HD" element={<BusinessEnergyBlueprintPage />} />
+        <Route path="rewrite-your-past" element={<RewriteYourPastPage />} />
       </Routes>
     </BrowserRouter>
   );

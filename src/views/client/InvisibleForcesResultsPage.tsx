@@ -1,5 +1,5 @@
 /**
- * ClientResultsPage — Light Edition
+ * InvisibleForcesResultsPage — Light Edition
  * White background with dark text, golden accents.
  */
 
@@ -1000,7 +1000,7 @@ function CostOfInaction({ goalShort, endYear }: { goalShort: string; endYear: nu
 
 // ── Main page ─────────────────────────────────────────────────────────────────
 
-export function ClientResultsPage() {
+export function InvisibleForcesResultsPage() {
   const location = useLocation();
   const navigate = useNavigate();
   const [isExporting, setIsExporting] = useState(false);
@@ -2675,4 +2675,4 @@ export function ClientResultsPage() {
   );
 }
 
-export default ClientResultsPage;
+export default InvisibleForcesResultsPage;

@@ -14,6 +14,7 @@ interface ParsedArgs {
   url: string;
   titleOverride?: string;
   ctaOverride?: string;
+  driveVideoUrl?: string;
   skipSlack: boolean;
 }
 
@@ -63,6 +64,12 @@ function parseArgs(argv: string[]): ParsedArgs {
       continue;
     }
 
+    if (arg === '--drive-video-url' && next) {
+      result.driveVideoUrl = next;
+      i += 1;
+      continue;
+    }
+
     if (arg === '--no-slack') {
       result.skipSlack = true;
       continue;
@@ -80,7 +87,7 @@ function printUsageAndExit(message?: string): never {
   }
   console.error(`
 Usage:
-  npm run transcript:send -- <video_url> [--title "Title"] [--cta "PORTAL"] [--no-slack]
+  npm run transcript:send -- <video_url> [--title "Title"] [--cta "PORTAL"] [--drive-video-url "https://drive.google.com/file/d/.../view"] [--no-slack]
 
 Required env vars:
   GETTRANSCRIBE_KEY
@@ -439,14 +446,22 @@ ${cta || 'Not detected'}` },
   }
 }
 
-function buildDocBody(title: string, sourceUrl: string, cta: string | null, transcript: string): string {
+function buildDocBody(
+  title: string,
+  sourceUrl: string,
+  cta: string | null,
+  transcript: string,
+  driveVideoUrl: string | null
+): string {
   const now = new Date().toISOString();
+  const driveLine = driveVideoUrl ? `Drive Video URL: ${driveVideoUrl}` : null;
 
   return [
     'Transcript Intake',
     '',
     `Title: ${title}`,
     `Source URL: ${sourceUrl}`,
+    driveLine,
     `Detected CTA: ${cta || 'Not detected'}`,
     `Generated At (UTC): ${now}`,
     '',
@@ -454,7 +469,7 @@ function buildDocBody(title: string, sourceUrl: string, cta: string | null, tran
     '',
     transcript,
     '',
-  ].join('\n');
+  ].filter((line): line is string => line !== null).join('\n');
 }
 
 async function saveLocalCopy(title: string, bodyText: string): Promise<string> {
@@ -489,7 +504,7 @@ async function main(): Promise<void> {
   const cta = (args.ctaOverride || explicitCaptionCTA || '').toUpperCase() || null;
   const docTitle = args.titleOverride || cta || dominantTerm || inferredTitle;
 
-  const bodyText = buildDocBody(docTitle, args.url, cta, transcript);
+  const bodyText = buildDocBody(docTitle, args.url, cta, transcript, args.driveVideoUrl || null);
   const localPath = await saveLocalCopy(docTitle, bodyText);
   const { docUrl } = await createGoogleDoc(docTitle, bodyText);
 

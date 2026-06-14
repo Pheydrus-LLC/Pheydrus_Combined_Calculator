@@ -1,7 +1,7 @@
 /**
  * Shared wrapper for standalone calculator pages.
  * Provides consistent Pheydrus branding (header, background, card container, footer).
- * Matches the design tokens from ClientAssessmentPage.
+ * Matches the design tokens from InvisibleForcesReportPage.
  */
 
 import { Link } from 'react-router-dom';

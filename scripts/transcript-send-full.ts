@@ -53,10 +53,50 @@ function requireArgUrl(argv: string[]): string {
   const first = argv[0];
   if (!first || first.startsWith('--')) {
     console.error('ERROR: Missing required video URL argument.');
-    console.error('Usage: npm run transcript:send -- <video_url> [--title "Title"] [--cta "PORTAL"] [--no-slack]');
+    console.error('Usage: npm run transcript:send -- <video_url> [--title "Doc Title"] [--video-title "Video Title"] [--cta "PORTAL"] [--no-slack]');
     process.exit(1);
   }
   return first;
+}
+
+function parseVideoTitle(argv: string[]): { videoTitle: string | null; passthroughArgs: string[] } {
+  const passthroughArgs: string[] = [];
+  let videoTitle: string | null = null;
+
+  for (let i = 0; i < argv.length; i += 1) {
+    const arg = argv[i]!;
+    const next = argv[i + 1];
+
+    if (arg === '--video-title' && next && !next.startsWith('--')) {
+      videoTitle = next;
+      i += 1;
+      continue;
+    }
+
+    passthroughArgs.push(arg);
+  }
+
+  return { videoTitle, passthroughArgs };
+}
+
+function hasTitleOverride(argv: string[]): boolean {
+  for (let i = 0; i < argv.length; i += 1) {
+    if (argv[i] === '--title') {
+      return true;
+    }
+  }
+  return false;
+}
+
+function buildDriveUploadName(finalFile: string, videoTitle: string | null): string | null {
+  if (!videoTitle) return null;
+  const ext = path.extname(finalFile) || '.mp4';
+  const sanitized = videoTitle
+    .replace(/[\\/:*?"<>|]/g, '-')
+    .replace(/\s+/g, ' ')
+    .trim();
+  if (!sanitized) return null;
+  return `${sanitized}${ext}`;
 }
 
 function postJsonToSlack(webhookUrl: string, body: object): Promise<void> {
@@ -128,9 +168,10 @@ async function postCombinedSlack(
 async function main(): Promise<void> {
   loadEnvFiles();
 
-  const forwardedArgs = process.argv.slice(2);
-  const videoUrl = requireArgUrl(forwardedArgs);
-  const skipSlack = forwardedArgs.includes('--no-slack');
+  const rawArgs = process.argv.slice(2);
+  const { videoTitle, passthroughArgs } = parseVideoTitle(rawArgs);
+  const videoUrl = requireArgUrl(passthroughArgs);
+  const skipSlack = passthroughArgs.includes('--no-slack');
 
   const driveFolderId =
     process.env.WATERMARK_DRIVE_FOLDER_ID ||
@@ -152,29 +193,44 @@ async function main(): Promise<void> {
   }
 
   const finalFile = finalFileMatch[1].trim();
+  const driveUploadName = buildDriveUploadName(finalFile, videoTitle);
+
+  const uploadArgs = ['tsx', 'scripts/upload-to-drive.ts', finalFile, driveFolderId];
+  if (driveUploadName) {
+    uploadArgs.push(driveUploadName);
+  }
 
   const uploadOutput = runCommand(
     'npx',
-    ['tsx', 'scripts/upload-to-drive.ts', finalFile, driveFolderId],
+    uploadArgs,
     'Step 2/3: Upload video to Google Drive'
   );
 
   const driveViewMatch = uploadOutput.match(/WEB_VIEW=(.+)/);
   const driveViewUrl = driveViewMatch?.[1]?.trim();
 
+  const transcriptArgs = ['tsx', 'scripts/transcript-to-gdoc-slack.ts', ...passthroughArgs, '--no-slack'];
+  if (videoTitle && !hasTitleOverride(passthroughArgs)) {
+    transcriptArgs.push('--title', videoTitle);
+  }
+  if (driveViewUrl) {
+    transcriptArgs.push('--drive-video-url', driveViewUrl);
+  }
+
   const transcriptOutput = runCommand(
     'npx',
-    ['tsx', 'scripts/transcript-to-gdoc-slack.ts', ...forwardedArgs, '--no-slack'],
+    transcriptArgs,
     'Step 3/3: Generate transcript'
   );
 
   const docUrlMatch = transcriptOutput.match(/^Google Doc:\s+(https:\/\/\S+)/m);
   const titleMatch = transcriptOutput.match(/^Title Used:\s+(.+)$/m);
   const docUrl = docUrlMatch?.[1]?.trim();
-  const title = titleMatch?.[1]?.trim() || 'Video Transcript';
+  const docTitle = titleMatch?.[1]?.trim() || 'Video Transcript';
+  const slackTitle = videoTitle || docTitle;
 
   if (driveViewUrl && docUrl) {
-    await postCombinedSlack(driveViewUrl, videoUrl, docUrl, title, skipSlack);
+    await postCombinedSlack(driveViewUrl, videoUrl, docUrl, slackTitle, skipSlack);
   }
 
   console.log('\nDONE: Full flow complete (download + Drive upload + transcript/slack).');

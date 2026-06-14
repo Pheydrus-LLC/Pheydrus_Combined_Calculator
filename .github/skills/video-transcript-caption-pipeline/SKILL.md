@@ -10,6 +10,8 @@ Use this skill when the user wants one end-to-end video workflow:
 ## Inputs
 - drive_video_link: Google Drive video URL (or Drive file ID)
 - original_video_link: source social URL when available (IG/TikTok/YouTube/Reels)
+- doc_title (optional): manual Google Doc title override (maps to `--title`)
+- video_title (optional): manual video title used for Drive upload file name and Slack title (maps to `--video-title`)
 
 ## Required Env Vars
 - GOOGLE_OAUTH_CLIENT_ID
@@ -45,6 +47,10 @@ Run the unified command:
 
 npm run "victorias google video" -- "<drive_video_link>"
 
+For the social reel pipeline with manual titles:
+
+npm run transcript:send -- "<original_video_link>" --title "<manual_doc_title>" --video-title "<manual_video_title>"
+
 This command handles:
 - burned-in captions upload
 - transcript Google Doc creation
@@ -54,6 +60,10 @@ This command handles:
 Run transcript pipeline against original_video_link when possible:
 
 npx tsx scripts/transcript-to-gdoc-slack.ts "<original_video_link>"
+
+Optional manual title override:
+
+npx tsx scripts/transcript-to-gdoc-slack.ts "<original_video_link>" --title "<manual_doc_title>"
 
 ### Step 2: Watermark handling
 - If original_video_link is social URL, produce/download watermark-free source first.
@@ -71,6 +81,7 @@ Post one consolidated message containing:
 - Google Doc URL
 - Captioned Drive video URL
 - Original source URL
+- Ensure the same Drive video URL is included inside the Google Doc metadata block (`Drive Video URL:` line).
 
 ## Slack Message Template
 Video Processing Complete

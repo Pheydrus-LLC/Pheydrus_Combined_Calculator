@@ -8,3 +8,4 @@ export { RelocationPage } from './RelocationPage';
 export { FengShuiPage } from './FengShuiPage';
 export { AstrocartographyPage } from './AstrocartographyPage';
 export { BusinessEnergyBlueprintPage } from './BusinessEnergyBlueprintPage';
+export { RewriteYourPastPage } from './RewriteYourPastPage';

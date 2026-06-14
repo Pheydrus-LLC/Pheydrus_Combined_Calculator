@@ -1,5 +1,5 @@
 /**
- * ClientAssessmentPage
+ * InvisibleForcesReportPage
  * Multi-step intake quiz for the client-facing Pheydrus assessment.
  * Steps:
  *   1 – About You       (name, email, phone, DOB, time of birth)
@@ -176,7 +176,7 @@ function NavButtons({
 }
 
 // ─── Main Component ──────────────────────────────────────────────────────────
-export function ClientAssessmentPage() {
+export function InvisibleForcesReportPage() {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
@@ -720,4 +720,4 @@ function Row({ label, value }: { label: string; value: string }) {
   );
 }
 
-export default ClientAssessmentPage;
+export default InvisibleForcesReportPage;
