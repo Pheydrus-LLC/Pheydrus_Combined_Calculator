@@ -10,13 +10,12 @@ import { useRewriteYourPastForm } from '../../hooks/useRewriteYourPastForm';
 import {
   calculateRewriteYourPast,
   getCompletionPercent,
-  type RewriteYourPastFormData,
 } from '../../calculators/rewriteYourPastCalculator';
 
 const LEAD_STORAGE_KEY = 'hjRewritePastLeadV1';
 
 export function RewriteYourPastPage() {
-  const { formData, updateField, updateFields, isLoading: formLoading } = useRewriteYourPastForm();
+  const { formData, updateField, isLoading: formLoading } = useRewriteYourPastForm();
   const [isLeadGateUnlocked, setIsLeadGateUnlocked] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const [result, setResult] = useState<ReturnType<typeof calculateRewriteYourPast> | null>(null);
@@ -73,11 +72,10 @@ export function RewriteYourPastPage() {
   };
 
   const completionPercent = getCompletionPercent(formData);
-  const heroScore = result?.score || 0;
 
   if (formLoading) {
     return (
-      <StandalonePageWrapper>
+      <StandalonePageWrapper title="Rewrite Your Past">
         <div className="flex items-center justify-center min-h-screen">
           <div className="text-center">
             <div className="animate-spin mb-4">
@@ -95,7 +93,7 @@ export function RewriteYourPastPage() {
   }
 
   return (
-    <StandalonePageWrapper>
+    <StandalonePageWrapper title="Rewrite Your Past">
       <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
         {/* Cover Page */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12">

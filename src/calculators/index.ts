@@ -47,6 +47,8 @@ export {
   getSelfLedShiftSample,
 } from './rewriteYourPastCalculator';
 
+export type { RewriteYourPastFormData, RewriteYourPastResult } from './rewriteYourPastCalculator';
+
 // Re-export types
 export type {
   TransitsInput,
@@ -63,6 +65,4 @@ export type {
   AstrocartographyResult,
   HumanDesignInput,
   HumanDesignResult,
-  RewriteYourPastFormData,
-  RewriteYourPastResult,
 } from '../models/calculators';
