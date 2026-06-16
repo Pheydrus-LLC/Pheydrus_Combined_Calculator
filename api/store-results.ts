@@ -366,6 +366,64 @@ async function appendToGoogleSheet(
   console.info(`[store-results] Google Sheets row appended for ${maskEmail(email)}`);
 }
 
+// ── GoHighLevel ───────────────────────────────────────────────────────────────
+
+async function addToGoHighLevel(
+  name: string,
+  email: string,
+  intake: Intake,
+  results: Results
+): Promise<void> {
+  const apiKey = process.env.GHL_API_KEY;
+  const locationId = process.env.GHL_LOCATION_ID;
+  const maskedEmail = maskEmail(email);
+
+  if (!apiKey || !locationId) {
+    console.info('[store-results] GHL sync skipped: GHL_API_KEY or GHL_LOCATION_ID not set');
+    return;
+  }
+
+  const [firstName, ...rest] = name.trim().split(' ');
+  const lastName = rest.join(' ');
+
+  const body: Record<string, unknown> = {
+    locationId,
+    email,
+    firstName: firstName || '',
+    lastName: lastName || '',
+    phone: intake.phone || undefined,
+    tags: ['Calculator Submission'],
+    customFields: [
+      { key: 'grade', field_value: results.diagnostic?.finalGrade ?? '' },
+      { key: 'score', field_value: String(results.diagnostic?.score ?? '') },
+      { key: 'desired_outcome', field_value: intake.desiredOutcome || '' },
+      { key: 'obstacle', field_value: intake.obstacle || '' },
+      { key: 'current_situation', field_value: intake.currentSituation || '' },
+      { key: 'preferred_solution', field_value: intake.preferredSolution || '' },
+      { key: 'pattern_year', field_value: intake.patternYear || '' },
+      { key: 'prior_help', field_value: Array.isArray(intake.priorHelp) ? intake.priorHelp.join(', ') : '' },
+    ].filter((f) => f.field_value !== ''),
+  };
+
+  const res = await fetch('https://services.leadconnectorhq.com/contacts/', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      'Content-Type': 'application/json',
+      Version: '2021-07-28',
+    },
+    body: JSON.stringify(body),
+  });
+
+  if (!res.ok) {
+    const text = await res.text();
+    console.warn(`[store-results] GHL sync failed for ${maskedEmail}:`, res.status, text);
+    return;
+  }
+
+  console.info(`[store-results] GHL contact created for ${maskedEmail}`);
+}
+
 // ── Handler ───────────────────────────────────────────────────────────────────
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -424,6 +482,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       postToSlack(displayName, email, results, resultsUrl),
       addToFlodesk(displayName, email, intake.marketingConsent),
       appendToGoogleSheet(displayName, email, results, intake, resultsUrl, addressCountry),
+      addToGoHighLevel(displayName, email, intake, results),
     ]);
     return res.status(200).json({ ok: true, id, blobDebug });
   } catch (err) {
