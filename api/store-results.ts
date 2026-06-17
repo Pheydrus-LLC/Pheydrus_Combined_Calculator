@@ -405,7 +405,7 @@ async function addToGoHighLevel(
     ].filter((f) => f.field_value !== ''),
   };
 
-  const res = await fetch('https://services.leadconnectorhq.com/contacts/', {
+  const contactRes = await fetch('https://services.leadconnectorhq.com/contacts/', {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${apiKey}`,
@@ -415,13 +415,83 @@ async function addToGoHighLevel(
     body: JSON.stringify(body),
   });
 
-  if (!res.ok) {
-    const text = await res.text();
-    console.warn(`[store-results] GHL sync failed for ${maskedEmail}:`, res.status, text);
+  if (!contactRes.ok) {
+    const text = await contactRes.text();
+    console.warn(`[store-results] GHL sync failed for ${maskedEmail}:`, contactRes.status, text);
     return;
   }
 
+  const contactData = (await contactRes.json()) as { contact?: { id?: string } };
+  const contactId = contactData?.contact?.id;
   console.info(`[store-results] GHL contact created for ${maskedEmail}`);
+
+  // Resolve pipeline + stage (env var override, otherwise dynamic lookup by name)
+  let pipelineId: string | null = process.env.GHL_PIPELINE_ID ?? null;
+  let stageId: string | null = process.env.GHL_STAGE_ID ?? null;
+
+  if (!pipelineId || !stageId) {
+    const plRes = await fetch(
+      `https://services.leadconnectorhq.com/opportunities/pipelines?locationId=${locationId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          Version: '2021-07-28',
+        },
+      }
+    );
+
+    if (plRes.ok) {
+      const plData = (await plRes.json()) as {
+        pipelines?: Array<{
+          id: string;
+          name: string;
+          stages: Array<{ id: string; name: string }>;
+        }>;
+      };
+      const pipeline = plData.pipelines?.find(
+        (p) => p.name.toLowerCase() === 'sales pipeline'
+      );
+      const stage = pipeline?.stages.find(
+        (s) => s.name.toLowerCase() === 'new lead'
+      );
+      pipelineId = pipeline?.id ?? null;
+      stageId = stage?.id ?? null;
+    } else {
+      console.warn(`[store-results] GHL pipeline lookup failed: ${plRes.status}`);
+    }
+  }
+
+  if (!pipelineId || !stageId || !contactId) {
+    console.warn(
+      `[store-results] GHL opportunity skipped for ${maskedEmail}: could not resolve pipeline/stage/contactId`
+    );
+    return;
+  }
+
+  const oppRes = await fetch('https://services.leadconnectorhq.com/opportunities/', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      'Content-Type': 'application/json',
+      Version: '2021-07-28',
+    },
+    body: JSON.stringify({
+      locationId,
+      pipelineId,
+      pipelineStageId: stageId,
+      contactId,
+      name: name || email,
+      status: 'open',
+    }),
+  });
+
+  if (!oppRes.ok) {
+    const text = await oppRes.text();
+    console.warn(`[store-results] GHL opportunity failed for ${maskedEmail}:`, oppRes.status, text);
+    return;
+  }
+
+  console.info(`[store-results] GHL opportunity created for ${maskedEmail}`);
 }
 
 // ── Handler ───────────────────────────────────────────────────────────────────
