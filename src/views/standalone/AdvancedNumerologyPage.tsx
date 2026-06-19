@@ -82,9 +82,9 @@ export function AdvancedNumerologyPage() {
     singleFamily:
       'For single-family homes, L1 starts with the street/building number and L2 is the street name.',
     apartmentCondo:
-      'For apartments/condos, L1 is unit number, L2 is street/building number, and L3 is street name.',
+      'For apartments/condos, L1 is your unit number, L2 is the building number (cadastral), and L3 is the street name.',
     duplexTriplex:
-      'For duplexes/triplexes, L1 is the unit number (e.g., A, B, 1, 2), and L2 is the street/building number.',
+      'For duplexes/triplexes, L1 is your unit letter/number (A, B, Unit 2), and L2 is the whole duplex structure (street number + street name combined).',
     gatedCommunity:
       'For gated communities, L1 is the street/building number and L2 is the street name, same as single-family homes.',
   };
@@ -119,7 +119,11 @@ export function AdvancedNumerologyPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {(formData.propertyType === 'apartmentCondo' || formData.propertyType === 'duplexTriplex') && (
               <div>
-                <label className={labelClass}>Unit / Suite Number (L1)</label>
+                <label className={labelClass}>
+                  {formData.propertyType === 'apartmentCondo'
+                    ? 'Unit / Apartment Number (L1)'
+                    : 'Unit Letter / Number (L1)'}
+                </label>
                 <input
                   type="text"
                   value={formData.unitNumber}
@@ -133,7 +137,13 @@ export function AdvancedNumerologyPage() {
               <label className={labelClass}>
                 {formData.propertyType === 'singleFamily'
                   ? 'Street / Building Number (L1)'
-                  : 'Street / Building Number'}
+                  : formData.propertyType === 'apartmentCondo'
+                    ? 'Building Number / Cadastral (L2)'
+                    : formData.propertyType === 'duplexTriplex'
+                      ? 'Street / Building Number (part of L2)'
+                      : formData.propertyType === 'gatedCommunity'
+                        ? 'Street / Building Number (L1)'
+                        : 'Street / Building Number'}
               </label>
               <input
                 type="text"
@@ -144,7 +154,15 @@ export function AdvancedNumerologyPage() {
             </div>
 
             <div>
-              <label className={labelClass}>Street Name</label>
+              <label className={labelClass}>
+                {formData.propertyType === 'apartmentCondo'
+                  ? 'Street Name (L3)'
+                  : formData.propertyType === 'duplexTriplex'
+                    ? 'Street Name (completes L2)'
+                    : formData.propertyType === 'gatedCommunity'
+                      ? 'Street Name (L2)'
+                      : 'Street Name'}
+              </label>
               <input
                 type="text"
                 value={formData.streetName}
