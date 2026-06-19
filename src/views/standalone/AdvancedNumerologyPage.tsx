@@ -14,7 +14,7 @@ const inputClass =
   'w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-[#2d2a3e] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#9a7d4e]/40 focus:border-[#9a7d4e] transition-colors';
 const labelClass = 'block text-sm font-semibold text-[#4a4560] mb-2';
 
-type PropertyType = 'singleFamily' | 'apartmentCondo' | 'commercial' | 'ruralNoNumber';
+type PropertyType = 'singleFamily' | 'apartmentCondo' | 'duplexTriplex' | 'gatedCommunity' | 'commercial' | 'ruralNoNumber';
 
 interface AdvancedFormData {
   propertyType: PropertyType;
@@ -58,7 +58,7 @@ export function AdvancedNumerologyPage() {
               birthYear: formData.birthYear,
             }
           : {
-              unitNumber: formData.propertyType === 'apartmentCondo' ? formData.unitNumber : '',
+              unitNumber: formData.propertyType === 'apartmentCondo' || formData.propertyType === 'duplexTriplex' ? formData.unitNumber : '',
               streetNumber: formData.streetNumber,
               streetName: formData.streetName,
               postalCode: formData.postalCode,
@@ -93,6 +93,10 @@ export function AdvancedNumerologyPage() {
       'For single-family homes, L1 starts with the street/building number and L2 is the street name.',
     apartmentCondo:
       'For apartments/condos, L1 is unit number, L2 is street/building number, and L3 is street name.',
+    duplexTriplex:
+      'For duplexes/triplexes, L1 is the unit number (e.g., A, B, 1, 2), and L2 is the street/building number.',
+    gatedCommunity:
+      'For gated communities, L1 is the street/building number and L2 is the street name, same as single-family homes.',
     commercial:
       'For commercial spaces, use suite/unit if available, then building number and street name.',
     ruralNoNumber:
@@ -120,6 +124,8 @@ export function AdvancedNumerologyPage() {
             >
               <option value="singleFamily">Single Family Home / Standalone House</option>
               <option value="apartmentCondo">Apartment / Condo / Unit in Building</option>
+              <option value="duplexTriplex">Duplex / Triplex</option>
+              <option value="gatedCommunity">Gated Community</option>
               <option value="commercial">Commercial / Office / Retail</option>
               <option value="ruralNoNumber">Rural / No Clear Street Number</option>
             </select>
@@ -127,7 +133,7 @@ export function AdvancedNumerologyPage() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {formData.propertyType === 'apartmentCondo' && (
+            {(formData.propertyType === 'apartmentCondo' || formData.propertyType === 'duplexTriplex') && (
               <div>
                 <label className={labelClass}>Unit / Suite Number (L1)</label>
                 <input
