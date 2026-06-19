@@ -375,16 +375,17 @@ describe('Legacy Comparison: Address Numerology', () => {
     expect(result.levels[1].value).toBe('12345');
     expect(result.levels[1].name).toBe('Building/House Number');
     expect(result.levels[2].level).toBe('L3');
-    expect(result.levels[2].value).toBe('Maple Lane');
-    expect(result.levels[2].name).toBe('Street Name');
+    expect(result.levels[2].value).toBe('7A + 12345');
+    expect(result.levels[2].name).toBe('L1 + L2');
     expect(result.levels[3].level).toBe('L4');
-    expect(result.levels[3].value).toBe('90210');
-    expect(result.levels[3].name).toBe('Postal Code');
+    expect(result.levels[3].value).toBe('Maple Lane');
+    expect(result.levels[3].name).toBe('Street Name');
     expect(result.levels[4].level).toBe('L5');
-    expect(result.levels[4].name).toBe('L3');
+    expect(result.levels[4].value).toBe('90210');
+    expect(result.levels[4].name).toBe('Postal Code');
   });
 
-  it('L3 combined value: L1+L2A+L3 when all three present', () => {
+  it('L3 combined value: L1+L2 when all three source address parts are present', () => {
     const result = calculateAddressNumerology({
       unitNumber: '7A',
       streetNumber: '12345',
@@ -394,10 +395,10 @@ describe('Legacy Comparison: Address Numerology', () => {
       birthYear: '1995',
     });
 
-    // Combined L3 level is added after all individual levels
-    const l3Combined = result.levels.find((l) => l.name === 'L3');
+    // Combined L3 level is inserted in the third slot and is based on L1 + L2 only.
+    const l3Combined = result.levels.find((l) => l.name === 'L1 + L2');
     expect(l3Combined).toBeDefined();
-    expect(l3Combined!.value).toBe('7A + 12345 + Maple Lane');
+    expect(l3Combined!.value).toBe('7A + 12345');
   });
 
   it('L3 combined: L1+L2A when only those two present (no street name)', () => {
@@ -410,12 +411,12 @@ describe('Legacy Comparison: Address Numerology', () => {
       birthYear: '1995',
     });
 
-    const l3Combined = result.levels.find((l) => l.name === 'L3');
+    const l3Combined = result.levels.find((l) => l.name === 'L1 + L2');
     expect(l3Combined).toBeDefined();
     expect(l3Combined!.value).toBe('7A + 12345');
   });
 
-  it('L3 combined: L2A+L3 when no unit number', () => {
+  it('L3 combined: L2A+L3 when no unit number (street number becomes L1)', () => {
     const result = calculateAddressNumerology({
       unitNumber: '',
       streetNumber: '12345',
@@ -425,12 +426,12 @@ describe('Legacy Comparison: Address Numerology', () => {
       birthYear: '1995',
     });
 
-    const l3Combined = result.levels.find((l) => l.name === 'L3');
+    const l3Combined = result.levels.find((l) => l.name === 'L1 + L2');
     expect(l3Combined).toBeDefined();
     expect(l3Combined!.value).toBe('12345 + Maple Lane');
   });
 
-  it('L3 combined added even with L1 and L3 only (no streetNumber)', () => {
+  it('L3 combined added even with L1 and L3 only (street name becomes L2)', () => {
     const result = calculateAddressNumerology({
       unitNumber: '7A',
       streetNumber: '',
@@ -442,12 +443,12 @@ describe('Legacy Comparison: Address Numerology', () => {
 
     // 2 individual levels + 1 L3 combined
     expect(result.levels).toHaveLength(3);
-    const l3Combined = result.levels.find((l) => l.name === 'L3');
+    const l3Combined = result.levels.find((l) => l.name === 'L1 + L2');
     expect(l3Combined).toBeDefined();
     expect(l3Combined!.value).toBe('7A + Maple Lane');
   });
 
-  it('L3 combined added even with single field', () => {
+  it('L3 combined is not added with single field (requires L1 and L2)', () => {
     const result = calculateAddressNumerology({
       unitNumber: '',
       streetNumber: '',
@@ -457,11 +458,11 @@ describe('Legacy Comparison: Address Numerology', () => {
       birthYear: '1995',
     });
 
-    // 1 individual level + 1 L3 combined
-    expect(result.levels).toHaveLength(2);
+    // Single source field only => no L3 derived level.
+    expect(result.levels).toHaveLength(1);
     expect(result.levels[0].value).toBe('Broadway');
-    const l3Combined = result.levels.find((l) => l.name === 'L3');
-    expect(l3Combined).toBeDefined();
+    const l3Combined = result.levels.find((l) => l.name === 'L1 + L2');
+    expect(l3Combined).toBeUndefined();
   });
 
   // ---- Numerology calculations ----
@@ -497,9 +498,11 @@ describe('Legacy Comparison: Address Numerology', () => {
 
     expect(result.levels[0].number).toBe(8); // 7A → 8
     expect(result.levels[1].number).toBe(6); // 12345 → 6
-    expect(result.levels[2].number).toBe(3); // Maple Lane (stripped: Maple) → 3
+    // L3 derived from L1 + L2 => 8 + 6 = 14 -> 5
+    expect(result.levels[2].number).toBe(5);
+    expect(result.levels[3].number).toBe(3); // Maple Lane (stripped: Maple) → 3
     // 90210 → 9+0+2+1+0 = 12 → 1+2 = 3
-    expect(result.levels[3].number).toBe(3);
+    expect(result.levels[4].number).toBe(3);
   });
 
   // ---- Extended meanings ----

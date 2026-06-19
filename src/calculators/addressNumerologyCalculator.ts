@@ -197,24 +197,20 @@ export function calculateAddressNumerology(input: AddressNumerologyInput): Addre
   if (L3?.value) levelsRaw.push(L3);
   if (L4?.value) levelsRaw.push(L4);
 
-  // Build final levels with dynamic numbering (L1, L2, L3, ...)
-  const levels: NumerologyLevel[] = levelsRaw.map((raw, index) =>
+  // Build base levels dynamically (L1, L2, L3, ...)
+  const baseLevels: NumerologyLevel[] = levelsRaw.map((raw, index) =>
     buildLevel(`L${index + 1}`, raw.value, raw.name)
   );
 
-  // Compute L3 — sum of individual chaldean values for Unit + Building + Street Name.
-  // Each component is calculated exactly as its individual level is (including suffix stripping for street name).
-  // Reduce the sum to a single digit, preserving 11 as a master number.
-  const l3CompNums: number[] = [];
-  if (L1) l3CompNums.push(chaldeanNumerologyCalculator([L1.value]));
-  if (L2A) l3CompNums.push(chaldeanNumerologyCalculator([L2A.value]));
-  if (L3) l3CompNums.push(chaldeanNumerologyCalculator([stripStreetSuffixes(L3.value)]));
-
-  if (l3CompNums.length >= 1) {
-    let l3Num = l3CompNums.reduce((a, b) => a + b, 0);
+  // Sheet rule: L3 is derived from L1 + L2. Any remaining source fields (e.g., postal) come after that.
+  // This ensures single-family inputs render as:
+  // L1: Street/Building Number, L2: Street Name, L3: L1 + L2, L4: Postal Code.
+  const levels: NumerologyLevel[] = [...baseLevels];
+  if (baseLevels.length >= 2) {
+    let l3Num = baseLevels[0].number + baseLevels[1].number;
     while (l3Num > 9 && l3Num !== 11) {
-      let s = 0,
-        n = l3Num;
+      let s = 0;
+      let n = l3Num;
       while (n) {
         s += n % 10;
         n = Math.floor(n / 10);
@@ -222,15 +218,11 @@ export function calculateAddressNumerology(input: AddressNumerologyInput): Addre
       l3Num = s;
     }
 
-    const displayValue = [L1, L2A, L3]
-      .filter(Boolean)
-      .map((c) => c!.value)
-      .join(' + ');
     const meaning = getFullMeaning(l3Num);
-    levels.push({
-      level: `L${levels.length + 1}`,
-      value: displayValue,
-      name: 'L3',
+    const combinedLevel: NumerologyLevel = {
+      level: 'L3',
+      value: `${baseLevels[0].value} + ${baseLevels[1].value}`,
+      name: 'L1 + L2',
       number: l3Num,
       meaning: meaning.meaning,
       description: meaning.description,
@@ -238,8 +230,15 @@ export function calculateAddressNumerology(input: AddressNumerologyInput): Addre
       challenges: meaning.challenges,
       gifts: meaning.gifts,
       reflection: meaning.reflection,
-    });
+    };
+
+    levels.splice(2, 0, combinedLevel);
   }
+
+  // Ensure level labels are sequential after inserting derived L3.
+  levels.forEach((level, index) => {
+    level.level = `L${index + 1}`;
+  });
 
   // Calculate Chinese Zodiacs
   const homeZodiac = homeYearNum ? getChineseZodiac(homeYearNum) : 'Unknown';
