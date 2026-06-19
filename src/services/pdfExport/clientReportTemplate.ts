@@ -169,10 +169,11 @@ export function renderDarkHouseWheel(items: GradeItem[], size = 108): string {
   const labelR = size * 0.34;
 
   const houseGrade: Record<number, string> = {};
+  const priority: Record<string, number> = { Neutral: 0, A: 1, C: 2, F: 3 };
   for (const item of items) {
     if (!item.house) continue;
-    const ex = houseGrade[item.house];
-    if (!ex || item.grade === 'F' || (item.grade === 'C' && ex === 'A') || (item.grade === 'A' && !ex)) {
+    const current = houseGrade[item.house] ?? 'Neutral';
+    if ((priority[item.grade] ?? 0) > (priority[current] ?? 0)) {
       houseGrade[item.house] = item.grade;
     }
   }
@@ -305,10 +306,11 @@ export function renderHouseWheel(items: GradeItem[], size = 120): string {
   const labelR = size * 0.34;
 
   const houseGrade: Record<number, string> = {};
+  const priority: Record<string, number> = { Neutral: 0, A: 1, C: 2, F: 3 };
   for (const item of items) {
     if (!item.house) continue;
-    const ex = houseGrade[item.house];
-    if (!ex || item.grade === 'F' || (item.grade === 'C' && ex === 'A') || (item.grade === 'A' && !ex)) {
+    const current = houseGrade[item.house] ?? 'Neutral';
+    if ((priority[item.grade] ?? 0) > (priority[current] ?? 0)) {
       houseGrade[item.house] = item.grade;
     }
   }
