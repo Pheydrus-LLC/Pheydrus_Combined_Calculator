@@ -85,6 +85,51 @@ export function AddressNumerologyResults({ result }: AddressNumerologyResultsPro
           ))}
         </div>
 
+        <div className="p-4 rounded-xl border border-[#e6dcc5] bg-[#fffaf2] space-y-3">
+          <h3 className="text-base font-semibold text-[#2d2a3e]">What about L4?</h3>
+          <p className="text-sm text-[#5e5138] leading-relaxed">
+            If you feel like your repeating patterns have persisted for 5+ years in your city (or
+            you don&apos;t feel at &quot;ease&quot; in general in that city) that means the issue is beyond the
+            house or building. It may have to do with your <strong>compatibility with your city,
+            state, or country.</strong>
+          </p>
+          <p className="text-sm text-[#5e5138] leading-relaxed">
+            This is L4. This is where you go into <strong>Astrocartography</strong> territory
+            (zipcode &amp; beyond).
+          </p>
+          <p className="text-sm text-[#5e5138] leading-relaxed">
+            If you&apos;re in <strong>Artist&apos;s Way</strong> — refer to your Pheydrus Astrocartography
+            calculator, and bring your results to your Pillar 3 expert.
+          </p>
+          <p className="text-sm text-[#5e5138] leading-relaxed">
+            If you&apos;re in{' '}
+            <a
+              href="https://pheydrusmetaverse.com/alchemize-your-address/"
+              target="_blank"
+              rel="noreferrer"
+              className="font-semibold text-[#9a7d4e] underline underline-offset-2"
+            >
+              Alchemize Your Address
+            </a>{' '}
+            — you&apos;ve already optimized where you are. The next step is finding out if &quot;where
+            you are&quot; was ever the right place for you to begin with. <strong>That&apos;s Quantum
+            Chess.</strong>
+          </p>
+          <p className="text-sm text-[#5e5138] leading-relaxed">
+            {'👉 '}
+            <a
+              href="https://pheydrusmetaverse.com/quantum-chess-methodology/"
+              target="_blank"
+              rel="noreferrer"
+              className="font-semibold text-[#9a7d4e] underline underline-offset-2"
+            >
+              Get Quantum Chess Now
+            </a>{' '}
+            — find the exact cities &amp; countries that will feel like &quot;home&quot; and tip things in
+            your favor.
+          </p>
+        </div>
+
         {/* Zodiac Compatibility */}
         <div className="pt-4 border-t border-gray-200">
           <h3 className="text-base font-semibold text-[#2d2a3e] mb-3">
