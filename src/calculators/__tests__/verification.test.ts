@@ -156,7 +156,7 @@ describe('Life Path Calculator Verification', () => {
 /**
  * Test Cases: Address Numerology Calculator
  * Input: L1, L2, L4 (postal code), home year, birth year
- * Expected: 4 numerology levels, zodiacs, compatibility
+ * Expected: up to 3 numerology levels (L1-L3), zodiacs, compatibility
  */
 describe('Address Numerology Calculator Verification', () => {
   const testCases = [
@@ -224,7 +224,7 @@ describe('Address Numerology Calculator Verification', () => {
       // Verify levels array
       expect(Array.isArray(result.levels)).toBe(true);
       expect(result.levels.length).toBeGreaterThan(0);
-      expect(result.levels.length).toBeLessThanOrEqual(5);
+      expect(result.levels.length).toBeLessThanOrEqual(3);
 
       // Verify each level has required fields
       result.levels.forEach((level) => {
@@ -239,8 +239,8 @@ describe('Address Numerology Calculator Verification', () => {
         expect(level).toHaveProperty('gifts');
         expect(level).toHaveProperty('reflection');
 
-        // Verify level is L1-L5
-        expect(['L1', 'L2', 'L3', 'L4', 'L5']).toContain(level.level);
+        // Verify level is L1-L3
+        expect(['L1', 'L2', 'L3']).toContain(level.level);
 
         // Verify number is 1-9, 11, 22, 33
         const validNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 22, 33];

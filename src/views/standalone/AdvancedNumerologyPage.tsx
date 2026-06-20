@@ -218,6 +218,21 @@ export function AdvancedNumerologyPage() {
               <AddressNumerologyResults result={addressResult} />
             </div>
           )}
+
+          <div className="mt-6 p-4 rounded-xl border border-[#e6dcc5] bg-[#fffaf2] space-y-3">
+            <p className="text-sm text-[#5e5138]">
+              For L4, this is where you start to go into Astrocartography territory. If you&apos;re in
+              &quot;Artist&apos;s Way,&quot; please refer to your Pheydrus Astrocartography calculator, and bring
+              your results to your Pillar 3 expert.
+            </p>
+            <p className="text-sm text-[#5e5138]">
+              If you&apos;re in &quot;Alchemize Your Address,&quot; you may want to consider taking &quot;Quantum
+              Chess&quot; (or Artist&apos;s Way) next, especially if you feel that your repeating patterns
+              have persisted for 5+ years in your city. That means the issue is beyond the
+              house/building - it may have to do with your compatibility with your
+              city/state/country.
+            </p>
+          </div>
         </section>
 
         {error && <p className="text-red-500 text-sm">{error}</p>}

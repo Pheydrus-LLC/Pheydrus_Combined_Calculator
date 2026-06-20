@@ -220,9 +220,9 @@ describe('Address Numerology Calculator - Extended Tests', () => {
       expect(result).toHaveProperty('birthZodiac');
       expect(result).toHaveProperty('compatibility');
 
-      // Verify levels are present (up to 5, including L5 unconscious combined)
+      // Verify levels are present (capped at L1-L3)
       expect(result.levels.length).toBeGreaterThanOrEqual(1);
-      expect(result.levels.length).toBeLessThanOrEqual(5);
+      expect(result.levels.length).toBeLessThanOrEqual(3);
 
       // Verify level sequence (L1, L2, L3, L4)
       const levelNames = result.levels.map((l) => l.level);
@@ -237,7 +237,7 @@ describe('Address Numerology Calculator - Extended Tests', () => {
 
       // Verify level data
       result.levels.forEach((level) => {
-        expect(['L1', 'L2', 'L3', 'L4', 'L5']).toContain(level.level);
+        expect(['L1', 'L2', 'L3']).toContain(level.level);
         expect(level.number).toBeGreaterThanOrEqual(1);
         expect(level.number).toBeLessThanOrEqual(33);
         expect(level.meaning).toBeTruthy();

@@ -366,8 +366,8 @@ describe('Legacy Comparison: Address Numerology', () => {
       birthYear: '1995',
     });
 
-    // 4 fields populated + 1 combined = 5 levels
-    expect(result.levels).toHaveLength(5);
+    // Output is capped at 3 levels: L1, L2, and derived L3.
+    expect(result.levels).toHaveLength(3);
     expect(result.levels[0].level).toBe('L1');
     expect(result.levels[0].value).toBe('7A');
     expect(result.levels[0].name).toBe('Unit Number');
@@ -377,12 +377,8 @@ describe('Legacy Comparison: Address Numerology', () => {
     expect(result.levels[2].level).toBe('L3');
     expect(result.levels[2].value).toBe('7A + 12345');
     expect(result.levels[2].name).toBe('L1 + L2');
-    expect(result.levels[3].level).toBe('L4');
-    expect(result.levels[3].value).toBe('Maple Lane');
-    expect(result.levels[3].name).toBe('Street Name');
-    expect(result.levels[4].level).toBe('L5');
-    expect(result.levels[4].value).toBe('90210');
-    expect(result.levels[4].name).toBe('Postal Code');
+    expect(result.levels.find((l) => l.name === 'Street Name')).toBeUndefined();
+    expect(result.levels.find((l) => l.name === 'Postal Code')).toBeUndefined();
   });
 
   it('L3 combined value: L1+L2 when all three source address parts are present', () => {
@@ -500,9 +496,7 @@ describe('Legacy Comparison: Address Numerology', () => {
     expect(result.levels[1].number).toBe(6); // 12345 → 6
     // L3 derived from L1 + L2 => 8 + 6 = 14 -> 5
     expect(result.levels[2].number).toBe(5);
-    expect(result.levels[3].number).toBe(3); // Maple Lane (stripped: Maple) → 3
-    // 90210 → 9+0+2+1+0 = 12 → 1+2 = 3
-    expect(result.levels[4].number).toBe(3);
+    expect(result.levels).toHaveLength(3);
   });
 
   // ---- Extended meanings ----

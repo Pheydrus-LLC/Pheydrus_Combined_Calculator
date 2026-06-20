@@ -1,7 +1,7 @@
 /**
  * Address Numerology Calculator Service
- * Calculates address numerology with dynamic levels (matching legacy getLevelsArray)
- * Includes L5 "unconscious combined value" and extended meanings
+ * Calculates address numerology with dynamic levels
+ * Returns L1-L3 only, with L3 derived from L1 + L2 when available
  * Determines zodiac compatibility between home year and birth year
  */
 
@@ -165,9 +165,10 @@ function buildLevel(level: string, value: string, name: string): NumerologyLevel
 
 /**
  * Calculate Address Numerology
- * Uses dynamic level numbering matching legacy getLevelsArray logic:
+ * Uses dynamic level numbering:
  * - Push non-empty fields in order: unitNumber, streetNumber, streetName, postalCode
- * - Add "Level" unconscious combined value using legacy priority logic
+ * - Insert derived L3 from L1 + L2 when at least two source fields are present
+ * - Return only L1-L3 levels
  * - Chinese zodiac meanings for home and birth years
  *
  * @param input - Address and year inputs
@@ -235,10 +236,11 @@ export function calculateAddressNumerology(input: AddressNumerologyInput): Addre
     levels.splice(2, 0, combinedLevel);
   }
 
-  // Ensure level labels are sequential after inserting derived L3.
-  levels.forEach((level, index) => {
-    level.level = `L${index + 1}`;
-  });
+  // Keep only L1-L3 as requested.
+  const cappedLevels = levels.slice(0, 3).map((level, index) => ({
+    ...level,
+    level: `L${index + 1}`,
+  }));
 
   // Calculate Chinese Zodiacs
   const homeZodiac = homeYearNum ? getChineseZodiac(homeYearNum) : 'Unknown';
@@ -255,7 +257,7 @@ export function calculateAddressNumerology(input: AddressNumerologyInput): Addre
   }
 
   return {
-    levels,
+    levels: cappedLevels,
     homeZodiac,
     birthZodiac,
     homeZodiacMeaning,
