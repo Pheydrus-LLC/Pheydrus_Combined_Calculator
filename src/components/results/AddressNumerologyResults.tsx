@@ -107,7 +107,7 @@ export function AddressNumerologyResults({ result }: AddressNumerologyResultsPro
               href="https://pheydrusmetaverse.com/alchemize-your-address/"
               target="_blank"
               rel="noreferrer"
-              className="font-semibold text-[#9a7d4e] underline underline-offset-2"
+              className="font-semibold text-blue-600 underline underline-offset-2 hover:text-blue-700"
             >
               Alchemize Your Address
             </a>{' '}
@@ -121,7 +121,7 @@ export function AddressNumerologyResults({ result }: AddressNumerologyResultsPro
               href="https://pheydrusmetaverse.com/quantum-chess-methodology/"
               target="_blank"
               rel="noreferrer"
-              className="font-semibold text-[#9a7d4e] underline underline-offset-2"
+              className="font-semibold text-blue-600 underline underline-offset-2 hover:text-blue-700"
             >
               Get Quantum Chess Now
             </a>{' '}
