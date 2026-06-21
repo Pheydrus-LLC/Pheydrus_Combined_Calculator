@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NE Sports Morning Show — June 21 2026</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --navy: #0D1B2A; --navy-mid: #1B2E45; --navy-light: #243B53;
+      --gold: #E8A020; --gold-light: #F2B940;
+      --green: #2CB67D; --red: #E05252; --blue-accent: #4A9EDF;
+      --text-primary: #F0F4F8; --text-secondary: #94A3B8; --text-muted: #64748B;
+      --card-bg: #1B2E45; --card-border: #243B53; --surface: #162232;
+      --celtics-green: #007A33; --sox-red: #BD3039;
+      --pats-navy: #002244; --bruins-gold: #FCB514; --wc-blue: #326295;
+    }
+    body { background: var(--navy); font-family: 'Inter', sans-serif; color: var(--text-primary); min-height: 100vh; }
+
+    /* Header */
+    .header { background: linear-gradient(135deg, #0D1B2A 0%, #1a3050 100%); border-bottom: 2px solid var(--gold); padding: 20px 32px; }
+    .header-inner { max-width: 1280px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+    .header-left { display: flex; align-items: center; gap: 14px; }
+    .show-icon { width: 48px; height: 48px; background: var(--gold); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; }
+    .header-title h1 { font-size: 22px; font-weight: 800; color: var(--text-primary); letter-spacing: -0.3px; }
+    .header-title p { font-size: 12px; color: var(--text-secondary); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.08em; }
+    .header-right { display: flex; align-items: center; gap: 8px; }
+    .on-air-badge { display: flex; align-items: center; gap: 6px; background: rgba(224,82,82,0.15); border: 1px solid rgba(224,82,82,0.4); color: var(--red); padding: 5px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+    .on-air-dot { width: 7px; height: 7px; background: var(--red); border-radius: 50%; animation: pulse 1.5s ease-in-out infinite; }
+    @keyframes pulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.5; transform:scale(0.8); } }
+    .date-badge { background: var(--navy-light); border: 1px solid var(--card-border); color: var(--text-secondary); padding: 5px 12px; border-radius: 20px; font-size: 12px; }
+
+    /* Nav */
+    .nav { background: var(--navy-mid); border-bottom: 1px solid var(--card-border); padding: 0 32px; position: sticky; top: 0; z-index: 100; }
+    .nav-inner { max-width: 1280px; margin: 0 auto; display: flex; gap: 4px; overflow-x: auto; }
+    .nav-btn { background: none; border: none; color: var(--text-muted); padding: 14px 18px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; border-bottom: 2px solid transparent; transition: all 0.15s ease; white-space: nowrap; }
+    .nav-btn:hover { color: var(--text-primary); }
+    .nav-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+    /* Ticker */
+    .ticker-wrap { background: var(--navy-light); border-bottom: 1px solid var(--card-border); padding: 8px 0; overflow: hidden; }
+    .ticker-track { display: flex; animation: ticker 38s linear infinite; width: max-content; }
+    @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+    .ticker-item { display: flex; align-items: center; gap: 8px; padding: 0 28px; border-right: 1px solid var(--card-border); white-space: nowrap; }
+    .ticker-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 600; }
+    .ticker-text { font-size: 12px; font-weight: 600; color: var(--text-primary); }
+    .ticker-note { font-size: 11px; color: var(--gold); }
+
+    /* Main */
+    .main { max-width: 1280px; margin: 0 auto; padding: 28px 32px; }
+    @media (max-width: 600px) { .main { padding: 16px; } .nav { padding: 0 12px; } .header { padding: 16px; } }
+
+    /* Sections */
+    .section { margin-bottom: 52px; }
+    .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+    .section-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+    .section-title-block { flex: 1; }
+    .section-title { font-size: 18px; font-weight: 800; color: var(--text-primary); letter-spacing: -0.2px; }
+    .section-sub { font-size: 12px; color: var(--text-muted); margin-top: 1px; }
+    .section-line { flex: 1; height: 1px; background: var(--card-border); }
+
+    /* Theme card */
+    .theme-card { background: linear-gradient(135deg, rgba(232,160,32,0.07) 0%, rgba(74,158,223,0.04) 100%); border: 1px solid rgba(232,160,32,0.3); border-radius: 16px; padding: 24px; margin-bottom: 32px; }
+    .theme-eyebrow { font-size: 11px; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px; }
+    .theme-headline { font-size: 26px; font-weight: 800; color: var(--text-primary); line-height: 1.2; margin-bottom: 12px; }
+    .theme-body { font-size: 14px; color: var(--text-secondary); line-height: 1.65; max-width: 760px; }
+    .theme-tags { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
+    .theme-tag { background: var(--card-bg); border: 1px solid var(--card-border); color: var(--text-secondary); padding: 4px 12px; border-radius: 20px; font-size: 12px; }
+
+    /* Script */
+    .rundown { display: flex; flex-direction: column; gap: 10px; }
+    .segment-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; overflow: hidden; }
+    .segment-card.lead { border-color: rgba(232,160,32,0.35); }
+    .segment-header { display: flex; align-items: center; gap: 14px; padding: 14px 18px; background: var(--surface); }
+    .segment-time { font-size: 13px; font-weight: 700; color: var(--gold); min-width: 108px; font-variant-numeric: tabular-nums; }
+    .segment-name { font-size: 15px; font-weight: 700; color: var(--text-primary); flex: 1; }
+    .segment-tag { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.05em; flex-shrink: 0; }
+    .tag-lead { background: rgba(232,160,32,0.15); color: var(--gold); }
+    .tag-sports { background: rgba(74,158,223,0.15); color: var(--blue-accent); }
+    .tag-wc { background: rgba(50,98,149,0.2); color: #7ab4e8; }
+    .tag-panel { background: rgba(44,182,125,0.15); color: var(--green); }
+    .tag-break { background: rgba(100,116,139,0.2); color: var(--text-muted); }
+    .segment-body { padding: 16px 18px; border-top: 1px solid var(--card-border); }
+    .segment-body ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .segment-body li { display: flex; gap: 10px; font-size: 13px; color: var(--text-secondary); line-height: 1.55; }
+    .bullet-icon { flex-shrink: 0; }
+    .panel-q { background: rgba(44,182,125,0.07); border: 1px solid rgba(44,182,125,0.2); border-radius: 8px; padding: 10px 14px; margin-top: 12px; }
+    .panel-q-label { font-size: 10px; font-weight: 700; color: var(--green); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4px; }
+    .panel-q-text { font-size: 13px; color: var(--text-primary); font-weight: 500; }
+    .verify-flag { display: inline-flex; align-items: center; gap: 3px; background: rgba(224,82,82,0.12); border: 1px solid rgba(224,82,82,0.25); color: #f87171; font-size: 10px; font-weight: 700; padding: 1px 7px; border-radius: 10px; text-transform: uppercase; letter-spacing: 0.05em; margin-left: 5px; }
+
+    /* Team cards */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+    @media (max-width: 900px) { .three-col { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 600px) { .two-col, .three-col { grid-template-columns: 1fr; } }
+    .team-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; overflow: hidden; transition: transform 0.15s, border-color 0.15s; }
+    .team-card:hover { transform: translateY(-2px); }
+    .team-card-header { padding: 16px; display: flex; align-items: center; gap: 14px; }
+    .team-logo { width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; letter-spacing: -0.5px; flex-shrink: 0; }
+    .logo-celtics { background: var(--celtics-green); color: #fff; }
+    .logo-sox { background: var(--sox-red); color: #fff; }
+    .logo-pats { background: var(--pats-navy); color: #C60C30; border: 2px solid #C60C30; }
+    .logo-bruins { background: var(--bruins-gold); color: #000; }
+    .logo-revs { background: #003087; color: #CE0E2D; border: 2px solid #CE0E2D; }
+    .team-info { flex: 1; }
+    .team-name-text { font-size: 16px; font-weight: 700; color: var(--text-primary); }
+    .team-league { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+    .status-badge { font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 20px; }
+    .status-finals { background: rgba(232,160,32,0.15); color: var(--gold); }
+    .status-active { background: rgba(44,182,125,0.15); color: var(--green); }
+    .status-offseason { background: rgba(100,116,139,0.15); color: var(--text-muted); }
+    .status-mls { background: rgba(74,158,223,0.15); color: var(--blue-accent); }
+    .team-card-body { padding: 0 16px 16px; }
+    .stat-row { display: flex; justify-content: space-around; background: var(--surface); border-radius: 8px; padding: 10px; margin-bottom: 14px; text-align: center; }
+    .stat-val { font-size: 18px; font-weight: 800; color: var(--text-primary); }
+    .stat-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 2px; }
+    .tp-list { display: flex; flex-direction: column; gap: 8px; }
+    .tp-item { display: flex; gap: 8px; font-size: 12px; color: var(--text-secondary); line-height: 1.45; }
+    .tp-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--gold); flex-shrink: 0; margin-top: 6px; }
+
+    /* Angle card */
+    .angle-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 18px; }
+    .angle-card-title { font-size: 12px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 14px; }
+    .angle-item { display: flex; gap: 10px; font-size: 13px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 10px; }
+    .angle-icon { flex-shrink: 0; font-size: 14px; }
+
+    /* World Cup */
+    .wc-hero { background: linear-gradient(135deg, #0a1628 0%, #1a2d4a 50%, #0d2035 100%); border: 1px solid rgba(50,98,149,0.4); border-radius: 16px; padding: 24px; margin-bottom: 20px; position: relative; overflow: hidden; }
+    .wc-hero::before { content: '⚽'; position: absolute; right: 28px; top: 50%; transform: translateY(-50%); font-size: 90px; opacity: 0.07; }
+    .wc-hero-title { font-size: 24px; font-weight: 800; color: var(--text-primary); margin-bottom: 8px; }
+    .wc-hero-sub { font-size: 13px; color: var(--text-secondary); line-height: 1.65; max-width: 680px; }
+    .wc-chips { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+    .wc-chip { background: rgba(50,98,149,0.2); border: 1px solid rgba(50,98,149,0.4); color: #7ab4e8; padding: 5px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+    .wc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 700px) { .wc-grid { grid-template-columns: 1fr; } }
+    .wc-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 18px; }
+    .wc-card-title { font-size: 12px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 14px; }
+    .wc-item { display: flex; gap: 10px; font-size: 13px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 10px; }
+    .wc-item:last-child { margin-bottom: 0; }
+    .wc-icon { flex-shrink: 0; font-size: 14px; }
+
+    /* Footer */
+    .footer { text-align: center; padding: 24px; color: var(--text-muted); font-size: 11px; border-top: 1px solid var(--card-border); margin-top: 40px; }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="header-left">
+      <div class="show-icon">🎙️</div>
+      <div class="header-title">
+        <h1>NE Sports Morning Rundown</h1>
+        <p>Show Prep · Sunday, June 21, 2026 · 6:00 – 8:00 AM · Panel Format</p>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="on-air-badge"><div class="on-air-dot"></div>On Air 6am</div>
+      <div class="date-badge">Sun Jun 21, 2026</div>
+    </div>
+  </div>
+</div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <button class="nav-btn active" onclick="navTo('script', this)">📋 Script</button>
+    <button class="nav-btn" onclick="navTo('celtics', this)">🏀 Celtics</button>
+    <button class="nav-btn" onclick="navTo('sox', this)">⚾ Red Sox</button>
+    <button class="nav-btn" onclick="navTo('worldcup', this)">🌍 World Cup</button>
+    <button class="nav-btn" onclick="navTo('quickhits', this)">⚡ Quick Hits</button>
+  </div>
+</nav>
+
+<div class="ticker-wrap">
+  <div class="ticker-track" id="ticker"></div>
+</div>
+
+<div class="main">
+
+  <!-- THEME -->
+  <div class="theme-card">
+    <div class="theme-eyebrow">Today's Show Theme</div>
+    <div class="theme-headline">"New England Is the Center of the Sports World"</div>
+    <div class="theme-body">
+      The biggest sporting event on the planet is being played 20 miles from Fenway — World Cup 2026 at Gillette Stadium in Foxborough. Simultaneously, the Celtics may be hunting another banner. This is an unprecedented convergence. Use this thread to tie every segment together. Open with it, return to it in the World Cup block, close on it.
+    </div>
+    <div class="theme-tags">
+      <span class="theme-tag">🏟️ Gillette = World Cup venue</span>
+      <span class="theme-tag">🏆 Celtics dynasty window</span>
+      <span class="theme-tag">🇺🇸 USA on home soil</span>
+      <span class="theme-tag">⚾ Sox buyer or seller</span>
+      <span class="theme-tag">🏈 Drake Maye year 2</span>
+    </div>
+  </div>
+
+  <!-- SCRIPT -->
+  <div class="section" id="script">
+    <div class="section-header">
+      <div class="section-icon" style="background:rgba(232,160,32,0.12);">📋</div>
+      <div class="section-title-block">
+        <div class="section-title">Show Script & Rundown</div>
+        <div class="section-sub">2-hour panel format · segment-by-segment talking points</div>
+      </div>
+    </div>
+    <div class="rundown">
+
+      <div class="segment-card lead">
+        <div class="segment-header">
+          <span class="segment-time">6:00 – 6:08</span>
+          <span class="segment-name">Open & Theme Set</span>
+          <span class="segment-tag tag-lead">Intro</span>
+        </div>
+        <div class="segment-body">
+          <ul>
+            <li><span class="bullet-icon">🎙️</span><span><strong>Hook line:</strong> "It's a Sunday morning in June, the World Cup is being played 20 miles from Fenway Park, and we might have a team fighting for the NBA championship. If you've been asleep, wake up — New England is the center of the sports world right now."</span></li>
+            <li><span class="bullet-icon">📣</span><span>Introduce panel. Go around: one sentence on the biggest story of the week. Don't let anyone say "the World Cup" and "the Celtics" — force them to pick one.</span></li>
+            <li><span class="bullet-icon">📋</span><span>Tease the show: Celtics lead, Red Sox mid-season checkpoint, World Cup extended block, quick hits on Pats/Bruins/Revs, hot takes at 7:45.</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="segment-card lead">
+        <div class="segment-header">
+          <span class="segment-time">6:08 – 6:28</span>
+          <span class="segment-name">🏀 Celtics — Lead Story</span>
+          <span class="segment-tag tag-lead">Lead</span>
+        </div>
+        <div class="segment-body">
+          <ul>
+            <li><span class="bullet-icon">📊</span><span>Current playoff/Finals status and latest series score <span class="verify-flag">🔴 Verify live</span></span></li>
+            <li><span class="bullet-icon">🏆</span><span><strong>Dynasty frame:</strong> Since 2024 Boston has been THE team. Today's question isn't "can they win?" — it's "where does this rank in franchise history?" Force that conversation before the game-by-game breakdown.</span></li>
+            <li><span class="bullet-icon">🔥</span><span><strong>Tatum vs. Brown alpha debate:</strong> When they're both clicking, no team stops them. But in a tight close-game moment, who do you want with the ball? This is the evergreen panel spark — use it here.</span></li>
+            <li><span class="bullet-icon">🛡️</span><span><strong>Defensive identity angle:</strong> This team wins through defense. When they're struggling, that's where to look — not the offense. It's the analytical frame for any game-by-game breakdown.</span></li>
+            <li><span class="bullet-icon">📈</span><span><strong>Legacy hook:</strong> If they win, do Tatum and Brown enter the elite "great duos" conversation — Shaq/Kobe, LeBron/Wade tier? Let the panel fight about it.</span></li>
+          </ul>
+          <div class="panel-q">
+            <div class="panel-q-label">Panel Question</div>
+            <div class="panel-q-text">"Jayson Tatum or Jaylen Brown — building a team from scratch, which one do you take? Pick one. No splits."</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="segment-card">
+        <div class="segment-header">
+          <span class="segment-time">6:28 – 6:48</span>
+          <span class="segment-name">⚾ Red Sox — Mid-Season Checkpoint</span>
+          <span class="segment-tag tag-sports">MLB</span>
+        </div>
+        <div class="segment-body">
+          <ul>
+            <li><span class="bullet-icon">📊</span><span>AL East standings, Sox record, games back <span class="verify-flag">🔴 Verify live</span></span></li>
+            <li><span class="bullet-icon">💰</span><span><strong>Buyer or seller framing:</strong> July 31 deadline is 6 weeks out. This is the moment of truth for the front office's two-year promise. Make every panelist commit — buyer or seller. No fence-sitting.</span></li>
+            <li><span class="bullet-icon">🧒</span><span><strong>Young core story:</strong> FO has said this group would "arrive." Is this the year, or is it another development season? Name the one player whose second half determines the answer.</span></li>
+            <li><span class="bullet-icon">🏟️</span><span><strong>Fenway summer angle:</strong> The park is full, it's June, the energy is there even when results are mixed. Is the atmosphere ahead of the record? Talk about what you feel walking in right now.</span></li>
+            <li><span class="bullet-icon">👁️</span><span>Last series result and what it revealed about this team's ceiling <span class="verify-flag">🔴 Verify</span></span></li>
+          </ul>
+          <div class="panel-q">
+            <div class="panel-q-label">Panel Question</div>
+            <div class="panel-q-text">"Does this Red Sox team make the playoffs? Yes or no — and name the one player whose performance is the deciding factor."</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="segment-card lead">
+        <div class="segment-header">
+          <span class="segment-time">6:48 – 7:20</span>
+          <span class="segment-name">🌍 World Cup 2026 — Extended Block</span>
+          <span class="segment-tag tag-wc">World Cup</span>
+        </div>
+        <div class="segment-body">
+          <ul>
+            <li><span class="bullet-icon">📍</span><span><strong>Lead with the local hook:</strong> "Matches are being played at Gillette Stadium in Foxborough. The biggest sporting event in the world is in our backyard. If you haven't been and you're a sports fan, you need to go." <span class="verify-flag">🔴 Confirm which Gillette matches</span></span></li>
+            <li><span class="bullet-icon">🇺🇸</span><span><strong>USA storyline:</strong> How is the USMNT doing on home soil? This generation has the most depth in program history. What's their ceiling — and what does elimination look like vs. a run? <span class="verify-flag">🔴 Verify USA group results</span></span></li>
+            <li><span class="bullet-icon">⭐</span><span><strong>Player of the tournament so far:</strong> Compare notes on who is running hot. Force each panelist to name one name. <span class="verify-flag">🔴 Verify current top performers</span></span></li>
+            <li><span class="bullet-icon">🏆</span><span><strong>Bracket outlook:</strong> Group stage is in full swing. Who looks like THE team after round 2? <span class="verify-flag">🔴 Verify standings</span></span></li>
+            <li><span class="bullet-icon">🎭</span><span><strong>Fan experience angle:</strong> Has anyone on the panel been to a match? Describe it. This is content non-soccer fans connect with — it's event energy, not sport knowledge.</span></li>
+            <li><span class="bullet-icon">🤔</span><span><strong>Crossover debate:</strong> "With World Cup at Gillette, is soccer finally — FINALLY — becoming a mainstream sport in New England?" Make everyone pick a side.</span></li>
+          </ul>
+          <div class="panel-q">
+            <div class="panel-q-label">Panel Question</div>
+            <div class="panel-q-text">"USA goes out in the Round of 32 — disaster or acceptable? Where do you set the bar for this team playing on home soil?"</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="segment-card">
+        <div class="segment-header">
+          <span class="segment-time">7:20 – 7:28</span>
+          <span class="segment-name">Break + Scores Ticker</span>
+          <span class="segment-tag tag-break">Break</span>
+        </div>
+        <div class="segment-body">
+          <ul>
+            <li><span class="bullet-icon">📻</span><span>Out-tease: "Coming up — Patriots OTAs, Bruins offseason, Revolution check-in, and the hot take segment at 7:45."</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="segment-card">
+        <div class="segment-header">
+          <span class="segment-time">7:28 – 7:45</span>
+          <span class="segment-name">⚡ Quick Hits — Pats / Bruins / Revolution</span>
+          <span class="segment-tag tag-sports">Quick Hits</span>
+        </div>
+        <div class="segment-body">
+          <ul>
+            <li><span class="bullet-icon">🏈</span><span><strong>Patriots:</strong> Drake Maye OTA reports — what are we hearing? Year 2 of a rebuild. Expectation-set: development year, not a Super Bowl year. But what does a "good" camp exit look like? <span class="verify-flag">🔴 Verify OTA news</span></span></li>
+            <li><span class="bullet-icon">🏒</span><span><strong>Bruins:</strong> Offseason mode — post-Bergeron era. Moves they're making, pieces being added or shed. Do they have the roster to compete, or is this a full rebuild cycle? <span class="verify-flag">🔴 Verify offseason moves</span></span></li>
+            <li><span class="bullet-icon">⚽</span><span><strong>Revolution:</strong> MLS mid-season — Eastern Conference standing. With World Cup buzz, is this the best marketing moment in Revolution history? <span class="verify-flag">🔴 Verify standings</span></span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="segment-card">
+        <div class="segment-header">
+          <span class="segment-time">7:45 – 7:55</span>
+          <span class="segment-name">🔥 Hot Takes & Panel Debate</span>
+          <span class="segment-tag tag-panel">Panel</span>
+        </div>
+        <div class="segment-body">
+          <ul>
+            <li><span class="bullet-icon">💬</span><span>"The World Cup being at Gillette is a bigger deal for New England sports culture long-term than another Celtics title." Agree or disagree?</span></li>
+            <li><span class="bullet-icon">💬</span><span>"Drake Maye will be a Pro Bowl QB within three years." Hot take or reasonable expectation?</span></li>
+            <li><span class="bullet-icon">💬</span><span>"The Red Sox should sell at the deadline and go all-in on 2027." Right move or giving up too early?</span></li>
+            <li><span class="bullet-icon">💬</span><span>"If the Celtics win, this is the best Boston sports team since the 2004 Red Sox." Too far — or not far enough?</span></li>
+          </ul>
+          <div class="panel-q">
+            <div class="panel-q-label">Closing Question</div>
+            <div class="panel-q-text">"One year from today — what New England sports memory from Summer 2026 are we still talking about?"</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="segment-card">
+        <div class="segment-header">
+          <span class="segment-time">7:55 – 8:00</span>
+          <span class="segment-name">Close & Sign Off</span>
+          <span class="segment-tag tag-break">Close</span>
+        </div>
+        <div class="segment-body">
+          <ul>
+            <li><span class="bullet-icon">📻</span><span>Rapid-fire recap: each panelist's call of the week in one sentence.</span></li>
+            <li><span class="bullet-icon">📅</span><span>Tease: what games and events to watch for this coming week — World Cup knockouts, Celtics next game, Sox series.</span></li>
+            <li><span class="bullet-icon">🎙️</span><span>Close line: "New England. Best sports region in the country. See you tomorrow."</span></li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- CELTICS -->
+  <div class="section" id="celtics">
+    <div class="section-header">
+      <div class="section-icon" style="background:rgba(0,122,51,0.15);">🏀</div>
+      <div class="section-title-block">
+        <div class="section-title">Boston Celtics</div>
+        <div class="section-sub">NBA · 2025–26 Season · Playoffs</div>
+      </div>
+      <div class="section-line"></div>
+    </div>
+    <div class="two-col">
+      <div class="team-card" style="border-color:rgba(0,122,51,0.3);">
+        <div class="team-card-header">
+          <div class="team-logo logo-celtics">BOS</div>
+          <div class="team-info">
+            <div class="team-name-text">Boston Celtics</div>
+            <div class="team-league">NBA Eastern Conference</div>
+          </div>
+          <span class="status-badge status-finals">Playoffs Active</span>
+        </div>
+        <div class="team-card-body">
+          <div class="stat-row">
+            <div class="stat-item"><div class="stat-val" style="color:var(--gold);">2024</div><div class="stat-label">Last Title</div></div>
+            <div class="stat-item"><div class="stat-val">?–?</div><div class="stat-label">Series <span class="verify-flag" style="font-size:9px;">Live</span></div></div>
+            <div class="stat-item"><div class="stat-val" style="color:var(--celtics-green);">East</div><div class="stat-label">Conference</div></div>
+          </div>
+          <div class="tp-list">
+            <div class="tp-item"><div class="tp-dot"></div><div>Jayson Tatum — MVP-caliber performances define the dynasty window</div></div>
+            <div class="tp-item"><div class="tp-dot"></div><div>Jaylen Brown's consistency is the under-told story of this run</div></div>
+            <div class="tp-item"><div class="tp-dot"></div><div>Defense-first identity: when it breaks down, they lose — that's the formula</div></div>
+            <div class="tp-item"><div class="tp-dot"></div><div>Back-to-back talk puts them in a completely different franchise-history tier</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="angle-card" style="border-color:rgba(0,122,51,0.2); background:rgba(0,122,51,0.04);">
+        <div class="angle-card-title">🎯 On-Air Angles</div>
+        <div class="angle-item"><span class="angle-icon">🏆</span><span><strong>If they win:</strong> Tatum + Brown become the best Celtic duo in history. That's the argument. Make someone defend it or attack it.</span></div>
+        <div class="angle-item"><span class="angle-icon">🆚</span><span><strong>Alpha debate:</strong> Tatum vs. Brown — never fully resolved. Finals moment, ball in your hands, one shot. This is your most reliable panel spark.</span></div>
+        <div class="angle-item"><span class="angle-icon">🌆</span><span><strong>City connection:</strong> Boston is a basketball town again in a way it hasn't been since Paul Pierce. How does it feel in the city right now?</span></div>
+        <div class="angle-item"><span class="angle-icon">🔄</span><span><strong>East vs. West:</strong> The West dominated for 20 years. Is this Celtic team rebalancing the power in the league for good?</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RED SOX -->
+  <div class="section" id="sox">
+    <div class="section-header">
+      <div class="section-icon" style="background:rgba(189,48,57,0.15);">⚾</div>
+      <div class="section-title-block">
+        <div class="section-title">Boston Red Sox</div>
+        <div class="section-sub">MLB · 2026 Season · AL East</div>
+      </div>
+      <div class="section-line"></div>
+    </div>
+    <div class="two-col">
+      <div class="team-card" style="border-color:rgba(189,48,57,0.3);">
+        <div class="team-card-header">
+          <div class="team-logo logo-sox">SOX</div>
+          <div class="team-info">
+            <div class="team-name-text">Boston Red Sox</div>
+            <div class="team-league">AL East · Fenway Park</div>
+          </div>
+          <span class="status-badge status-active">Mid-Season</span>
+        </div>
+        <div class="team-card-body">
+          <div class="stat-row">
+            <div class="stat-item"><div class="stat-val">?–?</div><div class="stat-label">Record <span class="verify-flag" style="font-size:9px;">Live</span></div></div>
+            <div class="stat-item"><div class="stat-val">?th</div><div class="stat-label">AL East <span class="verify-flag" style="font-size:9px;">Live</span></div></div>
+            <div class="stat-item"><div class="stat-val">Jul 31</div><div class="stat-label">Deadline</div></div>
+          </div>
+          <div class="tp-list">
+            <div class="tp-item"><div class="tp-dot"></div><div>Mid-June = buyer/seller decision time. The deadline is 6 weeks out.</div></div>
+            <div class="tp-item"><div class="tp-dot"></div><div>Young core: is this the "arrival" year the front office promised for two years?</div></div>
+            <div class="tp-item"><div class="tp-dot"></div><div>Fenway in June — the atmosphere is ahead of the standings most years</div></div>
+            <div class="tp-item"><div class="tp-dot"></div><div>AL East gauntlet: define what "competing" even means for this roster</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="angle-card" style="border-color:rgba(189,48,57,0.2); background:rgba(189,48,57,0.04);">
+        <div class="angle-card-title">🎯 On-Air Angles</div>
+        <div class="angle-item"><span class="angle-icon">💰</span><span><strong>Deadline framing:</strong> By now they should know if this is real. Force everyone to commit: buyer or seller. No "it depends."</span></div>
+        <div class="angle-item"><span class="angle-icon">📊</span><span><strong>AL East reality:</strong> Yankees, Rays, Orioles, Blue Jays all present challenges. Where does Boston realistically sit in that group after 80+ games?</span></div>
+        <div class="angle-item"><span class="angle-icon">🧒</span><span><strong>Youth accountability:</strong> Name the one young player who must step up in the second half. This is your accountability take — someone has to own it.</span></div>
+        <div class="angle-item"><span class="angle-icon">⚽</span><span><strong>World Cup distraction?</strong> With soccer dominating the cultural conversation, does baseball feel different this summer? Are fans splitting attention?</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WORLD CUP -->
+  <div class="section" id="worldcup">
+    <div class="section-header">
+      <div class="section-icon" style="background:rgba(50,98,149,0.2);">🌍</div>
+      <div class="section-title-block">
+        <div class="section-title">FIFA World Cup 2026</div>
+        <div class="section-sub">USA · Canada · Mexico · 48 Teams · Group Stage</div>
+      </div>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="wc-hero">
+      <div class="wc-hero-title">The World Cup Is In Your Backyard</div>
+      <div class="wc-hero-sub">
+        FIFA World Cup 2026 — the first 48-team tournament in history — is live across USA, Canada, and Mexico. <strong style="color:var(--gold);">Gillette Stadium in Foxborough is an official host venue.</strong> As of June 21, roughly Day 10 of the group stage, games are in full swing. The biggest sporting event on earth is happening 20 miles from Fenway. This is your connective thread all morning.
+      </div>
+      <div class="wc-chips">
+        <span class="wc-chip">📅 Tournament began ~Jun 11</span>
+        <span class="wc-chip">🏟️ Gillette Stadium — Host Venue</span>
+        <span class="wc-chip">⚽ 48 Teams · 12 Groups</span>
+        <span class="wc-chip">📍 Day ~10 of Group Stage</span>
+        <span class="wc-chip verify-flag" style="font-size:11px; padding: 5px 12px;">🔴 Verify all scores before air</span>
+      </div>
+    </div>
+
+    <div class="wc-grid">
+      <div class="wc-card">
+        <div class="wc-card-title">🇺🇸 USA Storylines</div>
+        <div class="wc-item"><span class="wc-icon">🏠</span><span><strong>Home soil pressure:</strong> The U.S. has never hosted with this quality of squad. Expectations are real and there's nowhere to hide. <span class="verify-flag">Verify USA results</span></span></div>
+        <div class="wc-item"><span class="wc-icon">🎯</span><span><strong>Set the bar:</strong> What's a "successful" World Cup for the U.S.? Group stage? QF? SF? Force every panelist to commit to a number.</span></div>
+        <div class="wc-item"><span class="wc-icon">🔥</span><span><strong>Home crowd factor:</strong> Massive, deafening crowds, electric atmosphere. Is this the edge that takes them further than anyone expects?</span></div>
+        <div class="wc-item"><span class="wc-icon">👤</span><span><strong>Name the USMNT hero:</strong> Who needs to step up for the U.S. to advance deep? One name, one take.</span></div>
+      </div>
+
+      <div class="wc-card">
+        <div class="wc-card-title">🌐 Global Storylines</div>
+        <div class="wc-item"><span class="wc-icon">⭐</span><span><strong>Player of the tournament:</strong> Who is running hot right now? Mbappe, Bellingham, Vinicius Jr., Pedri — have each panelist name one name. <span class="verify-flag">Verify</span></span></div>
+        <div class="wc-item"><span class="wc-icon">🏆</span><span><strong>Favorites:</strong> France, England, Brazil, Spain, Argentina — who is looking like THE team after round 2? <span class="verify-flag">Verify standings</span></span></div>
+        <div class="wc-item"><span class="wc-icon">😱</span><span><strong>Early upsets:</strong> Every World Cup has them. Who has shocked the world already? <span class="verify-flag">Verify</span></span></div>
+        <div class="wc-item"><span class="wc-icon">📺</span><span><strong>The ratings story:</strong> Is this the tournament that permanently shifts American sports media's relationship with soccer?</span></div>
+      </div>
+
+      <div class="wc-card">
+        <div class="wc-card-title">🏟️ Gillette Stadium Angle</div>
+        <div class="wc-item"><span class="wc-icon">📍</span><span>Gillette is an official FIFA venue. Group stage and potentially knockout stage matches are scheduled there — in Foxborough, MA. <span class="verify-flag">Confirm schedule</span></span></div>
+        <div class="wc-item"><span class="wc-icon">🎟️</span><span><strong>Fan experience:</strong> Has anyone on the panel been? Flags from 50 countries, noise you can't describe, pre-match scenes in the parking lot. Bring the room there.</span></div>
+        <div class="wc-item"><span class="wc-icon">💡</span><span><strong>Legacy question:</strong> "20 years from now, what do we say the 2026 World Cup meant for soccer in New England?" Plant that seed today.</span></div>
+        <div class="wc-item"><span class="wc-icon">🔄</span><span><strong>Revolution connection:</strong> Does World Cup buzz convert to NE Revolution season tickets and national interest? Make the case.</span></div>
+      </div>
+
+      <div class="wc-card">
+        <div class="wc-card-title">💬 Crossover Debates</div>
+        <div class="wc-item"><span class="wc-icon">🤔</span><span>"Is soccer a mainstream American sport now?" — The answer changes every 4 years. Make the case it's different this time.</span></div>
+        <div class="wc-item"><span class="wc-icon">🏟️</span><span>"If USA wins the World Cup on home soil, is it the biggest moment in American sports history?" Strong take. Run it.</span></div>
+        <div class="wc-item"><span class="wc-icon">🆚</span><span>"World Cup buzz vs. NBA Finals — which story are NE sports fans actually more invested in right now?"</span></div>
+        <div class="wc-item"><span class="wc-icon">⚽</span><span>"Name one player from outside the USA you're rooting to have a massive tournament." Goes around the panel, loose and fun.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUICK HITS -->
+  <div class="section" id="quickhits">
+    <div class="section-header">
+      <div class="section-icon" style="background:rgba(74,158,223,0.15);">⚡</div>
+      <div class="section-title-block">
+        <div class="section-title">Quick Hits</div>
+        <div class="section-sub">Patriots · Bruins · Revolution</div>
+      </div>
+      <div class="section-line"></div>
+    </div>
+    <div class="three-col">
+
+      <div class="team-card">
+        <div class="team-card-header">
+          <div class="team-logo logo-pats">NE</div>
+          <div class="team-info">
+            <div class="team-name-text">New England Patriots</div>
+            <div class="team-league">NFL · OTAs / Offseason</div>
+          </div>
+          <span class="status-badge status-offseason">OTAs</span>
+        </div>
+        <div class="team-card-body">
+          <div class="stat-row">
+            <div class="stat-item"><div class="stat-val" style="color:var(--blue-accent);">Yr 2</div><div class="stat-label">Drake Maye</div></div>
+            <div class="stat-item"><div class="stat-val">Sep</div><div class="stat-label">Kickoff</div></div>
+          </div>
+          <div class="tp-list">
+            <div class="tp-item"><div class="tp-dot"></div><div>Drake Maye Year 2 — what does a "good" 2026 season look like for him specifically?</div></div>
+            <div class="tp-item"><div class="tp-dot"></div><div>Expectation management: rebuild year, but are there enough weapons for a surprise?</div></div>
+            <div class="tp-item"><div class="tp-dot"></div><div>Offseason adds — any standout moves or draft picks? <span class="verify-flag">Verify</span></div></div>
+            <div class="tp-item"><div class="tp-dot"></div><div>"Two years post-Belichick — does this team have its own identity yet?"</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="team-card">
+        <div class="team-card-header">
+          <div class="team-logo logo-bruins">BRU</div>
+          <div class="team-info">
+            <div class="team-name-text">Boston Bruins</div>
+            <div class="team-league">NHL · Offseason</div>
+          </div>
+          <span class="status-badge status-offseason">Offseason</span>
+        </div>
+        <div class="team-card-body">
+          <div class="stat-row">
+            <div class="stat-item"><div class="stat-val">New</div><div class="stat-label">Era</div></div>
+            <div class="stat-item"><div class="stat-val">Oct</div><div class="stat-label">Puck Drop</div></div>
+          </div>
+          <div class="tp-list">
+            <div class="tp-item"><div class="tp-dot"></div><div>Post-Bergeron/Krejci era is real now — this is a new Bruins team</div></div>
+            <div class="tp-item"><div class="tp-dot"></div><div>Key offseason moves — building or selling? <span class="verify-flag">Verify</span></div></div>
+            <div class="tp-item"><div class="tp-dot"></div><div>"2-year rebuild or compete now?" Force an honest assessment — no vague optimism</div></div>
+            <div class="tp-item"><div class="tp-dot"></div><div>Young players entering camp who could break out in 2026–27</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="team-card">
+        <div class="team-card-header">
+          <div class="team-logo logo-revs">REV</div>
+          <div class="team-info">
+            <div class="team-name-text">NE Revolution</div>
+            <div class="team-league">MLS · Eastern Conference</div>
+          </div>
+          <span class="status-badge status-mls">MLS Active</span>
+        </div>
+        <div class="team-card-body">
+          <div class="stat-row">
+            <div class="stat-item"><div class="stat-val">?th</div><div class="stat-label">East Rank <span class="verify-flag" style="font-size:9px;">Live</span></div></div>
+            <div class="stat-item"><div class="stat-val">Nov</div><div class="stat-label">MLS Cup</div></div>
+          </div>
+          <div class="tp-list">
+            <div class="tp-item"><div class="tp-dot"></div><div>World Cup at Gillette is the best marketing moment in Revolution history — are they capitalizing?</div></div>
+            <div class="tp-item"><div class="tp-dot"></div><div>"Does World Cup buzz convert to Revolution season tickets?" Make everyone answer yes/no.</div></div>
+            <div class="tp-item"><div class="tp-dot"></div><div>Eastern Conference standing — playoff position? <span class="verify-flag">Verify</span></div></div>
+            <div class="tp-item"><div class="tp-dot"></div><div>Opportunity of a lifetime for soccer growth in this specific market</div></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  NE Sports Morning Show Prep · June 21, 2026 · Panel/Roundtable Format<br>
+  <span style="color:var(--red);">🔴 Verify</span> badges = confirm live before air &nbsp;·&nbsp; Segment timing is approximate; adjust for commercial breaks
+</div>
+
+<script>
+  const TICKER_DATA = [
+    { label: 'NBA', text: 'Celtics Playoff Series — Active', note: '🔴 Verify Score' },
+    { label: 'MLB', text: 'Red Sox — AL East · Check Today\'s Card', note: '🔴 Verify' },
+    { label: 'WC 2026', text: 'USA Group Stage Live — Gillette Foxborough', note: '🌍 Local' },
+    { label: 'WC 2026', text: 'Group Stage · Day ~10 of 16', note: '⏱️ In Progress' },
+    { label: 'WC 2026', text: 'World Cup at Gillette Stadium, Foxborough MA', note: '📍 20mi from Fenway' },
+    { label: 'NFL', text: 'Patriots OTAs — Drake Maye Year 2', note: '🏈 Offseason' },
+    { label: 'NHL', text: 'Bruins — Offseason Moves & Roster', note: '🏒 Verify' },
+    { label: 'MLS', text: 'NE Revolution — Eastern Conference', note: '⚽ Verify Rank' },
+  ];
+
+  const items = TICKER_DATA.map(t =>
+    `<div class="ticker-item"><span class="ticker-label">${t.label}</span><span class="ticker-text">${t.text}</span><span class="ticker-note">${t.note}</span></div>`
+  );
+  document.getElementById('ticker').innerHTML = [...items, ...items].join('');
+
+  function navTo(id, btn) {
+    document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
+  const sectionIds = ['script','celtics','sox','worldcup','quickhits'];
+  const navBtns = document.querySelectorAll('.nav-btn');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const idx = sectionIds.indexOf(e.target.id);
+        if (idx >= 0) {
+          navBtns.forEach(b => b.classList.remove('active'));
+          navBtns[idx].classList.add('active');
+        }
+      }
+    });
+  }, { threshold: 0.25 });
+  sectionIds.forEach(id => { const el = document.getElementById(id); if (el) io.observe(el); });
+</script>
+</body>
+</html>
