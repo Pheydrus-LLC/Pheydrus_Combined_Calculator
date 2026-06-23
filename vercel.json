@@ -20,6 +20,6 @@
     }
   ],
   "rewrites": [
-    { "source": "/((?!api/.*|\\.html$).*)", "destination": "/index.html" }
+    { "source": "/((?!api/.*|.*\\..*).*)", "destination": "/index.html" }
   ]
 }
