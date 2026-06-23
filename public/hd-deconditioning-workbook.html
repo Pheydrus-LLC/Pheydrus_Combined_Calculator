@@ -1,0 +1,1142 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deconditioning Workbook | Pheydrus</title>
+<style>
+:root {
+  --ground: #16122a;
+  --ground-mid: #1f1a38;
+  --ground-light: #faf6f0;
+  --text: #f0e8d5;
+  --text-dim: rgba(240,232,213,0.5);
+  --text-dark: #1e1830;
+  --text-mid: #4a3f6b;
+  --accent: #c8954a;
+  --accent-deep: #a07038;
+  --accent-pale: rgba(200,149,74,0.12);
+  --rose: #c4a8a4;
+  --rose-pale: rgba(196,168,164,0.15);
+  --border: rgba(240,232,213,0.12);
+  --border-gold: rgba(200,149,74,0.3);
+  --border-light: #e2d8ca;
+  --page-max: 860px;
+  --line-h: 32px;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;-webkit-font-smoothing:antialiased}
+body{background:var(--ground);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;min-height:100vh}
+
+/* ─── INPUT SCREEN ─────────────────────────────────── */
+#screen-input{
+  min-height:100vh;
+  padding:48px 24px 80px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+.brand-mark{letter-spacing:.22em;font-size:11px;font-weight:600;color:var(--accent);text-transform:uppercase;margin-bottom:10px}
+.input-title{font-family:Georgia,serif;font-size:clamp(28px,5vw,42px);font-weight:normal;color:var(--text);line-height:1.15;text-align:center;max-width:520px;margin-bottom:8px}
+.input-subtitle{color:var(--text-dim);font-size:14px;text-align:center;max-width:420px;line-height:1.6;margin-bottom:40px}
+
+.form-wrap{width:100%;max-width:640px;display:flex;flex-direction:column;gap:36px}
+
+.step-indicator{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.step-pill{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--accent);color:#fff;font-size:11px;font-weight:700;flex-shrink:0}
+.step-label-text{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+
+.fields-group{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fields-group .field-full{grid-column:1/-1}
+.field label{display:block;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:6px}
+.field input{width:100%;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:6px;padding:12px 14px;color:var(--text);font-size:15px;font-family:inherit;outline:none;transition:border-color .2s}
+.field input::placeholder{color:var(--text-dim)}
+.field input:focus{border-color:var(--accent)}
+
+.bg-section{display:flex;flex-direction:column;align-items:center;gap:14px}
+.bg-cta-banner{width:100%;background:rgba(200,149,74,0.1);border:1px solid var(--border-gold);border-radius:8px;padding:12px 16px;text-align:center}
+.bg-cta-title{font-size:13px;font-weight:700;color:var(--accent);letter-spacing:.06em;margin-bottom:3px}
+.bg-cta-sub{font-size:12px;color:var(--text-dim);line-height:1.5}
+
+#bodygraph-svg{width:min(220px,90vw);height:auto;overflow:visible}
+.center-shape{fill:rgba(240,232,213,0.04);stroke:rgba(200,149,74,0.3);stroke-width:1.5;transition:fill .25s,stroke .25s;cursor:pointer}
+.center-shape:hover{stroke:rgba(200,149,74,0.7);fill:rgba(200,149,74,0.08)}
+.hd-center.defined .center-shape{fill:rgba(200,149,74,0.88);stroke:#c8954a}
+.hd-center{cursor:pointer}
+.center-lbl{font-family:system-ui,sans-serif;font-size:7.5px;font-weight:600;letter-spacing:.06em;fill:rgba(240,232,213,0.45);pointer-events:none;text-anchor:middle;dominant-baseline:middle;transition:fill .25s}
+.hd-center.defined .center-lbl{fill:#1e1830}
+.channel-line{stroke:rgba(200,149,74,0.18);stroke-width:1;fill:none}
+
+.center-count{font-size:12.5px;color:var(--text-dim);text-align:center}
+.center-count strong{color:var(--accent);font-weight:700}
+
+.center-status-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;width:100%;max-width:380px}
+.center-badge{display:flex;align-items:center;gap:6px;padding:6px 10px;border-radius:5px;border:1px solid var(--border-gold);background:transparent;cursor:pointer;transition:background .2s}
+.center-badge:hover{background:var(--accent-pale)}
+.badge-dot{width:8px;height:8px;border-radius:50%;border:1.5px solid rgba(200,149,74,0.4);flex-shrink:0;transition:background .2s}
+.center-badge.defined .badge-dot{background:var(--accent);border-color:var(--accent)}
+.badge-name{font-size:10.5px;font-weight:600;letter-spacing:.04em;color:var(--text-dim);transition:color .2s}
+.center-badge.defined .badge-name{color:var(--accent)}
+.badge-status{font-size:9px;color:var(--text-dim);margin-left:auto;transition:color .2s}
+.center-badge.defined .badge-status{color:var(--accent);font-weight:600}
+
+.btn-generate{width:100%;padding:16px 24px;background:var(--accent);color:#fff;font-family:Georgia,serif;font-size:16px;font-weight:normal;letter-spacing:.05em;border:none;border-radius:8px;cursor:pointer;transition:background .2s,transform .1s}
+.btn-generate:hover{background:var(--accent-deep)}
+.btn-generate:active{transform:scale(.99)}
+.error-msg{color:#e07070;font-size:13px;text-align:center;margin-top:-20px}
+
+/* ─── WORKBOOK SCREEN ─────────────────────────────── */
+#screen-workbook{display:none;background:var(--ground-light);min-height:100vh}
+
+/* Print bar */
+.print-bar{
+  position:sticky;top:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  background:#1e1830;padding:10px 20px;gap:12px;
+  border-bottom:1px solid rgba(200,149,74,0.25);
+}
+.print-bar-brand{font-size:11px;font-weight:700;letter-spacing:.2em;color:var(--accent);text-transform:uppercase;white-space:nowrap}
+.print-bar-actions{display:flex;gap:8px;align-items:center;flex-shrink:0}
+.submission-badge{display:none;align-items:center;gap:5px;padding:4px 10px;background:rgba(80,180,100,0.15);border:1px solid rgba(80,180,100,0.3);border-radius:20px;font-size:10px;font-weight:700;letter-spacing:.06em;color:#5aaa6a;white-space:nowrap}
+.btn-print{padding:7px 16px;background:var(--accent);color:#fff;font-size:12px;font-weight:600;border:none;border-radius:5px;cursor:pointer;transition:background .2s}
+.btn-print:hover{background:var(--accent-deep)}
+.btn-back{padding:7px 16px;background:transparent;color:rgba(240,232,213,0.6);font-size:12px;border:1px solid rgba(240,232,213,0.18);border-radius:5px;cursor:pointer;transition:color .2s,border-color .2s}
+.btn-back:hover{color:var(--text);border-color:rgba(240,232,213,0.5)}
+
+/* Phase progress (inside print bar) */
+.phase-progress{
+  display:flex;align-items:center;gap:0;flex:1;justify-content:center;
+}
+.pp-step{
+  display:flex;align-items:center;gap:5px;
+  padding:4px 10px;border-radius:20px;
+  font-size:10.5px;font-weight:700;letter-spacing:.07em;
+  color:rgba(240,232,213,0.28);
+  cursor:pointer;
+  transition:color .25s,background .25s;
+  white-space:nowrap;
+  user-select:none;
+}
+.pp-step:hover{color:rgba(240,232,213,0.55)}
+.pp-step.visited{color:rgba(200,149,74,0.65)}
+.pp-step.current{color:var(--accent);background:rgba(200,149,74,0.1)}
+.pp-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:rgba(240,232,213,0.2);
+  transition:background .25s;flex-shrink:0;
+}
+.pp-step.visited .pp-dot,.pp-step.current .pp-dot{background:var(--accent)}
+.pp-divider{
+  width:18px;height:1px;
+  background:rgba(240,232,213,0.1);
+  transition:background .3s;flex-shrink:0;
+}
+.pp-divider.filled{background:rgba(200,149,74,0.4)}
+
+/* Progress scroll bar */
+.progress-track{
+  position:sticky;top:49px;z-index:99;
+  height:4px;background:rgba(200,149,74,0.06);width:100%;
+}
+.progress-fill{
+  height:100%;
+  background:linear-gradient(to right,var(--accent-deep),var(--accent),#e8c070);
+  width:0%;transition:width .1s linear;
+}
+
+/* Workbook body */
+.workbook-body{max-width:var(--page-max);margin:0 auto;padding:48px 32px 80px}
+
+/* Cover */
+.workbook-cover{text-align:center;padding:48px 0 56px;border-bottom:1.5px solid var(--border-light);margin-bottom:56px}
+.cover-brand{font-size:11px;letter-spacing:.22em;font-weight:700;color:var(--accent);text-transform:uppercase;margin-bottom:20px}
+.cover-title{font-family:Georgia,serif;font-size:clamp(30px,5vw,48px);font-weight:normal;color:var(--text-dark);line-height:1.2;margin-bottom:6px}
+.cover-subtitle{font-family:Georgia,serif;font-style:italic;font-size:18px;color:var(--text-mid);margin-bottom:32px}
+.cover-meta{display:inline-flex;flex-direction:column;align-items:flex-start;gap:4px;background:var(--accent-pale);border:1px solid rgba(200,149,74,0.25);border-radius:8px;padding:16px 24px;text-align:left}
+.cover-meta-row{display:flex;align-items:center;gap:10px;font-size:13px}
+.meta-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);width:52px;flex-shrink:0}
+.meta-value{color:var(--text-dark);font-size:14px}
+
+/* Blueprint section */
+.blueprint-section{margin-bottom:56px;padding:28px 32px;background:#fff;border:1px solid var(--border-light);border-left:4px solid var(--accent);border-radius:8px}
+.blueprint-title{font-family:Georgia,serif;font-size:18px;color:var(--text-dark);margin-bottom:6px}
+.blueprint-hint{font-size:14px;color:var(--text-mid);margin-bottom:16px;line-height:1.6}
+.blueprint-toggle-hint{font-size:12px;color:var(--text-mid);margin-bottom:16px;display:flex;align-items:center;gap:6px}
+.blueprint-toggle-hint::before{content:"⇄";color:var(--accent);font-size:14px}
+.blueprint-grid{display:flex;flex-wrap:wrap;gap:8px}
+.bp-chip{display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:600;letter-spacing:.03em;cursor:pointer;transition:transform .12s,box-shadow .12s,background .2s;user-select:none}
+.bp-chip:hover{transform:translateY(-1px);box-shadow:0 2px 8px rgba(0,0,0,0.08)}
+.bp-chip:active{transform:scale(.97)}
+.bp-chip.defined{background:rgba(200,149,74,0.15);color:#7a5a20;border:1px solid rgba(200,149,74,0.4)}
+.bp-chip.undefined{background:rgba(74,63,107,0.08);color:var(--text-mid);border:1px solid rgba(74,63,107,0.2)}
+.bp-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.bp-chip.defined .bp-dot{background:var(--accent)}
+.bp-chip.undefined .bp-dot{background:var(--text-mid);opacity:.5}
+
+/* Card flash */
+@keyframes cardFlash{0%{outline:2px solid var(--accent);outline-offset:2px}100%{outline:2px solid transparent;outline-offset:6px}}
+.center-card.flashing{animation:cardFlash .6s ease-out forwards}
+
+/* Phase sections */
+.phase-section{margin-bottom:64px}
+.phase-header{display:flex;align-items:flex-start;gap:20px;margin-bottom:32px;padding-bottom:20px;border-bottom:1.5px solid var(--border-light)}
+.phase-num{font-family:Georgia,serif;font-size:48px;font-weight:normal;color:var(--accent);opacity:.4;line-height:1;flex-shrink:0;margin-top:-4px}
+.phase-eyebrow{font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);margin-bottom:4px}
+.phase-name{font-family:Georgia,serif;font-size:clamp(22px,4vw,32px);font-weight:normal;color:var(--text-dark);line-height:1.2;margin-bottom:4px}
+.phase-tag{font-family:Georgia,serif;font-style:italic;font-size:15px;color:var(--text-mid)}
+
+/* Phase 1 */
+.objective-box{background:var(--rose-pale);border:1px solid rgba(196,168,164,0.3);border-radius:6px;padding:16px 20px;margin-bottom:28px}
+.objective-label{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--rose);margin-bottom:6px}
+.objective-text{font-size:14px;color:var(--text-dark);line-height:1.65}
+.step-block{margin-bottom:36px}
+.step-title{font-family:Georgia,serif;font-size:17px;color:var(--text-dark);margin-bottom:6px;font-weight:normal}
+.step-number{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+.step-prompt{font-size:14px;color:var(--text-mid);line-height:1.65;margin-bottom:18px}
+.step-prompt em{color:var(--text-dark);font-style:italic}
+
+/* ── Typeable inventory grid ── */
+.inventory-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.inv-col-header{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;padding-bottom:8px;border-bottom:1.5px solid var(--border-light)}
+
+/* Lined contenteditable for inventory columns */
+.inv-editable{
+  min-height:288px;
+  line-height:var(--line-h);
+  font-size:13.5px;
+  color:var(--text-dark);
+  font-family:Georgia,serif;
+  outline:none;
+  word-break:break-word;
+  cursor:text;
+  padding-top:2px;
+  background-image:repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent calc(var(--line-h) - 1px),
+    #ddd4c4 calc(var(--line-h) - 1px),
+    #ddd4c4 var(--line-h)
+  );
+  background-size:100% var(--line-h);
+  background-attachment:local;
+}
+.inv-editable:focus{background-image:repeating-linear-gradient(
+  to bottom,
+  rgba(200,149,74,0.03) 0px,
+  rgba(200,149,74,0.03) calc(var(--line-h) - 1px),
+  #c8a87a calc(var(--line-h) - 1px),
+  #c8a87a var(--line-h)
+)}
+.inv-editable:empty::before{
+  content:attr(data-placeholder);
+  color:rgba(74,63,107,0.28);
+  font-style:italic;
+  pointer-events:none;
+}
+
+/* Prompt blocks in Step 2 */
+.prompt-block{display:grid;grid-template-columns:auto 1fr;gap:12px 16px;margin-bottom:24px}
+.prompt-q{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--rose);padding-top:2px}
+.prompt-label{font-size:14px;color:var(--text-dark);line-height:1.55}
+.prompt-note{font-size:12.5px;color:var(--text-mid);font-style:italic;margin-top:2px}
+
+/* Typeable prompt area */
+.prompt-editable{
+  grid-column:1/-1;
+  min-height:90px;
+  border:1px solid var(--border-light);
+  border-radius:5px;
+  padding:10px 14px;
+  font-size:13.5px;
+  line-height:1.75;
+  color:var(--text-dark);
+  font-family:Georgia,serif;
+  outline:none;
+  word-break:break-word;
+  background:rgba(250,246,240,0.6);
+  cursor:text;
+  transition:border-color .2s,background .2s;
+  margin-top:4px;
+}
+.prompt-editable:focus{border-color:var(--accent);background:#fff}
+.prompt-editable:empty::before{
+  content:attr(data-placeholder);
+  color:rgba(74,63,107,0.3);
+  font-style:italic;
+  pointer-events:none;
+}
+
+.release-box{background:var(--accent-pale);border:1px solid rgba(200,149,74,0.25);border-radius:8px;padding:24px 28px}
+.release-text{font-family:Georgia,serif;font-size:16px;font-style:italic;color:var(--text-dark);line-height:1.8}
+
+/* Phase 2 center cards */
+.centers-intro{font-size:14px;color:var(--text-mid);line-height:1.65;margin-bottom:8px;max-width:680px}
+.centers-toggle-note{font-size:12px;color:var(--text-mid);margin-bottom:28px;display:flex;align-items:center;gap:6px}
+.centers-toggle-note::before{content:"↕";color:var(--accent);font-size:14px}
+
+.center-card{margin-bottom:28px;background:#fff;border:1px solid var(--border-light);border-radius:10px;overflow:hidden;transition:box-shadow .2s}
+.center-card:hover{box-shadow:0 2px 12px rgba(0,0,0,0.06)}
+
+.contrast-banner{font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--rose);background:rgba(196,168,164,0.1);border-bottom:1px solid rgba(196,168,164,0.2);padding:6px 18px;text-align:center}
+
+/* Card header */
+.center-card-header{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding:14px 16px;border-bottom:1px solid var(--border-light)}
+.center-card.defined .center-card-header{background:rgba(200,149,74,0.07)}
+.center-card.undefined .center-card-header{background:rgba(74,63,107,0.03)}
+.center-card.contrast-view .center-card-header{background:rgba(196,168,164,0.05)}
+
+.center-card-head-row{display:flex;align-items:center;gap:14px;flex:1;min-width:0}
+
+/* Mini BodyGraph wrapper — dark background so centers pop */
+.center-mini-graph{
+  background:var(--ground);
+  border-radius:7px;
+  padding:8px 7px;
+  flex-shrink:0;
+  border:1px solid rgba(200,149,74,0.22);
+}
+
+.center-card-info{flex:1;min-width:0}
+.center-card-name{font-family:Georgia,serif;font-size:17px;color:var(--text-dark);line-height:1.2}
+.center-card-subtitle{font-size:11.5px;color:var(--text-mid);font-style:italic;margin-top:2px}
+
+.center-card-actions{display:flex;flex-direction:column;align-items:flex-end;gap:7px;flex-shrink:0}
+.center-card-status{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:20px;white-space:nowrap}
+.center-card.defined .center-card-status{background:rgba(200,149,74,0.18);color:#7a5820;border:1px solid rgba(200,149,74,0.4)}
+.center-card.undefined .center-card-status{background:rgba(74,63,107,0.08);color:var(--text-mid);border:1px solid rgba(74,63,107,0.2)}
+.center-card.contrast-view .center-card-status{background:rgba(196,168,164,0.15);color:#8a6868;border:1px solid rgba(196,168,164,0.35)}
+.card-view-toggle{font-size:10.5px;font-weight:700;letter-spacing:.05em;color:var(--accent);background:var(--accent-pale);border:1px solid var(--border-gold);border-radius:20px;padding:4px 10px;cursor:pointer;white-space:nowrap;transition:background .2s;font-family:inherit}
+.card-view-toggle:hover{background:rgba(200,149,74,0.2)}
+.center-card.contrast-view .card-view-toggle{color:var(--rose);background:rgba(196,168,164,0.1);border-color:rgba(196,168,164,0.3)}
+
+/* Card body */
+.center-card-body{padding:16px 18px;display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.center-col-title{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px}
+.center-card.defined .strengths-col .center-col-title{color:#7a5820}
+.center-card.undefined .strengths-col .center-col-title{color:var(--text-mid)}
+.center-card.contrast-view .strengths-col .center-col-title{color:#8a6868}
+.challenges-col .center-col-title{color:#a05050}
+.center-col ul{list-style:none;padding:0;margin:0}
+.center-col li{font-size:13px;color:var(--text-dark);line-height:1.5;padding:3px 0 3px 14px;position:relative}
+.center-col li::before{content:"·";position:absolute;left:3px;color:var(--text-mid)}
+
+/* Key Practice */
+.center-practice{grid-column:1/-1;border-top:1px solid var(--border-light);padding-top:14px;margin-top:4px}
+.practice-label{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+.practice-text{font-size:14px;color:var(--text-dark);line-height:1.7;font-style:italic;border-left:3px solid var(--accent);padding-left:14px}
+.center-card.contrast-view .practice-text{border-left-color:var(--rose)}
+
+/* Phase 3 */
+.declaration-intro{font-size:14px;color:var(--text-mid);line-height:1.65;margin-bottom:28px}
+.decl-step{margin-bottom:36px}
+.decl-step-label{font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+.decl-step-title{font-family:Georgia,serif;font-size:18px;color:var(--text-dark);margin-bottom:12px}
+.decl-instruction{font-size:14px;color:var(--text-mid);line-height:1.65;margin-bottom:16px}
+
+.release-line-item{display:flex;gap:14px;align-items:flex-start;padding:12px 16px;border-radius:6px;margin-bottom:8px;transition:opacity .25s,background .25s}
+.release-line-item.highlighted{background:var(--accent-pale);border:1px solid rgba(200,149,74,0.2)}
+.release-line-item.dimmed{opacity:.38}
+.rl-center{font-size:10px;font-weight:700;letter-spacing:.08em;color:var(--accent);flex-shrink:0;padding-top:2px;min-width:80px;text-transform:uppercase}
+.rl-text{font-size:14px;color:var(--text-dark);line-height:1.6;font-style:italic}
+
+.somatic-box{background:#f7f0e8;border-radius:8px;padding:24px 28px;margin-bottom:24px}
+.somatic-instruction{font-size:14px;color:var(--text-mid);line-height:1.65;margin-bottom:16px}
+.declaration-quote{font-family:Georgia,serif;font-size:15px;color:var(--text-dark);line-height:1.9;font-style:italic}
+
+.checklist-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px}
+.check-pillar-title{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border-light)}
+.check-item{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px}
+.check-box{width:16px;height:16px;border:1.5px solid var(--border-light);border-radius:3px;flex-shrink:0;margin-top:1px}
+.check-text{font-size:13px;color:var(--text-dark);line-height:1.5}
+
+.anchor-box{background:var(--ground);border-radius:10px;padding:28px;color:var(--text)}
+.anchor-title{font-family:Georgia,serif;font-size:20px;font-weight:normal;color:var(--accent);margin-bottom:10px}
+.anchor-text{font-size:14px;color:var(--text-dim);line-height:1.7;margin-bottom:20px}
+.anchor-cta{font-family:Georgia,serif;font-size:15px;font-style:italic;color:var(--text);line-height:1.7;border-top:1px solid rgba(240,232,213,0.1);padding-top:18px}
+
+.closing{text-align:center;padding:48px 24px;border-top:1.5px solid var(--border-light);margin-top:16px}
+.closing-brand{font-size:11px;letter-spacing:.2em;font-weight:700;color:var(--accent);text-transform:uppercase;margin-bottom:12px}
+.closing-text{font-family:Georgia,serif;font-style:italic;font-size:15px;color:var(--text-mid);line-height:1.7;max-width:500px;margin:0 auto}
+
+/* ─── PRINT ──────────────────────────────────────── */
+@media print {
+  :root{--text-dark:#111;--text-mid:#555;--accent:#8a6520;--border-light:#ccc;--rose:#a08080}
+  body{background:#fff;color:#111}
+  #screen-input{display:none!important}
+  #screen-workbook{display:block!important}
+  .print-bar,.progress-track{display:none!important}
+  .workbook-body{padding:0;max-width:100%}
+  .phase-section{page-break-before:always;margin-bottom:0}
+  .workbook-cover{page-break-before:avoid}
+  .center-card{page-break-inside:avoid;box-shadow:none;border:1px solid #ccc}
+  .anchor-box{background:#f5f5f5;color:#111}
+  .anchor-text,.anchor-cta{color:#555}
+  .anchor-title{color:#8a6520}
+  .release-line-item.dimmed{opacity:.3}
+  a{text-decoration:none}
+  .card-view-toggle,.contrast-banner{display:none!important}
+  .inv-editable{
+    background-image:repeating-linear-gradient(to bottom,transparent 0px,transparent calc(var(--line-h) - 1px),#ccc calc(var(--line-h) - 1px),#ccc var(--line-h)) !important;
+    min-height:var(--line-h);
+  }
+  .inv-editable:empty{min-height:288px}
+  .inv-editable:empty::before{display:none}
+  .prompt-editable{border:none;border-bottom:1px solid #ccc;border-radius:0;background:transparent!important;min-height:0}
+  .prompt-editable:empty::before{display:none}
+  /* Mini bodygraph prints as-is — dark bg OK in most printers with backgrounds enabled */
+  .center-mini-graph{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+
+@media (max-width:600px){
+  .inventory-grid{grid-template-columns:1fr}
+  .center-card-body{grid-template-columns:1fr}
+  .checklist-grid{grid-template-columns:1fr}
+  .fields-group{grid-template-columns:1fr}
+  .fields-group .field-full{grid-column:auto}
+  .pp-step span{display:none}
+  .pp-divider{width:10px}
+  .center-card-actions{flex-direction:row;align-items:center}
+}
+</style>
+</head>
+<body>
+
+<!-- ════════ SCREEN 1 — INPUT ════════ -->
+<div id="screen-input">
+  <p class="brand-mark">Pheydrus</p>
+  <h1 class="input-title">Deconditioning<br>Workbook</h1>
+  <p class="input-subtitle">Your personalized 3-phase guide to energetic sovereignty — ready to print or save as PDF.</p>
+
+  <div class="form-wrap">
+    <div>
+      <div class="step-indicator">
+        <span class="step-pill">1</span>
+        <span class="step-label-text">Your Information</span>
+      </div>
+      <div class="fields-group">
+        <div class="field field-full">
+          <label for="f-name">Full Name</label>
+          <input id="f-name" type="text" placeholder="Your name" autocomplete="name">
+        </div>
+        <div class="field">
+          <label for="f-phone">Phone</label>
+          <input id="f-phone" type="tel" placeholder="+1 (555) 000-0000" autocomplete="tel">
+        </div>
+        <div class="field">
+          <label for="f-email">Email</label>
+          <input id="f-email" type="email" placeholder="you@email.com" autocomplete="email">
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-section">
+      <div class="step-indicator" style="width:100%;max-width:380px">
+        <span class="step-pill">2</span>
+        <span class="step-label-text">Select Your Centers</span>
+      </div>
+      <div class="bg-cta-banner" style="max-width:380px">
+        <p class="bg-cta-title">Tap each center to toggle Defined</p>
+        <p class="bg-cta-sub">Gold = Defined &nbsp;·&nbsp; Outline = Undefined / Open<br>Click the BodyGraph or the badges below.</p>
+      </div>
+
+      <svg id="bodygraph-svg" viewBox="0 0 240 390" role="img" aria-label="Human Design BodyGraph">
+        <line class="channel-line" x1="120" y1="56" x2="120" y2="60"/>
+        <line class="channel-line" x1="120" y1="108" x2="120" y2="112"/>
+        <line class="channel-line" x1="120" y1="154" x2="120" y2="162"/>
+        <line class="channel-line" x1="153" y1="196" x2="147" y2="185"/>
+        <line class="channel-line" x1="120" y1="230" x2="120" y2="238"/>
+        <line class="channel-line" x1="84" y1="267" x2="76" y2="244"/>
+        <line class="channel-line" x1="156" y1="267" x2="164" y2="244"/>
+        <line class="channel-line" x1="120" y1="294" x2="120" y2="308"/>
+        <g class="hd-center" id="c-head" data-id="head" onclick="toggleCenter('head')" tabindex="0" role="checkbox" aria-label="Head center">
+          <polygon class="center-shape" points="120,8 86,56 154,56"/><text class="center-lbl" x="120" y="40">HEAD</text>
+        </g>
+        <g class="hd-center" id="c-ajna" data-id="ajna" onclick="toggleCenter('ajna')" tabindex="0" role="checkbox" aria-label="Ajna center">
+          <polygon class="center-shape" points="86,60 154,60 120,108"/><text class="center-lbl" x="120" y="78">AJNA</text>
+        </g>
+        <g class="hd-center" id="c-throat" data-id="throat" onclick="toggleCenter('throat')" tabindex="0" role="checkbox" aria-label="Throat center">
+          <rect class="center-shape" x="84" y="112" width="72" height="42" rx="2"/><text class="center-lbl" x="120" y="134">THROAT</text>
+        </g>
+        <g class="hd-center" id="c-gcenter" data-id="gcenter" onclick="toggleCenter('gcenter')" tabindex="0" role="checkbox" aria-label="G-Center">
+          <polygon class="center-shape" points="120,162 155,197 120,232 85,197"/><text class="center-lbl" x="120" y="197">G CENTER</text>
+        </g>
+        <g class="hd-center" id="c-ego" data-id="ego" onclick="toggleCenter('ego')" tabindex="0" role="checkbox" aria-label="Ego / Heart center">
+          <polygon class="center-shape" points="167,163 188,185 167,207 146,185"/><text class="center-lbl" x="167" y="186">EGO</text>
+        </g>
+        <g class="hd-center" id="c-sacral" data-id="sacral" onclick="toggleCenter('sacral')" tabindex="0" role="checkbox" aria-label="Sacral center">
+          <rect class="center-shape" x="84" y="238" width="72" height="56" rx="2"/><text class="center-lbl" x="120" y="267">SACRAL</text>
+        </g>
+        <g class="hd-center" id="c-spleen" data-id="spleen" onclick="toggleCenter('spleen')" tabindex="0" role="checkbox" aria-label="Spleen center">
+          <polygon class="center-shape" points="16,242 78,242 47,298"/><text class="center-lbl" x="47" y="264">SPLEEN</text>
+        </g>
+        <g class="hd-center" id="c-solarplexus" data-id="solarplexus" onclick="toggleCenter('solarplexus')" tabindex="0" role="checkbox" aria-label="Solar Plexus center">
+          <polygon class="center-shape" points="162,242 224,242 193,298"/><text class="center-lbl" x="193" y="264">S·PLEXUS</text>
+        </g>
+        <g class="hd-center" id="c-root" data-id="root" onclick="toggleCenter('root')" tabindex="0" role="checkbox" aria-label="Root center">
+          <rect class="center-shape" x="84" y="308" width="72" height="44" rx="2"/><text class="center-lbl" x="120" y="331">ROOT</text>
+        </g>
+      </svg>
+
+      <p class="center-count" id="center-count"><strong>0</strong> of 9 centers marked Defined</p>
+      <div class="center-status-grid" id="badge-grid"></div>
+    </div>
+
+    <div>
+      <p class="error-msg" id="error-msg" style="display:none">Please enter your name and email before generating.</p>
+      <button class="btn-generate" onclick="generate()">Generate My Workbook →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════ SCREEN 2 — WORKBOOK ════════ -->
+<div id="screen-workbook">
+
+  <div class="print-bar">
+    <span class="print-bar-brand">Pheydrus</span>
+
+    <!-- Phase progress indicator -->
+    <div class="phase-progress">
+      <div class="pp-step current" data-phase="1" onclick="jumpToPhase(1)">
+        <div class="pp-dot"></div>
+        <span>01 Inventory</span>
+      </div>
+      <div class="pp-divider" id="div-1-2"></div>
+      <div class="pp-step" data-phase="2" onclick="jumpToPhase(2)">
+        <div class="pp-dot"></div>
+        <span>02 Blueprint</span>
+      </div>
+      <div class="pp-divider" id="div-2-3"></div>
+      <div class="pp-step" data-phase="3" onclick="jumpToPhase(3)">
+        <div class="pp-dot"></div>
+        <span>03 Declaration</span>
+      </div>
+    </div>
+
+    <div class="print-bar-actions">
+      <span class="submission-badge" id="submission-badge">✓ Captured</span>
+      <button class="btn-back" onclick="goBack()">← Edit</button>
+      <button class="btn-print" onclick="window.print()">↓ Save as PDF</button>
+    </div>
+  </div>
+
+  <div class="progress-track"><div id="progress-bar" class="progress-fill"></div></div>
+
+  <div class="workbook-body">
+
+    <!-- Cover -->
+    <div class="workbook-cover">
+      <p class="cover-brand">Pheydrus</p>
+      <h1 class="cover-title">Deconditioning Workbook</h1>
+      <p class="cover-subtitle">A 3-Phase Journey to Energetic Sovereignty</p>
+      <div class="cover-meta" id="cover-meta"></div>
+    </div>
+
+    <!-- Blueprint chips -->
+    <div class="blueprint-section">
+      <h2 class="blueprint-title">Your Center Blueprint</h2>
+      <p class="blueprint-hint">Your defined centers carry consistent, reliable energy. Your open centers are where you absorb the world's conditioning — and where your greatest wisdom lives.</p>
+      <p class="blueprint-toggle-hint">Click any center to toggle Defined / Open — Phase 2 cards and Phase 3 release lines update instantly.</p>
+      <div class="blueprint-grid" id="blueprint-grid"></div>
+    </div>
+
+    <!-- ─── PHASE 1 ─── -->
+    <section class="phase-section" id="phase-1">
+      <div class="phase-header">
+        <div class="phase-num">01</div>
+        <div>
+          <p class="phase-eyebrow">Phase One</p>
+          <h2 class="phase-name">The Honest Inventory</h2>
+          <p class="phase-tag">The Shadow Audit of Perceived Safety</p>
+        </div>
+      </div>
+
+      <div class="objective-box">
+        <p class="objective-label">Objective</p>
+        <p class="objective-text">Map out exactly where you are over-performing or tolerating draining environments, and uncover the subconscious "safety scripts" your mind uses to keep you there.</p>
+      </div>
+
+      <!-- Step 1 — typeable grid -->
+      <div class="step-block">
+        <p class="step-number">Step 1</p>
+        <h3 class="step-title">The Three-Column Reality Check</h3>
+        <p class="step-prompt">For each area below, answer with absolute, unfiltered honesty:<br><em>"If I had zero fear of judgment, rejection, or failure, what is the raw truth about how this area drains my energy right now?"</em></p>
+        <div class="inventory-grid">
+          <div>
+            <p class="inv-col-header">Professional</p>
+            <div class="inv-editable" contenteditable="true" data-placeholder="Write the unfiltered truth about how your professional life drains your energy…"></div>
+          </div>
+          <div>
+            <p class="inv-col-header">Financial</p>
+            <div class="inv-editable" contenteditable="true" data-placeholder="Write the unfiltered truth about how your financial reality drains your energy…"></div>
+          </div>
+          <div>
+            <p class="inv-col-header">Relational</p>
+            <div class="inv-editable" contenteditable="true" data-placeholder="Write the unfiltered truth about how your relationships drain your energy…"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2 — typeable prompts -->
+      <div class="step-block">
+        <p class="step-number">Step 2</p>
+        <h3 class="step-title">Exposing the Safety Traps</h3>
+        <p class="step-prompt">Choose the heaviest truth you wrote above. Use the prompts below to catch your mind in its own trap.</p>
+
+        <div class="prompt-block">
+          <p class="prompt-q">The Mind's Script</p>
+          <div>
+            <p class="prompt-label">"What is the exact lie or story my mind tells me to justify staying in this draining situation?"</p>
+            <p class="prompt-note">e.g. "If I leave this job, I'll end up broke." / "If I set a boundary, they'll abandon me."</p>
+          </div>
+          <div class="prompt-editable" contenteditable="true" data-placeholder="Write your mind's exact story here…"></div>
+        </div>
+
+        <div class="prompt-block">
+          <p class="prompt-q">Secondary Gain</p>
+          <div>
+            <p class="prompt-label">"What am I getting to avoid by staying small here?"</p>
+            <p class="prompt-note">e.g. "By staying in this draining relationship, I get to avoid the discomfort of conflict."</p>
+          </div>
+          <div class="prompt-editable" contenteditable="true" data-placeholder="What are you avoiding…"></div>
+        </div>
+
+        <div class="prompt-block">
+          <p class="prompt-q">Somatic Cost</p>
+          <div>
+            <p class="prompt-label">"Close your eyes, think about this area, and scan your body. Where do I physically feel the weight of this lie?"</p>
+            <p class="prompt-note">e.g. A tightness in my throat when I want to speak up. A hollow knot in my stomach.</p>
+          </div>
+          <div class="prompt-editable" contenteditable="true" data-placeholder="Describe the physical sensation in your body…"></div>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="step-block">
+        <p class="step-number">Step 3</p>
+        <h3 class="step-title">The Radical Compassion Release</h3>
+        <p class="step-prompt">Read the following aloud. Do not rush it. Let each line land in your body before moving to the next.</p>
+        <div class="release-box">
+          <p class="release-text">"I see you, mind. I see that you created this trap to keep me safe from rejection and failure. Thank you for trying to protect me. But I am no longer a child who needs to shrink to survive. I am safe in my body. I am allowed to let go of what drains me. I am ready to return to myself."</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── PHASE 2 ─── -->
+    <section class="phase-section" id="phase-2">
+      <div class="phase-header">
+        <div class="phase-num">02</div>
+        <div>
+          <p class="phase-eyebrow">Phase Two</p>
+          <h2 class="phase-name">Your Center Blueprint</h2>
+          <p class="phase-tag">Strengths &amp; Challenges of Your Defined and Open Centers</p>
+        </div>
+      </div>
+      <p class="centers-intro">Your defined centers show where your energy is reliable and consistent. Your open centers reveal where you have been taking in — and over-amplifying — the world's conditioning.</p>
+      <p class="centers-toggle-note">Each card shows a mini BodyGraph highlighting that center. Tap the toggle to compare Defined vs. Undefined content side by side.</p>
+      <div id="center-cards"></div>
+    </section>
+
+    <!-- ─── PHASE 3 ─── -->
+    <section class="phase-section" id="phase-3">
+      <div class="phase-header">
+        <div class="phase-num">03</div>
+        <div>
+          <p class="phase-eyebrow">Phase Three</p>
+          <h2 class="phase-name">The Sovereign Declaration</h2>
+          <p class="phase-tag">The Ultimate Ritual of Re-Inheriting Yourself</p>
+        </div>
+      </div>
+
+      <div class="objective-box">
+        <p class="objective-label">Objective</p>
+        <p class="objective-text">To physically and energetically seal the deconditioning work you have done across all 9 centers — officially breaking the contract with your Not-Self armor and choosing absolute self-alignment.</p>
+      </div>
+
+      <div class="decl-step">
+        <p class="decl-step-label">Step 1</p>
+        <h3 class="decl-step-title">The Core Deconditioning Release</h3>
+        <p class="decl-instruction">Find a quiet space. Take a few deep breaths. Read each line aloud, pausing to feel the release. Your open centers are highlighted — these carry the most conditioning for you.</p>
+        <div class="release-lines" id="release-lines"></div>
+      </div>
+
+      <div class="decl-step">
+        <p class="decl-step-label">Step 2</p>
+        <h3 class="decl-step-title">The Somatic Alignment Seal</h3>
+        <div class="somatic-box">
+          <p class="somatic-instruction">Place your left hand over your heart and your right hand over your stomach. Close your eyes, take three deep belly breaths, then speak this declaration aloud with calm, unshakeable authority:</p>
+          <p class="declaration-quote" id="decl-quote"></p>
+        </div>
+        <p class="decl-instruction" style="margin-top:14px">Take a deep inhale, open your mouth, and sigh it out completely — letting your shoulders drop.</p>
+      </div>
+
+      <div class="decl-step">
+        <p class="decl-step-label">Step 3</p>
+        <h3 class="decl-step-title">The Daily Return Checklist</h3>
+        <p class="decl-instruction">Check in with these four pillars every single day to ensure you do not slip back into the old Not-Self software.</p>
+        <div class="checklist-grid">
+          <div class="check-pillar">
+            <p class="check-pillar-title">Rest — The Sacred Pause</p>
+            <div class="check-item"><div class="check-box"></div><p class="check-text">Did I honor my body's exhaustion signals today?</p></div>
+            <div class="check-item"><div class="check-box"></div><p class="check-text">Did I give myself 15–30 min of uninterrupted solo time to drain out borrowed energy?</p></div>
+          </div>
+          <div class="check-pillar">
+            <p class="check-pillar-title">Hydration — The System Purifier</p>
+            <div class="check-item"><div class="check-box"></div><p class="check-text">Did I drink enough water to flush stress hormones and support nervous system regulation?</p></div>
+          </div>
+          <div class="check-pillar">
+            <p class="check-pillar-title">Intuition — Internal Guidance</p>
+            <div class="check-item"><div class="check-box"></div><p class="check-text">Did I make decisions from my body's instant, guttural responses — not my mind's logic traps?</p></div>
+            <div class="check-item"><div class="check-box"></div><p class="check-text">When a choice felt "heavy," did I pause and respect that heaviness instead of forcing a "yes"?</p></div>
+          </div>
+          <div class="check-pillar">
+            <p class="check-pillar-title">Boundaries — The Auric Shield</p>
+            <div class="check-item"><div class="check-box"></div><p class="check-text">Did I express my truth calmly and directly, or did I people-please to manage someone else's mood?</p></div>
+            <div class="check-item"><div class="check-box"></div><p class="check-text">When someone presented a demand, did I offer a grounded counter-proposal that protected my energy?</p></div>
+          </div>
+        </div>
+        <div class="release-box">
+          <p class="release-text">The magic happens in the split second you catch yourself performing — and gently choose to stop. Every time you return to your body, you win your power back. You are home.</p>
+        </div>
+      </div>
+
+      <div class="decl-step">
+        <p class="decl-step-label">Step 4</p>
+        <h3 class="decl-step-title">The 3-Month Anchor</h3>
+        <div class="anchor-box">
+          <h4 class="anchor-title">A Letter to Your Future Self</h4>
+          <p class="anchor-text">Write down the rawest, most beautiful insights you uncovered during this 9-center journey. Remind your future self of the exact boundaries you swore to protect and the compromises you are no longer willing to make.</p>
+          <p class="anchor-text">Seal it. Set a reminder in your calendar for exactly three months from today. Trust the process.</p>
+          <p class="anchor-cta">Transformation doesn't always happen with a loud explosion. It happens quietly, in the hidden, everyday choices — choosing radical honesty over quiet suppression, bodily presence over mental avoidance, unyielding boundaries over chronic self-abandonment.</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="closing">
+      <p class="closing-brand">Pheydrus</p>
+      <p class="closing-text">"You are not the same person who opened the very first page of this workbook. You have returned to yourself."</p>
+    </div>
+
+  </div>
+</div>
+
+<script>
+let storedName = '';
+
+// ── Center data ────────────────────────────────────────────────────────────────
+const CENTERS = [
+  {
+    id:'head', name:'Head / Crown', subtitle:'Pressure for inspiration, questions & mental stimulation',
+    defined:{
+      strengths:['Natural inspiration for ideas, innovation, and insight','Strong internal mental resilience','Resistance to others\' mental pressure','Rich inner world and intellectual depth'],
+      challenges:['Fixation on thinking and questioning','Difficulty "switching off" the mind','Mental overload and sleep difficulty'],
+      practice:'Channel mental pressure into creative processes such as writing, studying, researching, or teaching. Engage in activities that allow you to share knowledge and insights with the world.'
+    },
+    undefined:{
+      strengths:['Ability to draw inspiration from the environment','Strong creative receptor','Capacity to synthesize information from the collective field'],
+      challenges:['Trying to answer everyone\'s questions','Giving unsolicited advice','Mental burnout from borrowed pressure'],
+      practice:'"Not every thought is my problem." When someone comes to you with a problem, respond with questions rather than ready-made solutions. Meditation and conscious breathing are powerful allies. Help others reach their own answers instead of carrying the mental burden for them.'
+    }
+  },
+  {
+    id:'ajna', name:'Ajna Center', subtitle:'Conceptualization, opinions, interpretation',
+    defined:{
+      strengths:['Consistent way of thinking','Stable belief systems','Strong memory retention'],
+      challenges:['Rigidity in learning style','Difficulty changing mental patterns','Holding onto outdated beliefs'],
+      practice:'Regularly challenge yourself to learn something new. Allow your beliefs to be revised and updated as life delivers new evidence.'
+    },
+    undefined:{
+      strengths:['Cognitive flexibility','Ability to see multiple perspectives','Strong sensitivity to others\' thoughts'],
+      challenges:['Pressure to be certain','Adopting others\' beliefs as your own','Overthinking','Arguing to prove intellectual superiority'],
+      practice:'You don\'t need an opinion about everything. When you feel the urge to argue, pause and attempt to understand the other person\'s perspective rather than defending your own.'
+    }
+  },
+  {
+    id:'throat', name:'Throat Center', subtitle:'Expression, action, manifestation',
+    defined:{
+      strengths:['Stable, consistent communication style','Strong presence — people listen when you speak','Ease in manifesting through words and action','Natural gift for speaking, singing, or creative expression'],
+      challenges:['Dominating conversations','Suppressing unspoken truths'],
+      practice:'Sing, write, dance, create. Express yourself authentically and share your voice publicly when aligned. Your consistent voice is a gift.'
+    },
+    undefined:{
+      strengths:['Communication chameleon','Strong sense of timing','Ability to adapt language to the listener'],
+      challenges:['Speaking for attention or to fill silence','Fear of invisibility','Difficulty structuring thoughts'],
+      practice:'Speak when invited or when context genuinely supports it. Silence can bring you more recognition than forced expression. Wait to be asked.'
+    }
+  },
+  {
+    id:'gcenter', name:'G Center / Identity', subtitle:'Identity, direction, love',
+    defined:{
+      strengths:['Strong sense of self','Clear internal compass','Stable identity regardless of environment','Inspires love and warmth in others'],
+      challenges:['Resistance to personal change','Difficulty accepting differences in others','Desire to direct others\' paths'],
+      practice:'Offer love especially to those who differ from you. Learn to see others through new perspectives rather than trying to redirect them.'
+    },
+    undefined:{
+      strengths:['High adaptability','Deep sense of universal love','Wisdom about people and environments','Life tends to bring what is needed at the right time'],
+      challenges:['Seeking identity in partners or groups','Losing yourself in relationships','Direction shifting with every new environment','Constant external search for love and purpose'],
+      practice:'Choose environments and people where you feel accepted. Ask for help. Express your authentic self — even at the risk of rejection. This is how a stable self-image is built.'
+    }
+  },
+  {
+    id:'ego', name:'Heart / Ego / Will', subtitle:'Willpower, self-worth, promises, resources',
+    defined:{
+      strengths:['Strong willpower and self-discipline','Clear boundaries','Stable sense of self-worth','Motivation from within'],
+      challenges:['Possessiveness','Pressure to constantly win','Controlling tendencies','Difficulty letting go'],
+      practice:'Release control. Focus only on what depends on you. Allow yourself to lose people or money when necessary. Do not enforce your boundaries onto others — live them.'
+    },
+    undefined:{
+      strengths:['Wisdom about true value','Less attachment to status','Ability to detect inflated egos','Reduced fixation on material possessions'],
+      challenges:['Constant need to prove yourself','Overcommitting to appear capable','Difficulty setting boundaries','Financial instability from seeking approval'],
+      practice:'Promise less, deliver more. Self-worth is not earned through sacrifice or hustle. Audit where your resources leak — time, money, energy. Commit to one promise for 40 days and keep it.'
+    }
+  },
+  {
+    id:'sacral', name:'Sacral Center', subtitle:'Life force, work energy, pleasure, sexuality',
+    defined:{
+      strengths:['Sustainable life-force energy','Creative power and endurance','Ability to maintain projects and relationships','Natural ability to energize others'],
+      challenges:['Apathy and dissatisfaction when misaligned','Staying in draining environments out of habit'],
+      practice:'Check how you feel before committing. Answer yes/no questions to access your sacral response — uh-huh or uhn-uhn, not mental analysis. Movement and creation restore your energy.'
+    },
+    undefined:{
+      strengths:['Can work in focused, effective sprints','Wisdom about sustainable productivity','Strong delegation skills'],
+      challenges:['Burnout from overworking to match others','Not recognizing personal limits','Excess without awareness'],
+      practice:'Rest is a requirement, not a reward. Follow your body\'s natural rhythm. Moderation and discernment are your superpowers.'
+    }
+  },
+  {
+    id:'solarplexus', name:'Solar Plexus', subtitle:'Emotions, sensitivity, desire, emotional wave',
+    defined:{
+      strengths:['Emotional depth and rich inner passion','Encourages emotional expression in others','Charismatic and deeply felt energy'],
+      challenges:['Reactivity and emotional drama','Decision-making during emotional extremes','Patterns of manipulation when overwhelmed'],
+      practice:'Channel emotions into sports, writing, or creativity. Avoid major decisions at emotional peaks or lows. Wait for clarity before acting.'
+    },
+    undefined:{
+      strengths:['Reads emotional atmosphere with precision','Provides safe space for others','Strong social intelligence','Calming, grounding presence in crisis'],
+      challenges:['Avoiding conflict at all costs','Absorbing others\' emotions as your own','People-pleasing and emotional dependency'],
+      practice:'Name your emotions in real time. Be direct. Stop carrying responsibility for others\' emotional comfort — it is not yours to manage.'
+    }
+  },
+  {
+    id:'spleen', name:'Spleen Center', subtitle:'Instinct, health, fears, immunity, intuition in the now',
+    defined:{
+      strengths:['Strong intuitive instinct','Clear bodily "yes" or "no" in the moment','Deep sense of safety beyond logic'],
+      challenges:['Over-control through excessive caution','Avoidance of vulnerability','Fear of what cannot be predicted'],
+      practice:'Identify your fears and consciously face them one by one. Courage is not the absence of fear — it is the decision that something else matters more.'
+    },
+    undefined:{
+      strengths:['Deep wisdom about safety and health','Sensitivity to toxic environments','Strong energetic "scanner"','Natural healer and empathic listener'],
+      challenges:['Holding onto unhealthy people or habits','Amplified fears belonging to others','Addictive tendencies','Difficulty releasing attachment'],
+      practice:'Remove one toxic element from your life this week. Learn to release attachment through practice. Spend time alone regularly to rebuild inner security.'
+    }
+  },
+  {
+    id:'root', name:'Root Center', subtitle:'Pressure, stress, adrenaline, pace',
+    defined:{
+      strengths:['Handles stress productively and efficiently','Strong endurance and follow-through','Action-oriented under deadlines'],
+      challenges:['Constant internal pressure that never fully quiets','Addiction to the adrenaline of urgency','Boredom without tension or a deadline'],
+      practice:'Manage time proactively so urgency stays in service, not in control. Engage in regular physical activity. Practice conscious relaxation — stillness deepens relationships.'
+    },
+    undefined:{
+      strengths:['Wisdom about pacing and prioritization','Balanced relationship with time','Ability to rest and work in natural cycles'],
+      challenges:['Panic to finish everything immediately when around stressed people','Amplifying others\' stress as though it were your own','Overloading yourself with tasks that were never yours'],
+      practice:'Do less, but do it on time. Slow your pace intentionally. Allow imperfection and occasional chaos — not everything is urgent just because someone near you believes it is.'
+    }
+  }
+];
+
+// ── State ──────────────────────────────────────────────────────────────────────
+const centerState = {};
+const viewState = {};
+CENTERS.forEach(c => { centerState[c.id] = false; viewState[c.id] = 'actual'; });
+
+// ── Release lines ─────────────────────────────────────────────────────────────
+const RELEASE_LINES = [
+  {label:'Head & Ajna',          centers:['head','ajna'],               text:'I release the exhausting weight of trying to answer everyone else\'s questions and pretending to be certain just to feel safe.'},
+  {label:'Throat & G Center',    centers:['throat','gcenter'],          text:'I release the urge to over-perform for attention and the frantic search for external love and direction. I am my own compass.'},
+  {label:'Heart & Solar Plexus', centers:['ego','solarplexus'],         text:'I completely divorce the lie that I must prove my worth. I step off the eggshells; I am no longer responsible for managing other people\'s moods.'},
+  {label:'Sacral, Spleen & Root',centers:['sacral','spleen','root'],    text:'I drop the addiction to endless doing. I let go of toxic attachments held out of fear. I step out of hyper-urgency and return to my own sacred pace.'},
+];
+
+// ── Mini BodyGraph — dark background so centers pop clearly ───────────────────
+function miniBodyGraph(activeCenterId, isDefined) {
+  const shapes = [
+    {id:'head',        s:'poly', d:'120,8 86,56 154,56'},
+    {id:'ajna',        s:'poly', d:'86,60 154,60 120,108'},
+    {id:'throat',      s:'rect', x:84,  y:112, w:72, h:42},
+    {id:'gcenter',     s:'poly', d:'120,162 155,197 120,232 85,197'},
+    {id:'ego',         s:'poly', d:'167,163 188,185 167,207 146,185'},
+    {id:'sacral',      s:'rect', x:84,  y:238, w:72, h:56},
+    {id:'spleen',      s:'poly', d:'16,242 78,242 47,298'},
+    {id:'solarplexus', s:'poly', d:'162,242 224,242 193,298'},
+    {id:'root',        s:'rect', x:84,  y:308, w:72, h:44}
+  ];
+  const inner = shapes.map(sh => {
+    const isActive = sh.id === activeCenterId;
+    // Mirror the input screen's dark-background style for inactive centers
+    const fill   = isActive && isDefined  ? 'rgba(200,149,74,0.88)'
+                 : isActive               ? 'none'
+                 :                          'rgba(240,232,213,0.04)';
+    const stroke = isActive ? (isDefined ? '#c8954a' : '#c4a8a4') : 'rgba(200,149,74,0.28)';
+    const sw     = isActive ? '2' : '1.2';
+    const dash   = isActive && !isDefined ? ' stroke-dasharray="4 3"' : '';
+    if (sh.s === 'rect') {
+      return `<rect x="${sh.x}" y="${sh.y}" width="${sh.w}" height="${sh.h}" rx="2" fill="${fill}" stroke="${stroke}" stroke-width="${sw}"${dash}/>`;
+    }
+    return `<polygon points="${sh.d}" fill="${fill}" stroke="${stroke}" stroke-width="${sw}"${dash}/>`;
+  }).join('');
+  // Dark background wrapper mirrors the input-screen BodyGraph
+  return `<svg viewBox="0 0 240 390" style="width:68px;height:110px;display:block">${inner}</svg>`;
+}
+
+// ── Center count ──────────────────────────────────────────────────────────────
+function updateCenterCount() {
+  const n = CENTERS.filter(c => centerState[c.id]).length;
+  const el = document.getElementById('center-count');
+  if (el) el.innerHTML = '<strong>' + n + '</strong> of 9 centers marked Defined';
+}
+
+// ── Sync input screen ─────────────────────────────────────────────────────────
+function syncInputScreen(id) {
+  const svgEl = document.getElementById('c-' + id);
+  if (svgEl) svgEl.classList.toggle('defined', centerState[id]);
+  updateBadges();
+  updateCenterCount();
+}
+
+function toggleCenter(id) {
+  centerState[id] = !centerState[id];
+  syncInputScreen(id);
+}
+
+function toggleCenterOnWorkbook(id) {
+  centerState[id] = !centerState[id];
+  viewState[id] = 'actual';
+  syncInputScreen(id);
+  renderBlueprintChips();
+  updateCenterCard(id);
+  renderReleaseLines();
+}
+
+function toggleCardView(id) {
+  viewState[id] = viewState[id] === 'actual' ? 'contrast' : 'actual';
+  updateCenterCard(id);
+}
+
+// ── Badge grid ────────────────────────────────────────────────────────────────
+function updateBadges() {
+  const grid = document.getElementById('badge-grid');
+  grid.innerHTML = '';
+  CENTERS.forEach(c => {
+    const isDef = centerState[c.id];
+    const el = document.createElement('div');
+    el.className = 'center-badge' + (isDef ? ' defined' : '');
+    el.onclick = () => toggleCenter(c.id);
+    el.innerHTML = `<span class="badge-dot"></span><span class="badge-name">${c.name.split('/')[0].trim()}</span><span class="badge-status">${isDef ? 'DEF' : 'OPEN'}</span>`;
+    grid.appendChild(el);
+  });
+}
+updateBadges();
+updateCenterCount();
+
+document.querySelectorAll('.hd-center').forEach(el => {
+  el.addEventListener('keydown', e => {
+    if (e.key==='Enter'||e.key===' '){e.preventDefault();toggleCenter(el.dataset.id);}
+  });
+});
+
+// ── Blueprint chips ───────────────────────────────────────────────────────────
+function renderBlueprintChips() {
+  const grid = document.getElementById('blueprint-grid');
+  grid.innerHTML = '';
+  CENTERS.forEach(c => {
+    const isDef = centerState[c.id];
+    const chip = document.createElement('div');
+    chip.className = 'bp-chip ' + (isDef ? 'defined' : 'undefined');
+    chip.title = isDef ? 'Click to mark Open' : 'Click to mark Defined';
+    chip.setAttribute('role','button');
+    chip.setAttribute('aria-pressed', String(isDef));
+    chip.tabIndex = 0;
+    chip.onclick = () => toggleCenterOnWorkbook(c.id);
+    chip.onkeydown = e => {if(e.key==='Enter'||e.key===' '){e.preventDefault();toggleCenterOnWorkbook(c.id);}};
+    chip.innerHTML = `<span class="bp-dot"></span>${c.name.split('/')[0].trim()} <span style="opacity:.6;font-weight:400;margin-left:2px">${isDef?'· Defined':'· Open'}</span>`;
+    grid.appendChild(chip);
+  });
+}
+
+// ── Build card HTML ───────────────────────────────────────────────────────────
+function buildCardHTML(c) {
+  const actuallyDefined = centerState[c.id];
+  const isContrast      = viewState[c.id] === 'contrast';
+  const isViewingDefined = isContrast ? !actuallyDefined : actuallyDefined;
+  const data        = isViewingDefined ? c.defined : c.undefined;
+  const statusLabel = isViewingDefined ? 'Defined' : 'Undefined / Open';
+  const toggleLabel = isContrast ? '← My State' : (actuallyDefined ? 'See Undefined ↕' : 'See Defined ↕');
+  const miniSvg     = miniBodyGraph(c.id, isViewingDefined);
+
+  const banner = isContrast
+    ? `<div class="contrast-banner">Contrast view — showing ${isViewingDefined ? 'Defined' : 'Undefined / Open'} state</div>`
+    : '';
+
+  return {
+    className: 'center-card ' + (actuallyDefined ? 'defined' : 'undefined') + (isContrast ? ' contrast-view' : ''),
+    inner: `${banner}
+      <div class="center-card-header">
+        <div class="center-card-head-row">
+          <div class="center-mini-graph">${miniSvg}</div>
+          <div class="center-card-info">
+            <div class="center-card-name">${c.name}</div>
+            <div class="center-card-subtitle">${c.subtitle}</div>
+          </div>
+        </div>
+        <div class="center-card-actions">
+          <span class="center-card-status">${statusLabel}</span>
+          <button class="card-view-toggle" onclick="toggleCardView('${c.id}')">${toggleLabel}</button>
+        </div>
+      </div>
+      <div class="center-card-body">
+        <div class="center-col strengths-col">
+          <div class="center-col-title">Strengths</div>
+          <ul>${data.strengths.map(s=>`<li>${s}</li>`).join('')}</ul>
+        </div>
+        <div class="center-col challenges-col">
+          <div class="center-col-title">Challenges</div>
+          <ul>${data.challenges.map(s=>`<li>${s}</li>`).join('')}</ul>
+        </div>
+        <div class="center-practice">
+          <div class="practice-label">Key Practice</div>
+          <div class="practice-text">"${data.practice}"</div>
+        </div>
+      </div>`
+  };
+}
+
+function renderAllCenterCards() {
+  const container = document.getElementById('center-cards');
+  container.innerHTML = '';
+  CENTERS.forEach(c => {
+    const {className, inner} = buildCardHTML(c);
+    const card = document.createElement('div');
+    card.id = 'card-' + c.id;
+    card.className = className;
+    card.innerHTML = inner;
+    container.appendChild(card);
+  });
+}
+
+function updateCenterCard(id) {
+  const c = CENTERS.find(x => x.id === id);
+  const existing = document.getElementById('card-' + id);
+  if (!existing || !c) return;
+  const {className, inner} = buildCardHTML(c);
+  existing.className = className + ' flashing';
+  existing.innerHTML = inner;
+  existing.addEventListener('animationend', () => existing.classList.remove('flashing'), {once:true});
+}
+
+// ── Release lines ─────────────────────────────────────────────────────────────
+function renderReleaseLines() {
+  const container = document.getElementById('release-lines');
+  container.innerHTML = '';
+  RELEASE_LINES.forEach(rl => {
+    const isOpen = rl.centers.some(id => !centerState[id]);
+    const el = document.createElement('div');
+    el.className = 'release-line-item ' + (isOpen ? 'highlighted' : 'dimmed');
+    el.innerHTML = `<span class="rl-center">${rl.label}</span><p class="rl-text">${rl.text}</p>`;
+    container.appendChild(el);
+  });
+}
+
+// ── Phase progress (scroll detection) ────────────────────────────────────────
+function updatePhaseProgress() {
+  const phases = ['phase-1','phase-2','phase-3'];
+  let currentPhase = 0;
+  const midpoint = window.innerHeight * 0.4;
+  phases.forEach((id, i) => {
+    const el = document.getElementById(id);
+    if (el && el.getBoundingClientRect().top <= midpoint) currentPhase = i + 1;
+  });
+  if (currentPhase === 0 && document.getElementById('screen-workbook').style.display !== 'none') currentPhase = 1;
+
+  document.querySelectorAll('.pp-step').forEach((step, i) => {
+    const phase = i + 1;
+    step.classList.toggle('visited', phase < currentPhase);
+    step.classList.toggle('current', phase === currentPhase);
+  });
+  const d12 = document.getElementById('div-1-2');
+  const d23 = document.getElementById('div-2-3');
+  if (d12) d12.classList.toggle('filled', currentPhase >= 2);
+  if (d23) d23.classList.toggle('filled', currentPhase >= 3);
+}
+
+function jumpToPhase(n) {
+  const el = document.getElementById('phase-' + n);
+  if (el) el.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+// ── Scroll: progress bar + phase indicator ────────────────────────────────────
+window.addEventListener('scroll', function() {
+  // Gold fill bar
+  const doc = document.documentElement;
+  const pct = doc.scrollTop / (doc.scrollHeight - doc.clientHeight) * 100;
+  const bar = document.getElementById('progress-bar');
+  if (bar) bar.style.width = Math.min(100, isNaN(pct) ? 0 : pct) + '%';
+  // Phase progress
+  updatePhaseProgress();
+}, {passive:true});
+
+// ── Generate ──────────────────────────────────────────────────────────────────
+function generate() {
+  const name  = document.getElementById('f-name').value.trim();
+  const phone = document.getElementById('f-phone').value.trim();
+  const email = document.getElementById('f-email').value.trim();
+
+  if (!name || !email) {
+    document.getElementById('error-msg').style.display = 'block';
+    return;
+  }
+  document.getElementById('error-msg').style.display = 'none';
+  storedName = name;
+
+  CENTERS.forEach(c => viewState[c.id] = 'actual');
+
+  // Save to localStorage (→ "HD Submission" sheet when deployed to app)
+  const definedList = CENTERS.filter(c => centerState[c.id]).map(c => c.name).join(', ') || 'None (Reflector)';
+  const openList    = CENTERS.filter(c => !centerState[c.id]).map(c => c.name).join(', ') || 'None';
+  const submission  = {name, email, phone, definedCenters:definedList, openCenters:openList, timestamp:new Date().toISOString()};
+  try { localStorage.setItem('hd_submission_last', JSON.stringify(submission)); } catch(e) {}
+  const badge = document.getElementById('submission-badge');
+  if (badge) badge.style.display = 'inline-flex';
+
+  // Cover
+  const today = new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+  document.getElementById('cover-meta').innerHTML =
+    `<div class="cover-meta-row"><span class="meta-label">Name</span><span class="meta-value">${escHtml(name)}</span></div>
+     <div class="cover-meta-row"><span class="meta-label">Email</span><span class="meta-value">${escHtml(email)}</span></div>
+     ${phone?`<div class="cover-meta-row"><span class="meta-label">Phone</span><span class="meta-value">${escHtml(phone)}</span></div>`:''}
+     <div class="cover-meta-row"><span class="meta-label">Date</span><span class="meta-value">${today}</span></div>`;
+
+  renderBlueprintChips();
+  renderAllCenterCards();
+  renderReleaseLines();
+
+  document.getElementById('decl-quote').textContent =
+    `"I, ${name}, hereby declare that my deconditioning is a non-negotiable reality. I am no longer available to perform for approval, shrink for the comfort of others, or carry emotional weight that does not belong to me. My worth is inherent, my body is wise, and my voice is an extension of my truth. I choose to take absolute responsibility for my energetic well-being, my boundaries, and my peace. From this day forward, I am completely sovereign. I have returned to myself."`;
+
+  document.getElementById('screen-input').style.display = 'none';
+  document.getElementById('screen-workbook').style.display = 'block';
+  window.scrollTo(0, 0);
+  updatePhaseProgress();
+}
+
+function goBack() {
+  document.getElementById('screen-workbook').style.display = 'none';
+  document.getElementById('screen-input').style.display = 'flex';
+  window.scrollTo(0, 0);
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+</script>
+</body>
+</html>
