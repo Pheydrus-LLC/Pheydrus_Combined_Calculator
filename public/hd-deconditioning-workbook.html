@@ -359,6 +359,80 @@ body{background:var(--ground);color:var(--text);font-family:system-ui,-apple-sys
 .closing-brand{font-size:11px;letter-spacing:.2em;font-weight:700;color:var(--accent);text-transform:uppercase;margin-bottom:12px}
 .closing-text{font-family:Georgia,serif;font-style:italic;font-size:15px;color:var(--text-mid);line-height:1.7;max-width:500px;margin:0 auto}
 
+/* ─── CENTER ROW: info col + journal col ─────────── */
+.center-row{
+  display:grid;
+  grid-template-columns:55% 45%;
+  align-items:stretch;
+}
+.center-info-col{
+  /* left column — existing header + body */
+  min-width:0;
+}
+.center-journal-col{
+  border-left:1px solid var(--border-light);
+  background:rgba(250,246,240,0.6);
+  padding:18px 20px;
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+  min-width:0;
+}
+.journal-header{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--accent);
+}
+.journal-header::after{content:'';flex:1;height:1px;background:rgba(200,149,74,0.22)}
+.journal-prompt{display:flex;flex-direction:column;gap:7px}
+.journal-q{
+  font-size:12.5px;
+  font-weight:600;
+  color:var(--text-mid);
+  line-height:1.45;
+}
+/* Lined editable for journal */
+.journal-editable{
+  min-height:calc(var(--line-h) * 4);
+  line-height:var(--line-h);
+  font-size:13px;
+  color:var(--text-dark);
+  font-family:Georgia,serif;
+  outline:none;
+  word-break:break-word;
+  cursor:text;
+  padding-top:2px;
+  background-image:repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent calc(var(--line-h) - 1px),
+    #ddd4c4 calc(var(--line-h) - 1px),
+    #ddd4c4 var(--line-h)
+  );
+  background-size:100% var(--line-h);
+  background-attachment:local;
+}
+.journal-editable:focus{
+  background-image:repeating-linear-gradient(
+    to bottom,
+    rgba(200,149,74,0.02) 0px,
+    rgba(200,149,74,0.02) calc(var(--line-h) - 1px),
+    #c8a87a calc(var(--line-h) - 1px),
+    #c8a87a var(--line-h)
+  );
+}
+.journal-editable:empty::before{
+  content:attr(data-placeholder);
+  color:rgba(74,63,107,0.28);
+  font-style:italic;
+  pointer-events:none;
+}
+
 /* ─── PRINT ──────────────────────────────────────── */
 @media print {
   :root{--text-dark:#111;--text-mid:#555;--accent:#8a6520;--border-light:#ccc;--rose:#a08080}
@@ -386,6 +460,21 @@ body{background:var(--ground);color:var(--text);font-family:system-ui,-apple-sys
   .prompt-editable:empty::before{display:none}
   /* Mini bodygraph prints as-is — dark bg OK in most printers with backgrounds enabled */
   .center-mini-graph{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  /* Journal column prints cleanly */
+  .center-journal-col{background:#faf8f4!important;border-left:1px solid #ccc}
+  .journal-editable{
+    background-image:repeating-linear-gradient(to bottom,transparent 0px,transparent calc(var(--line-h) - 1px),#ccc calc(var(--line-h) - 1px),#ccc var(--line-h)) !important;
+    min-height:var(--line-h);
+  }
+  .journal-editable:empty{min-height:calc(var(--line-h)*4)}
+  .journal-editable:empty::before{display:none}
+}
+
+@media (max-width:700px){
+  /* Stack center row on mobile */
+  .center-row{grid-template-columns:1fr}
+  .center-info-col{border-right:none}
+  .center-journal-col{border-left:none;border-top:1px solid var(--border-light)}
 }
 
 @media (max-width:600px){
@@ -847,7 +936,30 @@ const CENTERS = [
 // ── State ──────────────────────────────────────────────────────────────────────
 const centerState = {};
 const viewState = {};
-CENTERS.forEach(c => { centerState[c.id] = false; viewState[c.id] = 'actual'; });
+const journalData = {};   // persists typed journal content across view-state toggles
+CENTERS.forEach(c => {
+  centerState[c.id] = false;
+  viewState[c.id] = 'actual';
+  journalData[c.id] = { strengths: '', challenges: '' };
+});
+
+function saveJournal(id) {
+  const card = document.getElementById('card-' + id);
+  if (!card) return;
+  const s  = card.querySelector('.journal-strengths');
+  const ch = card.querySelector('.journal-challenges');
+  if (s)  journalData[id].strengths  = s.innerHTML;
+  if (ch) journalData[id].challenges = ch.innerHTML;
+}
+
+function restoreJournal(id) {
+  const card = document.getElementById('card-' + id);
+  if (!card) return;
+  const s  = card.querySelector('.journal-strengths');
+  const ch = card.querySelector('.journal-challenges');
+  if (s  && journalData[id].strengths)  s.innerHTML  = journalData[id].strengths;
+  if (ch && journalData[id].challenges) ch.innerHTML = journalData[id].challenges;
+}
 
 // ── Release lines ─────────────────────────────────────────────────────────────
 const RELEASE_LINES = [
@@ -980,31 +1092,46 @@ function buildCardHTML(c) {
   return {
     className: 'center-card ' + (actuallyDefined ? 'defined' : 'undefined') + (isContrast ? ' contrast-view' : ''),
     inner: `${banner}
-      <div class="center-card-header">
-        <div class="center-card-head-row">
-          <div class="center-mini-graph">${miniSvg}</div>
-          <div class="center-card-info">
-            <div class="center-card-name">${c.name}</div>
-            <div class="center-card-subtitle">${c.subtitle}</div>
+      <div class="center-row">
+        <div class="center-info-col">
+          <div class="center-card-header">
+            <div class="center-card-head-row">
+              <div class="center-mini-graph">${miniSvg}</div>
+              <div class="center-card-info">
+                <div class="center-card-name">${c.name}</div>
+                <div class="center-card-subtitle">${c.subtitle}</div>
+              </div>
+            </div>
+            <div class="center-card-actions">
+              <span class="center-card-status">${statusLabel}</span>
+              <button class="card-view-toggle" onclick="toggleCardView('${c.id}')">${toggleLabel}</button>
+            </div>
+          </div>
+          <div class="center-card-body">
+            <div class="center-col strengths-col">
+              <div class="center-col-title">Strengths</div>
+              <ul>${data.strengths.map(s=>`<li>${s}</li>`).join('')}</ul>
+            </div>
+            <div class="center-col challenges-col">
+              <div class="center-col-title">Challenges</div>
+              <ul>${data.challenges.map(s=>`<li>${s}</li>`).join('')}</ul>
+            </div>
+            <div class="center-practice">
+              <div class="practice-label">Key Practice</div>
+              <div class="practice-text">"${data.practice}"</div>
+            </div>
           </div>
         </div>
-        <div class="center-card-actions">
-          <span class="center-card-status">${statusLabel}</span>
-          <button class="card-view-toggle" onclick="toggleCardView('${c.id}')">${toggleLabel}</button>
-        </div>
-      </div>
-      <div class="center-card-body">
-        <div class="center-col strengths-col">
-          <div class="center-col-title">Strengths</div>
-          <ul>${data.strengths.map(s=>`<li>${s}</li>`).join('')}</ul>
-        </div>
-        <div class="center-col challenges-col">
-          <div class="center-col-title">Challenges</div>
-          <ul>${data.challenges.map(s=>`<li>${s}</li>`).join('')}</ul>
-        </div>
-        <div class="center-practice">
-          <div class="practice-label">Key Practice</div>
-          <div class="practice-text">"${data.practice}"</div>
+        <div class="center-journal-col">
+          <div class="journal-header">Reflection Journal</div>
+          <div class="journal-prompt">
+            <p class="journal-q">Which moments in your life do you exhibit these strengths?</p>
+            <div class="journal-editable journal-strengths" contenteditable="true" data-placeholder="Think of specific situations where this energy showed up naturally in you…"></div>
+          </div>
+          <div class="journal-prompt">
+            <p class="journal-q">When do these challenges show up for you?</p>
+            <div class="journal-editable journal-challenges" contenteditable="true" data-placeholder="Where do you notice these patterns playing out — at work, in relationships, internally?…"></div>
+          </div>
         </div>
       </div>`
   };
@@ -1024,12 +1151,14 @@ function renderAllCenterCards() {
 }
 
 function updateCenterCard(id) {
+  saveJournal(id);   // capture typed content before replacing innerHTML
   const c = CENTERS.find(x => x.id === id);
   const existing = document.getElementById('card-' + id);
   if (!existing || !c) return;
   const {className, inner} = buildCardHTML(c);
   existing.className = className + ' flashing';
   existing.innerHTML = inner;
+  restoreJournal(id);  // put typed content back into the fresh editables
   existing.addEventListener('animationend', () => existing.classList.remove('flashing'), {once:true});
 }
 
