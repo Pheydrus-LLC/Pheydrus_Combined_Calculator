@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pheydrus — Ad Pulse</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ground:      #0C0F22;
+      --surface:     #131729;
+      --surface-2:   #1B1F38;
+      --border:      rgba(255,255,255,0.07);
+      --border-soft: rgba(255,255,255,0.035);
+      --text:        #DDE2F8;
+      --muted:       #5C6490;
+      --dim:         #2A2E50;
+      --accent:      #9B6FFF;
+      --accent-dim:  rgba(155,111,255,0.13);
+      --gold:        #F5A623;
+      --gold-dim:    rgba(245,166,35,0.11);
+      --mint:        #1AE8A0;
+      --mint-dim:    rgba(26,232,160,0.10);
+      --danger:      #FF5272;
+      --danger-dim:  rgba(255,82,114,0.12);
+      --warning:     #FFB830;
+      --warning-dim: rgba(255,184,48,0.11);
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--ground);
+      color: var(--text);
+      min-height: 100vh;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    /* ── TOPBAR ─────────────────────────────────────────── */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      height: 52px;
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .topbar-left { display: flex; align-items: center; gap: 20px; }
+
+    .wordmark {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: var(--text);
+    }
+    .wordmark em { font-style: normal; color: var(--accent); }
+
+    .topbar-sep {
+      width: 1px;
+      height: 18px;
+      background: var(--border);
+    }
+
+    .topbar-tag {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .topbar-right { display: flex; align-items: center; gap: 14px; }
+
+    .topbar-date {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .live-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--mint);
+      box-shadow: 0 0 8px var(--mint);
+      animation: blink 2.4s ease infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.35; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .live-dot { animation: none; }
+    }
+
+    /* ── ALERTS ─────────────────────────────────────────── */
+    .alerts-wrap {
+      padding: 14px 32px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .alert-strip {
+      border-radius: 7px;
+      padding: 10px 14px;
+      font-size: 12.5px;
+      line-height: 1.45;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .alert-strip.critical {
+      background: var(--danger-dim);
+      border: 1px solid rgba(255,82,114,0.22);
+      color: #FFBEC8;
+    }
+
+    .alert-strip.warning {
+      background: var(--warning-dim);
+      border: 1px solid rgba(255,184,48,0.18);
+      color: #FFE3A8;
+    }
+
+    .alert-icon { flex-shrink: 0; line-height: 1.45; }
+
+    /* ── KPI STRIP ──────────────────────────────────────── */
+    .kpi-strip {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      margin-top: 18px;
+    }
+
+    .kpi-cell {
+      padding: 22px 28px 18px;
+      border-right: 1px solid var(--border);
+      position: relative;
+    }
+    .kpi-cell:last-child { border-right: none; }
+
+    .kpi-cell::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 28px; right: 28px;
+      height: 2px;
+    }
+
+    .kpi-cell.c-violet::before  { background: var(--accent); }
+    .kpi-cell.c-gold::before    { background: var(--gold); }
+    .kpi-cell.c-mint::before    { background: var(--mint); }
+    .kpi-cell.c-danger::before  { background: var(--danger); }
+    .kpi-cell.c-warning::before { background: var(--warning); }
+    .kpi-cell.c-dim::before     { background: var(--dim); }
+
+    .kpi-label-top {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 9px;
+    }
+
+    .kpi-number {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 40px;
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      margin-bottom: 9px;
+    }
+
+    .kpi-number.n-good    { color: var(--mint); }
+    .kpi-number.n-bad     { color: var(--danger); }
+    .kpi-number.n-warn    { color: var(--warning); }
+    .kpi-number.n-neutral { color: var(--text); }
+
+    .kpi-footer {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .kpi-delta {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 3px;
+    }
+
+    .d-up   { background: var(--mint-dim);    color: var(--mint); }
+    .d-down { background: var(--danger-dim);  color: var(--danger); }
+    .d-warn { background: var(--warning-dim); color: var(--warning); }
+
+    .kpi-avg { font-size: 11px; color: var(--muted); }
+
+    /* ── BODY SPLIT ─────────────────────────────────────── */
+    .body-split {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .body-left { border-right: 1px solid var(--border); }
+
+    /* ── SECTION HEADER ─────────────────────────────────── */
+    .section-hd {
+      padding: 14px 28px 11px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .section-hd-title {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .section-hd-note {
+      font-size: 10px;
+      color: var(--dim);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* ── CAMPAIGN TABLE ─────────────────────────────────── */
+    .ctable {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .ctable th {
+      padding: 9px 28px;
+      font-size: 9.5px;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-align: left;
+      border-bottom: 1px solid var(--border-soft);
+    }
+
+    .ctable th.r { text-align: right; }
+
+    .ctable td {
+      padding: 13px 28px;
+      font-size: 13px;
+      border-bottom: 1px solid var(--border-soft);
+      vertical-align: middle;
+    }
+
+    .ctable tr:last-child td { border-bottom: none; }
+    .ctable tbody tr:hover td { background: rgba(255,255,255,0.013); }
+
+    .c-name-wrap { max-width: 200px; }
+
+    .c-name {
+      font-weight: 500;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: var(--text);
+    }
+
+    .c-chip {
+      display: inline-block;
+      font-size: 9px;
+      padding: 1px 6px;
+      border-radius: 3px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-top: 3px;
+    }
+
+    .chip-active   { background: var(--mint-dim);    color: var(--mint); }
+    .chip-issue    { background: var(--danger-dim);  color: var(--danger); }
+    .chip-warning  { background: var(--warning-dim); color: var(--warning); }
+
+    .spend-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--muted);
+      text-align: right;
+    }
+
+    .roas-cell { text-align: right; }
+
+    .roas-row {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .roas-bar {
+      width: 56px;
+      height: 3px;
+      background: var(--surface-2);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .roas-bar-fill {
+      height: 100%;
+      border-radius: 2px;
+      min-width: 2px;
+    }
+
+    .rb-mint    { background: var(--mint); }
+    .rb-gold    { background: var(--gold); }
+    .rb-danger  { background: var(--danger); }
+    .rb-dim     { background: var(--dim); }
+
+    .roas-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 600;
+      width: 46px;
+      text-align: right;
+    }
+
+    .rv-high  { color: var(--mint); }
+    .rv-mid   { color: var(--gold); }
+    .rv-low   { color: var(--danger); }
+    .rv-zero  { color: var(--muted); }
+
+    .delta-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      text-align: right;
+    }
+
+    .dn-up   { color: var(--mint); }
+    .dn-down { color: var(--danger); }
+    .dn-none { color: var(--dim); }
+
+    /* ── RUNWAY SIDEBAR ─────────────────────────────────── */
+    .runway-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border-soft);
+    }
+
+    .runway-item:last-child { border-bottom: none; }
+
+    .runway-bar {
+      width: 3px;
+      height: 30px;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    .rb-replace { background: var(--danger); box-shadow: 0 0 8px rgba(255,82,114,0.5); }
+    .rb-refresh { background: var(--warning); }
+    .rb-monitor { background: var(--gold); }
+    .rb-ok      { background: var(--mint); }
+
+    .runway-info { flex: 1; min-width: 0; }
+
+    .runway-name-t {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .runway-action {
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+
+    .ra-replace { color: var(--danger); }
+    .ra-refresh { color: var(--warning); }
+    .ra-monitor { color: var(--gold); }
+    .ra-ok      { color: var(--mint); }
+
+    .runway-days-col { text-align: right; flex-shrink: 0; }
+
+    .runway-days-n {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 1;
+    }
+
+    .runway-days-u {
+      font-size: 9px;
+      color: var(--muted);
+      margin-top: 1px;
+    }
+
+    /* ── FUNNEL ─────────────────────────────────────────── */
+    .funnel-wrap {
+      padding: 18px 32px 22px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .funnel-hd {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+    }
+
+    .funnel-stages {
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+
+    .f-stage { text-align: center; flex: 1; }
+
+    .f-count {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 34px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
+
+    .f-stage-lbl {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 5px;
+    }
+
+    .f-connector {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      width: 72px;
+      flex-shrink: 0;
+      padding-bottom: 24px;
+      gap: 4px;
+    }
+
+    .f-rate {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 4px;
+    }
+
+    .fr-critical { background: var(--danger-dim);  color: var(--danger);  border: 1px solid rgba(255,82,114,0.25); }
+    .fr-low      { background: var(--warning-dim); color: var(--warning); }
+    .fr-ok       { background: var(--mint-dim);    color: var(--mint); }
+
+    .f-arrow { color: var(--dim); font-size: 12px; }
+
+    .funnel-alert {
+      margin-top: 14px;
+      background: var(--danger-dim);
+      border: 1px solid rgba(255,82,114,0.2);
+      border-radius: 7px;
+      padding: 10px 14px;
+      font-size: 12px;
+      color: #FFBEC8;
+      line-height: 1.4;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    /* ── ATTRIBUTION STRIP ──────────────────────────────── */
+    .attr-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .attr-cell {
+      padding: 16px 32px;
+      border-right: 1px solid var(--border);
+    }
+
+    .attr-cell:last-child { border-right: none; }
+
+    .attr-lbl {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .attr-main-row {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+    }
+
+    .attr-big {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 26px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
+
+    .attr-sub {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .attr-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 4px;
+    }
+
+    .ab-gap    { background: var(--danger-dim);  color: var(--danger); }
+    .ab-ok     { background: var(--mint-dim);    color: var(--mint); }
+    .ab-violet { background: var(--accent-dim);  color: var(--accent); }
+
+    /* ── FOOTER ─────────────────────────────────────────── */
+    .footer {
+      padding: 20px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .footer-brand {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 12px;
+      color: var(--accent);
+    }
+
+    /* ── RESPONSIVE ─────────────────────────────────────── */
+    @media (max-width: 960px) {
+      .kpi-strip { grid-template-columns: repeat(3, 1fr); }
+      .kpi-cell:nth-child(4), .kpi-cell:nth-child(5) { border-top: 1px solid var(--border); }
+      .body-split { grid-template-columns: 1fr; }
+      .body-left { border-right: none; border-bottom: 1px solid var(--border); }
+      .attr-strip { grid-template-columns: 1fr 1fr; }
+      .attr-cell:last-child { grid-column: span 2; border-right: none; border-top: 1px solid var(--border); }
+    }
+
+    @media (max-width: 600px) {
+      .topbar { padding: 0 16px; }
+      .kpi-strip { grid-template-columns: repeat(2, 1fr); }
+      .kpi-cell { padding: 16px 16px 12px; }
+      .kpi-number { font-size: 30px; }
+      .kpi-cell::before { left: 16px; right: 16px; }
+      .alerts-wrap { padding: 12px 16px 0; }
+      .ctable th, .ctable td { padding-left: 16px; padding-right: 16px; }
+      .funnel-wrap { padding: 16px 16px 18px; }
+      .attr-cell { padding: 14px 16px; }
+      .attr-strip { grid-template-columns: 1fr; }
+      .attr-cell:last-child { grid-column: span 1; }
+      .footer { padding: 16px; flex-direction: column; gap: 6px; text-align: center; }
+      .section-hd { padding: 12px 16px 10px; }
+      .runway-item { padding: 12px 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<script>
+/* ===== DAILY DATA — REPLACED BY CLOUD ROUTINE AT 7AM ET ===== */
+const DATA = {
+  date: "Jun 24, 2026",
+  updated: "7:00 AM ET",
+  alerts: [
+    {
+      level: "critical",
+      text: "ROAS down 56% today — 1.48x vs 7-day avg of 3.39x. Hyros revenue $1,266 vs $4,019/day average (−69%). High-ticket closes absent."
+    },
+    {
+      level: "warning",
+      text: "New Leads — Outer Planet 2: 0 leads today (avg 7/day). D&D Portal Activation: 0 attributed sales (was active 5 of last 7 days)."
+    }
+  ],
+  kpis: [
+    { id: "spend",    label: "Spend Today",    value: "$847",   avg: "$1.2k avg",   delta: -29, color: "c-violet",  numClass: "n-neutral" },
+    { id: "metaroas", label: "Meta ROAS",       value: "1.48x",  avg: "3.39x 7d avg", delta: -56, color: "c-danger",  numClass: "n-bad" },
+    { id: "hyrosrev", label: "Hyros Revenue",   value: "$1.3k",  avg: "$4.0k 7d avg", delta: -69, color: "c-danger",  numClass: "n-bad" },
+    { id: "cpl",      label: "Cost per Lead",   value: "$24",    avg: "$18 avg",      delta: +31, color: "c-warning", numClass: "n-warn", invertDelta: true },
+    { id: "cpa",      label: "Cost per Acq",    value: "—",      avg: "$142 avg",     delta: null, color: "c-dim",   numClass: "n-neutral", note: "0 closes today" }
+  ],
+  campaigns: [
+    { name: "Invisible Forces",        spend: "$387", roas: 7.76, roasPct: 100, status: "active",  delta: +0.4 },
+    { name: "Alchemize Your Address",  spend: "$198", roas: 0.84, roasPct: 11,  status: "warning", delta: -1.2 },
+    { name: "Quantum Chess",           spend: "$142", roas: 1.20, roasPct: 15,  status: "active",  delta: -0.8 },
+    { name: "Outer Planet 2",          spend: "$87",  roas: 0,    roasPct: 0,   status: "issue",   delta: null },
+    { name: "D&D Portal Activation",   spend: "$33",  roas: 0,    roasPct: 0,   status: "issue",   delta: null }
+  ],
+  runway: [
+    { name: "Millionnaire Num Secrets", days: 2,  level: "replace" },
+    { name: "LLA-5%-2 (Alchemize)",     days: 4,  level: "replace" },
+    { name: "B Roll — Quantum Chess",   days: 9,  level: "refresh" },
+    { name: "MC Creative",              days: 17, level: "monitor" },
+    { name: "New Eyeballs IF",          days: 24, level: "ok" }
+  ],
+  funnel: {
+    clicks:   1840,
+    lp:       203,
+    leads:    12,
+    sales:    0,
+    lpRate:   11,
+    leadRate: 5.9,
+    saleRate: 0
+  },
+  attribution: {
+    metaPurchases: 14,
+    hyrosSales:    3,
+    gap:           78,
+    hyrosRoas:     "0.9x"
+  }
+};
+/* ============================================================= */
+</script>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="topbar-left">
+    <div class="wordmark">Pheydrus<em>.</em></div>
+    <div class="topbar-sep"></div>
+    <div class="topbar-tag">Ad Pulse</div>
+  </div>
+  <div class="topbar-right">
+    <div class="topbar-date" id="topbar-date"></div>
+    <div class="live-dot" title="Refreshed daily at 7 AM ET"></div>
+  </div>
+</header>
+
+<!-- ALERTS -->
+<div class="alerts-wrap" id="alerts-wrap"></div>
+
+<!-- KPI STRIP -->
+<div class="kpi-strip" id="kpi-strip"></div>
+
+<!-- BODY SPLIT: campaigns + runway -->
+<div class="body-split">
+  <div class="body-left">
+    <div class="section-hd">
+      <span class="section-hd-title">Campaigns</span>
+      <span class="section-hd-note" id="campaign-count"></span>
+    </div>
+    <table class="ctable" id="campaign-table">
+      <thead>
+        <tr>
+          <th>Campaign</th>
+          <th class="r">Spend</th>
+          <th class="r">ROAS (Hyros)</th>
+          <th class="r">7d Δ</th>
+        </tr>
+      </thead>
+      <tbody id="campaign-body"></tbody>
+    </table>
+  </div>
+  <div class="body-right">
+    <div class="section-hd">
+      <span class="section-hd-title">Creative Runway</span>
+      <span class="section-hd-note">days left</span>
+    </div>
+    <div id="runway-list"></div>
+  </div>
+</div>
+
+<!-- FUNNEL -->
+<div class="funnel-wrap">
+  <div class="funnel-hd">
+    <span class="section-hd-title">Funnel Drop-off</span>
+    <span class="section-hd-note">Click → LP → Lead → Sale</span>
+  </div>
+  <div class="funnel-stages" id="funnel-stages"></div>
+  <div class="funnel-alert" id="funnel-alert" style="display:none;">
+    <span>⚠️</span>
+    <span id="funnel-alert-text"></span>
+  </div>
+</div>
+
+<!-- ATTRIBUTION -->
+<div class="attr-strip">
+  <div class="attr-cell">
+    <div class="attr-lbl">Meta attributed</div>
+    <div class="attr-main-row">
+      <div class="attr-big" id="attr-meta" style="color: var(--accent);"></div>
+      <div class="attr-sub">purchases</div>
+    </div>
+  </div>
+  <div class="attr-cell">
+    <div class="attr-lbl">Hyros confirmed</div>
+    <div class="attr-main-row">
+      <div class="attr-big" id="attr-hyros" style="color: var(--gold);"></div>
+      <div class="attr-sub">last-click sales</div>
+    </div>
+  </div>
+  <div class="attr-cell">
+    <div class="attr-lbl">Attribution gap</div>
+    <div class="attr-main-row" id="attr-gap-row">
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-brand">Pheydrus.</div>
+  <div>Refreshed daily · <span id="footer-date"></span> · Cloud routine 7 AM ET</div>
+</footer>
+
+<script>
+(function () {
+  /* ── topbar ─────────────────────────────────────────── */
+  document.getElementById('topbar-date').textContent = DATA.date + ' · ' + DATA.updated;
+  document.getElementById('footer-date').textContent = DATA.date;
+
+  /* ── alerts ─────────────────────────────────────────── */
+  const alertsWrap = document.getElementById('alerts-wrap');
+  DATA.alerts.forEach(function(a) {
+    const div = document.createElement('div');
+    div.className = 'alert-strip ' + a.level;
+    div.innerHTML = '<span class="alert-icon">' + (a.level === 'critical' ? '🚨' : '⚠️') + '</span>' +
+                    '<span>' + a.text + '</span>';
+    alertsWrap.appendChild(div);
+  });
+
+  /* ── kpis ───────────────────────────────────────────── */
+  const kpiStrip = document.getElementById('kpi-strip');
+  DATA.kpis.forEach(function(k) {
+    const cell = document.createElement('div');
+    cell.className = 'kpi-cell ' + k.color;
+    cell.id = 'kpi-' + k.id;
+
+    let deltaHtml = '';
+    if (k.delta !== null && k.delta !== undefined) {
+      const sign = k.delta > 0 ? '+' : '';
+      const cls = k.invertDelta
+        ? (k.delta > 0 ? 'd-down' : 'd-up')
+        : (k.delta > 0 ? 'd-up' : 'd-down');
+      deltaHtml = '<span class="kpi-delta ' + cls + '">' + sign + k.delta.toFixed(0) + '%</span>';
+    }
+
+    const noteHtml = k.note ? '<span class="kpi-avg">' + k.note + '</span>' : '';
+    const avgHtml  = k.avg  ? '<span class="kpi-avg">' + k.avg + '</span>' : '';
+
+    cell.innerHTML =
+      '<div class="kpi-label-top">' + k.label + '</div>' +
+      '<div class="kpi-number ' + k.numClass + '">' + k.value + '</div>' +
+      '<div class="kpi-footer">' + deltaHtml + (noteHtml || avgHtml) + '</div>';
+
+    kpiStrip.appendChild(cell);
+  });
+
+  /* ── campaigns ──────────────────────────────────────── */
+  document.getElementById('campaign-count').textContent = DATA.campaigns.length + ' active';
+
+  const tbody = document.getElementById('campaign-body');
+  DATA.campaigns.forEach(function(c) {
+    const tr = document.createElement('tr');
+
+    // chip
+    const chipCls = c.status === 'active' ? 'chip-active' : c.status === 'issue' ? 'chip-issue' : 'chip-warning';
+    const chipLabel = c.status === 'active' ? 'Active' : c.status === 'issue' ? 'Delivery Issue' : 'Watch';
+
+    // roas color
+    const roasClass = c.roas >= 3 ? 'rv-high' : c.roas >= 1.5 ? 'rv-mid' : c.roas > 0 ? 'rv-low' : 'rv-zero';
+    const barClass  = c.roas >= 3 ? 'rb-mint' : c.roas >= 1.5 ? 'rb-gold' : c.roas > 0 ? 'rb-danger' : 'rb-dim';
+    const roasLabel = c.roas === 0 ? '—' : c.roas.toFixed(2) + 'x';
+
+    // delta
+    let deltaTd = '<span class="dn-none">—</span>';
+    if (c.delta !== null && c.delta !== undefined) {
+      const dc = c.delta > 0 ? 'dn-up' : 'dn-down';
+      const ds = c.delta > 0 ? '+' : '';
+      deltaTd = '<span class="delta-num ' + dc + '">' + ds + c.delta.toFixed(1) + '</span>';
+    }
+
+    tr.innerHTML =
+      '<td><div class="c-name-wrap"><div class="c-name">' + c.name + '</div>' +
+        '<div><span class="c-chip ' + chipCls + '">' + chipLabel + '</span></div></div></td>' +
+      '<td><div class="spend-num">' + c.spend + '</div></td>' +
+      '<td class="roas-cell"><div class="roas-row">' +
+        '<div class="roas-bar"><div class="roas-bar-fill ' + barClass + '" style="width:' + c.roasPct + '%"></div></div>' +
+        '<span class="roas-num ' + roasClass + '">' + roasLabel + '</span></div></td>' +
+      '<td>' + deltaTd + '</td>';
+
+    tbody.appendChild(tr);
+  });
+
+  /* ── runway ─────────────────────────────────────────── */
+  const runwayList = document.getElementById('runway-list');
+  DATA.runway.forEach(function(r) {
+    const div = document.createElement('div');
+    div.className = 'runway-item';
+
+    const barCls  = 'rb-' + r.level;
+    const actCls  = 'ra-' + r.level;
+    const numCls  = r.level === 'replace' ? 'n-bad' : r.level === 'refresh' ? 'n-warn' : r.level === 'monitor' ? '' : '';
+    const numColor = r.level === 'replace' ? 'var(--danger)' : r.level === 'refresh' ? 'var(--warning)' : r.level === 'monitor' ? 'var(--gold)' : 'var(--mint)';
+    const actionLabel = r.level === 'replace' ? 'Replace now' : r.level === 'refresh' ? 'Refresh soon' : r.level === 'monitor' ? 'Monitor' : 'Running well';
+
+    div.innerHTML =
+      '<div class="runway-bar ' + barCls + '"></div>' +
+      '<div class="runway-info">' +
+        '<div class="runway-name-t">' + r.name + '</div>' +
+        '<div class="runway-action ' + actCls + '">' + actionLabel + '</div>' +
+      '</div>' +
+      '<div class="runway-days-col">' +
+        '<div class="runway-days-n" style="color:' + numColor + '">' + r.days + '</div>' +
+        '<div class="runway-days-u">days</div>' +
+      '</div>';
+
+    runwayList.appendChild(div);
+  });
+
+  /* ── funnel ─────────────────────────────────────────── */
+  const f = DATA.funnel;
+  const stages = [
+    { count: f.clicks.toLocaleString(), label: 'Clicks',   color: 'var(--accent)' },
+    { count: f.lp.toLocaleString(),     label: 'LP Views', color: 'var(--warning)' },
+    { count: f.leads.toLocaleString(),  label: 'Leads',    color: 'var(--gold)' },
+    { count: f.sales === 0 ? '0' : f.sales.toLocaleString(), label: 'Sales', color: f.sales === 0 ? 'var(--muted)' : 'var(--mint)' }
+  ];
+
+  const rates = [
+    { pct: f.lpRate,   label: f.lpRate + '%',   cls: f.lpRate < 30 ? 'fr-critical' : f.lpRate < 50 ? 'fr-low' : 'fr-ok' },
+    { pct: f.leadRate, label: f.leadRate + '%',  cls: f.leadRate < 10 ? 'fr-low' : 'fr-ok' },
+    { pct: f.saleRate, label: f.saleRate + '%',  cls: f.saleRate === 0 ? 'fr-critical' : f.saleRate < 20 ? 'fr-low' : 'fr-ok' }
+  ];
+
+  const funnelEl = document.getElementById('funnel-stages');
+  stages.forEach(function(s, i) {
+    const stageDiv = document.createElement('div');
+    stageDiv.className = 'f-stage';
+    stageDiv.innerHTML =
+      '<div class="f-count" style="color:' + s.color + '">' + s.count + '</div>' +
+      '<div class="f-stage-lbl">' + s.label + '</div>';
+    funnelEl.appendChild(stageDiv);
+
+    if (i < stages.length - 1) {
+      const conn = document.createElement('div');
+      conn.className = 'f-connector';
+      conn.innerHTML =
+        '<div class="f-rate ' + rates[i].cls + '">' + rates[i].label + '</div>' +
+        '<div class="f-arrow">→</div>';
+      funnelEl.appendChild(conn);
+    }
+  });
+
+  if (f.lpRate < 30) {
+    const alertEl = document.getElementById('funnel-alert');
+    alertEl.style.display = 'flex';
+    document.getElementById('funnel-alert-text').textContent =
+      'Click→LP rate is critically low (' + f.lpRate + '% vs. 60–80% healthy). Meta pixel likely missing on landing pages. Check pixel placement on all destination URLs — this is suppressing conversion data account-wide.';
+  }
+
+  /* ── attribution ────────────────────────────────────── */
+  document.getElementById('attr-meta').textContent  = DATA.attribution.metaPurchases;
+  document.getElementById('attr-hyros').textContent = DATA.attribution.hyrosSales;
+
+  const gapRow = document.getElementById('attr-gap-row');
+  const gapPct = DATA.attribution.gap;
+  const gapCls = gapPct > 50 ? 'ab-gap' : 'ab-ok';
+  gapRow.innerHTML =
+    '<div class="attr-big attr-badge ' + gapCls + '">' + gapPct + '%</div>' +
+    '<div class="attr-sub">Meta over-reporting vs Hyros</div>';
+
+})();
+</script>
+</body>
+</html>
