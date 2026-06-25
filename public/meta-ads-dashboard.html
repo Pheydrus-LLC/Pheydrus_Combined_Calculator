@@ -86,6 +86,53 @@
       color: var(--muted);
     }
 
+    /* ── DATE RANGE TABS ────────────────────────────────── */
+    .range-tabs {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 3px;
+    }
+
+    .range-tab {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 4px 9px;
+      border-radius: 4px;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+      letter-spacing: 0.03em;
+    }
+
+    .range-tab:hover { color: var(--text); background: rgba(255,255,255,0.05); }
+
+    .range-tab.active {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .range-unavail-msg {
+      display: none;
+      position: fixed;
+      top: 60px;
+      right: 32px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 12px;
+      color: var(--muted);
+      z-index: 200;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    }
+
     .live-dot {
       width: 6px;
       height: 6px;
@@ -548,6 +595,70 @@
     .ab-ok     { background: var(--mint-dim);    color: var(--mint); }
     .ab-violet { background: var(--accent-dim);  color: var(--accent); }
 
+    /* ── ACTION ITEMS ───────────────────────────────────── */
+    .actions-wrap {
+      padding: 16px 32px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .actions-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 4px;
+    }
+
+    .actions-title {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .actions-subtitle {
+      font-size: 11px;
+      color: var(--dim);
+    }
+
+    .action-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .action-item.critical {
+      background: var(--danger-dim);
+      border: 1px solid rgba(255,82,114,0.18);
+    }
+
+    .action-item.warning {
+      background: var(--warning-dim);
+      border: 1px solid rgba(255,184,48,0.15);
+    }
+
+    .action-item.watch {
+      background: rgba(155,111,255,0.07);
+      border: 1px solid rgba(155,111,255,0.15);
+    }
+
+    .action-icon { flex-shrink: 0; font-size: 14px; line-height: 1.45; }
+
+    .action-text { flex: 1; }
+
+    .action-text strong { font-weight: 600; }
+
+    .action-item.critical .action-text { color: #FFBEC8; }
+    .action-item.warning .action-text  { color: #FFE3A8; }
+    .action-item.watch .action-text    { color: #C4B5FD; }
+
     /* ── FOOTER ─────────────────────────────────────────── */
     .footer {
       padding: 20px 32px;
@@ -645,7 +756,34 @@ const DATA = {
     hyrosSales:    3,
     gap:           78,
     hyrosRoas:     "0.9x"
-  }
+  },
+  actions: [
+    {
+      priority: "critical",
+      icon: "🚨",
+      text: "<strong>Pause Millionnaire Num Secrets now.</strong> It's consuming $198/day at 0.84x ROAS — actively losing money. Redirect its full budget to LLA-5%-2, which is running at 3.88x on the same audience."
+    },
+    {
+      priority: "critical",
+      icon: "🔧",
+      text: "<strong>Fix the Meta pixel on your landing pages.</strong> Click-to-LP is 11% — healthy accounts run 60–80%. Meta can't see who's converting, which means it can't optimize for buyers. This is suppressing performance account-wide, not just in one campaign."
+    },
+    {
+      priority: "warning",
+      icon: "⚠️",
+      text: "<strong>Investigate Outer Planet 2 before adding more budget.</strong> Zero leads today vs. a 7/day average suggests a delivery or audience issue. Check for audience overlap with IF campaigns before tomorrow's pulse."
+    },
+    {
+      priority: "warning",
+      icon: "⏱",
+      text: "<strong>Give Quantum Chess new creatives two more weeks.</strong> B Roll and MC are 9 days in — too early to read. The real signal will come at day 14+. Don't optimize yet."
+    },
+    {
+      priority: "watch",
+      icon: "👁",
+      text: "<strong>Watch D&D Portal Activation — don't react yet.</strong> One zero-sale day after 5 active days isn't a pattern. Let it run through the weekend before making changes."
+    }
+  ]
 };
 /* ============================================================= */
 </script>
@@ -658,13 +796,28 @@ const DATA = {
     <div class="topbar-tag">Ad Pulse</div>
   </div>
   <div class="topbar-right">
+    <div class="range-tabs" id="range-tabs">
+      <button class="range-tab active" data-range="7d">7d</button>
+      <button class="range-tab" data-range="14d">14d</button>
+      <button class="range-tab" data-range="30d">30d</button>
+      <button class="range-tab" data-range="custom">Custom</button>
+    </div>
     <div class="topbar-date" id="topbar-date"></div>
     <div class="live-dot" title="Refreshed daily at 7 AM ET"></div>
   </div>
 </header>
+<div class="range-unavail-msg" id="range-unavail-msg"></div>
 
 <!-- ALERTS -->
 <div class="alerts-wrap" id="alerts-wrap"></div>
+
+<!-- ACTION ITEMS -->
+<div class="actions-wrap" id="actions-wrap">
+  <div class="actions-header">
+    <span class="actions-title">Action Items</span>
+    <span class="actions-subtitle">What to do today, ranked by impact</span>
+  </div>
+</div>
 
 <!-- KPI STRIP -->
 <div class="kpi-strip" id="kpi-strip"></div>
@@ -744,6 +897,37 @@ const DATA = {
   /* ── topbar ─────────────────────────────────────────── */
   document.getElementById('topbar-date').textContent = DATA.date + ' · ' + DATA.updated;
   document.getElementById('footer-date').textContent = DATA.date;
+
+  /* ── date range tabs ────────────────────────────────── */
+  var rangeMsg = document.getElementById('range-unavail-msg');
+  var msgTimer;
+  document.getElementById('range-tabs').addEventListener('click', function(e) {
+    var btn = e.target.closest('.range-tab');
+    if (!btn) return;
+    var range = btn.dataset.range;
+    if (range === '7d') {
+      document.querySelectorAll('.range-tab').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      rangeMsg.style.display = 'none';
+    } else {
+      clearTimeout(msgTimer);
+      rangeMsg.textContent = range === 'custom'
+        ? 'Custom date range — coming in a future update.'
+        : range + ' view — the daily routine will include this range in an upcoming refresh.';
+      rangeMsg.style.display = 'block';
+      msgTimer = setTimeout(function() { rangeMsg.style.display = 'none'; }, 3000);
+    }
+  });
+
+  /* ── action items ───────────────────────────────────── */
+  var actionsWrap = document.getElementById('actions-wrap');
+  DATA.actions.forEach(function(a) {
+    var div = document.createElement('div');
+    div.className = 'action-item ' + a.priority;
+    div.innerHTML = '<span class="action-icon">' + a.icon + '</span>' +
+                    '<span class="action-text">' + a.text + '</span>';
+    actionsWrap.appendChild(div);
+  });
 
   /* ── alerts ─────────────────────────────────────────── */
   const alertsWrap = document.getElementById('alerts-wrap');
