@@ -1,0 +1,23 @@
+{
+  "days": [
+    {
+      "date": "Jun 24, 2026",
+      "spend": 847,
+      "metaRoas": 1.48,
+      "hyrosRev": 1266,
+      "cpl": 24,
+      "cpa": 0,
+      "hyrosSales": 3,
+      "metaPurchases": 14,
+      "leads": 12,
+      "lpRate": 11,
+      "campaigns": [
+        { "name": "Invisible Forces",       "spend": 387, "roas": 7.76 },
+        { "name": "Alchemize Your Address", "spend": 198, "roas": 0.84 },
+        { "name": "Quantum Chess",          "spend": 142, "roas": 1.20 },
+        { "name": "Outer Planet 2",         "spend": 87,  "roas": 0    },
+        { "name": "D&D Portal Activation",  "spend": 33,  "roas": 0    }
+      ]
+    }
+  ]
+}

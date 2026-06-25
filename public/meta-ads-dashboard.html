@@ -898,25 +898,158 @@ const DATA = {
   document.getElementById('topbar-date').textContent = DATA.date + ' · ' + DATA.updated;
   document.getElementById('footer-date').textContent = DATA.date;
 
-  /* ── date range tabs ────────────────────────────────── */
-  var rangeMsg = document.getElementById('range-unavail-msg');
-  var msgTimer;
+  /* ── date range tabs + history ──────────────────────── */
+  var HISTORY = [];
+  var currentRange = '7d';
+
+  fetch('ads-history.json')
+    .then(function(r) { return r.json(); })
+    .then(function(h) {
+      HISTORY = h.days || [];
+      renderRangeOverlay(currentRange);
+    })
+    .catch(function() { /* history not yet available — 7d view is default */ });
+
+  function daysForRange(range) {
+    if (range === '7d')  return 7;
+    if (range === '14d') return 14;
+    if (range === '30d') return 30;
+    return null;
+  }
+
+  function aggregateHistory(days) {
+    var slice = HISTORY.slice(-days);
+    if (!slice.length) return null;
+    var totalSpend = 0, totalRev = 0, totalLeads = 0, totalSales = 0, totalPurchases = 0;
+    slice.forEach(function(d) {
+      totalSpend     += d.spend      || 0;
+      totalRev       += d.hyrosRev   || 0;
+      totalLeads     += d.leads      || 0;
+      totalSales     += d.hyrosSales || 0;
+      totalPurchases += d.metaPurchases || 0;
+    });
+    var avgMetaRoas  = slice.reduce(function(s,d){ return s + (d.metaRoas||0); }, 0) / slice.length;
+    var avgLpRate    = slice.reduce(function(s,d){ return s + (d.lpRate||0);  }, 0) / slice.length;
+    var hyrosRoas    = totalSpend > 0 ? totalRev / totalSpend : 0;
+    var cpl          = totalLeads > 0 ? totalSpend / totalLeads : 0;
+    var cpa          = totalSales > 0 ? totalSpend / totalSales : 0;
+
+    // aggregate campaigns
+    var campMap = {};
+    slice.forEach(function(d) {
+      (d.campaigns||[]).forEach(function(c) {
+        if (!campMap[c.name]) campMap[c.name] = { spend: 0, roasSum: 0, count: 0 };
+        campMap[c.name].spend   += c.spend || 0;
+        campMap[c.name].roasSum += c.roas  || 0;
+        campMap[c.name].count++;
+      });
+    });
+    var campaigns = Object.keys(campMap).map(function(name) {
+      var c = campMap[name];
+      var avgRoas = c.roasSum / c.count;
+      return { name: name, spend: '$' + Math.round(c.spend), roas: avgRoas,
+               roasPct: 0, status: avgRoas >= 1.5 ? 'active' : avgRoas > 0 ? 'warning' : 'issue', delta: null };
+    });
+    var maxRoas = campaigns.reduce(function(m,c){ return Math.max(m, c.roas); }, 0.01);
+    campaigns.forEach(function(c){ c.roasPct = Math.round((c.roas/maxRoas)*100); });
+
+    return {
+      days: slice.length,
+      spend: totalSpend, hyrosRev: totalRev, hyrosRoas: hyrosRoas,
+      metaRoas: avgMetaRoas, cpl: cpl, cpa: cpa,
+      hyrosSales: totalSales, metaPurchases: totalPurchases,
+      avgLpRate: avgLpRate, campaigns: campaigns
+    };
+  }
+
+  function fmt$(n) { return n >= 1000 ? '$' + (n/1000).toFixed(1) + 'k' : '$' + Math.round(n); }
+
+  function renderRangeOverlay(range) {
+    var overlay = document.getElementById('range-overlay');
+    if (range === '7d') { if (overlay) overlay.remove(); return; }
+    if (range === 'custom') {
+      showRangeNote('Custom date range — coming soon.');
+      return;
+    }
+    var days = daysForRange(range);
+    var agg  = aggregateHistory(days);
+
+    if (!agg || agg.days < 2) {
+      showRangeNote('Only ' + (agg ? agg.days : 0) + ' day' + (agg && agg.days === 1 ? '' : 's') + ' of history so far. ' + range + ' view will fill in automatically as data accumulates.');
+      return;
+    }
+
+    if (!overlay) {
+      overlay = document.createElement('div');
+      overlay.id = 'range-overlay';
+      overlay.style.cssText = 'position:fixed;top:52px;left:0;right:0;bottom:0;background:var(--ground);z-index:90;overflow-y:auto;padding:24px 32px 48px;';
+      document.body.appendChild(overlay);
+    }
+
+    var roasColor = agg.hyrosRoas >= 3 ? 'var(--mint)' : agg.hyrosRoas >= 1.5 ? 'var(--gold)' : 'var(--danger)';
+    var campRows  = agg.campaigns.map(function(c) {
+      var rc = c.roas >= 3 ? 'rv-high' : c.roas >= 1.5 ? 'rv-mid' : c.roas > 0 ? 'rv-low' : 'rv-zero';
+      var bc = c.roas >= 3 ? 'rb-mint' : c.roas >= 1.5 ? 'rb-gold' : c.roas > 0 ? 'rb-danger' : 'rb-dim';
+      var chipCls = c.status === 'active' ? 'chip-active' : c.status === 'issue' ? 'chip-issue' : 'chip-warning';
+      var chipLbl = c.status === 'active' ? 'Active' : c.status === 'issue' ? 'Delivery Issue' : 'Watch';
+      return '<tr><td><div class="c-name-wrap"><div class="c-name">' + c.name + '</div>' +
+             '<div><span class="c-chip ' + chipCls + '">' + chipLbl + '</span></div></div></td>' +
+             '<td><div class="spend-num">' + c.spend + '</div></td>' +
+             '<td class="roas-cell"><div class="roas-row"><div class="roas-bar"><div class="roas-bar-fill ' + bc + '" style="width:' + c.roasPct + '%"></div></div>' +
+             '<span class="roas-num ' + rc + '">' + (c.roas === 0 ? '—' : c.roas.toFixed(2) + 'x') + '</span></div></td>' +
+             '<td><span class="dn-none">—</span></td></tr>';
+    }).join('');
+
+    overlay.innerHTML =
+      '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">' +
+        '<div style="font-size:10px;font-weight:600;letter-spacing:0.09em;text-transform:uppercase;color:var(--muted);">' + range + ' Summary · ' + agg.days + ' days of data</div>' +
+        '<button onclick="document.getElementById(\'range-overlay\').remove();document.querySelectorAll(\'.range-tab\').forEach(function(b){b.classList.remove(\'active\')});document.querySelector(\'.range-tab[data-range=7d]\').classList.add(\'active\');currentRange=\'7d\';" ' +
+        'style="background:var(--surface-2);border:1px solid var(--border);color:var(--muted);border-radius:6px;padding:6px 12px;font-size:11px;cursor:pointer;">← Back to today</button>' +
+      '</div>' +
+      '<div style="display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:20px;">' +
+        '<div style="padding:20px 24px;border-right:1px solid var(--border);">' +
+          '<div style="font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Total Spend</div>' +
+          '<div style="font-family:JetBrains Mono,monospace;font-size:32px;font-weight:600;color:var(--text);">' + fmt$(agg.spend) + '</div>' +
+        '</div>' +
+        '<div style="padding:20px 24px;border-right:1px solid var(--border);">' +
+          '<div style="font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Hyros Revenue</div>' +
+          '<div style="font-family:JetBrains Mono,monospace;font-size:32px;font-weight:600;color:var(--gold);">' + fmt$(agg.hyrosRev) + '</div>' +
+        '</div>' +
+        '<div style="padding:20px 24px;border-right:1px solid var(--border);">' +
+          '<div style="font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Avg Hyros ROAS</div>' +
+          '<div style="font-family:JetBrains Mono,monospace;font-size:32px;font-weight:600;color:' + roasColor + ';">' + agg.hyrosRoas.toFixed(2) + 'x</div>' +
+        '</div>' +
+        '<div style="padding:20px 24px;">' +
+          '<div style="font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Avg CPL</div>' +
+          '<div style="font-family:JetBrains Mono,monospace;font-size:32px;font-weight:600;color:var(--text);">' + fmt$(agg.cpl) + '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;">' +
+        '<div style="padding:14px 24px;border-bottom:1px solid var(--border);font-size:10px;font-weight:600;letter-spacing:0.09em;text-transform:uppercase;color:var(--muted);">Campaign Breakdown — ' + range + ' Avg</div>' +
+        '<table class="ctable" style="width:100%;"><thead><tr>' +
+          '<th>Campaign</th><th class="r">Total Spend</th><th class="r">Avg ROAS (Hyros)</th><th class="r">7d Δ</th>' +
+        '</tr></thead><tbody>' + campRows + '</tbody></table>' +
+      '</div>';
+  }
+
+  function showRangeNote(msg) {
+    var rangeMsg = document.getElementById('range-unavail-msg');
+    rangeMsg.textContent = msg;
+    rangeMsg.style.display = 'block';
+    clearTimeout(window._rangeMsgTimer);
+    window._rangeMsgTimer = setTimeout(function() { rangeMsg.style.display = 'none'; }, 4000);
+  }
+
   document.getElementById('range-tabs').addEventListener('click', function(e) {
     var btn = e.target.closest('.range-tab');
     if (!btn) return;
     var range = btn.dataset.range;
-    if (range === '7d') {
-      document.querySelectorAll('.range-tab').forEach(function(b) { b.classList.remove('active'); });
-      btn.classList.add('active');
-      rangeMsg.style.display = 'none';
-    } else {
-      clearTimeout(msgTimer);
-      rangeMsg.textContent = range === 'custom'
-        ? 'Custom date range — coming in a future update.'
-        : range + ' view — the daily routine will include this range in an upcoming refresh.';
-      rangeMsg.style.display = 'block';
-      msgTimer = setTimeout(function() { rangeMsg.style.display = 'none'; }, 3000);
-    }
+    document.querySelectorAll('.range-tab').forEach(function(b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+    currentRange = range;
+    var overlay = document.getElementById('range-overlay');
+    if (overlay) overlay.remove();
+    renderRangeOverlay(range);
   });
 
   /* ── action items ───────────────────────────────────── */
