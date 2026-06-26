@@ -132,17 +132,7 @@ function getTransmuteLine(item: { planet?: string; house?: number; section?: str
  return applyKmsStyle(lines[key] ?? '');
 }
 
-// ── Testimonial card ──────────────────────────────────────────────────────────
 
-function renderTestimonialCard(quote: string, attribution: string): string {
- return `
-<!-- REPLACE WITH REAL TESTIMONIAL -->
-<div style="background:#FDFBF6;border-left:3px solid #C9A84C;border-radius:4px;padding:18px 22px;margin:14px 0;position:relative;overflow:hidden;">
- <span style="position:absolute;top:-12px;left:8px;font-size:72px;color:#C9A84C;opacity:0.12;font-family:${CORMORANT};line-height:1;pointer-events:none;">&ldquo;</span>
- <p style="margin:0 0 8px;font-size:13px;font-style:italic;color:#7A5A1A;line-height:1.65;font-family:${CORMORANT};position:relative;">${esc(quote)}</p>
- <p style="margin:0;font-size:10px;color:#999;font-family:${INTER};"> - ${esc(attribution)}</p>
-</div>`;
-}
 
 // ── SVG: Venn Diagram ─────────────────────────────────────────────────────────
 
@@ -363,7 +353,7 @@ function getPillar2MaxEndYear(pillar2Items: GradeItem[], transits: PlanetaryTran
 function renderPillarTimeline(
  pillarNum: 1 | 2 | 3,
  pillar2Items: GradeItem[],
- pillar3Items: GradeItem[],
+ _pillar3Items: GradeItem[],
  transits: PlanetaryTransit[],
  addressMoveDate: string,
 ): string {

@@ -386,7 +386,7 @@ function getPillar2MaxEndYear(
 function PillarTimeline({
  pillarNum,
  pillar2Items,
- pillar3Items,
+ pillar3Items: _pillar3Items,
  transits,
  addressMoveDate,
 }: {
