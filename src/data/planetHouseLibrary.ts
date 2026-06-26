@@ -12,6 +12,7 @@ export interface LibraryEntry {
   hurt_or_help: string;
   note: string | null;
   steps: string;
+  steps2?: string;
 }
 
 export const MALEFIC_PLANETS = new Set(['Mars', 'Saturn', 'Pluto', 'Neptune', 'Uranus']);
@@ -1498,4 +1499,56 @@ export function getLibraryEntry(
   const pillarLabel = pillar === 1 ? 'natal' : pillar === 2 ? 'transit' : 'environment';
   const key = `${planet.toUpperCase()}_${house}_${pillarLabel}`;
   return LIBRARY[key] ?? null;
+}
+
+const STEPS2: Record<string, Record<1 | 2 | 3, string>> = {
+  Mars: {
+    1: `Claim your fire. That intensity others call "too much" is raw creative force - the same energy that creates friction, when consciously directed, produces results that gentler approaches never could. Pick one arena where intensity is an asset and pour it in fully.`,
+    2: `This is a window of accelerated action. Every day this transit is active, pour that Mars energy into your single most important goal. The same intensity creating friction right now, aimed at your target, builds momentum others take years to achieve.`,
+    3: `Your environment is activating your warrior energy. Lean into it by choosing one bold, decisive action each day toward your most important goal. The same force creating friction, pointed forward, becomes unstoppable momentum.`,
+  },
+  Saturn: {
+    1: `You are being built to last. Every constraint Saturn places on you is a load-bearing wall in a life designed to endure. Start treating your disciplines, boundaries, and non-negotiables as your competitive edge - what others see as limitation is your foundation.`,
+    2: `This window is building the foundation. Everything you commit to with full integrity right now becomes the bedrock of the next decade. Make one uncompromising commitment today and hold it through this window - Saturn rewards those who don't quit when it gets hard.`,
+    3: `Your environment is calling for your most consistent self. Choose one thing you've been inconsistent about and show up at the same level every day for 30 days. Saturn's reward arrives slowly - and it never goes away.`,
+  },
+  Pluto: {
+    1: `You have the power to transform entire systems - starting with yourself. Identify one outdated pattern or identity you are ready to release, and consciously step into the next version of who you are becoming. The structure that is dissolving is making room for something far more powerful.`,
+    2: `Write a letter from your future self describing who you are on the other side of this transit. Then take one concrete action today that version of you would take. Pluto rewards those who lead the transformation rather than wait for it.`,
+    3: `This location is an alchemical container. Whatever you commit to transforming here will transform completely. Choose your most important target and go all in - the environment is amplifying the deepest version of your upgrade.`,
+  },
+  Neptune: {
+    1: `Your intuition and sensitivity are rare gifts in a world that runs on logic. Begin trusting what you feel before you can explain it. Your most inspired decisions have always come from this place - build a daily practice that accesses it deliberately.`,
+    2: `This is a period of deep creative replenishment. Spend 15 minutes daily in a practice that connects you to vision - journaling, meditation, or creative work. What emerges from this quiet time is carrying the blueprint for your next breakthrough.`,
+    3: `Your environment is tuning you to a higher creative frequency. Capture every inspired idea immediately - even the ones that don't make sense yet. The fog Neptune creates is also the medium through which your deepest vision arrives.`,
+  },
+  Uranus: {
+    1: `You are here to build something no one has built before. Stop trying to make your vision fit existing frameworks - that is where the friction lives. Sketch the unconventional version of your goal, the one that genuinely excites you, and start building from that version.`,
+    2: `Breakthroughs available in this window won't be available again for decades. Take one unconventional risk toward your goal this week - the one your practical mind has been talking you out of. The future version of you will be grateful you moved when the window was open.`,
+    3: `Your environment is a laboratory for what has never been done before. Experiment freely. The approach that works here won't work anywhere else - but here, it can be extraordinary. Identify the most unconventional move toward your goal and try it.`,
+  },
+  Sun: {
+    1: `You are designed to lead and to be seen. The resistance around full visibility is precisely where the breakthrough lives. Take one step this week that puts you in front of your people at full power - the world needs what only you can bring.`,
+    2: `Your identity and leadership are crystallizing right now. Choose to show up as the most expressed, most visible version of yourself for the next 30 days. The confidence that felt inaccessible before is ready to emerge.`,
+    3: `Your environment is illuminating who you are meant to become. What does the most fully expressed version of you look like here? Take one visible, bold step toward that version this week.`,
+  },
+  Moon: {
+    1: `Your emotional intelligence is one of your greatest assets in business and in life. Before high-stakes decisions, check in with your body first: does this feel like fear or genuine desire? That distinction, practiced consistently, transforms your entire trajectory.`,
+    2: `This period is about emotional alignment with your deepest goals. Daily check-in: is this decision coming from scarcity or from genuine desire? Choices made from genuine desire during this window build the foundation of your most authentic life.`,
+    3: `Your location amplifies your emotional intelligence and intuition. Trust what you feel here before you can explain it. The knowing you experience in this environment is often ahead of what logic can confirm - act on it.`,
+  },
+  Venus: {
+    1: `You naturally draw people and opportunities toward you - that magnetism grows when you stop hiding it. Put your most authentic work into the world this week and let what resonates come back. What you attract at full power is exactly what you have been looking for.`,
+    2: `This is a prime window for attracting alignment - in love and in business. Make yourself available. Say yes to one new connection or opportunity you would normally have hesitated about. Venus rewards those who show up open.`,
+    3: `Your environment amplifies your natural magnetism. Show up where your people are. Attend the event. Start the conversation. This location rewards those who make themselves visible in it.`,
+  },
+  Jupiter: {
+    1: `You have an inherent capacity for expansion that most people never fully activate. Raise your target by 30% this week - not as a mental exercise but as a real intention. Notice how your actions shift when you stop limiting what you are willing to ask for.`,
+    2: `This is one of your expansion windows and it won't last. Set the boldest version of your goal right now - the one you have been afraid to say out loud - and take one concrete action toward it today. Jupiter's window is limited and the rewards are exponential.`,
+    3: `Your environment is amplifying your capacity to grow. Write down the boldest version of your goal and identify one action only that version of you would take. Then take it - this location is set up for your expansion.`,
+  },
+};
+
+export function getDefaultSteps2(planet: string, pillar: 1 | 2 | 3): string {
+  return STEPS2[planet]?.[pillar] ?? `Take one deliberate action today that the highest version of you would take. The pattern you are working with becomes your greatest asset the moment you work it consciously.`;
 }
