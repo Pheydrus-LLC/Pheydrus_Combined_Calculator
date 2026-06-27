@@ -283,7 +283,7 @@ function TestimonialCard({ quote, attribution }: { quote: string; attribution: s
  >
  {quote}
  </p>
- <p style={{ fontFamily: INTER, color: '#8080A8', fontSize: '0.8rem', margin: 0 }}>
+ <p style={{ fontFamily: INTER, color: '#C8C0E8', fontSize: '0.8rem', margin: 0 }}>
  - {attribution}
  </p>
  </div>
@@ -497,7 +497,7 @@ function AspectCard({
  style={{
  fontFamily: INTER,
  fontSize: '0.72rem',
- color: '#9A8EC8',
+ color: '#DDD8F8',
  lineHeight: 1.7,
  margin: 0,
  }}
@@ -508,7 +508,7 @@ function AspectCard({
  style={{
  fontFamily: INTER,
  fontSize: '0.72rem',
- color: '#9A8EC8',
+ color: '#DDD8F8',
  lineHeight: 1.7,
  margin: 0,
  }}
@@ -882,7 +882,7 @@ function CostOfInaction({ goalShort, endYear }: { goalShort: string; endYear: nu
  style={{
  margin: 0,
  fontSize: '0.85rem',
- color: '#9A8EC8',
+ color: '#DDD8F8',
  lineHeight: 1.7,
  fontFamily: INTER,
  borderLeft: '2px solid #C0392B',
@@ -1719,10 +1719,10 @@ export function InvisibleForcesResultsPage() {
  >
  {h1} <em style={{ color: '#D4A843' }}>{h2}</em>
  </div>
- <p style={{ margin: '0 0 12px', fontSize: '0.82rem', color: '#9A8EC8', lineHeight: 1.75 }}>
+ <p style={{ margin: '0 0 12px', fontSize: '0.82rem', color: '#DDD8F8', lineHeight: 1.75 }}>
  {descLine}
  </p>
- <p style={{ margin: '0 0 10px', fontSize: '0.82rem', color: '#9A8EC8', lineHeight: 1.75 }}>
+ <p style={{ margin: '0 0 10px', fontSize: '0.82rem', color: '#DDD8F8', lineHeight: 1.75 }}>
  This report shows exactly where momentum is leaking and what to change first. Every pressure point has a usable upside once you work it directly.
  </p>
  <div style={{ borderLeft: '3px solid #C9A84C', paddingLeft: '12px', marginBottom: '12px' }}>
@@ -1730,13 +1730,13 @@ export function InvisibleForcesResultsPage() {
  "Pluto transiting your 1st house? Stop playing nice. Stop softening your edges. Step fully into your power - that is the higher octave." - Pheydrus team
  </p>
  </div>
- <p style={{ margin: '0 0 8px', fontSize: '0.82rem', color: '#9A8EC8', lineHeight: 1.75 }}>
+ <p style={{ margin: '0 0 8px', fontSize: '0.82rem', color: '#DDD8F8', lineHeight: 1.75 }}>
  You did the mindset work, the strategy work, and the coaching. Results still stall at the same point.
  </p>
- <p style={{ margin: '0 0 8px', fontSize: '0.82rem', color: '#9A8EC8', lineHeight: 1.75 }}>
+ <p style={{ margin: '0 0 8px', fontSize: '0.82rem', color: '#DDD8F8', lineHeight: 1.75 }}>
  The missing variable is energetic structure. Thinking harder does not solve this layer.
  </p>
- <p style={{ margin: 0, fontSize: '0.82rem', color: '#9A8EC8', lineHeight: 1.75 }}>
+ <p style={{ margin: 0, fontSize: '0.82rem', color: '#DDD8F8', lineHeight: 1.75 }}>
  You already have the capacity. This report shows the sequence to unlock it.
  </p>
  </div>
@@ -1937,7 +1937,7 @@ export function InvisibleForcesResultsPage() {
  style={{
  margin: '0 0 12px',
  fontSize: '0.85rem',
- color: '#9A8EC8',
+ color: '#DDD8F8',
  lineHeight: 1.8,
  fontWeight: 700,
  }}
@@ -1945,7 +1945,7 @@ export function InvisibleForcesResultsPage() {
 						You are in an identity shift.
  </p>
  <p
- style={{ margin: '0 0 12px', fontSize: '0.85rem', color: '#9A8EC8', lineHeight: 1.8 }}
+ style={{ margin: '0 0 12px', fontSize: '0.85rem', color: '#DDD8F8', lineHeight: 1.8 }}
  >
 						These patterns are the exact conditions that precede a major identity upgrade.
 						Three invisible forces are pulling against each other, and that friction marks the
@@ -1963,7 +1963,7 @@ export function InvisibleForcesResultsPage() {
 						Your identity upgrade is around the corner, and the first signals are active now.
  </p>
  <p
- style={{ margin: '0 0 24px', fontSize: '0.85rem', color: '#9A8EC8', lineHeight: 1.8 }}
+ style={{ margin: '0 0 24px', fontSize: '0.85rem', color: '#DDD8F8', lineHeight: 1.8 }}
  >
 						You now choose how you enter this window: with a map and deliberate action, or by
 						repeating the same loop.
@@ -2073,7 +2073,7 @@ export function InvisibleForcesResultsPage() {
  >
  ⚠ Active Pattern Window
  </div>
- <p style={{ margin: 0, fontSize: '0.82rem', color: '#9A8EC8', lineHeight: 1.7 }}>
+ <p style={{ margin: 0, fontSize: '0.82rem', color: '#DDD8F8', lineHeight: 1.7 }}>
  Without intervention, your current configuration is projected to persist{' '}
  <strong style={{ color: '#C9A84C' }}>
  through {endYear}
@@ -2159,29 +2159,29 @@ export function InvisibleForcesResultsPage() {
  How to Improve Your Scores, and Stop Living in Pain 🏆
  </h3>
  <p
- style={{ margin: '0 0 10px', fontSize: '0.85rem', color: '#9A8EC8', lineHeight: 1.8 }}
+ style={{ margin: '0 0 10px', fontSize: '0.85rem', color: '#DDD8F8', lineHeight: 1.8 }}
  >
  The first is <strong style={{ color: '#D4A843' }}>closure</strong>. You were handed a lie: that struggle means growth. It doesn't. It means you've been placed in an energetic grid working against you.
  </p>
  <p
- style={{ margin: '0 0 10px', fontSize: '0.85rem', color: '#9A8EC8', lineHeight: 1.8 }}
+ style={{ margin: '0 0 10px', fontSize: '0.85rem', color: '#DDD8F8', lineHeight: 1.8 }}
  >
  The second - and more important - is <strong style={{ color: '#D4A843' }}>preparation</strong>. That grid is already shifting. And to move with it, you need to attack all three pillars at once - because they don't work in isolation. Your blueprint, your timing, and your environment are always talking to each other. Fix one and ignore the others - and you'll keep hitting the same ceiling in a different room.
  </p>
  <p
- style={{ margin: '0 0 10px', fontSize: '0.85rem', color: '#9A8EC8', lineHeight: 1.8 }}
+ style={{ margin: '0 0 10px', fontSize: '0.85rem', color: '#DDD8F8', lineHeight: 1.8 }}
  >
  <span style={{ color: '#38a169', fontWeight: 800, marginRight: '6px' }}>➜</span>
  For <strong>Pillar 1</strong> - we use a sequential deconditioning method that goes directly into your energetic blindspots (desires, addictions, dreams, etc). This isn’t talk therapy or journaling. A specific, structured process that helps you identify the unconscious karmic patterns running your decisions - and consciously transmute them into your greatest assets.
  </p>
  <p
- style={{ margin: '0 0 10px', fontSize: '0.85rem', color: '#9A8EC8', lineHeight: 1.8 }}
+ style={{ margin: '0 0 10px', fontSize: '0.85rem', color: '#DDD8F8', lineHeight: 1.8 }}
  >
  <span style={{ color: '#38a169', fontWeight: 800, marginRight: '6px' }}>➜</span>
  For <strong>Pillar 2</strong> - we map your current and upcoming planetary transits so you're never caught off guard again. We show you exactly which seasons to push, which to rest, and how to prepare for the windows that - if you move correctly - will be the most expansive periods of your life.
  </p>
  <p
- style={{ margin: '0 0 10px', fontSize: '0.85rem', color: '#9A8EC8', lineHeight: 1.8 }}
+ style={{ margin: '0 0 10px', fontSize: '0.85rem', color: '#DDD8F8', lineHeight: 1.8 }}
  >
  <span style={{ color: '#38a169', fontWeight: 800, marginRight: '6px' }}>➜</span>
  For <strong>Pillar 3</strong> - we use our proprietary Feng Shui × Astrocartography x Real Estate Numerology to find the best addresses+places in the world that accelerate your goals. This is different for everything. And it works even if you can't move yet. There are ways to shift the energetic frequency of your space, and protect yourself against unseel environmental forces that have been holding you back for years.
@@ -2238,19 +2238,19 @@ export function InvisibleForcesResultsPage() {
  >
  What Now?
  </h3>
- <p style={{ margin: '0 0 14px', fontSize: '0.88rem', color: '#9A8EC8', fontFamily: INTER, lineHeight: 1.75 }}>
+ <p style={{ margin: '0 0 14px', fontSize: '0.88rem', color: '#DDD8F8', fontFamily: INTER, lineHeight: 1.75 }}>
  You now have the map, but a map only works if you're willing to make the journey. This report is not a magic bullet.
  </p>
- <p style={{ margin: '0 0 14px', fontSize: '0.88rem', color: '#9A8EC8', fontFamily: INTER, lineHeight: 1.75 }}>
+ <p style={{ margin: '0 0 14px', fontSize: '0.88rem', color: '#DDD8F8', fontFamily: INTER, lineHeight: 1.75 }}>
  The students who transformed through this work got deeply curious about each pillar, challenged what they thought they knew about their own reality, and were willing to question the belief systems and values they had since childhood.
  </p>
- <p style={{ margin: '0 0 14px', fontSize: '0.88rem', color: '#9A8EC8', fontFamily: INTER, lineHeight: 1.75 }}>
+ <p style={{ margin: '0 0 14px', fontSize: '0.88rem', color: '#DDD8F8', fontFamily: INTER, lineHeight: 1.75 }}>
  Is it true that everything works out if you go to a good school, get a good job, and find a decent partner? Or move to the greatest city in the world? Better yet, what if you've done all of those things - and you feel like something is …off? This report is the beginning of you trying to unpack why.
  </p>
- <p style={{ margin: '0 0 14px', fontSize: '0.88rem', color: '#9A8EC8', fontFamily: INTER, lineHeight: 1.75 }}>
+ <p style={{ margin: '0 0 14px', fontSize: '0.88rem', color: '#DDD8F8', fontFamily: INTER, lineHeight: 1.75 }}>
  The ones who got results committed, stayed patient, studied, had faith, and made a conscious choice to work with these forces instead of against them. That choice is yours.
  </p>
- <p style={{ margin: '0 0 14px', fontSize: '0.88rem', color: '#9A8EC8', fontFamily: INTER, lineHeight: 1.75 }}>
+ <p style={{ margin: '0 0 14px', fontSize: '0.88rem', color: '#DDD8F8', fontFamily: INTER, lineHeight: 1.75 }}>
  Below you'll find some resources to help you start going deeper into what this report surfaced. But more importantly, <strong style={{ color: '#E8DEFF' }}>stay on our emails.</strong> We regularly share complimentary live trainings, classes, and tools that will make this information more real and more actionable over time.
  </p>
  <p style={{ margin: 0, fontSize: '1rem', color: '#D4A843', fontFamily: CORMORANT, fontStyle: 'italic', lineHeight: 1.6 }}>
@@ -2312,7 +2312,7 @@ export function InvisibleForcesResultsPage() {
  </h2>
  <p
  style={{
- color: '#9A8EC8',
+ color: '#DDD8F8',
  fontSize: '0.82rem',
  margin: '0 0 20px',
  fontFamily: INTER,
@@ -2450,7 +2450,7 @@ export function InvisibleForcesResultsPage() {
  style={{
  margin: '0 0 18px',
  fontSize: '0.88rem',
- color: '#9A8EC8',
+ color: '#DDD8F8',
  lineHeight: 1.7,
  fontFamily: INTER,
  }}
@@ -2509,7 +2509,7 @@ export function InvisibleForcesResultsPage() {
  style={{
  margin: '0 0 18px',
  fontSize: '0.9rem',
- color: '#9A8EC8',
+ color: '#DDD8F8',
  lineHeight: 1.75,
  fontFamily: INTER,
  flex: 1,
