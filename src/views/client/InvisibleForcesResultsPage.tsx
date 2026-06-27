@@ -66,7 +66,7 @@ const PROGRAM_DETAILS: Record<ProgramRoute, ProgramRecommendation> = {
  },
  'artists-way': {
  route: 'artists-way',
- title: 'Portal Activation 🌎',
+ title: 'Checkout These Viral Mini Courses ✍️ at 50%+ Off',
  description:
  "For people who REALLY need to fix Pillar 3 FAST. If you've done all the inner work and now looking for the PERFECT environment, Portal Activation is for you. It's our proprietary Feng Shui × Astrocartography × Real Estate Numerology method that helps you realign your external reality to match who you've already become.",
  link: 'https://pheydrusmetaverse.com/portal-activation/#',
@@ -136,10 +136,10 @@ const GOAL_SHORT: Record<GoalCategory, string> = {
 };
 
 const GRADE_COLOR: Record<string, { border: string; bg: string; text: string }> = {
- A: { border: '#2ecc71', bg: '#F0FFF4', text: '#16a34a' },
- B: { border: '#3b82f6', bg: '#EFF6FF', text: '#1d4ed8' },
- C: { border: '#C9A84C', bg: '#FFFBEB', text: '#92680A' },
- F: { border: '#C0392B', bg: '#FFF5F5', text: '#C0392B' },
+ A: { border: '#4ADE80', bg: 'rgba(74,222,128,0.1)', text: '#4ADE80' },
+ B: { border: '#60A5FA', bg: 'rgba(96,165,250,0.1)', text: '#60A5FA' },
+ C: { border: '#D4A843', bg: 'rgba(212,168,67,0.1)', text: '#D4A843' },
+ F: { border: '#F87171', bg: 'rgba(248,113,113,0.1)', text: '#F87171' },
 };
 
 function gradeColor(g: string) {
@@ -204,8 +204,8 @@ function VennDiagram() {
  cy="68"
  r="58"
  fill="#C9A84C"
- fillOpacity="0.09"
- stroke="#C9A84C"
+ fillOpacity="0.18"
+ stroke="#D4A843"
  strokeWidth="1.5"
  />
  <circle
@@ -213,8 +213,8 @@ function VennDiagram() {
  cy="127"
  r="58"
  fill="#7B5EA7"
- fillOpacity="0.09"
- stroke="#9B8EC4"
+ fillOpacity="0.18"
+ stroke="#B8A8E0"
  strokeWidth="1.5"
  />
  <circle
@@ -222,95 +222,18 @@ function VennDiagram() {
  cy="127"
  r="58"
  fill="#2E8B7A"
- fillOpacity="0.09"
- stroke="#5BB5A5"
+ fillOpacity="0.18"
+ stroke="#7ECFC4"
  strokeWidth="1.5"
  />
- <text
- x="100"
- y="14"
- textAnchor="middle"
- fontSize="13"
- fill="#C9A84C"
- fontFamily="'Cormorant Garamond',Georgia,serif"
- fontWeight="600"
- >
- Soul / Karma
- </text>
- <text
- x="100"
- y="26"
- textAnchor="middle"
- fontSize="9"
- fill="#888"
- fontFamily="Arial,sans-serif"
- >
- Pillar 1
- </text>
- <text
- x="18"
- y="178"
- textAnchor="middle"
- fontSize="12"
- fill="#9B8EC4"
- fontFamily="'Cormorant Garamond',Georgia,serif"
- fontWeight="600"
- >
- Timing
- </text>
- <text
- x="18"
- y="188"
- textAnchor="middle"
- fontSize="9"
- fill="#888"
- fontFamily="Arial,sans-serif"
- >
- Pillar 2
- </text>
- <text
- x="182"
- y="178"
- textAnchor="middle"
- fontSize="12"
- fill="#5BB5A5"
- fontFamily="'Cormorant Garamond',Georgia,serif"
- fontWeight="600"
- >
- Environment
- </text>
- <text
- x="182"
- y="188"
- textAnchor="middle"
- fontSize="9"
- fill="#888"
- fontFamily="Arial,sans-serif"
- >
- Pillar 3
- </text>
- <text
- x="100"
- y="110"
- textAnchor="middle"
- fontSize="11"
- fill="#1C1A2E"
- fontFamily="'Cormorant Garamond',Georgia,serif"
- fontStyle="italic"
- >
- Full
- </text>
- <text
- x="100"
- y="123"
- textAnchor="middle"
- fontSize="11"
- fill="#1C1A2E"
- fontFamily="'Cormorant Garamond',Georgia,serif"
- fontStyle="italic"
- >
- Alignment
- </text>
+ <text x="100" y="30" textAnchor="middle" fontSize="12" fill="#E8C46A" fontFamily="'Cormorant Garamond',Georgia,serif" fontWeight="600">Soul / Karma</text>
+ <text x="100" y="43" textAnchor="middle" fontSize="9" fill="#C0B4E0" fontFamily="Arial,sans-serif">Pillar 1</text>
+ <text x="43" y="162" textAnchor="middle" fontSize="12" fill="#C0B0F0" fontFamily="'Cormorant Garamond',Georgia,serif" fontWeight="600">Timing</text>
+ <text x="43" y="174" textAnchor="middle" fontSize="9" fill="#C0B4E0" fontFamily="Arial,sans-serif">Pillar 2</text>
+ <text x="148" y="162" textAnchor="middle" fontSize="10" fill="#7ECFC4" fontFamily="'Cormorant Garamond',Georgia,serif" fontWeight="600">Environment</text>
+ <text x="148" y="174" textAnchor="middle" fontSize="9" fill="#C0B4E0" fontFamily="Arial,sans-serif">Pillar 3</text>
+ <text x="100" y="110" textAnchor="middle" fontSize="11" fill="#E8DEFF" fontFamily="'Cormorant Garamond',Georgia,serif" fontStyle="italic">Full</text>
+ <text x="100" y="123" textAnchor="middle" fontSize="11" fill="#E8DEFF" fontFamily="'Cormorant Garamond',Georgia,serif" fontStyle="italic">Alignment</text>
  </svg>
  );
 }
@@ -322,13 +245,13 @@ function TestimonialCard({ quote, attribution }: { quote: string; attribution: s
  // REPLACE WITH REAL TESTIMONIAL
  <div
  style={{
- background: '#FFFFFF',
+ background: '#0C1128',
  borderLeft: '3px solid #C9A84C',
  borderRadius: '4px',
  padding: '20px 24px',
  position: 'relative',
  overflow: 'hidden',
- border: '1px solid #E8E8E8',
+ border: '1px solid rgba(255,255,255,0.1)',
  }}
  >
  <span
@@ -351,7 +274,7 @@ function TestimonialCard({ quote, attribution }: { quote: string; attribution: s
  style={{
  fontFamily: CORMORANT,
  fontStyle: 'italic',
- color: '#7A5A1A',
+ color: '#D4A843',
  fontSize: '1.05rem',
  lineHeight: 1.65,
  margin: '0 0 10px',
@@ -360,7 +283,7 @@ function TestimonialCard({ quote, attribution }: { quote: string; attribution: s
  >
  {quote}
  </p>
- <p style={{ fontFamily: INTER, color: '#888888', fontSize: '0.8rem', margin: 0 }}>
+ <p style={{ fontFamily: INTER, color: '#8080A8', fontSize: '0.8rem', margin: 0 }}>
  - {attribution}
  </p>
  </div>
@@ -401,7 +324,7 @@ function PillarTimeline({
  paddingLeft: '12px',
  borderLeft: '2px solid #C9A84C',
  fontSize: '0.75rem',
- color: '#666',
+ color: '#8880A8',
  lineHeight: 1.6,
  fontFamily: INTER,
  };
@@ -423,7 +346,7 @@ function PillarTimeline({
  <strong style={{ color: '#C9A84C' }}>⏱ Timeline:</strong>{' '}
  {endYear ? (
  <>
- Active <strong style={{ color: '#7A5A1A' }}>{formatDuration(endYear)}</strong>. This
+ Active <strong style={{ color: '#D4A843' }}>{formatDuration(endYear)}</strong>. This
  window will lift - knowing when is half the advantage.
  </>
  ) : (
@@ -441,7 +364,7 @@ function PillarTimeline({
  <strong style={{ color: '#C9A84C' }}>⏱ Timeline:</strong> Amplifies your active transits for{' '}
  {endYear ? (
  <>
- approximately <strong style={{ color: '#7A5A1A' }}>{formatDuration(endYear)}</strong>,
+ approximately <strong style={{ color: '#D4A843' }}>{formatDuration(endYear)}</strong>,
  mirroring your active transit window.
  </>
  ) : (
@@ -479,22 +402,22 @@ function AspectCard({
  if (libraryEntry) {
  const hurtHelpLabel =
  item.grade === 'F'
- ? { text: '⚡ Hurts Goal', bg: '#FFF5F5', color: '#C0392B', border: '#C0392B' }
+ ? { text: '⚡ Hurts Goal', bg: 'rgba(248,113,113,0.12)', color: '#F87171', border: 'rgba(248,113,113,0.4)' }
  : item.grade === 'C'
- ? { text: '⚠️ Caution', bg: '#FFFBEB', color: '#B45309', border: '#C9A84C' }
+ ? { text: '⚠️ Caution', bg: 'rgba(212,168,67,0.1)', color: '#E8A838', border: '#C9A84C' }
  : item.grade === 'A'
- ? { text: '✓ Helps Goal', bg: '#F0FFF4', color: '#16a34a', border: '#2ecc71' }
+ ? { text: '✓ Helps Goal', bg: 'rgba(74,222,128,0.1)', color: '#4ADE80', border: '#2ecc71' }
  : null;
 
  return (
  <div
  style={{
- background: '#FFFFFF',
+ background: '#0C1128',
  borderLeft: `3px solid ${gc.border}`,
  borderRadius: '4px',
  padding: '14px 16px',
  marginBottom: '10px',
- border: `1px solid #E8E8E8`,
+ border: `1px solid rgba(255,255,255,0.1)`,
  }}
  >
  <div
@@ -506,7 +429,7 @@ function AspectCard({
  flexWrap: 'wrap' as const,
  }}
  >
- <span style={{ fontFamily: INTER, fontSize: '0.8rem', fontWeight: 700, color: '#1C1A2E' }}>
+ <span style={{ fontFamily: INTER, fontSize: '0.8rem', fontWeight: 700, color: '#E8DEFF' }}>
  {label}
  </span>
  <span
@@ -574,7 +497,7 @@ function AspectCard({
  style={{
  fontFamily: INTER,
  fontSize: '0.72rem',
- color: '#555',
+ color: '#9A8EC8',
  lineHeight: 1.7,
  margin: 0,
  }}
@@ -585,7 +508,7 @@ function AspectCard({
  style={{
  fontFamily: INTER,
  fontSize: '0.72rem',
- color: '#555',
+ color: '#9A8EC8',
  lineHeight: 1.7,
  margin: 0,
  }}
@@ -605,12 +528,12 @@ function AspectCard({
  return (
  <div
  style={{
- background: '#FFFFFF',
+ background: '#0C1128',
  borderLeft: `3px solid ${gc.border}`,
  borderRadius: '4px',
  padding: '14px 16px',
  marginBottom: '10px',
- border: `1px solid #E8E8E8`,
+ border: `1px solid rgba(255,255,255,0.1)`,
  }}
  >
  {mirror && (
@@ -618,7 +541,7 @@ function AspectCard({
  style={{
  fontFamily: CORMORANT,
  fontStyle: 'italic',
- color: '#1C1A2E',
+ color: '#E8DEFF',
  fontSize: '0.9rem',
  margin: '0 0 8px',
  lineHeight: 1.55,
@@ -636,7 +559,7 @@ function AspectCard({
  flexWrap: 'wrap' as const,
  }}
  >
- <span style={{ fontFamily: INTER, fontSize: '0.8rem', fontWeight: 700, color: '#1C1A2E' }}>
+ <span style={{ fontFamily: INTER, fontSize: '0.8rem', fontWeight: 700, color: '#E8DEFF' }}>
  {label}
  </span>
  <span
@@ -660,7 +583,7 @@ function AspectCard({
  style={{
  fontFamily: INTER,
  fontSize: '0.72rem',
- color: '#666',
+ color: '#8880A8',
  lineHeight: 1.7,
  margin: transmute ? '0 0 8px' : '0',
  }}
@@ -668,7 +591,7 @@ function AspectCard({
  {applyKmsStyle(interp)}
  </p>
  {transmute && (
- <div style={{ borderTop: '1px solid #E0E0E0', paddingTop: '7px' }}>
+ <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: '7px' }}>
  <p
  style={{
  fontFamily: INTER,
@@ -690,9 +613,9 @@ function AspectCard({
 // ── Pillar deep-dive card ─────────────────────────────────────────────────────
 
 const PILLAR_BADGE_STYLE: Record<1 | 2 | 3, CSSProperties> = {
- 1: { background: '#FFF0F0', color: '#C0392B', border: '1px solid #C0392B' },
- 2: { background: '#FFF9E6', color: '#8B6914', border: '1px solid #C9A84C' },
- 3: { background: '#FDF5E6', color: '#7A5A1A', border: '1px solid #9a7d4e' },
+ 1: { background: 'rgba(248,113,113,0.12)', color: '#F87171', border: '1px solid rgba(248,113,113,0.4)' },
+ 2: { background: 'rgba(212,168,67,0.12)', color: '#D4A843', border: '1px solid rgba(212,168,67,0.5)' },
+ 3: { background: 'rgba(212,168,67,0.08)', color: '#D4A843', border: '1px solid rgba(150,120,80,0.5)' },
 };
 
 const PILLAR_CALLOUT: Record<1 | 2 | 3, (goal: string, loc: string) => string> = {
@@ -766,14 +689,14 @@ function PillarDeepDiveCard({
  });
 
  const callout = PILLAR_CALLOUT[index](goalShort, location);
- const accentColor = index === 1 ? '#C0392B' : index === 2 ? '#C9A84C' : '#9a7d4e';
+ const accentColor = index === 1 ? '#F87171' : index === 2 ? '#C9A84C' : '#9a7d4e';
  const pillarGrade = getPillarLetterGrade(pillar);
 
  return (
  <div
  style={{
- background: '#FFFFFF',
- border: '1px solid #E8E8E8',
+ background: '#0C1128',
+ border: '1px solid rgba(255,255,255,0.1)',
  borderRadius: '4px',
  padding: '20px 24px',
  }}
@@ -801,7 +724,7 @@ function PillarDeepDiveCard({
  PILLAR {index}
  </span>
  <span
- style={{ fontFamily: CORMORANT, fontSize: '1.1rem', fontWeight: 700, color: '#1C1A2E' }}
+ style={{ fontFamily: CORMORANT, fontSize: '1.1rem', fontWeight: 700, color: '#E8DEFF' }}
  >
  {title} - {subtitle}
  </span>
@@ -823,7 +746,7 @@ function PillarDeepDiveCard({
  style={{
  fontFamily: CORMORANT,
  fontStyle: 'italic',
- color: '#7A5A1A',
+ color: '#D4A843',
  fontSize: '0.9rem',
  lineHeight: 1.5,
  padding: '7px 12px',
@@ -840,7 +763,7 @@ function PillarDeepDiveCard({
  <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
  <div style={{ flexShrink: 0, textAlign: 'center', width: '108px' }}>
  <SvgChart svg={renderHouseWheel(pillar.items, 108)} />
- <p style={{ fontSize: '9px', color: '#999', margin: '4px 0 3px', fontFamily: INTER }}>
+ <p style={{ fontSize: '9px', color: '#7068A0', margin: '4px 0 3px', fontFamily: INTER }}>
  {index === 3 ? 'Env Chart' : index === 2 ? 'Transit Chart' : 'House Chart'}
  </p>
  <div style={{ fontSize: '8px', fontFamily: INTER }}>
@@ -854,7 +777,7 @@ function PillarDeepDiveCard({
  verticalAlign: 'middle',
  }}
  />{' '}
- <span style={{ color: '#777' }}>F</span>&nbsp;
+ <span style={{ color: '#A098C0' }}>F</span>&nbsp;
  <span
  style={{
  display: 'inline-block',
@@ -865,7 +788,7 @@ function PillarDeepDiveCard({
  verticalAlign: 'middle',
  }}
  />{' '}
- <span style={{ color: '#777' }}>C</span>&nbsp;
+ <span style={{ color: '#A098C0' }}>C</span>&nbsp;
  <span
  style={{
  display: 'inline-block',
@@ -876,7 +799,7 @@ function PillarDeepDiveCard({
  verticalAlign: 'middle',
  }}
  />{' '}
- <span style={{ color: '#777' }}>A</span>
+ <span style={{ color: '#A098C0' }}>A</span>
  </div>
  </div>
  <div style={{ flex: 1 }}>
@@ -928,7 +851,7 @@ function CostOfInaction({ goalShort, endYear }: { goalShort: string; endYear: nu
  return (
  <div
  style={{
- background: '#FFF8F8',
+ background: 'rgba(248,113,113,0.07)',
  border: '1px solid #FAEAEA',
  borderRadius: '4px',
  padding: '28px 32px',
@@ -937,7 +860,7 @@ function CostOfInaction({ goalShort, endYear }: { goalShort: string; endYear: nu
  <h3
  style={{
  fontFamily: CORMORANT,
- color: '#1C1A2E',
+ color: '#E8DEFF',
  fontSize: '1.6rem',
  fontWeight: 700,
  margin: '0 0 20px',
@@ -959,7 +882,7 @@ function CostOfInaction({ goalShort, endYear }: { goalShort: string; endYear: nu
  style={{
  margin: 0,
  fontSize: '0.85rem',
- color: '#444444',
+ color: '#9A8EC8',
  lineHeight: 1.7,
  fontFamily: INTER,
  borderLeft: '2px solid #C0392B',
@@ -975,7 +898,7 @@ function CostOfInaction({ goalShort, endYear }: { goalShort: string; endYear: nu
  margin: 0,
  fontSize: '0.9rem',
  fontWeight: 700,
- color: '#C0392B',
+ color: '#F87171',
  fontFamily: INTER,
  }}
  >
@@ -1326,13 +1249,13 @@ export function InvisibleForcesResultsPage() {
  <div
  style={{
  minHeight: '100vh',
- background: '#F5F1EB',
+ background: '#050A18',
  display: 'flex',
  alignItems: 'center',
  justifyContent: 'center',
  }}
  >
- <p style={{ fontFamily: INTER, color: '#6b6188' }}>Loading your report…</p>
+ <p style={{ fontFamily: INTER, color: '#B0A4D8' }}>Loading your report…</p>
  </div>
  );
  }
@@ -1342,7 +1265,7 @@ export function InvisibleForcesResultsPage() {
  <div
  style={{
  minHeight: '100vh',
- background: '#F5F1EB',
+ background: '#050A18',
  display: 'flex',
  alignItems: 'center',
  justifyContent: 'center',
@@ -1352,8 +1275,8 @@ export function InvisibleForcesResultsPage() {
  <div
  style={{
  maxWidth: '480px',
- background: '#FFFFFF',
- border: '1px solid #E0E0E0',
+ background: '#0C1128',
+ border: '1px solid rgba(255,255,255,0.08)',
  borderRadius: '4px',
  padding: '40px',
  textAlign: 'center',
@@ -1362,7 +1285,7 @@ export function InvisibleForcesResultsPage() {
  <h2
  style={{
  fontFamily: CORMORANT,
- color: '#1C1A2E',
+ color: '#E8DEFF',
  fontSize: '1.5rem',
  fontWeight: 700,
  marginBottom: '12px',
@@ -1370,7 +1293,7 @@ export function InvisibleForcesResultsPage() {
  >
  No results found
  </h2>
- <p style={{ color: '#666', fontSize: '0.9rem', marginBottom: '24px', fontFamily: INTER }}>
+ <p style={{ color: '#8880A8', fontSize: '0.9rem', marginBottom: '24px', fontFamily: INTER }}>
  {fetchError ?? 'Please complete the assessment first.'}
  </p>
  <button
@@ -1378,7 +1301,7 @@ export function InvisibleForcesResultsPage() {
  style={{
  padding: '12px 28px',
  background: '#C9A84C',
- color: '#1C1A2E',
+ color: '#E8DEFF',
  fontWeight: 700,
  borderRadius: '2px',
  border: 'none',
@@ -1482,8 +1405,9 @@ export function InvisibleForcesResultsPage() {
  <div
  style={{
  minHeight: '100vh',
- background: '#F5F1EB',
- color: '#1C1A2E',
+ background: "radial-gradient(ellipse 80% 55% at 12% 0%, rgba(110,50,200,0.22) 0%, transparent 55%), radial-gradient(ellipse 60% 40% at 88% 4%, rgba(35,85,220,0.15) 0%, transparent 50%), radial-gradient(circle 1px at 8% 6%, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0) 2px), radial-gradient(circle 1px at 32% 14%, rgba(255,255,255,0.65) 0%, rgba(255,255,255,0) 2px), radial-gradient(circle 1px at 61% 4%, rgba(255,255,255,0.75) 0%, rgba(255,255,255,0) 2px), radial-gradient(circle 1px at 83% 17%, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0) 2px), radial-gradient(circle 1px at 46% 27%, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0) 2px), radial-gradient(circle 1px at 74% 11%, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0) 2px), radial-gradient(circle 1px at 19% 37%, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 2px), radial-gradient(circle 1px at 92% 43%, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0) 2px), #050A18",
+ backgroundAttachment: 'fixed',
+ color: '#E8DEFF',
  padding: '40px 16px',
  fontFamily: INTER,
  }}
@@ -1503,8 +1427,10 @@ export function InvisibleForcesResultsPage() {
  position: 'sticky',
  top: '12px',
  zIndex: 50,
- background: '#FFFFFF',
- border: '1px solid #E8E8E8',
+ background: 'rgba(5,10,24,0.92)',
+ backdropFilter: 'blur(10px)',
+ WebkitBackdropFilter: 'blur(10px)',
+ border: '1px solid rgba(201,168,76,0.2)',
  borderRadius: '4px',
  padding: '12px 14px',
  }}
@@ -1523,13 +1449,13 @@ export function InvisibleForcesResultsPage() {
  fontSize: '10px',
  textTransform: 'uppercase',
  letterSpacing: '0.12em',
- color: '#999',
+ color: '#7068A0',
  fontWeight: 700,
  }}
  >
  On this page
  </div>
- <div style={{ fontSize: '11px', color: '#7A5A1A', fontWeight: 700 }}>
+ <div style={{ fontSize: '11px', color: '#D4A843', fontWeight: 700 }}>
  {Math.round(scrollProgress)}%
  </div>
  </div>
@@ -1537,7 +1463,7 @@ export function InvisibleForcesResultsPage() {
  style={{
  height: '6px',
  borderRadius: '999px',
- background: '#EFE8D6',
+ background: 'rgba(255,255,255,0.1)',
  overflow: 'hidden',
  marginBottom: '10px',
  }}
@@ -1570,9 +1496,9 @@ export function InvisibleForcesResultsPage() {
  cursor: 'pointer',
  padding: '6px 9px',
  borderRadius: '2px',
- border: isActive ? '1px solid #C9A84C' : '1px solid #E0E0E0',
- color: isActive ? '#7A5A1A' : '#666',
- background: isActive ? '#FDFBF6' : '#FFFFFF',
+ border: isActive ? '1px solid #C9A84C' : '1px solid rgba(255,255,255,0.08)',
+ color: isActive ? '#D4A843' : '#666',
+ background: isActive ? 'rgba(201,168,76,0.12)' : 'transparent',
  fontWeight: isActive ? 700 : 600,
  fontFamily: INTER,
  }}
@@ -1601,7 +1527,7 @@ export function InvisibleForcesResultsPage() {
  display: 'flex',
  justifyContent: 'space-between',
  alignItems: 'flex-start',
- borderBottom: '1px solid #E8E8E8',
+ borderBottom: '1px solid rgba(255,255,255,0.1)',
  paddingBottom: '16px',
  }}
  >
@@ -1621,7 +1547,7 @@ export function InvisibleForcesResultsPage() {
  fontSize: '10px',
  textTransform: 'uppercase',
  letterSpacing: '0.12em',
- color: '#999',
+ color: '#7068A0',
  marginTop: '2px',
  }}
  >
@@ -1629,10 +1555,10 @@ export function InvisibleForcesResultsPage() {
  </div>
  </div>
  <div style={{ textAlign: 'right' }}>
- <div style={{ fontSize: '0.85rem', color: '#7A5A1A', fontWeight: 600 }}>
+ <div style={{ fontSize: '0.85rem', color: '#D4A843', fontWeight: 600 }}>
  {results.userInfo.name}
  </div>
- <div style={{ fontSize: '10px', color: '#999', marginTop: '2px' }}>
+ <div style={{ fontSize: '10px', color: '#7068A0', marginTop: '2px' }}>
  {new Date(results.timestamp).toLocaleDateString('en-US', {
  year: 'numeric',
  month: 'long',
@@ -1646,7 +1572,7 @@ export function InvisibleForcesResultsPage() {
  <div
  style={{
  borderLeft: '4px solid #C9A84C',
- background: '#FDFBF6',
+ background: 'rgba(201,168,76,0.07)',
  padding: '10px 16px',
  borderRadius: '0 4px 4px 0',
  }}
@@ -1667,13 +1593,41 @@ export function InvisibleForcesResultsPage() {
  margin: 0,
  fontFamily: CORMORANT,
  fontStyle: 'italic',
- color: '#7A5A1A',
+ color: '#D4A843',
  fontSize: '0.95rem',
  lineHeight: 1.6,
  }}
  >
  {intake.desiredOutcome}
  </p>
+ {(results.userInfo.name || results.userInfo.dateOfBirth || intake.obstacle) && (
+ <div
+  style={{
+  marginTop: '10px',
+  display: 'flex',
+  flexWrap: 'wrap' as const,
+  gap: '12px',
+  borderTop: '1px solid rgba(201,168,76,0.25)',
+  paddingTop: '8px',
+  }}
+ >
+  {results.userInfo.name && (
+  <span style={{ fontSize: '0.75rem', fontFamily: INTER, color: '#C9A84C' }}>
+   <strong>Client:</strong> {results.userInfo.name}
+  </span>
+  )}
+  {results.userInfo.dateOfBirth && (
+  <span style={{ fontSize: '0.75rem', fontFamily: INTER, color: '#C9A84C' }}>
+   <strong>DOB:</strong> {results.userInfo.dateOfBirth}
+  </span>
+  )}
+  {intake.obstacle && (
+  <span style={{ fontSize: '0.75rem', fontFamily: INTER, color: '#C9A84C' }}>
+   <strong>Obstacle:</strong> {intake.obstacle}
+  </span>
+  )}
+ </div>
+ )}
  </div>
 
  {/* Hero card - grade + headline + dynamic description */}
@@ -1701,8 +1655,8 @@ export function InvisibleForcesResultsPage() {
  return (
  <div
  style={{
- background: '#FFFFFF',
- border: '1px solid #E0E0E0',
+ background: '#0C1128',
+ border: '1px solid rgba(255,255,255,0.08)',
  borderRadius: '4px',
  padding: '20px 24px',
  display: 'flex',
@@ -1740,7 +1694,7 @@ export function InvisibleForcesResultsPage() {
  fontSize: '9px',
  textTransform: 'uppercase',
  letterSpacing: '0.08em',
- color: '#999',
+ color: '#7068A0',
  marginTop: '6px',
  }}
  >
@@ -1758,31 +1712,31 @@ export function InvisibleForcesResultsPage() {
  fontFamily: CORMORANT,
  fontSize: '1.35rem',
  fontWeight: 700,
- color: '#1C1A2E',
+ color: '#E8DEFF',
  marginBottom: '10px',
  lineHeight: 1.3,
  }}
  >
- {h1} <em style={{ color: '#8B6914' }}>{h2}</em>
+ {h1} <em style={{ color: '#D4A843' }}>{h2}</em>
  </div>
- <p style={{ margin: '0 0 12px', fontSize: '0.82rem', color: '#555', lineHeight: 1.75 }}>
+ <p style={{ margin: '0 0 12px', fontSize: '0.82rem', color: '#9A8EC8', lineHeight: 1.75 }}>
  {descLine}
  </p>
- <p style={{ margin: '0 0 10px', fontSize: '0.82rem', color: '#555', lineHeight: 1.75 }}>
+ <p style={{ margin: '0 0 10px', fontSize: '0.82rem', color: '#9A8EC8', lineHeight: 1.75 }}>
  This report shows exactly where momentum is leaking and what to change first. Every pressure point has a usable upside once you work it directly.
  </p>
  <div style={{ borderLeft: '3px solid #C9A84C', paddingLeft: '12px', marginBottom: '12px' }}>
- <p style={{ margin: 0, fontFamily: CORMORANT, fontStyle: 'italic', color: '#7A5A1A', fontSize: '0.9rem', lineHeight: 1.7 }}>
+ <p style={{ margin: 0, fontFamily: CORMORANT, fontStyle: 'italic', color: '#D4A843', fontSize: '0.9rem', lineHeight: 1.7 }}>
  "Pluto transiting your 1st house? Stop playing nice. Stop softening your edges. Step fully into your power - that is the higher octave." - Pheydrus team
  </p>
  </div>
- <p style={{ margin: '0 0 8px', fontSize: '0.82rem', color: '#555', lineHeight: 1.75 }}>
+ <p style={{ margin: '0 0 8px', fontSize: '0.82rem', color: '#9A8EC8', lineHeight: 1.75 }}>
  You did the mindset work, the strategy work, and the coaching. Results still stall at the same point.
  </p>
- <p style={{ margin: '0 0 8px', fontSize: '0.82rem', color: '#555', lineHeight: 1.75 }}>
+ <p style={{ margin: '0 0 8px', fontSize: '0.82rem', color: '#9A8EC8', lineHeight: 1.75 }}>
  The missing variable is energetic structure. Thinking harder does not solve this layer.
  </p>
- <p style={{ margin: 0, fontSize: '0.82rem', color: '#555', lineHeight: 1.75 }}>
+ <p style={{ margin: 0, fontSize: '0.82rem', color: '#9A8EC8', lineHeight: 1.75 }}>
  You already have the capacity. This report shows the sequence to unlock it.
  </p>
  </div>
@@ -1798,7 +1752,7 @@ export function InvisibleForcesResultsPage() {
  label: 'Structure',
  sub: 'Pillar 1',
  pct: p1pct,
- color: '#C0392B',
+ color: '#F87171',
  grade: getPillarLetterGrade(p1),
  },
  {
@@ -1819,8 +1773,8 @@ export function InvisibleForcesResultsPage() {
  return (
  <div
  style={{
- background: '#FFFFFF',
- border: '1px solid #E8E8E8',
+ background: '#0C1128',
+ border: '1px solid rgba(255,255,255,0.1)',
  borderRadius: '4px',
  padding: '18px 22px',
  }}
@@ -1830,7 +1784,7 @@ export function InvisibleForcesResultsPage() {
  fontSize: '10px',
  textTransform: 'uppercase',
  letterSpacing: '0.12em',
- color: '#999',
+ color: '#7068A0',
  marginBottom: '14px',
  }}
  >
@@ -1850,19 +1804,19 @@ export function InvisibleForcesResultsPage() {
  style={{
  fontSize: '0.82rem',
  fontWeight: 700,
- color: '#1C1A2E',
+ color: '#E8DEFF',
  fontFamily: INTER,
  }}
  >
  {r.label}
  </div>
- <div style={{ fontSize: '9px', color: '#999' }}>{r.sub}</div>
+ <div style={{ fontSize: '9px', color: '#7068A0' }}>{r.sub}</div>
  </div>
  <div
  style={{
  flex: 1,
  height: '6px',
- background: '#E8E8E8',
+ background: 'rgba(255,255,255,0.1)',
  borderRadius: '3px',
  }}
  >
@@ -1910,7 +1864,7 @@ export function InvisibleForcesResultsPage() {
  </div>
  <div style={{ flexShrink: 0, textAlign: 'center' }}>
  <VennDiagram />
- <div style={{ fontSize: '9px', color: '#999', marginTop: '4px' }}>
+ <div style={{ fontSize: '9px', color: '#7068A0', marginTop: '4px' }}>
  3 forces · 1 score
  </div>
  </div>
@@ -1926,8 +1880,8 @@ export function InvisibleForcesResultsPage() {
  <section id="pattern" data-report-section style={{ scrollMarginTop: '120px' }}>
  <div
  style={{
- background: '#FFFFFF',
- border: '1px solid #E8E8E8',
+ background: '#0C1128',
+ border: '1px solid rgba(255,255,255,0.1)',
  borderRadius: '4px',
  padding: '28px 32px',
  }}
@@ -1937,7 +1891,7 @@ export function InvisibleForcesResultsPage() {
  fontSize: '10px',
  textTransform: 'uppercase',
  letterSpacing: '0.14em',
- color: '#999',
+ color: '#7068A0',
  marginBottom: '8px',
  }}
  >
@@ -1948,7 +1902,7 @@ export function InvisibleForcesResultsPage() {
  fontFamily: CORMORANT,
  fontSize: '2rem',
  fontWeight: 700,
- color: '#1C1A2E',
+ color: '#E8DEFF',
  margin: '0 0 20px',
  lineHeight: 1.2,
  }}
@@ -1962,7 +1916,7 @@ export function InvisibleForcesResultsPage() {
  borderLeft: '4px solid #C9A84C',
  padding: '12px 20px',
  marginBottom: '20px',
- background: '#FDFBF6',
+ background: 'rgba(201,168,76,0.07)',
  }}
  >
  <p
@@ -1970,7 +1924,7 @@ export function InvisibleForcesResultsPage() {
  margin: 0,
  fontFamily: CORMORANT,
  fontStyle: 'italic',
- color: '#7A5A1A',
+ color: '#D4A843',
  fontSize: '1rem',
  lineHeight: 1.7,
  }}
@@ -1983,7 +1937,7 @@ export function InvisibleForcesResultsPage() {
  style={{
  margin: '0 0 12px',
  fontSize: '0.85rem',
- color: '#444444',
+ color: '#9A8EC8',
  lineHeight: 1.8,
  fontWeight: 700,
  }}
@@ -1991,7 +1945,7 @@ export function InvisibleForcesResultsPage() {
 						You are in an identity shift.
  </p>
  <p
- style={{ margin: '0 0 12px', fontSize: '0.85rem', color: '#444444', lineHeight: 1.8 }}
+ style={{ margin: '0 0 12px', fontSize: '0.85rem', color: '#9A8EC8', lineHeight: 1.8 }}
  >
 						These patterns are the exact conditions that precede a major identity upgrade.
 						Three invisible forces are pulling against each other, and that friction marks the
@@ -2009,7 +1963,7 @@ export function InvisibleForcesResultsPage() {
 						Your identity upgrade is around the corner, and the first signals are active now.
  </p>
  <p
- style={{ margin: '0 0 24px', fontSize: '0.85rem', color: '#444444', lineHeight: 1.8 }}
+ style={{ margin: '0 0 24px', fontSize: '0.85rem', color: '#9A8EC8', lineHeight: 1.8 }}
  >
 						You now choose how you enter this window: with a map and deliberate action, or by
 						repeating the same loop.
@@ -2041,8 +1995,8 @@ export function InvisibleForcesResultsPage() {
  <div
  key={c.label}
  style={{
- background: '#FAFAFA',
- border: '1px solid #E8E8E8',
+ background: '#0C1128',
+ border: '1px solid rgba(255,255,255,0.1)',
  borderRadius: '4px',
  padding: '12px 14px',
  }}
@@ -2070,7 +2024,7 @@ export function InvisibleForcesResultsPage() {
  fontSize: '10px',
  textTransform: 'uppercase',
  letterSpacing: '0.1em',
- color: '#999',
+ color: '#7068A0',
  }}
  >
  {c.label}
@@ -2088,7 +2042,7 @@ export function InvisibleForcesResultsPage() {
  >
  {c.question}
  </p>
- <p style={{ margin: 0, fontSize: '0.75rem', color: '#666', lineHeight: 1.6 }}>
+ <p style={{ margin: 0, fontSize: '0.75rem', color: '#8880A8', lineHeight: 1.6 }}>
  {c.desc}
  </p>
  </div>
@@ -2100,8 +2054,8 @@ export function InvisibleForcesResultsPage() {
  {longest && (
  <div
  style={{
- background: '#FAFAFA',
- border: '1px solid #E8E8E8',
+ background: '#0C1128',
+ border: '1px solid rgba(255,255,255,0.1)',
  borderRadius: '4px',
  padding: '14px 18px',
  marginBottom: '16px',
@@ -2119,14 +2073,14 @@ export function InvisibleForcesResultsPage() {
  >
  ⚠ Active Pattern Window
  </div>
- <p style={{ margin: 0, fontSize: '0.82rem', color: '#555555', lineHeight: 1.7 }}>
+ <p style={{ margin: 0, fontSize: '0.82rem', color: '#9A8EC8', lineHeight: 1.7 }}>
  Without intervention, your current configuration is projected to persist{' '}
  <strong style={{ color: '#C9A84C' }}>
  through {endYear}
  {yearsRemaining ? ` - approximately ${yearsRemaining} more years` : ''}
  </strong>
  . The primary driver is{' '}
- <strong style={{ color: '#1C1A2E' }}>
+ <strong style={{ color: '#E8DEFF' }}>
  {longest.planet} transiting House {longest.house}
  </strong>
  , defining the exact window you are in right now. Knowing the window is half the
@@ -2146,7 +2100,7 @@ export function InvisibleForcesResultsPage() {
  fontFamily: CORMORANT,
  fontSize: '2rem',
  fontWeight: 700,
- color: '#1C1A2E',
+ color: '#E8DEFF',
  margin: '0 0 20px',
  lineHeight: 1.2,
  }}
@@ -2186,7 +2140,7 @@ export function InvisibleForcesResultsPage() {
  {/* Destiny block */}
  <div
  style={{
- background: '#F5FBF5',
+ background: 'rgba(74,222,128,0.07)',
  border: '1px solid #C8E6C8',
  borderRadius: '4px',
  padding: '20px 24px',
@@ -2195,7 +2149,7 @@ export function InvisibleForcesResultsPage() {
  <h3
  style={{
  fontFamily: CORMORANT,
- color: '#1d4ed8',
+ color: '#60A5FA',
  fontSize: '1.6rem',
  fontWeight: 700,
  margin: '0 0 20px',
@@ -2205,29 +2159,29 @@ export function InvisibleForcesResultsPage() {
  How to Improve Your Scores, and Stop Living in Pain 🏆
  </h3>
  <p
- style={{ margin: '0 0 10px', fontSize: '0.85rem', color: '#444444', lineHeight: 1.8 }}
+ style={{ margin: '0 0 10px', fontSize: '0.85rem', color: '#9A8EC8', lineHeight: 1.8 }}
  >
- The first is <strong style={{ color: '#7A5A1A' }}>closure</strong>. You were handed a lie: that struggle means growth. It doesn't. It means you've been placed in an energetic grid working against you.
+ The first is <strong style={{ color: '#D4A843' }}>closure</strong>. You were handed a lie: that struggle means growth. It doesn't. It means you've been placed in an energetic grid working against you.
  </p>
  <p
- style={{ margin: '0 0 10px', fontSize: '0.85rem', color: '#444444', lineHeight: 1.8 }}
+ style={{ margin: '0 0 10px', fontSize: '0.85rem', color: '#9A8EC8', lineHeight: 1.8 }}
  >
- The second - and more important - is <strong style={{ color: '#7A5A1A' }}>preparation</strong>. That grid is already shifting. And to move with it, you need to attack all three pillars at once - because they don't work in isolation. Your blueprint, your timing, and your environment are always talking to each other. Fix one and ignore the others - and you'll keep hitting the same ceiling in a different room.
+ The second - and more important - is <strong style={{ color: '#D4A843' }}>preparation</strong>. That grid is already shifting. And to move with it, you need to attack all three pillars at once - because they don't work in isolation. Your blueprint, your timing, and your environment are always talking to each other. Fix one and ignore the others - and you'll keep hitting the same ceiling in a different room.
  </p>
  <p
- style={{ margin: '0 0 10px', fontSize: '0.85rem', color: '#444444', lineHeight: 1.8 }}
+ style={{ margin: '0 0 10px', fontSize: '0.85rem', color: '#9A8EC8', lineHeight: 1.8 }}
  >
  <span style={{ color: '#38a169', fontWeight: 800, marginRight: '6px' }}>➜</span>
  For <strong>Pillar 1</strong> - we use a sequential deconditioning method that goes directly into your energetic blindspots (desires, addictions, dreams, etc). This isn’t talk therapy or journaling. A specific, structured process that helps you identify the unconscious karmic patterns running your decisions - and consciously transmute them into your greatest assets.
  </p>
  <p
- style={{ margin: '0 0 10px', fontSize: '0.85rem', color: '#444444', lineHeight: 1.8 }}
+ style={{ margin: '0 0 10px', fontSize: '0.85rem', color: '#9A8EC8', lineHeight: 1.8 }}
  >
  <span style={{ color: '#38a169', fontWeight: 800, marginRight: '6px' }}>➜</span>
  For <strong>Pillar 2</strong> - we map your current and upcoming planetary transits so you're never caught off guard again. We show you exactly which seasons to push, which to rest, and how to prepare for the windows that - if you move correctly - will be the most expansive periods of your life.
  </p>
  <p
- style={{ margin: '0 0 10px', fontSize: '0.85rem', color: '#444444', lineHeight: 1.8 }}
+ style={{ margin: '0 0 10px', fontSize: '0.85rem', color: '#9A8EC8', lineHeight: 1.8 }}
  >
  <span style={{ color: '#38a169', fontWeight: 800, marginRight: '6px' }}>➜</span>
  For <strong>Pillar 3</strong> - we use our proprietary Feng Shui × Astrocartography x Real Estate Numerology to find the best addresses+places in the world that accelerate your goals. This is different for everything. And it works even if you can't move yet. There are ways to shift the energetic frequency of your space, and protect yourself against unseel environmental forces that have been holding you back for years.
@@ -2238,7 +2192,7 @@ export function InvisibleForcesResultsPage() {
  margin: 0,
  fontFamily: CORMORANT,
  fontStyle: 'italic',
- color: '#1C1A2E',
+ color: '#E8DEFF',
  fontSize: '1.1rem',
  lineHeight: 1.5,
  }}
@@ -2264,7 +2218,7 @@ export function InvisibleForcesResultsPage() {
  {/* Transition bridge */}
  <div
  style={{
- background: '#FDFBF6',
+ background: 'rgba(201,168,76,0.07)',
  borderTop: '1px solid #E8E0C8',
  borderBottom: '1px solid #E8E0C8',
  borderRadius: '4px',
@@ -2279,27 +2233,27 @@ export function InvisibleForcesResultsPage() {
  fontFamily: CORMORANT,
  fontSize: '1.6rem',
  fontWeight: 700,
- color: '#1C1A2E',
+ color: '#E8DEFF',
  }}
  >
  What Now?
  </h3>
- <p style={{ margin: '0 0 14px', fontSize: '0.88rem', color: '#555', fontFamily: INTER, lineHeight: 1.75 }}>
+ <p style={{ margin: '0 0 14px', fontSize: '0.88rem', color: '#9A8EC8', fontFamily: INTER, lineHeight: 1.75 }}>
  You now have the map, but a map only works if you're willing to make the journey. This report is not a magic bullet.
  </p>
- <p style={{ margin: '0 0 14px', fontSize: '0.88rem', color: '#555', fontFamily: INTER, lineHeight: 1.75 }}>
+ <p style={{ margin: '0 0 14px', fontSize: '0.88rem', color: '#9A8EC8', fontFamily: INTER, lineHeight: 1.75 }}>
  The students who transformed through this work got deeply curious about each pillar, challenged what they thought they knew about their own reality, and were willing to question the belief systems and values they had since childhood.
  </p>
- <p style={{ margin: '0 0 14px', fontSize: '0.88rem', color: '#555', fontFamily: INTER, lineHeight: 1.75 }}>
+ <p style={{ margin: '0 0 14px', fontSize: '0.88rem', color: '#9A8EC8', fontFamily: INTER, lineHeight: 1.75 }}>
  Is it true that everything works out if you go to a good school, get a good job, and find a decent partner? Or move to the greatest city in the world? Better yet, what if you've done all of those things - and you feel like something is …off? This report is the beginning of you trying to unpack why.
  </p>
- <p style={{ margin: '0 0 14px', fontSize: '0.88rem', color: '#555', fontFamily: INTER, lineHeight: 1.75 }}>
+ <p style={{ margin: '0 0 14px', fontSize: '0.88rem', color: '#9A8EC8', fontFamily: INTER, lineHeight: 1.75 }}>
  The ones who got results committed, stayed patient, studied, had faith, and made a conscious choice to work with these forces instead of against them. That choice is yours.
  </p>
- <p style={{ margin: '0 0 14px', fontSize: '0.88rem', color: '#555', fontFamily: INTER, lineHeight: 1.75 }}>
- Below you'll find some resources to help you start going deeper into what this report surfaced. But more importantly, <strong style={{ color: '#1C1A2E' }}>stay on our emails.</strong> We regularly share complimentary live trainings, classes, and tools that will make this information more real and more actionable over time.
+ <p style={{ margin: '0 0 14px', fontSize: '0.88rem', color: '#9A8EC8', fontFamily: INTER, lineHeight: 1.75 }}>
+ Below you'll find some resources to help you start going deeper into what this report surfaced. But more importantly, <strong style={{ color: '#E8DEFF' }}>stay on our emails.</strong> We regularly share complimentary live trainings, classes, and tools that will make this information more real and more actionable over time.
  </p>
- <p style={{ margin: 0, fontSize: '1rem', color: '#7A5A1A', fontFamily: CORMORANT, fontStyle: 'italic', lineHeight: 1.6 }}>
+ <p style={{ margin: 0, fontSize: '1rem', color: '#D4A843', fontFamily: CORMORANT, fontStyle: 'italic', lineHeight: 1.6 }}>
  The door is open. Walking through it is the work.
  </p>
  </div>
@@ -2323,7 +2277,7 @@ export function InvisibleForcesResultsPage() {
  const recommendations = getTwoProgramRecommendations(p1, p2, p3, diagnosticItems);
 
  const optionCardStyle: CSSProperties = {
- background: '#FDFBF6',
+ background: 'rgba(201,168,76,0.07)',
  border: '1px solid #C9A84C',
  borderRadius: '4px',
  padding: '32px',
@@ -2358,7 +2312,7 @@ export function InvisibleForcesResultsPage() {
  </h2>
  <p
  style={{
- color: '#555',
+ color: '#9A8EC8',
  fontSize: '0.82rem',
  margin: '0 0 20px',
  fontFamily: INTER,
@@ -2394,8 +2348,8 @@ export function InvisibleForcesResultsPage() {
  <div
  key={item.pillar}
  style={{
- background: '#F0FFF4',
- border: '1px solid #86efac',
+ background: 'rgba(22,163,74,0.1)',
+ border: '1px solid rgba(22,163,74,0.25)',
  borderRadius: '4px',
  padding: '16px 18px',
  display: 'flex',
@@ -2423,7 +2377,7 @@ export function InvisibleForcesResultsPage() {
  fontFamily: CORMORANT,
  fontSize: '1.1rem',
  fontWeight: 700,
- color: '#1C1A2E',
+ color: '#E8DEFF',
  marginBottom: '4px',
  }}
  >
@@ -2473,7 +2427,7 @@ export function InvisibleForcesResultsPage() {
  textTransform: 'uppercase',
  letterSpacing: '0.12em',
  fontWeight: 700,
- color: '#1d4ed8',
+ color: '#60A5FA',
  marginBottom: '10px',
  fontFamily: INTER,
  }}
@@ -2483,7 +2437,7 @@ export function InvisibleForcesResultsPage() {
  <h2
  style={{
  fontFamily: CORMORANT,
- color: '#1d4ed8',
+ color: '#60A5FA',
  fontSize: '1.7rem',
  fontWeight: 700,
  margin: '0 0 16px',
@@ -2496,7 +2450,7 @@ export function InvisibleForcesResultsPage() {
  style={{
  margin: '0 0 18px',
  fontSize: '0.88rem',
- color: '#555',
+ color: '#9A8EC8',
  lineHeight: 1.7,
  fontFamily: INTER,
  }}
@@ -2519,7 +2473,7 @@ export function InvisibleForcesResultsPage() {
  style={{
  flex: 1,
  minWidth: '250px',
- background: '#FFFFFF',
+ background: '#0C1128',
  border: '1px solid #D9C78E',
  borderRadius: '4px',
  padding: '22px 20px',
@@ -2546,7 +2500,7 @@ export function InvisibleForcesResultsPage() {
  fontFamily: CORMORANT,
  fontSize: '1.45rem',
  fontWeight: 700,
- color: '#1C1A2E',
+ color: '#E8DEFF',
  }}
  >
  {recommendation.title}
@@ -2555,7 +2509,7 @@ export function InvisibleForcesResultsPage() {
  style={{
  margin: '0 0 18px',
  fontSize: '0.9rem',
- color: '#444444',
+ color: '#9A8EC8',
  lineHeight: 1.75,
  fontFamily: INTER,
  flex: 1,
@@ -2571,7 +2525,7 @@ export function InvisibleForcesResultsPage() {
  display: 'inline-block',
  padding: '12px 20px',
  background: '#C9A84C',
- color: '#1C1A2E',
+ color: '#E8DEFF',
  fontWeight: 700,
  fontSize: '0.75rem',
  letterSpacing: '0.1em',
@@ -2609,7 +2563,7 @@ export function InvisibleForcesResultsPage() {
  style={{
  padding: '12px 28px',
  background: '#C9A84C',
- color: '#1C1A2E',
+ color: '#E8DEFF',
  fontWeight: 700,
  borderRadius: '2px',
  border: 'none',
@@ -2625,10 +2579,10 @@ export function InvisibleForcesResultsPage() {
  style={{
  padding: '12px 28px',
  background: 'transparent',
- color: '#666',
+ color: '#8880A8',
  fontWeight: 600,
  borderRadius: '2px',
- border: '1px solid #E0E0E0',
+ border: '1px solid rgba(255,255,255,0.08)',
  cursor: 'pointer',
  fontFamily: INTER,
  }}
@@ -2646,7 +2600,7 @@ export function InvisibleForcesResultsPage() {
  paddingBottom: '8px',
  fontFamily: INTER,
  lineHeight: 1.6,
- borderTop: '1px solid #E8E8E8',
+ borderTop: '1px solid rgba(255,255,255,0.1)',
  maxWidth: '520px',
  margin: '0 auto',
  }}

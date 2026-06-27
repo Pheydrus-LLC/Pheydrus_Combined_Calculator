@@ -307,7 +307,7 @@ export function renderHouseWheel(items: GradeItem[], size = 120): string {
  }
  }
 
- const FILL: Record<string, string> = { F: '#fca5a5', C: '#fcd34d', A: '#6ee7b7' };
+ const FILL: Record<string, string> = { F: '#ef4444', C: '#fcd34d', A: '#6ee7b7' };
 
  const segments: string[] = [];
  for (let i = 0; i < 12; i++) {
@@ -666,7 +666,7 @@ function renderPage3(results: ConsolidatedResults, intake: ClientIntakeData, goa
  ${renderHouseWheel(pillar.items, 108)}
  <div style="font-size:9px;color:#999;margin-top:4px;font-family:${INTER};">${chartLabel}</div>
  <div style="font-size:8px;margin-top:3px;font-family:${INTER};">
- <span style="display:inline-block;width:7px;height:7px;background:#fca5a5;border-radius:1px;vertical-align:middle;"></span><span style="color:#666;"> F</span>&nbsp;
+ <span style="display:inline-block;width:7px;height:7px;background:#ef4444;border-radius:1px;vertical-align:middle;"></span><span style="color:#666;"> F</span>&nbsp;
  <span style="display:inline-block;width:7px;height:7px;background:#fcd34d;border-radius:1px;vertical-align:middle;"></span><span style="color:#666;"> C</span>&nbsp;
  <span style="display:inline-block;width:7px;height:7px;background:#6ee7b7;border-radius:1px;vertical-align:middle;"></span><span style="color:#666;"> A</span>
  </div>
