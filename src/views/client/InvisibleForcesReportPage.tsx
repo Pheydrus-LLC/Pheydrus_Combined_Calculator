@@ -674,7 +674,7 @@ export function InvisibleForcesReportPage() {
       <div className="max-w-xl mx-auto">
         {/* Brand header */}
         <div className="text-center mb-10">
-          <h1 className="text-3xl font-bold text-[#2d2a3e] tracking-tight">Pheydrus Assessment</h1>
+          <h1 className="text-3xl font-bold text-[#2d2a3e] tracking-tight">Which Invisible Force is Holding You Back?</h1>
           <p className="text-[#6b6188] mt-1 text-sm">
             Personalized 3-Pillar Analysis &nbsp;·&nbsp; Quiz takes ~4 min
           </p>
