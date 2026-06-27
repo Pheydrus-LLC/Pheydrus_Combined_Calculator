@@ -284,7 +284,7 @@ export function InvisibleForcesReportPage() {
         return (
           <div>
             <p className={questionClass}>Let's start with the basics.</p>
-            <p className={subClass}>This information powers your astrological analysis.</p>
+            <p className={subClass}>This information helps us calculate your score.</p>
             <div className="space-y-5">
               <div>
                 <label className={labelClass}>
@@ -676,7 +676,7 @@ export function InvisibleForcesReportPage() {
         <div className="text-center mb-10">
           <h1 className="text-3xl font-bold text-[#2d2a3e] tracking-tight">Which Invisible Force is Holding You Back?</h1>
           <p className="text-[#6b6188] mt-1 text-sm">
-            Personalized 3-Pillar Analysis &nbsp;·&nbsp; Quiz takes ~4 min
+            Proprietary Pheydrus Analysis &nbsp;·&nbsp; Quiz takes ~4 min
           </p>
         </div>
 
