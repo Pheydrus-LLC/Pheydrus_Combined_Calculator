@@ -470,7 +470,7 @@ function AspectCard({
  style={{
  fontFamily: INTER,
  fontSize: '0.72rem',
- color: '#444',
+ color: '#DDD8F8',
  lineHeight: 1.7,
  margin: '0 0 6px',
  }}
@@ -2387,7 +2387,7 @@ export function InvisibleForcesResultsPage() {
  style={{
  margin: '0 0 8px',
  fontSize: '0.8rem',
- color: '#444',
+ color: '#DDD8F8',
  lineHeight: 1.6,
  fontFamily: INTER,
  }}
