@@ -470,7 +470,7 @@ function AspectCard({
  style={{
  fontFamily: INTER,
  fontSize: '0.72rem',
- color: '#DDD8F8',
+ color: '#FFFFFF',
  lineHeight: 1.7,
  margin: '0 0 6px',
  }}
