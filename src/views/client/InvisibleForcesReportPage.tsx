@@ -392,7 +392,7 @@ export function InvisibleForcesReportPage() {
           <div>
             <p className={questionClass}>Tell us about your home.</p>
             <p className={subClass}>
-              Your address number reveals your environment's energy. All these inputs factor into your final score for Pillar 3.
+              Your address number reveals your environment's energy. All these inputs factor into your final score for Pillar 3. If you don't have a unit number, please put 0.
             </p>
             <div className="space-y-5">
               <div>
