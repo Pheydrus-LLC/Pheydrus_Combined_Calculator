@@ -27,6 +27,7 @@ import {
   PILLAR_1_SOFT_SPOT_PLANETS,
   PILLAR_1_SOFT_SPOT_HOUSES,
   PILLAR_2_MALEFICS,
+  PILLAR_2_BENEFICS,
   PILLAR_2_PRESSURE_HOUSES,
   PILLAR_3_MALEFICS,
   PILLAR_3_BENEFICS,
@@ -119,7 +120,8 @@ function gradePillar2Transits(transits: TransitsResult | null): GradeItem[] {
     const house = transit.houseNumber;
 
     const isMalefic = PILLAR_2_MALEFICS.has(name);
-    if (!isMalefic) continue; // Only malefics are graded for transits
+    const isBenefic = PILLAR_2_BENEFICS.has(name);
+    if (!isMalefic && !isBenefic) continue;
 
     const isAngular = PHEYDRUS_ANGULAR_HOUSES.has(house);
     const isPressure = PILLAR_2_PRESSURE_HOUSES.has(house);
@@ -127,12 +129,15 @@ function gradePillar2Transits(transits: TransitsResult | null): GradeItem[] {
     let grade: PillarGrade = 'Neutral';
     let reason: string;
 
-    if (isAngular) {
+    if (isMalefic && isAngular) {
       grade = 'F';
       reason = `Malefic transit ${name} in angular house ${house}`;
-    } else if (isPressure) {
+    } else if (isMalefic && isPressure) {
       grade = 'C';
       reason = `Malefic transit ${name} in pressure house ${house} (2nd/6th/8th/11th)`;
+    } else if (isBenefic && isAngular) {
+      grade = 'A';
+      reason = `Benefic transit ${name} in angular house ${house}`;
     } else {
       reason = `Transit ${name} in house ${house} (not angular or pressure)`;
     }
@@ -359,7 +364,14 @@ export function gradeThreePillars(input: GraderInput): AngularDiagnosticResult {
   const totalFs = allItems.filter((i) => i.grade === 'F').length;
   const totalCs = allItems.filter((i) => i.grade === 'C').length;
   const totalAs = allItems.filter((i) => i.grade === 'A').length;
-  const score = Math.ceil(Math.max(0, totalFs + totalCs * 0.5 - totalAs * 0.5));
+  // Normalize to a true 0-100 alignment scale against 12 modeled categories.
+  // Pressure points rise with F/C and are slightly offset by A placements.
+  const maxPressurePoints = 12;
+  const netPressurePoints = Math.min(
+    maxPressurePoints,
+    Math.max(0, totalFs + totalCs * 0.5 - totalAs * 0.5)
+  );
+  const score = Math.round(((maxPressurePoints - netPressurePoints) / maxPressurePoints) * 100);
   const baseGrade: FinalGrade = computeFinalGrade(score);
   const finalGrade: FinalGrade = applyPillarGradeGuardrails(baseGrade, [
     getPillarLetterGrade(pillar1),

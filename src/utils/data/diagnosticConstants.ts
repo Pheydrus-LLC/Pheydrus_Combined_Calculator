@@ -60,12 +60,14 @@ export const ADDRESS_A_NUMBERS = new Set([2, 7, 11]);
 export const ADDRESS_GRADED_LEVELS = ['L3'] as const;
 
 // ---------------------------------------------------------------------------
-// Final grade thresholds
+// Final grade thresholds (alignment score, 0-100)
 // ---------------------------------------------------------------------------
-// Score = (F count × 1) + (C count × 0.5)
+// Higher is better.
+// - 100 = full alignment (no net pressure)
+// - 0 = max modeled pressure
 export function computeFinalGrade(score: number): 'A' | 'B' | 'C' | 'F' {
-  if (score > 6) return 'F';
-  if (score >= 4) return 'C';
-  if (score >= 2) return 'B';
-  return 'A';
+  if (score >= 85) return 'A';
+  if (score >= 70) return 'B';
+  if (score >= 50) return 'C';
+  return 'F';
 }

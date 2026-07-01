@@ -480,8 +480,9 @@ function renderPage1(results: ConsolidatedResults, intake: ClientIntakeData, goa
  <div style="width:90px;height:90px;border-radius:50%;border:2.5px solid ${gc.border};background:${gc.bg};display:flex;align-items:center;justify-content:center;margin:0 auto;">
  <span style="font-size:48px;font-weight:700;color:${gc.text};font-family:${CORMORANT};line-height:1;">${diagnostic.finalGrade}</span>
  </div>
- <div style="font-size:9px;text-transform:uppercase;letter-spacing:0.08em;color:#999;margin-top:6px;font-family:${INTER};">Overall Score</div>
+ <div style="font-size:9px;text-transform:uppercase;letter-spacing:0.08em;color:#999;margin-top:6px;font-family:${INTER};">Alignment Score</div>
  <div style="font-size:12px;font-weight:700;color:${gc.text};font-family:${INTER};">${diagnostic.score % 1 === 0 ? diagnostic.score : diagnostic.score.toFixed(1)} / 100</div>
+ <div style="font-size:8px;color:#999;margin-top:2px;font-family:${INTER};">normalized from 12 categories</div>
  </div>
  <div style="flex:1;">
  <div style="font-size:18px;font-weight:700;color:#1C1A2E;font-family:${CORMORANT};margin-bottom:10px;line-height:1.3;">${esc(headH1)} <em style="color:#8B6914;">${esc(headH2)}</em></div>

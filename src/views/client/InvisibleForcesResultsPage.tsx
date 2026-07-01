@@ -1698,12 +1698,23 @@ export function InvisibleForcesResultsPage() {
  marginTop: '6px',
  }}
  >
- Overall Score
+ Alignment Score
  </div>
  <div
  style={{ fontSize: '12px', fontWeight: 700, color: gc.text, fontFamily: INTER }}
  >
  {score % 1 === 0 ? score : score.toFixed(1)} / 100
+ </div>
+ <div
+ style={{
+ fontSize: '9px',
+ letterSpacing: '0.02em',
+ color: '#7068A0',
+ marginTop: '2px',
+ fontFamily: INTER,
+ }}
+ >
+ normalized from 12 categories
  </div>
  </div>
  <div style={{ flex: 1 }}>
