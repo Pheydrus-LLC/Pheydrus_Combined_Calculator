@@ -2226,63 +2226,6 @@ export function InvisibleForcesResultsPage() {
  gap: '24px',
  }}
  >
- {/* Transition bridge */}
- <div
- style={{
- background: 'rgba(201,168,76,0.07)',
- borderTop: '1px solid #E8E0C8',
- borderBottom: '1px solid #E8E0C8',
- borderRadius: '4px',
- padding: '28px 32px',
- }}
- >
- <div style={{ display: 'flex', gap: '32px', alignItems: 'flex-start', flexWrap: 'wrap' as const }}>
- <div style={{ flex: 1, minWidth: '260px' }}>
- <h3
- style={{
- margin: '0 0 18px',
- fontFamily: CORMORANT,
- fontSize: '1.6rem',
- fontWeight: 700,
- color: '#E8DEFF',
- }}
- >
- What Now?
- </h3>
- <p style={{ margin: '0 0 14px', fontSize: '0.88rem', color: '#DDD8F8', fontFamily: INTER, lineHeight: 1.75 }}>
- You now have the map, but a map only works if you're willing to make the journey. This report is not a magic bullet.
- </p>
- <p style={{ margin: '0 0 14px', fontSize: '0.88rem', color: '#DDD8F8', fontFamily: INTER, lineHeight: 1.75 }}>
- The students who transformed through this work got deeply curious about each pillar, challenged what they thought they knew about their own reality, and were willing to question the belief systems and values they had since childhood.
- </p>
- <p style={{ margin: '0 0 14px', fontSize: '0.88rem', color: '#DDD8F8', fontFamily: INTER, lineHeight: 1.75 }}>
- Is it true that everything works out if you go to a good school, get a good job, and find a decent partner? Or move to the greatest city in the world? Better yet, what if you've done all of those things - and you feel like something is …off? This report is the beginning of you trying to unpack why.
- </p>
- <p style={{ margin: '0 0 14px', fontSize: '0.88rem', color: '#DDD8F8', fontFamily: INTER, lineHeight: 1.75 }}>
- The ones who got results committed, stayed patient, studied, had faith, and made a conscious choice to work with these forces instead of against them. That choice is yours.
- </p>
- <p style={{ margin: '0 0 14px', fontSize: '0.88rem', color: '#DDD8F8', fontFamily: INTER, lineHeight: 1.75 }}>
- Below you'll find some resources to help you start going deeper into what this report surfaced. But more importantly, <strong style={{ color: '#E8DEFF' }}>stay on our emails.</strong> We regularly share complimentary live trainings, classes, and tools that will make this information more real and more actionable over time.
- </p>
- <p style={{ margin: 0, fontSize: '1rem', color: '#D4A843', fontFamily: CORMORANT, fontStyle: 'italic', lineHeight: 1.6 }}>
- The door is open. Walking through it is the work.
- </p>
- </div>
- <div style={{ flexShrink: 0, width: '220px' }}>
- <img
- src="/hj-finals-2-of-20-1.jpg"
- alt="HeyJune Jeon - Pheydrus"
- style={{
- width: '100%',
- borderRadius: '4px',
- border: '1px solid #E8E0C8',
- objectFit: 'cover',
- }}
- />
- </div>
- </div>
- </div>
-
  {/* PROGRAM RECOMMENDATION + BOOK A CALL OPTIONS */}
  {(() => {
  const recommendations = getTwoProgramRecommendations(p1, p2, p3, diagnosticItems);
@@ -2454,7 +2397,7 @@ export function InvisibleForcesResultsPage() {
  margin: '0 0 16px',
  }}
  >
- Checkout These Viral Mini Courses ✍️
+ Checkout These Viral Mini Courses - Up to 50% Off ✍️
  </h2>
 
  <p
@@ -2551,6 +2494,101 @@ export function InvisibleForcesResultsPage() {
  </a>
  </div>
  ))}
+ </div>
+ </div>
+
+ <div style={optionCardStyle}>
+ <div
+ style={{
+ fontSize: '11px',
+ textTransform: 'uppercase',
+ letterSpacing: '0.12em',
+ fontWeight: 700,
+ color: '#D4A843',
+ marginBottom: '10px',
+ fontFamily: INTER,
+ }}
+ >
+ #3 Option
+ </div>
+ <h2
+ style={{
+ margin: '0 0 18px',
+ fontFamily: CORMORANT,
+ fontSize: '1.7rem',
+ fontWeight: 700,
+ color: '#E8DEFF',
+ }}
+ >
+ Explore Pheydrus Coaching
+ </h2>
+ <div
+ style={{
+ display: 'flex',
+ gap: '32px',
+ alignItems: 'flex-start',
+ flexWrap: 'wrap' as const,
+ }}
+ >
+ <div style={{ flex: 1, minWidth: '260px' }}>
+ <p style={{ margin: '0 0 14px', fontSize: '0.88rem', color: '#DDD8F8', fontFamily: INTER, lineHeight: 1.75 }}>
+ This report gives you a score. That's it.
+ </p>
+ <p style={{ margin: '0 0 14px', fontSize: '0.88rem', color: '#DDD8F8', fontFamily: INTER, lineHeight: 1.75 }}>
+ Nothing changes until you're willing to work with the unseen forces it surfaced, and you can't do that alone. You need someone who can reflect back what you can't see in yourself and hold you accountable when old patterns try to pull you back.
+ </p>
+ <p style={{ margin: '0 0 14px', fontSize: '0.88rem', color: '#DDD8F8', fontFamily: INTER, lineHeight: 1.75 }}>
+ That's what Pheydrus coaching does.
+ </p>
+ <p style={{ margin: '0 0 14px', fontSize: '0.88rem', color: '#DDD8F8', fontFamily: INTER, lineHeight: 1.75 }}>
+ Thousands of students came to us after trying everything: The right school. The right relationship. The right city. Therapy. Life coaching. And still things were "off." For most of them, this was the last door they hadn't opened. And it was the one that finally changed everything.
+ </p>
+ <p style={{ margin: '0 0 14px', fontSize: '0.88rem', color: '#DDD8F8', fontFamily: INTER, lineHeight: 1.75 }}>
+ If something in this report stirred something in you, don't let it sit.
+ </p>
+ <p style={{ margin: '0 0 18px', fontSize: '0.88rem', color: '#DDD8F8', fontFamily: INTER, lineHeight: 1.75 }}>
+ <a
+ href="https://pheydrusmetaverse.com/thank-you-onboarding/"
+ target="_blank"
+ rel="noopener noreferrer"
+ style={{ color: '#E8DEFF', fontWeight: 700, textDecoration: 'underline' }}
+ >
+ Explore if Pheydrus Coaching is Right For You
+ </a>
+ </p>
+ <a
+ href="https://pheydrusmetaverse.com/thank-you-onboarding/"
+ target="_blank"
+ rel="noopener noreferrer"
+ style={{
+ display: 'inline-block',
+ padding: '12px 20px',
+ background: '#C9A84C',
+ color: '#E8DEFF',
+ fontWeight: 700,
+ fontSize: '0.75rem',
+ letterSpacing: '0.08em',
+ textTransform: 'uppercase',
+ textDecoration: 'none',
+ borderRadius: '2px',
+ fontFamily: INTER,
+ }}
+ >
+ Explore if Pheydrus Coaching is Right For You
+ </a>
+ </div>
+ <div style={{ flexShrink: 0, width: '220px' }}>
+ <img
+ src="/hj-finals-2-of-20-1.jpg"
+ alt="HeyJune Jeon - Pheydrus"
+ style={{
+ width: '100%',
+ borderRadius: '4px',
+ border: '1px solid #E8E0C8',
+ objectFit: 'cover',
+ }}
+ />
+ </div>
  </div>
  </div>
  </>
