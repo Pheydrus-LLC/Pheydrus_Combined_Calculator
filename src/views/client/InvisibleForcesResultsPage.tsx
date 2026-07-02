@@ -34,15 +34,6 @@ function pillarScore(p: PillarSummary): number {
  return p.fCount + p.cCount * 0.5;
 }
 
-function normalizedAlignmentScore(totalFs: number, totalCs: number, totalAs: number): number {
- const maxPressurePoints = 12;
- const netPressurePoints = Math.min(
- maxPressurePoints,
- Math.max(0, totalFs + totalCs * 0.5 - totalAs * 0.5)
- );
- return Math.round(((maxPressurePoints - netPressurePoints) / maxPressurePoints) * 100);
-}
-
 function getPillarLetterGrade(pillar: PillarSummary): string {
  const grades = pillar.items.map((item) => item.grade);
  if (grades.includes('F') || pillar.fCount > 0) return 'F';
@@ -1346,11 +1337,6 @@ export function InvisibleForcesResultsPage() {
 
  const longest = getLongestMaleficTransit(diagnosticItems, transits);
  const { finalGrade } = results.diagnostic!;
- const score = normalizedAlignmentScore(
- results.diagnostic!.totalFs,
- results.diagnostic!.totalCs,
- results.diagnostic!.totalAs
- );
  const gc = gradeColor(finalGrade);
  // CTA eligibility (unused - kept for future re-activation)
  // const wordCount = intake.desiredOutcome.trim().split(/\s+/).filter(Boolean).length;
@@ -1713,22 +1699,6 @@ export function InvisibleForcesResultsPage() {
  }}
  >
  Alignment Score
- </div>
- <div
- style={{ fontSize: '12px', fontWeight: 700, color: gc.text, fontFamily: INTER }}
- >
- {score % 1 === 0 ? score : score.toFixed(1)} / 100
- </div>
- <div
- style={{
- fontSize: '9px',
- letterSpacing: '0.02em',
- color: '#7068A0',
- marginTop: '2px',
- fontFamily: INTER,
- }}
- >
- normalized from 12 categories
  </div>
  </div>
  <div style={{ flex: 1 }}>
