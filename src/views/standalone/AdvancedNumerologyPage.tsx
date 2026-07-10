@@ -8,13 +8,13 @@ import { useState } from 'react';
 import { StandalonePageWrapper } from './StandalonePageWrapper';
 import { calculateAddressNumerology } from '../../calculators';
 import { AddressNumerologyResults } from '../../components/results';
-import type { AddressNumerologyResult } from '../../models/calculators';
+import type { AddressNumerologyResult, AddressPropertyType } from '../../models/calculators';
 
 const inputClass =
   'w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-[#2d2a3e] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#9a7d4e]/40 focus:border-[#9a7d4e] transition-colors';
 const labelClass = 'block text-sm font-semibold text-[#4a4560] mb-2';
 
-type PropertyType = 'singleFamily' | 'apartmentCondo' | 'duplexTriplex' | 'gatedCommunity';
+type PropertyType = AddressPropertyType;
 
 interface AdvancedFormData {
   propertyType: PropertyType;
@@ -46,23 +46,15 @@ export function AdvancedNumerologyPage() {
   const handleCalculateAddress = () => {
     setError('');
     try {
-      // Property type drives what appears as L1/L2 by controlling which core address parts are present.
-      const normalizedInput = {
-        unitNumber: formData.propertyType === 'apartmentCondo' || formData.propertyType === 'duplexTriplex' ? formData.unitNumber : '',
+      // The calculator itself decides which fields feed L1/L2/L3 based on propertyType.
+      const res = calculateAddressNumerology({
+        propertyType: formData.propertyType,
+        unitNumber: formData.unitNumber,
         streetNumber: formData.streetNumber,
         streetName: formData.streetName,
         postalCode: formData.postalCode,
         homeYear: formData.homeYear,
         birthYear: formData.birthYear,
-      };
-
-      const res = calculateAddressNumerology({
-        unitNumber: normalizedInput.unitNumber,
-        streetNumber: normalizedInput.streetNumber,
-        streetName: normalizedInput.streetName,
-        postalCode: normalizedInput.postalCode,
-        homeYear: normalizedInput.homeYear,
-        birthYear: normalizedInput.birthYear,
       });
       setAddressResult(res);
     } catch (e) {
@@ -72,7 +64,8 @@ export function AdvancedNumerologyPage() {
   };
 
   const hasAddressInput =
-    (formData.propertyType === 'apartmentCondo' && formData.unitNumber) ||
+    ((formData.propertyType === 'apartmentCondo' || formData.propertyType === 'duplexTriplex') &&
+      formData.unitNumber) ||
     formData.streetNumber ||
     formData.streetName ||
     formData.postalCode ||
@@ -82,7 +75,7 @@ export function AdvancedNumerologyPage() {
     singleFamily:
       'For single-family homes, L1 starts with the street/building number and L2 is the street name.',
     apartmentCondo:
-      'For apartments/condos, L1 is your unit number, L2 is the building number (cadastral), and L3 is the street name.',
+      'For apartments/condos, L1 is your unit number and L2 is your building (cadastral number, plus building name if it has one) — street name isn’t part of this calculation. L3 is always derived from L1 + L2.',
     duplexTriplex:
       'For duplexes/triplexes, L1 is your unit letter/number (A, B, Unit 2), and L2 is the whole duplex structure (street number + street name combined).',
     gatedCommunity:
@@ -149,27 +142,30 @@ export function AdvancedNumerologyPage() {
                 type="text"
                 value={formData.streetNumber}
                 onChange={(e) => handleChange('streetNumber', e.target.value)}
+                placeholder={
+                  formData.propertyType === 'apartmentCondo' ? 'e.g. 2311 or 2311 Meridian Tower' : undefined
+                }
                 className={inputClass}
               />
             </div>
 
-            <div>
-              <label className={labelClass}>
-                {formData.propertyType === 'apartmentCondo'
-                  ? 'Street Name (L3)'
-                  : formData.propertyType === 'duplexTriplex'
+            {formData.propertyType !== 'apartmentCondo' && (
+              <div>
+                <label className={labelClass}>
+                  {formData.propertyType === 'duplexTriplex'
                     ? 'Street Name (completes L2)'
                     : formData.propertyType === 'gatedCommunity'
                       ? 'Street Name (L2)'
                       : 'Street Name'}
-              </label>
-              <input
-                type="text"
-                value={formData.streetName}
-                onChange={(e) => handleChange('streetName', e.target.value)}
-                className={inputClass}
-              />
-            </div>
+                </label>
+                <input
+                  type="text"
+                  value={formData.streetName}
+                  onChange={(e) => handleChange('streetName', e.target.value)}
+                  className={inputClass}
+                />
+              </div>
+            )}
 
             <div>
               <label className={labelClass}>Postal Code</label>

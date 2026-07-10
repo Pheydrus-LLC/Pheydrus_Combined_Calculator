@@ -61,6 +61,7 @@ export type {
   RelocationResult,
   AddressNumerologyInput,
   AddressNumerologyResult,
+  AddressPropertyType,
   AstrocartographyInput,
   AstrocartographyResult,
   HumanDesignInput,

@@ -143,9 +143,15 @@ function stripStreetSuffixes(streetName: string): string {
 /**
  * Build a numerology level with full meanings
  */
-function buildLevel(level: string, value: string, name: string): NumerologyLevel {
-  // Strip street suffixes when calculating Street Name numerology
-  const calcValue = name === 'Street Name' ? stripStreetSuffixes(value) : value;
+function buildLevel(
+  level: string,
+  value: string,
+  name: string,
+  calcValueOverride?: string
+): NumerologyLevel {
+  // Strip street suffixes when calculating Street Name numerology (unless a caller
+  // already supplied a pre-computed calc value, e.g. a combined field).
+  const calcValue = calcValueOverride ?? (name === 'Street Name' ? stripStreetSuffixes(value) : value);
   const number = chaldeanNumerologyCalculator([calcValue]);
   const meaning = getFullMeaning(number);
 
@@ -165,17 +171,23 @@ function buildLevel(level: string, value: string, name: string): NumerologyLevel
 
 /**
  * Calculate Address Numerology
- * Uses dynamic level numbering:
- * - Push non-empty fields in order: unitNumber, streetNumber, streetName, postalCode
- * - Insert derived L3 from L1 + L2 when at least two source fields are present
- * - Return only L1-L3 levels
- * - Chinese zodiac meanings for home and birth years
+ *
+ * L3 is always the reduced sum of L1 + L2, for every property type. Which
+ * fields feed L1/L2 depends on propertyType (see AddressPropertyType docs);
+ * postal code is never factored into any level.
+ * - undefined / singleFamily / gatedCommunity (legacy default): L1 Street/
+ *   Building Number, L2 Street Name.
+ * - apartmentCondo: L1 unit number, L2 building number (cadastral). Street
+ *   name is not part of this formula at all.
+ * - duplexTriplex: L1 unit letter/number, L2 the whole duplex structure
+ *   (street number + street name combined into one value).
  *
  * @param input - Address and year inputs
  * @returns AddressNumerologyResult with all levels and compatibility
  */
 export function calculateAddressNumerology(input: AddressNumerologyInput): AddressNumerologyResult {
-  const { unitNumber, streetNumber, streetName, postalCode, homeYear, birthYear } = input;
+  const { unitNumber, streetNumber, streetName, homeYear, birthYear, propertyType } = input;
+  // Note: postalCode is intentionally never factored into L1-L3 for any property type.
 
   // Validate required fields
   if (!birthYear) {
@@ -185,27 +197,39 @@ export function calculateAddressNumerology(input: AddressNumerologyInput): Addre
   const birthYearNum = Number(birthYear);
   const homeYearNum = homeYear ? Number(homeYear) : null;
 
-  // Build levels dynamically (matching legacy getLevelsArray)
-  const levelsRaw: Array<{ value: string; name: string }> = [];
+  const levelsRaw: Array<{ value: string; name: string; calcValue?: string }> = [];
 
-  const L1 = unitNumber ? { value: unitNumber, name: 'Unit Number' } : null;
-  const L2A = streetNumber ? { value: streetNumber, name: 'Building/House Number' } : null;
-  const L3 = streetName ? { value: streetName, name: 'Street Name' } : null;
-  const L4 = postalCode ? { value: postalCode, name: 'Postal Code' } : null;
+  if (propertyType === 'apartmentCondo') {
+    // Street name is not part of the apartment/condo formula: L1 is the unit,
+    // L2 is the building (cadastral number, plus its name if it has one).
+    if (unitNumber) levelsRaw.push({ value: unitNumber, name: 'Unit Number' });
+    if (streetNumber) levelsRaw.push({ value: streetNumber, name: 'Building Number (Cadastral)' });
+  } else if (propertyType === 'duplexTriplex') {
+    if (unitNumber) levelsRaw.push({ value: unitNumber, name: 'Unit Number' });
+    const combinedStreetValue = [streetNumber, streetName].filter(Boolean).join(' ');
+    if (combinedStreetValue) {
+      const combinedCalcValue = [streetNumber, streetName ? stripStreetSuffixes(streetName) : '']
+        .filter(Boolean)
+        .join(' ');
+      levelsRaw.push({
+        value: combinedStreetValue,
+        name: 'Street Number + Street Name',
+        calcValue: combinedCalcValue,
+      });
+    }
+  } else {
+    // Legacy default: singleFamily, gatedCommunity, and callers that don't pass propertyType.
+    if (unitNumber) levelsRaw.push({ value: unitNumber, name: 'Unit Number' });
+    if (streetNumber) levelsRaw.push({ value: streetNumber, name: 'Building/House Number' });
+    if (streetName) levelsRaw.push({ value: streetName, name: 'Street Name' });
+  }
 
-  if (L1?.value) levelsRaw.push(L1);
-  if (L2A?.value) levelsRaw.push(L2A);
-  if (L3?.value) levelsRaw.push(L3);
-  if (L4?.value) levelsRaw.push(L4);
-
-  // Build base levels dynamically (L1, L2, L3, ...)
+  // Build base levels dynamically (L1, L2, ...)
   const baseLevels: NumerologyLevel[] = levelsRaw.map((raw, index) =>
-    buildLevel(`L${index + 1}`, raw.value, raw.name)
+    buildLevel(`L${index + 1}`, raw.value, raw.name, raw.calcValue)
   );
 
-  // Sheet rule: L3 is derived from L1 + L2. Any remaining source fields (e.g., postal) come after that.
-  // This ensures single-family inputs render as:
-  // L1: Street/Building Number, L2: Street Name, L3: L1 + L2, L4: Postal Code.
+  // L3 is always the reduced sum of L1 + L2, for every property type.
   const levels: NumerologyLevel[] = [...baseLevels];
   if (baseLevels.length >= 2) {
     let l3Num = baseLevels[0].number + baseLevels[1].number;

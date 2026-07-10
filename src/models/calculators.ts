@@ -155,6 +155,12 @@ export interface RelocationResult {
 // ADDRESS NUMEROLOGY CALCULATOR
 // ============================================================================
 
+export type AddressPropertyType =
+  | 'singleFamily'
+  | 'apartmentCondo'
+  | 'duplexTriplex'
+  | 'gatedCommunity';
+
 export interface AddressNumerologyInput {
   unitNumber: string; // L1
   streetNumber: string; // Building/House Number
@@ -162,6 +168,9 @@ export interface AddressNumerologyInput {
   postalCode: string; // Postal Code
   homeYear: string; // YYYY
   birthYear: string; // YYYY
+  // Determines how L1/L2/L3 are assembled. Omitted (or 'singleFamily'/'gatedCommunity')
+  // preserves the legacy street-number + street-name + derived-sum behavior.
+  propertyType?: AddressPropertyType;
 }
 
 export interface NumerologyLevel {

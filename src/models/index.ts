@@ -48,6 +48,7 @@ export {
   type BusinessHouseActivation,
   type AddressNumerologyInput,
   type AddressNumerologyResult,
+  type AddressPropertyType,
   type NumerologyLevel,
   type ZodiacMeaning,
   type UserInfo,
