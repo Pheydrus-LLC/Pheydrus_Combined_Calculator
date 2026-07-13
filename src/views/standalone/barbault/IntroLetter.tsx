@@ -1,4 +1,5 @@
 import {
+  INTRO_LETTER_TITLE,
   INTRO_LETTER_PARAGRAPHS,
   INTRO_LETTER_LEARN_LIST,
   INTRO_LETTER_CLOSING_PARAGRAPHS,
@@ -33,10 +34,10 @@ export function IntroLetter({ onContinue }: { onContinue: () => void }) {
             marginBottom: '22px',
           }}
         >
-          {INTRO_LETTER_PARAGRAPHS[0]}
+          {INTRO_LETTER_TITLE}
         </p>
 
-        {INTRO_LETTER_PARAGRAPHS.slice(1).map((p, i) => (
+        {INTRO_LETTER_PARAGRAPHS.map((p, i) => (
           <p key={i} style={{ fontSize: '17px', lineHeight: 1.75, marginBottom: '18px' }}>
             {p}
           </p>

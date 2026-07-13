@@ -7,6 +7,7 @@ export type { BarbaultContentMap, TransitSignContent } from './content';
 export { renderTransitHouseWheel } from './houseWheelSvg';
 export type { HouseActivation } from './houseWheelSvg';
 export {
+  INTRO_LETTER_TITLE,
   INTRO_LETTER_PARAGRAPHS,
   INTRO_LETTER_LEARN_LIST,
   INTRO_LETTER_CLOSING_PARAGRAPHS,

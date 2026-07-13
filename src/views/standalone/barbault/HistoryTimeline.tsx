@@ -50,6 +50,22 @@ export function HistoryTimeline({ onContinue, onBack }: { onContinue: () => void
 
   return (
     <div>
+      <div style={{ marginBottom: '16px' }}>
+        <button
+          onClick={onBack}
+          style={{
+            background: 'transparent',
+            border: 'none',
+            color: MUTED_TEXT,
+            fontFamily: INTER,
+            fontSize: '13px',
+            cursor: 'pointer',
+            padding: 0,
+          }}
+        >
+          ← Back
+        </button>
+      </div>
       <h1
         style={{
           fontFamily: PLAYFAIR,

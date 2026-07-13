@@ -16,9 +16,10 @@ export interface TimelineEvent {
 
 // ── Page 1: Intro letter ─────────────────────────────────────────────────────
 
+export const INTRO_LETTER_TITLE = "A new civilization is forming, and you're at the center of it.";
+
 export const INTRO_LETTER_PARAGRAPHS: string[] = [
-  'Look at who is making money right now.',
-  'AI creators. People building digital businesses. Anyone who figured out how to use communication as a wealth tool. This is not luck or hustle. It is the final wave of a 130-year cycle that started in 1891 when Neptune and Pluto met in Gemini — the sign of communication, information, and the split world — and seeded every tool that followed. The telegraph. Radio. Television. The internet. Social media. AI. Same seed. Same cycle.',
+  'Look at who is making money right now. AI creators. People building digital businesses. Anyone who figured out how to use communication as a wealth tool. This is not luck or hustle. It is the final wave of a 130-year cycle that started in 1891 when Neptune and Pluto met in Gemini — the sign of communication, information, and the split world — and seeded every tool that followed. The telegraph. Radio. Television. The internet. Social media. AI. Same seed. Same cycle.',
   'For most of that 130 years, the tools were controlled by a small group. Hollywood. Governments. Corporations. The Boomer celebrity era. Switching lanes was hard — not impossible, but the system was not built for the average person to cross over. Power stayed concentrated.',
   'Then Pluto moved from Leo through Capricorn and into Aquarius. Power is now structurally moving toward the masses. For the first time in over a century, there is a genuine window to switch roads — to cross lanes and plant yourself on the side of history that is actually being built right now.',
   'That window is open in July 2026. And it will not stay open.',

@@ -29,6 +29,62 @@ const HEADER_IMAGE = '/images/once-in-a-century-header.jpg';
 
 type Step = 'intro' | 'timeline' | 'calculator';
 
+const STEP_ORDER: Step[] = ['intro', 'timeline', 'calculator'];
+const STEP_LABELS: Record<Step, string> = {
+  intro: 'Menu',
+  timeline: 'Timeline',
+  calculator: 'Your Report',
+};
+
+function StepNav({ step, onSelect }: { step: Step; onSelect: (s: Step) => void }) {
+  return (
+    <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', padding: '0 16px 16px' }}>
+      {STEP_ORDER.map((s) => {
+        const isActive = s === step;
+        return (
+          <button
+            key={s}
+            onClick={() => onSelect(s)}
+            style={{
+              padding: '8px 18px',
+              borderRadius: '999px',
+              border: `1px solid ${isActive ? ACCENT : CARD_BORDER}`,
+              background: isActive ? 'rgba(47,111,237,0.15)' : 'transparent',
+              color: isActive ? ACCENT_BRIGHT : MUTED_TEXT,
+              fontFamily: INTER,
+              fontWeight: isActive ? 700 : 400,
+              fontSize: '13px',
+              cursor: 'pointer',
+              transition: 'all 0.15s ease',
+            }}
+          >
+            {STEP_LABELS[s]}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+function BackButton({ label, onClick }: { label: string; onClick: () => void }) {
+  return (
+    <button
+      onClick={onClick}
+      style={{
+        background: 'transparent',
+        border: 'none',
+        color: MUTED_TEXT,
+        fontFamily: INTER,
+        fontSize: '13px',
+        cursor: 'pointer',
+        padding: 0,
+      }}
+    >
+      {label}
+    </button>
+  );
+}
+
 export interface TransitAnswers {
   q1: string;
   q2: string;
@@ -104,6 +160,8 @@ export function BarbaultWorksheetPage() {
         </Link>
       </header>
 
+      <StepNav step={step} onSelect={setStep} />
+
       {step === 'intro' && (
         <div
           style={{
@@ -146,21 +204,9 @@ export function BarbaultWorksheetPage() {
 
         {step === 'calculator' && (
           <>
-        <button
-          onClick={() => setStep('timeline')}
-          style={{
-            background: 'transparent',
-            border: 'none',
-            color: MUTED_TEXT,
-            fontFamily: INTER,
-            fontSize: '13px',
-            cursor: 'pointer',
-            marginBottom: '16px',
-            padding: 0,
-          }}
-        >
-          ← Back to the Timeline
-        </button>
+        <div style={{ marginBottom: '16px' }}>
+          <BackButton label="← Back to the Timeline" onClick={() => setStep('timeline')} />
+        </div>
         <h1
           style={{
             fontFamily: PLAYFAIR,
@@ -345,6 +391,9 @@ export function BarbaultWorksheetPage() {
         >
           {isExporting ? 'Generating PDF…' : 'Save as PDF'}
         </button>
+        <div style={{ textAlign: 'center', marginTop: '16px' }}>
+          <BackButton label="← Back to the Timeline" onClick={() => setStep('timeline')} />
+        </div>
           </>
         )}
       </main>
