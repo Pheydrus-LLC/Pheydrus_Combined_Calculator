@@ -20,6 +20,7 @@ import {
   AstrocartographyPage,
   BusinessEnergyBlueprintPage,
   RewriteYourPastPage,
+  BarbaultWorksheetPage,
 } from './views/standalone';
 import './App.css';
 
@@ -49,6 +50,7 @@ function App() {
         <Route path="astrocartography" element={<AstrocartographyPage />} />
         <Route path="pheydrus-HD" element={<BusinessEnergyBlueprintPage />} />
         <Route path="rewrite-your-past" element={<RewriteYourPastPage />} />
+        <Route path="once-in-a-century-upgrade" element={<BarbaultWorksheetPage />} />
       </Routes>
     </BrowserRouter>
   );
