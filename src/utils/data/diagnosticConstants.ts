@@ -55,8 +55,8 @@ export const ADDRESS_F_NUMBERS = new Set([3, 6, 8, 9]);
 export const ADDRESS_C_NUMBERS = new Set([1, 4, 5]);
 export const ADDRESS_A_NUMBERS = new Set([2, 7, 11]);
 
-// Address level names to grade (from address calculator output)
-// 'L3' = combined Unit Number + Building Number + Street Name, reduced to single digit (11 preserved)
+// Address level positions to grade (matched against level.level, not level.name)
+// 'L3' = the derived L1 + L2 combined level, reduced to single digit (11 preserved)
 export const ADDRESS_GRADED_LEVELS = ['L3'] as const;
 
 // ---------------------------------------------------------------------------

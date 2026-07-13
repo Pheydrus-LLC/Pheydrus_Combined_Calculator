@@ -255,7 +255,9 @@ function gradePillar3Address(addressNumerology: AddressNumerologyResult | null):
   const items: GradeItem[] = [];
 
   for (const levelName of ADDRESS_GRADED_LEVELS) {
-    const level = addressNumerology.levels.find((l) => l.name === levelName);
+    // Match by position (level.level, e.g. "L3"), not level.name — the descriptive
+    // name of the derived combined level ("L1 + L2") no longer equals its position label.
+    const level = addressNumerology.levels.find((l) => l.level === levelName);
     if (!level) continue;
 
     // Reduce master numbers to single digit for grading.
