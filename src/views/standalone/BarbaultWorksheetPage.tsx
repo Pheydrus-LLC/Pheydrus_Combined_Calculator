@@ -10,6 +10,8 @@ import {
   type RisingSign,
 } from '../../data/barbault2026';
 import { exportBarbaultWorksheetToPDF } from '../../services/pdfExport';
+import { IntroLetter } from './barbault/IntroLetter';
+import { HistoryTimeline } from './barbault/HistoryTimeline';
 import {
   DARK_BG,
   CARD_BG,
@@ -24,6 +26,8 @@ import {
 } from '../../styles/darkPheydrusTheme';
 
 const HEADER_IMAGE = '/images/once-in-a-century-header.jpg';
+
+type Step = 'intro' | 'timeline' | 'calculator';
 
 export interface TransitAnswers {
   q1: string;
@@ -52,6 +56,7 @@ const inputStyle = {
 };
 
 export function BarbaultWorksheetPage() {
+  const [step, setStep] = useState<Step>('intro');
   const [risingSign, setRisingSign] = useState<RisingSign>('Aries');
   const [activeTransitId, setActiveTransitId] = useState<TransitId>(BARBAULT_TRANSITS_2026[0].id);
   const [answers, setAnswers] = useState<Record<TransitId, TransitAnswers>>(emptyAnswers);
@@ -99,38 +104,63 @@ export function BarbaultWorksheetPage() {
         </Link>
       </header>
 
-      <div
-        style={{
-          position: 'relative',
-          maxWidth: '860px',
-          margin: '16px auto 0',
-          padding: '0 20px',
-        }}
-      >
+      {step === 'intro' && (
         <div
           style={{
             position: 'relative',
-            borderRadius: '18px',
-            overflow: 'hidden',
-            border: `1px solid ${CARD_BORDER}`,
+            maxWidth: '860px',
+            margin: '16px auto 0',
+            padding: '0 20px',
           }}
         >
-          <img
-            src={HEADER_IMAGE}
-            alt="Outer Planets 2.0"
-            style={{ display: 'block', width: '100%', height: 'auto', maxHeight: '360px', objectFit: 'cover' }}
-          />
           <div
             style={{
-              position: 'absolute',
-              inset: 0,
-              background: `linear-gradient(180deg, rgba(3,6,13,0) 55%, ${DARK_BG} 100%)`,
+              position: 'relative',
+              borderRadius: '18px',
+              overflow: 'hidden',
+              border: `1px solid ${CARD_BORDER}`,
             }}
-          />
+          >
+            <img
+              src={HEADER_IMAGE}
+              alt="Outer Planets 2.0"
+              style={{ display: 'block', width: '100%', height: 'auto', maxHeight: '360px', objectFit: 'cover' }}
+            />
+            <div
+              style={{
+                position: 'absolute',
+                inset: 0,
+                background: `linear-gradient(180deg, rgba(3,6,13,0) 55%, ${DARK_BG} 100%)`,
+              }}
+            />
+          </div>
         </div>
-      </div>
+      )}
 
       <main style={{ maxWidth: '860px', margin: '0 auto', padding: '16px 20px 80px' }}>
+        {step === 'intro' && <IntroLetter onContinue={() => setStep('timeline')} />}
+
+        {step === 'timeline' && (
+          <HistoryTimeline onContinue={() => setStep('calculator')} onBack={() => setStep('intro')} />
+        )}
+
+        {step === 'calculator' && (
+          <>
+        <button
+          onClick={() => setStep('timeline')}
+          style={{
+            background: 'transparent',
+            border: 'none',
+            color: MUTED_TEXT,
+            fontFamily: INTER,
+            fontSize: '13px',
+            cursor: 'pointer',
+            marginBottom: '16px',
+            padding: 0,
+          }}
+        >
+          ← Back to the Timeline
+        </button>
         <h1
           style={{
             fontFamily: PLAYFAIR,
@@ -315,6 +345,8 @@ export function BarbaultWorksheetPage() {
         >
           {isExporting ? 'Generating PDF…' : 'Save as PDF'}
         </button>
+          </>
+        )}
       </main>
     </div>
   );
