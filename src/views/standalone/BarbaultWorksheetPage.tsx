@@ -5,6 +5,7 @@ import {
   BARBAULT_TRANSITS_2026,
   BARBAULT_CONTENT_2026,
   getHouseForSign,
+  renderTransitHouseWheel,
   type TransitId,
   type RisingSign,
 } from '../../data/barbault2026';
@@ -59,6 +60,11 @@ export function BarbaultWorksheetPage() {
   const activeTransit = BARBAULT_TRANSITS_2026.find((t) => t.id === activeTransitId)!;
   const activeContent = BARBAULT_CONTENT_2026[activeTransitId][risingSign];
   const activeAnswers = answers[activeTransitId];
+  const activations = activeTransit.placements.map((p) => ({
+    house: getHouseForSign(p.sign, risingSign),
+    planet: p.planet,
+  }));
+  const houseWheelSvg = renderTransitHouseWheel(activations, 150);
 
   const updateAnswer = (field: keyof TransitAnswers, value: string) => {
     setAnswers((prev) => ({ ...prev, [activeTransitId]: { ...prev[activeTransitId], [field]: value } }));
@@ -231,10 +237,17 @@ export function BarbaultWorksheetPage() {
               .join('  •  ')}
           </p>
 
-          <ContentBlock heading="The Shift + Your Houses" text={activeContent.shiftAndHouses} />
-          <ContentBlock heading="Identity Shift" text={activeContent.identityShift} />
-          <ContentBlock heading="Wealth Channel" text={activeContent.wealthChannel} />
-          <ContentBlock heading="Transformation" text={activeContent.transformation} last />
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '24px' }}>
+            <div style={{ flex: '0 0 auto' }}>
+              <SvgChart svg={houseWheelSvg} />
+            </div>
+            <div style={{ flex: '1 1 260px', minWidth: '260px' }}>
+              <ContentBlock heading="The Shift + Your Houses 🌌" text={activeContent.shiftAndHouses} />
+              <ContentBlock heading="Identity Shift 🪞" text={activeContent.identityShift} />
+              <ContentBlock heading="Wealth Channel 💰" text={activeContent.wealthChannel} />
+              <ContentBlock heading="Bottomline 🔥" text={activeContent.transformation} last />
+            </div>
+          </div>
         </section>
 
         <section
@@ -249,13 +262,13 @@ export function BarbaultWorksheetPage() {
           <h3
             style={{
               fontFamily: PLAYFAIR,
-              fontSize: '18px',
+              fontSize: '24px',
               fontWeight: 700,
               color: HEADING_TEXT,
               marginBottom: '16px',
             }}
           >
-            Reflection
+            Reflection ✏️
           </h3>
 
           <FieldLabel>{activeTransit.reflectionQuestions[0]}</FieldLabel>
@@ -305,6 +318,10 @@ export function BarbaultWorksheetPage() {
       </main>
     </div>
   );
+}
+
+function SvgChart({ svg }: { svg: string }) {
+  return <div dangerouslySetInnerHTML={{ __html: svg }} />;
 }
 
 function ContentBlock({ heading, text, last }: { heading: string; text: string; last?: boolean }) {

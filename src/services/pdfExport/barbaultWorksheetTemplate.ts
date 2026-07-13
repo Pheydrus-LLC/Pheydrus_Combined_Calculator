@@ -8,6 +8,7 @@ import {
   BARBAULT_TRANSITS_2026,
   BARBAULT_CONTENT_2026,
   getHouseForSign,
+  renderTransitHouseWheel,
   type TransitId,
   type RisingSign,
 } from '../../data/barbault2026';
@@ -58,9 +59,14 @@ export function generateBarbaultWorksheetTemplate(
   const transitSections = BARBAULT_TRANSITS_2026.map((transit) => {
     const content = BARBAULT_CONTENT_2026[transit.id][risingSign];
     const a = answers[transit.id] ?? { q1: '', q2: '', commitment: '' };
+    const activations = transit.placements.map((p) => ({
+      house: getHouseForSign(p.sign, risingSign),
+      planet: p.planet,
+    }));
     const placementsLine = transit.placements
       .map((p) => `${p.planet} in ${p.sign} → House ${getHouseForSign(p.sign, risingSign)}`)
       .join('  •  ');
+    const wheelSvg = renderTransitHouseWheel(activations, 130);
 
     return `
       <div style="background:${CARD_BG};border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:24px;margin-bottom:20px;page-break-inside:avoid;">
@@ -68,13 +74,18 @@ export function generateBarbaultWorksheetTemplate(
         <p style="font-family:${INTER};font-size:11px;color:${ACCENT};margin:0 0 3px;">${esc(transit.aspectSummary)}</p>
         <p style="font-family:${INTER};font-size:11px;color:${MUTED_TEXT};margin:0 0 18px;">${esc(placementsLine)}</p>
 
-        ${contentBlock('The Shift + Your Houses', content.shiftAndHouses)}
-        ${contentBlock('Identity Shift', content.identityShift)}
-        ${contentBlock('Wealth Channel', content.wealthChannel)}
-        ${contentBlock('Transformation', content.transformation)}
+        <div style="display:flex;gap:20px;">
+          <div style="flex:0 0 auto;">${wheelSvg}</div>
+          <div style="flex:1 1 auto;min-width:0;">
+            ${contentBlock('The Shift + Your Houses 🌌', content.shiftAndHouses)}
+            ${contentBlock('Identity Shift 🪞', content.identityShift)}
+            ${contentBlock('Wealth Channel 💰', content.wealthChannel)}
+            ${contentBlock('Bottomline 🔥', content.transformation)}
+          </div>
+        </div>
 
         <div style="border-top:1px solid rgba(255,255,255,0.1);margin-top:16px;padding-top:16px;">
-          <p style="font-family:${PLAYFAIR};font-size:12px;font-weight:700;color:${HEADING_TEXT};margin:0 0 10px;">Reflection</p>
+          <p style="font-family:${PLAYFAIR};font-size:20px;font-weight:700;color:${HEADING_TEXT};margin:0 0 10px;">Reflection ✏️</p>
           ${answerBlock(transit.reflectionQuestions[0], a.q1)}
           ${answerBlock(transit.reflectionQuestions[1], a.q2)}
           ${answerBlock(transit.actionPrompt, a.commitment)}
