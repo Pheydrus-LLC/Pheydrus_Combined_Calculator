@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HeyJune's Tarot</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#050A18;color:#E8DEFF;min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 55% at 12% 0%,rgba(110,50,200,.18) 0%,transparent 55%),radial-gradient(ellipse 60% 40% at 88% 4%,rgba(35,85,220,.12) 0%,transparent 50%),radial-gradient(circle 1px at 15% 20%,rgba(255,255,255,.9) 0%,transparent 2px),radial-gradient(circle 1px at 35% 10%,rgba(255,255,255,.7) 0%,transparent 2px),radial-gradient(circle 1px at 68% 30%,rgba(255,255,255,.85) 0%,transparent 2px),radial-gradient(circle 1px at 82% 15%,rgba(255,255,255,.6) 0%,transparent 2px),radial-gradient(circle 1px at 45% 55%,rgba(255,255,255,.75) 0%,transparent 2px),radial-gradient(circle 1px at 92% 45%,rgba(255,255,255,.8) 0%,transparent 2px),radial-gradient(circle 1px at 8% 75%,rgba(255,255,255,.65) 0%,transparent 2px),radial-gradient(circle 1px at 55% 80%,rgba(255,255,255,.5) 0%,transparent 2px),#050A18;pointer-events:none;z-index:0}
+#app{position:relative;z-index:1;max-width:680px;margin:0 auto;padding:20px 16px 60px}
+.screen{display:none}
+.screen.active{display:block}
+.header{text-align:center;padding:36px 0 24px}
+.header-icon{font-size:3rem;margin-bottom:12px}
+.header-title{font-size:1.9rem;font-weight:700;background:linear-gradient(135deg,#D4A843,#E8C46A,#D4A843);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.25}
+.header-sub{font-size:.8rem;color:#9A8EC8;margin-top:8px;letter-spacing:.08em;text-transform:uppercase}
+.card{background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.25);border-radius:16px;padding:28px;margin-bottom:20px}
+.welcome-text{font-size:.97rem;color:#DDD8F8;line-height:1.75;text-align:center}
+.welcome-text strong{color:#E8C46A}
+.btn{display:block;padding:13px 28px;border-radius:50px;border:none;cursor:pointer;font-size:.97rem;font-weight:600;transition:all .2s;text-align:center;width:100%;letter-spacing:.02em}
+.btn-primary{background:linear-gradient(135deg,#D4A843,#B8922A);color:#0C1128;box-shadow:0 4px 20px rgba(212,168,67,.3)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 25px rgba(212,168,67,.45)}
+.btn-primary:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.btn-secondary{background:rgba(201,168,76,.1);color:#D4A843;border:1px solid rgba(201,168,76,.4)}
+.btn-secondary:hover{background:rgba(201,168,76,.18)}
+.pick-counter{text-align:center;margin-bottom:22px;font-size:.85rem;color:#9A8EC8}
+.pick-dots{display:flex;justify-content:center;gap:8px;margin-top:8px}
+.pick-dot{width:10px;height:10px;border-radius:50%;background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.35);transition:background .3s}
+.pick-dot.used{background:rgba(212,168,67,.85)}
+.reading-label{text-align:center;margin-bottom:28px}
+.cat-badge{display:inline-block;padding:4px 14px;border-radius:20px;font-size:.72rem;text-transform:uppercase;letter-spacing:.09em;margin-bottom:10px}
+.reading-label h2{font-size:1.3rem;color:#E8C46A;font-weight:600;line-height:1.3}
+.reading-label p{font-size:.88rem;color:#9A8EC8;margin-top:6px}
+.cookies-container{display:flex;justify-content:center;align-items:flex-end;gap:36px;padding:30px 0 10px;flex-wrap:wrap}
+.fortune-cookie{display:flex;flex-direction:column;align-items:center;cursor:pointer;user-select:none;animation:float 3s ease-in-out infinite}
+.fortune-cookie:nth-child(2){animation-delay:.6s}
+.fortune-cookie:nth-child(3){animation-delay:1.2s}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.fortune-cookie:hover{animation:none;transform:translateY(-14px) scale(1.06)}
+.fortune-cookie.disabled{pointer-events:none}
+.fortune-cookie.faded{opacity:.35;transform:scale(.9)!important;animation:none!important}
+/* ── Cookie wrap & halves ── */
+.cookie-wrap{width:116px;height:96px;position:relative}
+.cookie-svg{width:100%;height:100%;filter:drop-shadow(0 5px 16px rgba(212,168,67,.38));transition:opacity .12s,filter .2s;position:relative;z-index:1}
+.fortune-cookie:hover .cookie-svg{filter:drop-shadow(0 8px 22px rgba(212,168,67,.7))}
+/* Crack halves — invisible until cracking */
+.crack-half{position:absolute;left:0;width:100%;overflow:hidden;pointer-events:none;opacity:0;z-index:2}
+.crack-half svg{position:absolute;width:116px;height:96px;left:0}
+.crack-top{top:0;height:48px;transform-origin:center bottom}
+.crack-top svg{top:0}
+.crack-bot{bottom:0;height:48px;transform-origin:center top}
+.crack-bot svg{bottom:0}
+/* Cracking state */
+.fortune-cookie.cracking .cookie-svg{opacity:0}
+.fortune-cookie.cracking .crack-half{opacity:1}
+.fortune-cookie.cracking .crack-top{animation:crackTop .68s cubic-bezier(.22,1,.36,1) forwards}
+.fortune-cookie.cracking .crack-bot{animation:crackBot .68s cubic-bezier(.22,1,.36,1) forwards}
+.fortune-cookie.cracking .burst-ring{animation:burst .75s ease-out forwards}
+@keyframes crackTop{
+  0%{transform:translateY(0) rotate(0deg);opacity:1}
+  20%{transform:translateY(-6px) rotate(-6deg);opacity:1}
+  100%{transform:translateY(-72px) rotate(-28deg) translateX(-18px);opacity:0}
+}
+@keyframes crackBot{
+  0%{transform:translateY(0) rotate(0deg);opacity:1}
+  20%{transform:translateY(6px) rotate(6deg);opacity:1}
+  100%{transform:translateY(72px) rotate(28deg) translateX(18px);opacity:0}
+}
+.burst-ring{position:absolute;inset:-18px;pointer-events:none;opacity:0;z-index:3}
+@keyframes burst{0%{opacity:0;transform:scale(.4)}40%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1.65)}}
+.cookie-num{font-size:1.05rem;font-weight:700;color:#E8C46A;margin-top:11px}
+.cookie-lbl{font-size:.7rem;color:#7A6EA8;text-transform:uppercase;letter-spacing:.1em;margin-top:3px}
+.instruction{text-align:center;color:#9A8EC8;font-size:.92rem;margin-bottom:6px}
+/* ── Loading screen ── */
+.bowl-scene{display:flex;flex-direction:column;align-items:center;padding:30px 20px 20px}
+.floating-cookies{height:110px;display:flex;gap:28px;align-items:flex-end;margin-bottom:0}
+.float-cookie{font-size:2.6rem;display:inline-block;animation:floatUp 1.6s ease-in-out infinite}
+.fc1{animation-delay:0s}
+.fc2{animation-delay:.55s}
+.fc3{animation-delay:1.1s}
+@keyframes floatUp{
+  0%,100%{transform:translateY(0) rotate(-8deg);opacity:.65}
+  50%{transform:translateY(-44px) rotate(10deg);opacity:1}
+}
+.bowl{width:220px;height:82px;border-radius:0 0 110px 110px;border:3px solid rgba(212,168,67,.55);border-top:none;background:linear-gradient(180deg,rgba(212,168,67,.06) 0%,rgba(212,168,67,.14) 100%);display:flex;align-items:flex-end;justify-content:center;padding-bottom:8px;position:relative;margin-top:-2px}
+.bowl::before{content:'';position:absolute;top:-3px;left:-22px;right:-22px;height:22px;border-radius:50%;border:3px solid rgba(212,168,67,.45);border-bottom:none;background:rgba(212,168,67,.05)}
+.bowl-cookies-in{font-size:1.3rem;letter-spacing:3px;line-height:1}
+.loading-text{color:#9A8EC8;font-size:.9rem;margin-top:22px;text-align:center;animation:pulse 1.5s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.5}50%{opacity:1}}
+/* ── Video ── */
+.video-wrap{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;border:1px solid rgba(201,168,76,.2);background:#080E22;margin-bottom:20px}
+.video-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none}
+.video-loading{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;color:#9A8EC8;font-size:.9rem}
+.spinner{width:38px;height:38px;border:3px solid rgba(201,168,76,.2);border-top-color:#D4A843;border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.video-fallback{padding:20px;text-align:center}
+.video-fallback h3{color:#D4A843;margin-bottom:10px;font-size:1rem}
+.video-fallback p{color:#9A8EC8;font-size:.88rem;line-height:1.65}
+.action-area{display:flex;flex-direction:column;gap:10px;margin-top:4px}
+/* ── End screen ── */
+.end-icon{font-size:3.5rem;text-align:center;margin-bottom:18px}
+.end-title{font-size:1.55rem;color:#E8C46A;text-align:center;margin-bottom:14px;font-weight:600}
+.end-text{color:#DDD8F8;text-align:center;line-height:1.75;font-size:.97rem}
+.summary-item{padding:12px 0;border-bottom:1px solid rgba(255,255,255,.07)}
+.summary-row{font-size:.88rem;display:flex;align-items:baseline;gap:6px;flex-wrap:wrap;margin-bottom:4px}
+.summary-num{color:#D4A843;font-weight:600;min-width:22px}
+.summary-cat{color:#9A8EC8}
+.summary-title{color:#DDD8F8}
+.summary-pile{color:#7A6EA8;font-size:.78rem}
+.summary-takeaway{font-size:.82rem;color:#B8A8E8;line-height:1.6;padding:7px 10px;background:rgba(167,139,250,.07);border-left:2px solid rgba(167,139,250,.4);border-radius:0 6px 6px 0;margin-top:6px}
+.summary-takeaway-label{font-size:.7rem;color:#7A6EA8;text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px}
+/* ── Animations & utilities ── */
+.fade-in{animation:fadeIn .5s ease-out}
+@keyframes fadeIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.video-card-emerge{animation:videoEmerge .45s cubic-bezier(.34,1.56,.64,1)}
+@keyframes videoEmerge{0%{transform:scale(.25);opacity:0}100%{transform:scale(1);opacity:1}}
+.cat-love{background:rgba(240,80,120,.15);color:#F080A0;border:1px solid rgba(240,80,120,.3)}
+.cat-money{background:rgba(201,168,76,.15);color:#D4A843;border:1px solid rgba(201,168,76,.3)}
+.cat-planet{background:rgba(96,165,250,.15);color:#60A5FA;border:1px solid rgba(96,165,250,.3)}
+.cat-identity{background:rgba(167,139,250,.15);color:#A78BFA;border:1px solid rgba(167,139,250,.3)}
+.cat-general{background:rgba(74,222,128,.15);color:#4ADE80;border:1px solid rgba(74,222,128,.3)}
+@media(max-width:500px){.cookies-container{gap:18px}.cookie-wrap{width:96px;height:80px}.crack-half svg{width:96px;height:80px}.crack-top{height:40px}.crack-bot{height:40px}.header-title{font-size:1.5rem}.bowl{width:180px}}
+</style>
+</head>
+<body>
+<div id="app">
+
+<!-- SCREEN 1: Intro — HeyJune's Tarot (shell, content TBD) -->
+<div class="screen active" id="screen-intro">
+  <div class="header fade-in">
+    <div class="header-icon">🃏</div>
+    <h1 class="header-title">HeyJune's Tarot</h1>
+    <p class="header-sub">How it works</p>
+  </div>
+  <div class="card fade-in">
+    <p class="welcome-text">
+      [Placeholder — intro copy for HeyJune's Tarot goes here: what this is, how the reading works, what to expect.]
+    </p>
+  </div>
+  <div class="card fade-in">
+    <div style="margin-top:2px"><button class="btn btn-primary" onclick="beginReading()">Begin Your Reading ✨</button></div>
+  </div>
+</div>
+
+<!-- SCREEN LOADING: Cookie picking animation -->
+<div class="screen" id="screen-loading">
+  <div class="header fade-in">
+    <h1 class="header-title">Picking Your Fortune Cookies...</h1>
+    <p class="header-sub">The universe is selecting just for you</p>
+  </div>
+  <div class="bowl-scene fade-in">
+    <div class="floating-cookies">
+      <span class="float-cookie fc1">🥠</span>
+      <span class="float-cookie fc2">🥠</span>
+      <span class="float-cookie fc3">🥠</span>
+    </div>
+    <div class="bowl">
+      <div class="bowl-cookies-in">🥠🥠🥠🥠</div>
+    </div>
+    <p class="loading-text">Reading the stars for you...</p>
+  </div>
+</div>
+
+<!-- SCREEN 2: Cookie Pick -->
+<div class="screen" id="screen-cookies">
+  <div class="header fade-in">
+    <div class="header-icon">🥠🥠🥠</div>
+    <h1 class="header-title">Choose Your Fortune</h1>
+    <p class="header-sub" id="pick-sub">Your personalized reading awaits</p>
+  </div>
+  <div class="pick-counter fade-in">
+    <span id="pick-label">Fortune 1 of 3</span>
+    <div class="pick-dots" id="pick-dots"></div>
+  </div>
+  <div class="reading-label fade-in">
+    <span class="cat-badge" id="cat-badge">General</span>
+    <h2 id="reading-title">Loading...</h2>
+    <p id="reading-hint">Pick a fortune cookie to reveal your reading</p>
+  </div>
+  <p class="instruction fade-in">👇 Pick a fortune cookie — 1, 2, or 3</p>
+  <div class="cookies-container fade-in" id="cookies-container">
+
+    <!-- Cookie 1 -->
+    <div class="fortune-cookie" id="ck-1" onclick="pickCookie(1)">
+      <div class="cookie-wrap">
+        <svg class="cookie-svg" viewBox="0 0 116 96" xmlns="http://www.w3.org/2000/svg">
+          <defs><radialGradient id="cg1" cx="38%" cy="32%"><stop offset="0%" stop-color="#EDD060"/><stop offset="55%" stop-color="#C9A030"/><stop offset="100%" stop-color="#8B6010"/></radialGradient></defs>
+          <ellipse cx="58" cy="48" rx="52" ry="42" fill="url(#cg1)"/>
+          <path d="M16 50 Q58 66 100 50" stroke="#7A5010" stroke-width="3.5" fill="none" opacity=".5"/>
+          <path d="M20 46 Q58 34 96 46" stroke="#D4A030" stroke-width="1.5" fill="none" opacity=".35"/>
+          <text x="58" y="56" text-anchor="middle" font-size="26" font-weight="900" fill="rgba(0,0,0,.18)" font-family="Georgia,serif">1</text>
+        </svg>
+        <div class="crack-half crack-top">
+          <svg viewBox="0 0 116 96" xmlns="http://www.w3.org/2000/svg">
+            <defs><radialGradient id="ct1" cx="38%" cy="32%"><stop offset="0%" stop-color="#EDD060"/><stop offset="55%" stop-color="#C9A030"/><stop offset="100%" stop-color="#8B6010"/></radialGradient></defs>
+            <ellipse cx="58" cy="48" rx="52" ry="42" fill="url(#ct1)"/>
+            <path d="M16 50 Q58 66 100 50" stroke="#7A5010" stroke-width="3.5" fill="none" opacity=".5"/>
+          </svg>
+        </div>
+        <div class="crack-half crack-bot">
+          <svg viewBox="0 0 116 96" xmlns="http://www.w3.org/2000/svg">
+            <defs><radialGradient id="cb1" cx="38%" cy="32%"><stop offset="0%" stop-color="#EDD060"/><stop offset="55%" stop-color="#C9A030"/><stop offset="100%" stop-color="#8B6010"/></radialGradient></defs>
+            <ellipse cx="58" cy="48" rx="52" ry="42" fill="url(#cb1)"/>
+            <path d="M16 50 Q58 66 100 50" stroke="#7A5010" stroke-width="3.5" fill="none" opacity=".5"/>
+          </svg>
+        </div>
+        <svg class="burst-ring" viewBox="0 0 152 152" xmlns="http://www.w3.org/2000/svg"><circle cx="76" cy="76" r="68" fill="none" stroke="#D4A843" stroke-width="2" stroke-dasharray="8 6"/><circle cx="76" cy="76" r="52" fill="none" stroke="#E8C46A" stroke-width="1.5" stroke-dasharray="4 8" opacity=".7"/></svg>
+      </div>
+      <div class="cookie-num">1</div>
+      <div class="cookie-lbl">Fortune #1</div>
+    </div>
+
+    <!-- Cookie 2 -->
+    <div class="fortune-cookie" id="ck-2" onclick="pickCookie(2)">
+      <div class="cookie-wrap">
+        <svg class="cookie-svg" viewBox="0 0 116 96" xmlns="http://www.w3.org/2000/svg">
+          <defs><radialGradient id="cg2" cx="38%" cy="32%"><stop offset="0%" stop-color="#EDD060"/><stop offset="55%" stop-color="#C9A030"/><stop offset="100%" stop-color="#8B6010"/></radialGradient></defs>
+          <ellipse cx="58" cy="48" rx="52" ry="42" fill="url(#cg2)"/>
+          <path d="M16 50 Q58 66 100 50" stroke="#7A5010" stroke-width="3.5" fill="none" opacity=".5"/>
+          <path d="M20 46 Q58 34 96 46" stroke="#D4A030" stroke-width="1.5" fill="none" opacity=".35"/>
+          <text x="58" y="56" text-anchor="middle" font-size="26" font-weight="900" fill="rgba(0,0,0,.18)" font-family="Georgia,serif">2</text>
+        </svg>
+        <div class="crack-half crack-top">
+          <svg viewBox="0 0 116 96" xmlns="http://www.w3.org/2000/svg">
+            <defs><radialGradient id="ct2" cx="38%" cy="32%"><stop offset="0%" stop-color="#EDD060"/><stop offset="55%" stop-color="#C9A030"/><stop offset="100%" stop-color="#8B6010"/></radialGradient></defs>
+            <ellipse cx="58" cy="48" rx="52" ry="42" fill="url(#ct2)"/>
+            <path d="M16 50 Q58 66 100 50" stroke="#7A5010" stroke-width="3.5" fill="none" opacity=".5"/>
+          </svg>
+        </div>
+        <div class="crack-half crack-bot">
+          <svg viewBox="0 0 116 96" xmlns="http://www.w3.org/2000/svg">
+            <defs><radialGradient id="cb2" cx="38%" cy="32%"><stop offset="0%" stop-color="#EDD060"/><stop offset="55%" stop-color="#C9A030"/><stop offset="100%" stop-color="#8B6010"/></radialGradient></defs>
+            <ellipse cx="58" cy="48" rx="52" ry="42" fill="url(#cb2)"/>
+            <path d="M16 50 Q58 66 100 50" stroke="#7A5010" stroke-width="3.5" fill="none" opacity=".5"/>
+          </svg>
+        </div>
+        <svg class="burst-ring" viewBox="0 0 152 152" xmlns="http://www.w3.org/2000/svg"><circle cx="76" cy="76" r="68" fill="none" stroke="#D4A843" stroke-width="2" stroke-dasharray="8 6"/><circle cx="76" cy="76" r="52" fill="none" stroke="#E8C46A" stroke-width="1.5" stroke-dasharray="4 8" opacity=".7"/></svg>
+      </div>
+      <div class="cookie-num">2</div>
+      <div class="cookie-lbl">Fortune #2</div>
+    </div>
+
+    <!-- Cookie 3 -->
+    <div class="fortune-cookie" id="ck-3" onclick="pickCookie(3)">
+      <div class="cookie-wrap">
+        <svg class="cookie-svg" viewBox="0 0 116 96" xmlns="http://www.w3.org/2000/svg">
+          <defs><radialGradient id="cg3" cx="38%" cy="32%"><stop offset="0%" stop-color="#EDD060"/><stop offset="55%" stop-color="#C9A030"/><stop offset="100%" stop-color="#8B6010"/></radialGradient></defs>
+          <ellipse cx="58" cy="48" rx="52" ry="42" fill="url(#cg3)"/>
+          <path d="M16 50 Q58 66 100 50" stroke="#7A5010" stroke-width="3.5" fill="none" opacity=".5"/>
+          <path d="M20 46 Q58 34 96 46" stroke="#D4A030" stroke-width="1.5" fill="none" opacity=".35"/>
+          <text x="58" y="56" text-anchor="middle" font-size="26" font-weight="900" fill="rgba(0,0,0,.18)" font-family="Georgia,serif">3</text>
+        </svg>
+        <div class="crack-half crack-top">
+          <svg viewBox="0 0 116 96" xmlns="http://www.w3.org/2000/svg">
+            <defs><radialGradient id="ct3" cx="38%" cy="32%"><stop offset="0%" stop-color="#EDD060"/><stop offset="55%" stop-color="#C9A030"/><stop offset="100%" stop-color="#8B6010"/></radialGradient></defs>
+            <ellipse cx="58" cy="48" rx="52" ry="42" fill="url(#ct3)"/>
+            <path d="M16 50 Q58 66 100 50" stroke="#7A5010" stroke-width="3.5" fill="none" opacity=".5"/>
+          </svg>
+        </div>
+        <div class="crack-half crack-bot">
+          <svg viewBox="0 0 116 96" xmlns="http://www.w3.org/2000/svg">
+            <defs><radialGradient id="cb3" cx="38%" cy="32%"><stop offset="0%" stop-color="#EDD060"/><stop offset="55%" stop-color="#C9A030"/><stop offset="100%" stop-color="#8B6010"/></radialGradient></defs>
+            <ellipse cx="58" cy="48" rx="52" ry="42" fill="url(#cb3)"/>
+            <path d="M16 50 Q58 66 100 50" stroke="#7A5010" stroke-width="3.5" fill="none" opacity=".5"/>
+          </svg>
+        </div>
+        <svg class="burst-ring" viewBox="0 0 152 152" xmlns="http://www.w3.org/2000/svg"><circle cx="76" cy="76" r="68" fill="none" stroke="#D4A843" stroke-width="2" stroke-dasharray="8 6"/><circle cx="76" cy="76" r="52" fill="none" stroke="#E8C46A" stroke-width="1.5" stroke-dasharray="4 8" opacity=".7"/></svg>
+      </div>
+      <div class="cookie-num">3</div>
+      <div class="cookie-lbl">Fortune #3</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- SCREEN 3: Video -->
+<div class="screen" id="screen-video">
+  <div class="header fade-in">
+    <div class="header-icon">✨</div>
+    <h1 class="header-title" id="v-title">Your Fortune</h1>
+    <p class="header-sub" id="v-sub">Pile Reading</p>
+  </div>
+  <div class="pick-counter fade-in">
+    <span id="v-pick-label">Fortune 1 of 3</span>
+    <div class="pick-dots" id="v-pick-dots"></div>
+  </div>
+  <div class="card fade-in" id="video-card">
+    <div class="video-wrap" id="video-wrap">
+      <div class="video-loading" id="video-loading">
+        <div class="spinner"></div>
+        <span>Preparing your fortune...</span>
+      </div>
+    </div>
+    <div id="video-fallback" style="display:none" class="video-fallback">
+      <h3>🔮 Your fortune has been chosen!</h3>
+      <p id="fallback-msg">Your reading is ready.</p>
+    </div>
+  </div>
+  <div class="action-area fade-in" id="v-actions"></div>
+</div>
+
+<!-- SCREEN 4: End -->
+<div class="screen" id="screen-end">
+  <div class="header fade-in">
+    <div class="end-icon">🥠✨</div>
+    <h1 class="end-title">Your Fortunes Have Spoken!</h1>
+  </div>
+  <div class="card fade-in">
+    <p class="end-text">
+      We're out of fortunes for you today! Come back again soon.
+    </p>
+  </div>
+  <div class="card fade-in">
+    <h3 style="color:#E8C46A;margin-bottom:14px;font-size:.95rem;text-transform:uppercase;letter-spacing:.06em">Your Session</h3>
+    <div id="summary"></div>
+  </div>
+  <div style="margin-top:16px;padding-bottom:40px">
+    <button class="btn btn-secondary" onclick="restart()">Start Over</button>
+  </div>
+</div>
+
+</div><!-- #app -->
+<script>
+// ─── DATA ────────────────────────────────────────────────────
+const CATS = {
+  'love-relationships':      {label:'Love & Relationships',  emoji:'💕', cls:'cat-love'},
+  'money-abundance':         {label:'Money & Abundance',     emoji:'💰', cls:'cat-money'},
+  'planetary-transits':      {label:'Planetary Transits',    emoji:'🪐', cls:'cat-planet'},
+  'identity-transformation': {label:'Identity & Growth',     emoji:'🦋', cls:'cat-identity'},
+  'general':                 {label:'General Reading',       emoji:'🔮', cls:'cat-general'},
+};
+
+const CAT_IDS = {
+  'love-relationships':      ['7','8','20','21','36','40','41b'],
+  'money-abundance':         ['19','31b','32','38','46'],
+  'planetary-transits':      ['9','20','22','24','29','32','35','40','40b','41b','42','43'],
+  'identity-transformation': ['3','6','11','12','13','14','18','20','25','30','31','33','34','37','41'],
+  'general':                 ['1','2','4','10','16','23','26','27','28','39','44','47'],
+};
+
+const R = {
+  '1':   {t:'Pick-a-Card Reading',                          f:'14KUtNvK9cc2R0afsEDuKlMiTAHhw2Tav', p:3},
+  '2':   {t:'What Are They Feeling?',                       f:'1cS5tOW8EmnYHkt5SlVV1n7P2HWLvaaax', p:3},
+  '3':   {t:'Your Next Big Internal Step',                  f:'1hPCYS2GCws3SoQaAP-MIlT6QMqhc43wN', p:4},
+  '4':   {t:"What's Happening in Your World?",              f:'1DFKe89KvrG1TrJnmDSxtzdnPdC-TY-_H', p:4},
+  '6':   {t:'What Is Your Business Archetype?',             f:'1ltslhgTNSe23i_sr6QLQTPg25zQXtYj2', p:4},
+  '7':   {t:"What's Next in Your Romantic Life",            f:'1W4QrqMQbXD-4yeMVLzDQBr3q8SR_RpTe', p:4},
+  '8':   {t:'Love Prediction',                              f:'1dImang5LJ7xIVac5y_8vy5SWROwKQkSF', p:3},
+  '9':   {t:'Jupiter in Taurus — What It Brings You',       f:'1h-MfdmoCCIx4oT8ypQogrCRiBWTMMoLQ', p:3},
+  '10':  {t:'Flutter — Manifest Your Frequency',            f:'1L8BtPEzhuvXGi15KAcz1KTGP0nLd1UsA', p:4},
+  '11':  {t:"Your Hidden Archetype That's Holding You Back",f:'1qeRlQWgRzrgpl1QqfTAMpupVATvz7Tac', p:3},
+  '12':  {t:'How Will You Transform After This Season',     f:'1JLyLtVZbRf0W5e-aMUkiFlwiVvQ5_eAp', p:3},
+  '13':  {t:"What's Your Glow Up?",                         f:'160bHT6ksySV4GDHkKnBP_hgVMgXg2RRL', p:3},
+  '14':  {t:'What Archetype Do You Need to Drop?',          f:'1mtx2M3FhAky4LsTR-QCM2T0QPhzkaSgI', p:3},
+  '16':  {t:'What Obstacle Are You Turning Into Opportunity?',f:'1UbC9EHHeJ5b1ezANGth9HNs0iCStQADI', p:3},
+  '18':  {t:'How Were You Programmed to Feel Worthy?',      f:'1tKj6LUQGzVKHu8_U3xaASNd9IRI3Z6I-', p:3},
+  '19':  {t:'What Abundance Is Coming Your Way?',           f:'1fQa5NrNxaRJK3X5yhSYkbVECG9VOrqHh', p:3},
+  '20':  {t:'How Is Venus RX Transforming You?',            f:'1mS2XFZ1HApvtgs1zGwMmES0KB4ufCf1D', p:3},
+  '21':  {t:'What Past Love Pattern Have You Not Released?', f:'1AGVNewJ0ZmIdrysvTgqYHxv0yficvyrU', p:2},
+  '22':  {t:'Pisces Full Moon — Are You Polarizing?',       f:'1HM1nafD1xLqO6pftHrJck_9SLmhsgBIF', p:3},
+  '23':  {t:'Monthly Prediction',                           f:'1QlmpV7nrw1LOu6-8vkbp0A4MlujNd3iJ', p:3},
+  '24':  {t:'Eclipse — Your New Chapter',                   f:'1Swks29mohdidSkXc7YKZhgqQIGA3JZaR', p:3},
+  '25':  {t:'Why Are You Not Performing?',                  f:'17-YtRsWwKQEvZLYQ-2mrDptiQXEgq0Hf', p:3},
+  '26':  {t:'Monthly Energy Reading',                       f:'1NxRDuW7_dRY3I6kwMHglb0BI-zNAeM6n', p:3},
+  '27':  {t:'How Do People See You?',                       f:'1doxu5IhwyaknvhngtSQQd8jyEOmvyFE-', p:3},
+  '28':  {t:'How Do You Need to Grow This Year?',           f:'1BGAjj4SV2YYHuQKMCvwbexgd0dnxqcRL', p:3},
+  '29':  {t:'Mercury Retrograde — Your Message',            f:'1xEXwExT5bQQibWk5OHuBgSVaN1HBPIzY', p:4},
+  '30':  {t:'Your Core Archetype',                          f:'1f5Y6LUQABVEnWou05Ddpd3TD9bhYmM5-', p:3},
+  '31':  {t:'Career & Purpose Reading',                     f:'1tqiPPIHCkmwunip5igwNBlfp90vCX7hy', p:3},
+  '31b': {t:'Blessings & Predictions Coming Your Way',      f:'1GNEvOsThIDG1cv-e1Kl68p3A2K0hh452', p:4},
+  '32':  {t:'Financial Karma Reading',                      f:'106IrfH3gpiz8fTH6fumL7oFaJm6XpTvr', p:4},
+  '33':  {t:"What's Blocking Your Professional Growth?",    f:'1Aiu7IpgwNI8384RH_inH1mLvDaRJI2Fo', p:3},
+  '34':  {t:'Your Forgotten Sparkle',                       f:'1D_ZSvOPt9pAR8bb2tTik3RFOLl9Kaxe4', p:3},
+  '35':  {t:'Mercury Rx + Coming Prediction',               f:'1yn7ROS7TRo3sI4PQm85iMU4gwNwZZxsC', p:4},
+  '36':  {t:'What Was Their True Intention?',               f:'1XHPnLh8z58livPseJWcb7CCQxjfQcUlw', p:3},
+  '37':  {t:'Which Old Identity Is Holding You Back?',      f:'1Dz5J4gX6wYTexhh7cX7pWfh3l60egduV', p:4},
+  '38':  {t:'Enter the Digital Gold Rush',                  f:'1BKCa_3SQ86Cef8AggCw1k7n8MHnWKt-j', p:3, m:true},
+  '39':  {t:'Closing the Year With a Bang',                 f:'154ULtiPC973fUh9UVbp159XMRet-EgLI', p:3, m:true},
+  '40':  {t:'Post-Venus Retrograde: Your Next Chapter',     f:'1Jj0bqjISz9NUIAQgHUmff8P6rHrzXCL0', p:3, m:true},
+  '40b': {t:'What Is Neptune in Aries Bringing You?',       f:'1VWtMNW-dwVJiv8vDDehqq3iracgZ8uys', p:3},
+  '41':  {t:'Overcome Your Resistance',                     f:'1elvAXMtyBRgGO6nzhjvrn_oWpZeHyWl7', p:3, m:true},
+  '41b': {t:'What Will This Venus Rx Bring You?',           f:'1RSkqhyoT6ZjvsKNvPpv5bAo4P2ftuzET', p:3},
+  '42':  {t:'Full Moon in Scorpio — Venus Goes Direct',     f:'1fqBUfDvhigPioUfSZrVZgs3HW-oPA5yy', p:3, m:true},
+  '43':  {t:'Jupiter in Cancer — Your Cosmic Gift',         f:'1634hFhmpI8Pt7m0f9v9Gvuz_jknvMw1J', p:3, m:true},
+  '44':  {t:'Second Half of the Year Reading',              f:'1sVmcQkUjguYr7k9qviMbonEGD88-x7-s', p:3},
+  '46':  {t:'You Are 10xing Your Net Worth',                f:'1QWDD0h4sPVvWoZPMIGnT1e_mPBaOXm6c', p:0, m:true},
+  '47':  {t:"What's Holding Back Your Money Shift?",        f:'1sEyuuyriE_ZoMlaTyosTdrTknczFFIZy', p:3},
+};
+
+// Key takeaway / action item per reading & pile
+const TP = {
+  '1':  {1:"Trust that this moment is a turning point — act on your intuition today",2:"You're being guided to set boundaries that protect your peace",3:"The next step forward requires releasing one old habit"},
+  '2':  {1:"They feel more deeply than they show — open the door for honest conversation",2:"Distance has made them reflect; the connection still matters",3:"They're ready for something real — and so are you"},
+  '3':  {1:"Your inner child is asking you to play again — create space for joy this week",2:"You're outgrowing a belief system; replace it with one that actually fits you now",3:"The transformation starts in private before it shows publicly",4:"This is your permission to stop shrinking — claim your full presence"},
+  '4':  {1:"Something unexpected is about to shift your priorities — stay flexible",2:"You've been doing more than your share; ask for support",3:"A creative project you've shelved deserves another look",4:"Your environment reflects your inner state — start with one corner of your life"},
+  '6':  {1:"You're a builder by nature — stop waiting for permission to start",2:"Your superpower is making people feel seen; lead with that",3:"The vision you have isn't too big — it just needs a realistic first step",4:"Partner with someone whose strength is your weakness"},
+  '7':  {1:"Release your grip on what's already gone — healing begins when you stop holding on",2:"You deserve a love that's easy, not one you have to convince",3:"A bold new romantic chapter is opening — walk through it",4:"Protect your energy in love; not everyone deserves access to your heart"},
+  '8':  {1:"The love you want requires you to first love this version of yourself",2:"Pay attention to actions, not words — the truth is already showing",3:"Something beautiful is coming in love; prepare yourself to receive it"},
+  '9':  {1:"Jupiter is expanding your resources — identify the one area to double down on",2:"Luck favors preparation right now; finish what you started",3:"A financial or career door is opening — knock on it before it closes"},
+  '10': {1:"Your frequency is your magnet — raise how you feel to raise what you attract",2:"Drop the timeline and trust the process; manifestation is already in motion",3:"One small daily practice will compound into a massive shift in 90 days",4:"You are not behind; you are exactly where you need to be"},
+  '11': {1:"The 'helper' archetype has kept you from asking for help yourself — reverse that",2:"Your 'too much' is actually your gift; stop making yourself smaller",3:"The perfectionist in you is delaying the very success you want"},
+  '12': {1:"This season ends a chapter that no longer deserves your energy",2:"The transformation is already happening — stop resisting the discomfort",3:"You will look back on this season as the best thing that happened to you"},
+  '13': {1:"Your glow-up starts with how you see yourself in private — upgrade that first",2:"Stop explaining yourself to people who don't want to understand",3:"A reinvention is imminent — say yes to the version of you that scares you a little"},
+  '14': {1:"The 'people pleaser' archetype is costing you your dreams — drop it now",2:"The 'victim' story has served its purpose — write a new one",3:"You've outgrown the 'not enough' belief — act from abundance instead"},
+  '16': {1:"The obstacle you're facing is pointing you toward your next big skill",2:"What looks like a setback is strategic redirection — trust it",3:"The pivot you've been resisting is the breakthrough you've been waiting for"},
+  '18': {1:"You were taught to earn love by being useful — worth is not performance",2:"Unworthiness is inherited, not true — return it to where it came from",3:"You are allowed to simply exist and be loved as you are"},
+  '19': {1:"Abundance wants to find you — remove the one thing you're doing that's blocking it",2:"Your next financial expansion is tied to a skill you've been undercharging for",3:"Say yes to the opportunity that feels slightly too big — you're ready"},
+  '20': {1:"Venus Rx is clarifying what you actually want in relationships — let it do its work",2:"What's ending now was never aligned with the real you",3:"Post-retrograde, a relationship dynamic will shift permanently in your favor"},
+  '21': {1:"The love pattern from the past is still running in the background — name it to release it",2:"You attract what you believe you deserve; upgrade the belief first"},
+  '22': {1:"You don't have to choose between your spiritual self and your practical self — integrate them",2:"The full moon is revealing what you've been ignoring — look directly at it",3:"What feels like a crisis is actually a completion; let it close"},
+  '23': {1:"This month's energy supports bold beginnings — don't wait for the 'right moment'",2:"Someone from your past may resurface; you get to decide what it means",3:"Your energy is your currency this month — spend it on what actually matters"},
+  '24': {1:"This eclipse is closing a door that needed to close — trust the timing",2:"Your new chapter requires a new identity; try on the upgraded version today",3:"The opportunity connected to this eclipse requires quick, decisive action"},
+  '25': {1:"You're not underperforming — you're performing for the wrong audience",2:"The standard you're holding yourself to is someone else's dream, not yours",3:"Remove one comparison from your mental diet and watch your output change"},
+  '26': {1:"The energy this month supports consolidation — finish before you start something new",2:"A relationship or collaboration is asking for more honest communication",3:"Your intuition has been right all along; stop second-guessing it"},
+  '27': {1:"People see your strength before they see your struggle — use that wisely",2:"You are coming across differently than you intend; adjust your energy not your message",3:"You are being watched by someone who is ready to support your vision"},
+  '28': {1:"The growth required this year is an inside job — commit to one internal practice",2:"You're being asked to lead in an area you consider ordinary — it's extraordinary to others",3:"This year's lesson is about receiving as gracefully as you give"},
+  '29': {1:"Mercury Rx is asking you to revisit a conversation you left unfinished",2:"Review your plans before acting — something important was missed the first time",3:"A past idea or project deserves a second look; it's more relevant now than when you had it",4:"Back up everything and slow down; the answers come in the pause"},
+  '30': {1:"Your core archetype is not who you were taught to be — rediscover the original you",2:"You embody the archetype others are secretly looking for — stop hiding it",3:"The archetype trying to emerge in you is the one your next level requires"},
+  '31': {1:"Your career breakthrough is tied to a contribution only you can make — define it",2:"Purpose isn't found, it's built — start building it one day at a time",3:"The role that makes your soul come alive is closer than you think"},
+  '31b':{1:"A blessing that's been delayed is about to arrive — stop looking in the wrong direction",2:"Your predictions are coming true; continue trusting what you know",3:"Abundance is moving toward you in a form you haven't expected",4:"Three blessings are stacked for you; the first is already in motion"},
+  '32': {1:"Your financial karma is shifting — the harvest is connected to seeds planted 2+ years ago",2:"A karmic financial cycle is closing; debt of any kind is resolving",3:"Your next wealth level requires clearing resentment around money or past providers",4:"Financial luck activates when you stop playing small with your pricing"},
+  '33': {1:"The block to your professional growth is internal, not external — find the belief behind it",2:"You're playing smaller than your skills deserve — raise your visibility",3:"A specific fear is disguising itself as 'being realistic' — challenge it directly"},
+  '34': {1:"Your forgotten sparkle is the version of you that existed before the world told you to be quiet",2:"Something you loved before 'real life' took over is trying to return — let it",3:"Reignite one old passion and watch your whole energy shift in a week"},
+  '35': {1:"This Mercury Rx + transit combo is revealing a hidden pattern in how you communicate",2:"A coming shift makes this the ideal time to prepare, not act",3:"Something ending now is creating space for a major prediction to land",4:"The clarity you gain from this retrograde is worth more than any action you could take right now"},
+  '36': {1:"Their true intention was more complicated than you realized — forgive yourself for trusting",2:"What they didn't say tells you everything you need to know",3:"Closure doesn't require their explanation — you already have what you need"},
+  '37': {1:"The 'responsible one' identity has kept you from being spontaneous — reclaim that freedom",2:"An old identity from your past is blocking a new relationship with success",3:"The identity that kept you safe is now keeping you stuck — shed it consciously",4:"You get to decide who you are now, regardless of who you've been"},
+  '38': {1:"Digital income is a real path for you — choose one platform and go deep",2:"Money patterns from childhood are running your financial present — identify and interrupt them",3:"Comparison is leaking your creative energy; focus on your lane and watch it accelerate"},
+  '39': {1:"The year's final chapter asks you to complete what you started — don't abandon it at the finish line",2:"A celebration is due; acknowledge how far you've come before setting the next goal",3:"What you're ending now creates the foundation for your biggest year yet"},
+  '40': {1:"Post-Venus Rx, a relationship is about to show its true alignment — pay attention to what shifts",2:"Your next chapter in love or partnership is cleaner and more aligned than anything before it",3:"A decision you've been avoiding in a relationship needs to be made — your gut already knows"},
+  '40b':{1:"Neptune in Aries is awakening a bold vision in you — don't let fear talk you out of it",2:"A spiritual insight is about to translate into practical action",3:"Your idealism is your strategic advantage right now — lead with it"},
+  '41': {1:"The resistance you feel is protecting an old identity that no longer serves you — push through it",2:"Your breakthrough is on the other side of the one conversation you keep postponing",3:"What you're resisting is the very thing that will set you free — move toward it"},
+  '41b':{1:"Venus Rx is rerouting a love situation toward something more honest and lasting",2:"What feels like loss right now is actually course correction",3:"A new kind of relationship dynamic is available to you on the other side of this transit"},
+  '42': {1:"The Scorpio full moon is surfacing something buried in your emotional body — let it surface safely",2:"Venus going direct activates a stalled love situation — expect movement within 2 weeks",3:"A transformation is completing; the new version of you is already emerging"},
+  '43': {1:"Jupiter in Cancer is expanding your home, family, and sense of emotional security",2:"Your cosmic gift involves nurturing others — claim it as your superpower, not a burden",3:"An expansion in your domestic or family life is on the horizon — prepare your inner world for it"},
+  '44': {1:"The second half of the year holds a major plot twist in your favor — stay in the game",2:"Rest is not regression; a strategic pause now sets you up for a massive second-half surge",3:"An opportunity you almost gave up on is about to become your biggest win"},
+  '46': {1:"Your net worth is already being upgraded energetically — align your actions with that reality"},
+  '47': {1:"A specific money belief is acting as a glass ceiling — name it and dissolve it",2:"The shift in your money story requires one bold financial decision — make it",3:"Your relationship with risk is the only thing between you and your next income level"},
+};
+
+// ─── STATE ───────────────────────────────────────────────────
+let S = {
+  picks: 0,
+  max: 3,
+  used: new Set(),
+  reading: null,
+  cat: null,
+  log: [],
+  pendingPile: null,
+  showingMain: false,
+};
+
+// ─── HELPERS ─────────────────────────────────────────────────
+function randomCat() {
+  const cats = Object.keys(CATS);
+  return cats[Math.floor(Math.random() * cats.length)];
+}
+
+function pickReading(cat) {
+  let pool = CAT_IDS[cat].filter(id => !S.used.has(id) && R[id]);
+  if (!pool.length) pool = Object.keys(R).filter(id => !S.used.has(id));
+  if (!pool.length) return null;
+  const withPiles = pool.filter(id => (R[id].p || 0) > 0 || R[id].m);
+  const final = withPiles.length ? withPiles : pool;
+  return final[Math.floor(Math.random() * final.length)];
+}
+
+function dots(containerId) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  el.innerHTML = Array.from({length:S.max}, (_,i) =>
+    `<div class="pick-dot${i < S.picks ? ' used' : ''}"></div>`
+  ).join('');
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const el = document.getElementById(id);
+  if (el) { el.classList.add('active'); window.scrollTo(0,0); }
+}
+
+// ─── ACTIONS ─────────────────────────────────────────────────
+function beginReading() {
+  S.cat = randomCat();
+
+  // Show loading screen for 2 seconds, then proceed
+  showScreen('screen-loading');
+  setTimeout(prepareCookies, 2000);
+}
+
+function prepareCookies() {
+  const id = pickReading(S.cat);
+  if (!id) { showEndScreen(); return; }
+
+  S.reading = {id, ...R[id]};
+  S.showingMain = false;
+  S.pendingPile = null;
+
+  const cat = CATS[S.cat];
+  const badge = document.getElementById('cat-badge');
+  badge.textContent = cat.emoji + ' ' + cat.label;
+  badge.className = 'cat-badge ' + cat.cls;
+  document.getElementById('reading-title').textContent = S.reading.t;
+
+  const piles = S.reading.p || 0;
+  if (S.reading.m && piles === 0) {
+    document.getElementById('reading-hint').textContent = 'A special fortune has been chosen for you!';
+    loadVideoScreen(null);
+    return;
+  }
+
+  document.getElementById('reading-hint').textContent = S.reading.m
+    ? 'First watch the intro, then pick your pile!'
+    : 'Pick a fortune cookie to reveal your reading';
+
+  const max = Math.min(piles, 3);
+  for (let i = 1; i <= 3; i++) {
+    const el = document.getElementById('ck-'+i);
+    if (el) {
+      el.style.display = i <= max ? 'flex' : 'none';
+      el.className = 'fortune-cookie'; // reset animation classes
+    }
+  }
+
+  document.getElementById('pick-label').textContent = `Fortune ${S.picks + 1} of ${S.max}`;
+  dots('pick-dots');
+  showScreen('screen-cookies');
+}
+
+function pickCookie(n) {
+  const el = document.getElementById('ck-'+n);
+  if (!el || el.classList.contains('disabled')) return;
+
+  for (let i = 1; i <= 3; i++) {
+    const c = document.getElementById('ck-'+i);
+    if (!c) continue;
+    c.classList.add('disabled');
+    if (i !== n) c.classList.add('faded');
+  }
+
+  el.classList.add('cracking');
+
+  const pile = Math.min(n, S.reading.p);
+
+  setTimeout(() => {
+    if (S.reading.m && !S.showingMain) {
+      S.showingMain = true;
+      S.pendingPile = pile;
+      loadVideoScreen(null);
+    } else {
+      S.showingMain = false;
+      loadVideoScreen(pile);
+    }
+  }, 750);
+}
+
+function loadVideoScreen(pile) {
+  S.picks++;
+  if (pile !== null) {
+    S.used.add(S.reading.id);
+    S.log.push({id: S.reading.id, title: S.reading.t, pile, cat: S.cat});
+  }
+
+  document.getElementById('v-title').textContent = S.reading.t;
+  document.getElementById('v-sub').textContent = pile === null
+    ? 'Intro Reading'
+    : `You chose Fortune Cookie #${pile}`;
+  document.getElementById('v-pick-label').textContent = `Fortune ${S.picks} of ${S.max}`;
+  dots('v-pick-dots');
+
+  const actions = document.getElementById('v-actions');
+  actions.innerHTML = '';
+
+  if (pile === null && S.pendingPile !== null) {
+    actions.innerHTML = `<button class="btn btn-primary" onclick="continueFromMain()">🥠 Your Fortune Cookie — Pick Pile ${S.pendingPile}</button>`;
+  } else {
+    const hasMore = S.picks < S.max;
+    if (hasMore) {
+      actions.innerHTML = `<button class="btn btn-secondary" onclick="nextCookie()">🥠 Open Another Fortune Cookie</button>`;
+    }
+    actions.innerHTML += `<button class="btn btn-primary" onclick="showEnd()">${hasMore ? "I'm done for today →" : 'See My Complete Reading →'}</button>`;
+  }
+
+  // Emerge animation on the video card
+  const card = document.getElementById('video-card');
+  card.classList.remove('video-card-emerge');
+  void card.offsetWidth; // reflow to restart animation
+  card.classList.add('video-card-emerge');
+
+  showScreen('screen-video');
+  fetchVideo(S.reading.f, pile);
+}
+
+function continueFromMain() {
+  const pile = S.pendingPile;
+  S.pendingPile = null;
+  S.showingMain = false;
+  S.picks--;
+  loadVideoScreen(pile);
+}
+
+function nextCookie() {
+  const cats = Object.keys(CATS);
+  const others = cats.filter(c => c !== S.cat);
+  S.cat = others[Math.floor(Math.random() * others.length)];
+  prepareCookies();
+}
+
+async function fetchVideo(folderId, pile) {
+  const wrap = document.getElementById('video-wrap');
+  const loading = document.getElementById('video-loading');
+  const fallback = document.getElementById('video-fallback');
+
+  const prev = wrap.querySelector('iframe');
+  if (prev) prev.remove();
+  loading.style.display = 'flex';
+  fallback.style.display = 'none';
+
+  const pileParam = pile === null ? 'main' : pile;
+
+  try {
+    const res = await fetch(`/api/fortune-video?folderId=${encodeURIComponent(folderId)}&pile=${pileParam}`);
+    if (!res.ok) throw new Error('API ' + res.status);
+    const data = await res.json();
+    if (!data.embedUrl) throw new Error('no url');
+
+    loading.style.display = 'none';
+    const iframe = document.createElement('iframe');
+    iframe.src = data.embedUrl;
+    iframe.allow = 'autoplay';
+    iframe.allowFullscreen = true;
+    wrap.appendChild(iframe);
+  } catch {
+    loading.style.display = 'none';
+    fallback.style.display = 'block';
+    const msg = pile !== null
+      ? `You chose Fortune Cookie #${pile}. Your reading is ready — once videos are shared publicly on Google Drive, they'll play automatically here.`
+      : `Your intro reading is ready — once videos are shared publicly on Google Drive, they'll play automatically here.`;
+    document.getElementById('fallback-msg').textContent = msg;
+  }
+}
+
+function showEnd() {
+  const sum = document.getElementById('summary');
+  if (S.log.length) {
+    sum.innerHTML = S.log.map((p, i) => {
+      const cat = CATS[p.cat];
+      const takeaway = TP[p.id] && TP[p.id][p.pile];
+      return `<div class="summary-item">
+        <div class="summary-row">
+          <span class="summary-num">#${i+1}</span>
+          <span class="summary-cat">${cat.emoji} ${cat.label}</span>
+          <span class="summary-title">${p.title}</span>
+          ${p.pile ? `<span class="summary-pile">· Pile ${p.pile}</span>` : ''}
+        </div>
+        ${takeaway ? `<div class="summary-takeaway"><div class="summary-takeaway-label">What came through</div>${takeaway}</div>` : ''}
+      </div>`;
+    }).join('');
+  } else {
+    sum.innerHTML = '<p style="color:#9A8EC8;font-size:.88rem">No readings completed yet.</p>';
+  }
+
+  showScreen('screen-end');
+}
+
+function showEndScreen() { showEnd(); }
+
+function restart() {
+  S = {picks:0, max:3, used:new Set(), reading:null, cat:null, log:[], pendingPile:null, showingMain:false};
+  showScreen('screen-intro');
+}
+</script>
+</body>
+</html>

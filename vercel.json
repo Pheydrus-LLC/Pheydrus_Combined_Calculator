@@ -21,6 +21,7 @@
   ],
   "rewrites": [
     { "source": "/fortune", "destination": "/fortune.html" },
+    { "source": "/heyjunes-tarot", "destination": "/heyjune-tarot.html" },
     { "source": "/((?!api/.*|.*\\..*).*)", "destination": "/index.html" }
   ]
 }
