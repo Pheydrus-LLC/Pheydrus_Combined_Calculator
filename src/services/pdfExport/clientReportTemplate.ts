@@ -444,9 +444,16 @@ function renderPage1(results: ConsolidatedResults, intake: ClientIntakeData, goa
  const longest2 = getLongestMaleficTransit(diagnostic.allItems, results.calculators.transits?.transits ?? []);
  const endYr = longest2?.endYear ?? null;
  const yrsLeft = endYr ? endYr - new Date().getFullYear() : null;
- const descLine = endYr && yrsLeft
+ const descLine = diagnostic.finalGrade === 'F'
+ ? endYr
+ ? `Getting an F simply means multiple invisible forces are holding you back behind the scenes. Left unaddressed, they can persist until ${endYr}: impacting your relationships, career, and overall well-being. The calculations below are based on thousands of case studies, where we identified exactly which configurations caused the biggest disruptions in people's lives.`
+ : `Getting an F simply means multiple invisible forces are holding you back behind the scenes. Left unaddressed, they can persist for years to come, impacting your relationships, career, and overall well-being. The calculations below are based on thousands of case studies, where we identified exactly which configurations caused the biggest disruptions in people's lives.`
+ : endYr && yrsLeft
  ? `Your ${diagnostic.finalGrade} score traces back to ${forceCount} specific force${forceCount !== 1 ? 's' : ''} - all identified below. Left unaddressed, this configuration persists through ${endYr} - ${yrsLeft} more year${yrsLeft !== 1 ? 's' : ''} of a reality that passes, but doesn't 10x.`
  : `Your ${diagnostic.finalGrade} score traces back to ${forceCount} specific force${forceCount !== 1 ? 's' : ''} - all identified below. This configuration does not self-resolve without targeted intervention.`;
+ const secondLine = diagnostic.finalGrade === 'F'
+ ? "The good news? This report shows you precisely which invisible forces are at play, what they mean, and some initial steps you can take. The grade may seem harsh, but that's intentional: it's here to make sure addressing these forces becomes YOUR #1 priority. Once you do, you'll be surprised how quickly life feels in flow again."
+ : 'This report shows exactly where momentum is leaking and what to change first. Every pressure point has a usable upside once you work it directly.';
 
  // Pillar grades for breakdown bars
  function pillarGradeFor(p: PillarSummary): string {
@@ -534,7 +541,7 @@ function renderPage1(results: ConsolidatedResults, intake: ClientIntakeData, goa
  <!-- Malefic box -->
  <div style="background:#FDFAF5;border:1px solid #E8E0C8;border-radius:4px;padding:20px 24px;">
  <div style="font-size:13px;font-weight:700;color:#C9A84C;font-family:${INTER};margin-bottom:10px;">Your score is not a verdict. It's an entry point.</div>
- <p style="margin:0 0 12px;font-size:12px;color:#555;line-height:1.75;font-family:${INTER};">This report shows exactly where momentum is leaking and what to change first. Every pressure point has a usable upside once you work it directly.</p>
+ <p style="margin:0 0 12px;font-size:12px;color:#555;line-height:1.75;font-family:${INTER};">${secondLine}</p>
  <div style="border-left:3px solid #C9A84C;padding:8px 14px;">
  <p style="margin:0;font-size:12px;font-style:italic;color:#7A5A1A;line-height:1.7;font-family:${CORMORANT};">"Pluto transiting your 1st house? Stop playing nice. Stop softening your edges. Step fully into your power - that is the higher octave." &mdash; Pheydrus team</p>
  </div>

@@ -229,7 +229,7 @@ export function InvisibleForcesReportPage() {
       case 2:
         return !!form.birthLocation && !!form.currentLocation;
       case 3:
-        return !!form.l1 && !!form.postalCode;
+        return !!form.postalCode;
       case 4:
         return !!intake.desiredOutcome && !!intake.obstacle;
       case 5:
@@ -407,7 +407,7 @@ export function InvisibleForcesReportPage() {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className={labelClass}>Unit number <span className="text-[#9a7d4e]">*</span></label>
+                  <label className={labelClass}>Unit number</label>
                   <input
                     type="text"
                     value={form.l1}

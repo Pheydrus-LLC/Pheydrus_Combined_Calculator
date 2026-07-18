@@ -1652,9 +1652,17 @@ export function InvisibleForcesResultsPage() {
  const forceCount =
  (results.diagnostic!.totalFs ?? 0) + (results.diagnostic!.totalCs ?? 0);
  const descLine =
- endYear && yearsRemaining
+ finalGrade === 'F'
+ ? endYear
+ ? `Getting an F simply means multiple invisible forces are holding you back behind the scenes. Left unaddressed, they can persist until ${endYear}: impacting your relationships, career, and overall well-being. The calculations below are based on thousands of case studies, where we identified exactly which configurations caused the biggest disruptions in people's lives.`
+ : `Getting an F simply means multiple invisible forces are holding you back behind the scenes. Left unaddressed, they can persist for years to come, impacting your relationships, career, and overall well-being. The calculations below are based on thousands of case studies, where we identified exactly which configurations caused the biggest disruptions in people's lives.`
+ : endYear && yearsRemaining
  ? `Your ${finalGrade} score traces back to ${forceCount} specific force${forceCount !== 1 ? 's' : ''} - all identified below. Left unaddressed, this configuration persists through ${endYear} - ${yearsRemaining} more year${yearsRemaining !== 1 ? 's' : ''} of a reality that passes, but doesn't 10x.`
  : `Your ${finalGrade} score traces back to ${forceCount} specific force${forceCount !== 1 ? 's' : ''} - all identified below. This configuration does not self-resolve without targeted intervention.`;
+ const secondLine =
+ finalGrade === 'F'
+ ? "The good news? This report shows you precisely which invisible forces are at play, what they mean, and some initial steps you can take. The grade may seem harsh, but that's intentional: it's here to make sure addressing these forces becomes YOUR #1 priority. Once you do, you'll be surprised how quickly life feels in flow again."
+ : 'This report shows exactly where momentum is leaking and what to change first. Every pressure point has a usable upside once you work it directly.';
  return (
  <div
  style={{
@@ -1721,7 +1729,7 @@ export function InvisibleForcesResultsPage() {
  {descLine}
  </p>
  <p style={{ margin: '0 0 10px', fontSize: '0.82rem', color: '#DDD8F8', lineHeight: 1.75 }}>
- This report shows exactly where momentum is leaking and what to change first. Every pressure point has a usable upside once you work it directly.
+ {secondLine}
  </p>
  <div style={{ borderLeft: '3px solid #C9A84C', paddingLeft: '12px', marginBottom: '12px' }}>
  <p style={{ margin: 0, fontFamily: CORMORANT, fontStyle: 'italic', color: '#D4A843', fontSize: '0.9rem', lineHeight: 1.7 }}>
