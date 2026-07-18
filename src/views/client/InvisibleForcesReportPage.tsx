@@ -415,6 +415,9 @@ export function InvisibleForcesReportPage() {
                     placeholder="e.g., 7A"
                     className={inputClass}
                   />
+                  <p className="text-xs text-gray-400 mt-1">
+                    Put 0 if you don't have a unit number.
+                  </p>
                 </div>
                 <div>
                   <label className={labelClass}>Building / house number</label>

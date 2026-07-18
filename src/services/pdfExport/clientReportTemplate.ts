@@ -433,7 +433,10 @@ function renderPage1(results: ConsolidatedResults, intake: ClientIntakeData, goa
  B: ["You're doing well - ", "'doing well' and 'living fully' are two different things."],
  C: ['A passing grade - ', 'but who wants a passing-grade life?'],
  D: ["D means you're one step away from failing - ", "and you're probably feeling the pressure."],
- F: ['This is your turning point. ', 'You now have the map.'],
+ F: [
+ "Don't let the score alarm you - this isn't a class exam. ",
+ 'This simply means you have an unseen force working AGAINST you. Once you address this force, the score (and your life) will improve dramatically!',
+ ],
  };
  const [headH1, headH2] = gradeHeadlines[diagnostic.finalGrade] ?? ['Overall Deconditioning Score', ''];
 
@@ -656,7 +659,7 @@ function renderPage3(results: ConsolidatedResults, intake: ClientIntakeData, goa
 <div style="margin-bottom:28px;">
  <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap;">
  <span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:2px;${badgeSty}font-family:${INTER};">PILLAR ${num}</span>
- <span style="font-size:16px;font-weight:700;color:#1C1A2E;font-family:${CORMORANT};">${title} &mdash; ${subtitle}</span>
+ <span style="font-size:34px;font-weight:700;color:#1C1A2E;font-family:${CORMORANT};">${title} &mdash; ${subtitle}</span>
  <span style="margin-left:auto;font-size:18px;font-weight:900;color:${accent};font-family:${INTER};">${pillarGrade}</span>
  </div>
  <p style="margin:0 0 12px;font-size:12px;font-style:italic;color:#7A5A1A;line-height:1.5;padding:7px 12px;background:rgba(201,168,76,0.06);border-bottom:1px solid rgba(201,168,76,0.18);border-radius:4px 4px 0 0;font-family:${CORMORANT};">${callout}</p>

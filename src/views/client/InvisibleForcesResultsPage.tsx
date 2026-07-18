@@ -724,7 +724,7 @@ function PillarDeepDiveCard({
  PILLAR {index}
  </span>
  <span
- style={{ fontFamily: CORMORANT, fontSize: '1.1rem', fontWeight: 700, color: '#E8DEFF' }}
+ style={{ fontFamily: CORMORANT, fontSize: '2rem', fontWeight: 700, color: '#E8DEFF' }}
  >
  {title} - {subtitle}
  </span>
@@ -1643,7 +1643,10 @@ export function InvisibleForcesResultsPage() {
  "D means you're one step away from failing - ",
  "and you're probably feeling the pressure.",
  ],
- F: ['This is your turning point.', 'You now have the map.'],
+ F: [
+ "Don't let the score alarm you - this isn't a class exam.",
+ 'This simply means you have an unseen force working AGAINST you. Once you address this force, the score (and your life) will improve dramatically!',
+ ],
  };
  const [h1, h2] = hl[finalGrade] ?? ['Overall Deconditioning Score', ''];
  const forceCount =
