@@ -226,8 +226,9 @@ function VennDiagram() {
  stroke="#7ECFC4"
  strokeWidth="1.5"
  />
- <text x="100" y="30" textAnchor="middle" fontSize="12" fill="#E8C46A" fontFamily="'Cormorant Garamond',Georgia,serif" fontWeight="600">Soul / Karma</text>
- <text x="100" y="43" textAnchor="middle" fontSize="9" fill="#C0B4E0" fontFamily="Arial,sans-serif">Pillar 1</text>
+ <text x="100" y="23" textAnchor="middle" fontSize="12" fill="#E8C46A" fontFamily="'Cormorant Garamond',Georgia,serif" fontWeight="600">Identity /</text>
+ <text x="100" y="36" textAnchor="middle" fontSize="12" fill="#E8C46A" fontFamily="'Cormorant Garamond',Georgia,serif" fontWeight="600">Personality</text>
+ <text x="100" y="49" textAnchor="middle" fontSize="9" fill="#C0B4E0" fontFamily="Arial,sans-serif">Pillar 1</text>
  <text x="43" y="162" textAnchor="middle" fontSize="12" fill="#C0B0F0" fontFamily="'Cormorant Garamond',Georgia,serif" fontWeight="600">Timing</text>
  <text x="43" y="174" textAnchor="middle" fontSize="9" fill="#C0B4E0" fontFamily="Arial,sans-serif">Pillar 2</text>
  <text x="148" y="162" textAnchor="middle" fontSize="10" fill="#7ECFC4" fontFamily="'Cormorant Garamond',Georgia,serif" fontWeight="600">Environment</text>
@@ -1380,7 +1381,7 @@ export function InvisibleForcesResultsPage() {
  const legendCards = [
  {
  dot: '#C9A84C',
- label: 'SOUL / KARMA - PILLAR 1',
+ label: 'IDENTITY/PERSONALITY - PILLAR 1',
  question: `Have people always called you 'too much' - or felt emotions more intensely, like you were wired differently from birth?`,
  desc: `Your permanent, energetic blueprint. Just as how you didn't choose your eye color or height, you are also born with certain personality traits. Once you become aware of them and learn how to channel them in a productive way, it could become your greatest asset.`,
  },

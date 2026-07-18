@@ -141,8 +141,9 @@ function renderVennDiagram(): string {
  <circle cx="97" cy="66" r="56" fill="#C9A84C" fill-opacity="0.09" stroke="#C9A84C" stroke-width="1.5"/>
  <circle cx="65" cy="124" r="56" fill="#7B5EA7" fill-opacity="0.09" stroke="#9B8EC4" stroke-width="1.5"/>
  <circle cx="129" cy="124" r="56" fill="#2E8B7A" fill-opacity="0.09" stroke="#5BB5A5" stroke-width="1.5"/>
- <text x="97" y="13" text-anchor="middle" font-size="12" fill="#C9A84C" font-family="'Cormorant Garamond',Georgia,serif" font-weight="600">Soul / Karma</text>
- <text x="97" y="25" text-anchor="middle" font-size="8" fill="#555" font-family="Arial,sans-serif">Pillar 1</text>
+ <text x="97" y="11" text-anchor="middle" font-size="11" fill="#C9A84C" font-family="'Cormorant Garamond',Georgia,serif" font-weight="600">Identity /</text>
+ <text x="97" y="23" text-anchor="middle" font-size="11" fill="#C9A84C" font-family="'Cormorant Garamond',Georgia,serif" font-weight="600">Personality</text>
+ <text x="97" y="35" text-anchor="middle" font-size="8" fill="#555" font-family="Arial,sans-serif">Pillar 1</text>
  <text x="20" y="174" text-anchor="middle" font-size="11" fill="#9B8EC4" font-family="'Cormorant Garamond',Georgia,serif" font-weight="600">Timing</text>
  <text x="20" y="184" text-anchor="middle" font-size="8" fill="#555" font-family="Arial,sans-serif">Pillar 2</text>
  <text x="172" y="174" text-anchor="middle" font-size="11" fill="#5BB5A5" font-family="'Cormorant Garamond',Georgia,serif" font-weight="600">Environment</text>
@@ -563,7 +564,7 @@ function renderPage2(results: ConsolidatedResults, _intake: ClientIntakeData, __
  const legendCards = [
  {
  dot: '#C9A84C',
- label: 'SOUL / KARMA - PILLAR 1',
+ label: 'IDENTITY/PERSONALITY - PILLAR 1',
  question: `Have people always called you 'too much' - or felt emotions more intensely, like you were wired differently from birth?`,
  desc: `Your permanent, energetic blueprint. Just as how you didn't choose your eye color or height, you are also born with certain personality traits. Once you become aware of them and learn how to channel them in a productive way, it could become your greatest asset.`,
  },
