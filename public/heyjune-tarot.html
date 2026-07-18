@@ -18,11 +18,12 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .card{background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.25);border-radius:16px;padding:28px;margin-bottom:20px}
 .welcome-text{font-size:.97rem;color:#DDD8F8;line-height:1.75;text-align:center}
 .welcome-text strong{color:#E8C46A}
-.press-images{display:flex;gap:14px;flex-wrap:wrap}
-.press-images img{flex:1 1 200px;width:100%;max-width:100%;height:auto;border-radius:12px;border:1px solid rgba(201,168,76,.25);object-fit:cover}
+.press-images{display:flex;gap:14px}
+.press-images img{flex:1 1 0;min-width:0;height:auto;border-radius:12px;border:1px solid rgba(201,168,76,.25);object-fit:cover}
 .press-links{display:flex;flex-direction:column;gap:10px;text-align:center}
-.press-links a{color:#E8C46A;font-size:.9rem;text-decoration:none;border-bottom:1px solid rgba(212,168,67,.35);padding-bottom:2px;transition:color .2s,border-color .2s}
-.press-links a:hover{color:#fff;border-color:#E8C46A}
+.press-links a{color:#5B9EFF;font-size:.9rem;text-decoration:none;border-bottom:1px solid rgba(91,158,255,.4);padding-bottom:2px;transition:color .2s,border-color .2s}
+.press-links a:hover{color:#8FBBFF;border-color:#8FBBFF}
+@media(max-width:480px){.press-images{flex-wrap:wrap}.press-images img{flex:1 1 100%}}
 .btn{display:block;padding:13px 28px;border-radius:50px;border:none;cursor:pointer;font-size:.97rem;font-weight:600;transition:all .2s;text-align:center;width:100%;letter-spacing:.02em}
 .btn-primary{background:linear-gradient(135deg,#D4A843,#B8922A);color:#0C1128;box-shadow:0 4px 20px rgba(212,168,67,.3)}
 .btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 25px rgba(212,168,67,.45)}
@@ -148,8 +149,8 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 
   <div class="card fade-in">
     <p class="press-links">
-      <a href="https://nypost.com/2020/08/08/meet-the-psychic-that-big-money-wall-street-traders-depend-on/" target="_blank" rel="noopener">Pheydrus on NY Post as "Wall Street's Psychic"</a>
-      <a href="https://www.forbes.com/sites/aleksandramichalska/2020/08/28/energy-reader-hae-jun-heyjune-jeon-is-getting-ready-to-shake-up-wall-streets-corporate-culture/" target="_blank" rel="noopener">Pheydrus on Forbes</a>
+      <a href="https://nypost.com/2020/08/08/meet-the-psychic-that-big-money-wall-street-traders-depend-on/" target="_blank" rel="noopener">As Seen on NY Post: Wallstreet's Psychic</a>
+      <a href="https://www.forbes.com/sites/aleksandramichalska/2020/08/28/energy-reader-hae-jun-heyjune-jeon-is-getting-ready-to-shake-up-wall-streets-corporate-culture/" target="_blank" rel="noopener">As Seen on Forbes: Shaking up WallStreet Culture</a>
     </p>
   </div>
 
