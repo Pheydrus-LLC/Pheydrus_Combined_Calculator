@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HeyJune's Tarot</title>
+<title>HeyJune's Timeless Tarot Vault</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#050A18;color:#E8DEFF;min-height:100vh;overflow-x:hidden}
+body{font-family:'Palatino Linotype',Palatino,'Book Antiqua',Georgia,serif;background:#050A18;color:#E8DEFF;min-height:100vh;overflow-x:hidden}
 body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 55% at 12% 0%,rgba(110,50,200,.18) 0%,transparent 55%),radial-gradient(ellipse 60% 40% at 88% 4%,rgba(35,85,220,.12) 0%,transparent 50%),radial-gradient(circle 1px at 15% 20%,rgba(255,255,255,.9) 0%,transparent 2px),radial-gradient(circle 1px at 35% 10%,rgba(255,255,255,.7) 0%,transparent 2px),radial-gradient(circle 1px at 68% 30%,rgba(255,255,255,.85) 0%,transparent 2px),radial-gradient(circle 1px at 82% 15%,rgba(255,255,255,.6) 0%,transparent 2px),radial-gradient(circle 1px at 45% 55%,rgba(255,255,255,.75) 0%,transparent 2px),radial-gradient(circle 1px at 92% 45%,rgba(255,255,255,.8) 0%,transparent 2px),radial-gradient(circle 1px at 8% 75%,rgba(255,255,255,.65) 0%,transparent 2px),radial-gradient(circle 1px at 55% 80%,rgba(255,255,255,.5) 0%,transparent 2px),#050A18;pointer-events:none;z-index:0}
 #app{position:relative;z-index:1;max-width:680px;margin:0 auto;padding:20px 16px 60px}
 .screen{display:none}
@@ -18,6 +18,11 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .card{background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.25);border-radius:16px;padding:28px;margin-bottom:20px}
 .welcome-text{font-size:.97rem;color:#DDD8F8;line-height:1.75;text-align:center}
 .welcome-text strong{color:#E8C46A}
+.press-images{display:flex;gap:14px;flex-wrap:wrap}
+.press-images img{flex:1 1 200px;width:100%;max-width:100%;height:auto;border-radius:12px;border:1px solid rgba(201,168,76,.25);object-fit:cover}
+.press-links{display:flex;flex-direction:column;gap:10px;text-align:center}
+.press-links a{color:#E8C46A;font-size:.9rem;text-decoration:none;border-bottom:1px solid rgba(212,168,67,.35);padding-bottom:2px;transition:color .2s,border-color .2s}
+.press-links a:hover{color:#fff;border-color:#E8C46A}
 .btn{display:block;padding:13px 28px;border-radius:50px;border:none;cursor:pointer;font-size:.97rem;font-weight:600;transition:all .2s;text-align:center;width:100%;letter-spacing:.02em}
 .btn-primary{background:linear-gradient(135deg,#D4A843,#B8922A);color:#0C1128;box-shadow:0 4px 20px rgba(212,168,67,.3)}
 .btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 25px rgba(212,168,67,.45)}
@@ -126,18 +131,34 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 <body>
 <div id="app">
 
-<!-- SCREEN 1: Intro — HeyJune's Tarot (shell, content TBD) -->
+<!-- SCREEN 1: Intro — HeyJune's Timeless Tarot Vault (shell, content TBD) -->
 <div class="screen active" id="screen-intro">
   <div class="header fade-in">
     <div class="header-icon">🃏</div>
-    <h1 class="header-title">HeyJune's Tarot</h1>
+    <h1 class="header-title">HeyJune's Timeless<br>Tarot Vault</h1>
     <p class="header-sub">How it works</p>
   </div>
+
   <div class="card fade-in">
-    <p class="welcome-text">
-      [Placeholder — intro copy for HeyJune's Tarot goes here: what this is, how the reading works, what to expect.]
+    <div class="press-images">
+      <img src="/images/heyjune-tarot-1.png" alt="HeyJune giving a tarot reading" />
+      <img src="/images/heyjune-tarot-2.png" alt="HeyJune presenting on tarot archetypes" />
+    </div>
+  </div>
+
+  <div class="card fade-in">
+    <p class="press-links">
+      <a href="https://nypost.com/2020/08/08/meet-the-psychic-that-big-money-wall-street-traders-depend-on/" target="_blank" rel="noopener">Pheydrus on NY Post as "Wall Street's Psychic"</a>
+      <a href="https://www.forbes.com/sites/aleksandramichalska/2020/08/28/energy-reader-hae-jun-heyjune-jeon-is-getting-ready-to-shake-up-wall-streets-corporate-culture/" target="_blank" rel="noopener">Pheydrus on Forbes</a>
     </p>
   </div>
+
+  <div class="card fade-in">
+    <p class="welcome-text">
+      Although she no longer offers 1:1 sessions, HeyJune's Tarot sessions took the world by storm and regularly had a 1+ year waiting list from major investors, bankers, and traders all around the world. What you're about to access is her Tarot Vault: timeless readings she's posted on social media. Even if the transit or signs mentioned don't apply to you directly, in the true spirit of a "reading," please remember: if you see this, it's meant for you..
+    </p>
+  </div>
+
   <div class="card fade-in">
     <div style="margin-top:2px"><button class="btn btn-primary" onclick="beginReading()">Begin Your Reading ✨</button></div>
   </div>
