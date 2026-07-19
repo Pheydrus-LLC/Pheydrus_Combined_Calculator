@@ -1,0 +1,336 @@
+<title>Barbault's Basket — Rising Sign Cheatsheet</title>
+<style>
+  :root {
+    --bg: #03060D;
+    --card: #0A0F1C;
+    --border: rgba(255,255,255,0.1);
+    --accent: #2F6FED;
+    --accent-bright: #5B94FF;
+    --heading: #FFFFFF;
+    --muted: #8B93A7;
+    --body: #E7EAF2;
+    --sextile: #5B94FF;
+    --trine: #4ADE80;
+    --opposition: #F87171;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 40px 24px 80px;
+    background: var(--bg);
+    color: var(--body);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+  }
+  .wrap { max-width: 1500px; margin: 0 auto; }
+  h1 {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: clamp(24px, 4vw, 34px);
+    font-weight: 700;
+    color: var(--heading);
+    margin: 0 0 6px;
+    text-align: center;
+    text-wrap: balance;
+  }
+  .sub {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin: 0 0 32px;
+  }
+  .legend {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+  .legend-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    border-top: 3px solid var(--dot);
+  }
+  .legend-card .tag {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--dot);
+    margin-bottom: 6px;
+    display: block;
+  }
+  .legend-card p {
+    margin: 0;
+    font-size: 0.82rem;
+    line-height: 1.6;
+    color: var(--body);
+  }
+  .house-key {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 32px;
+  }
+  .house-key summary {
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--heading);
+    list-style: none;
+  }
+  .house-key summary::-webkit-details-marker { display: none; }
+  .house-key summary::before { content: '▸ '; color: var(--accent-bright); }
+  .house-key[open] summary::before { content: '▾ '; }
+  .house-key-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 8px 20px;
+    margin-top: 14px;
+    font-size: 0.78rem;
+    color: var(--body);
+  }
+  .house-key-grid b { color: var(--accent-bright); font-weight: 700; }
+  .table-scroll {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--card);
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    min-width: 1400px;
+  }
+  thead th {
+    position: sticky;
+    top: 0;
+    background: #0D1424;
+    z-index: 2;
+    padding: 14px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  thead th .col-title {
+    font-family: Georgia, serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--heading);
+    display: block;
+    margin-bottom: 4px;
+  }
+  thead th .col-aspect {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 2px 8px;
+    border-radius: 999px;
+    display: inline-block;
+  }
+  th.sign-col, td.sign-col {
+    position: sticky;
+    left: 0;
+    background: #0D1424;
+    z-index: 1;
+    font-family: Georgia, serif;
+    font-weight: 700;
+    color: var(--heading);
+    font-size: 0.95rem;
+    padding: 14px 18px;
+    border-right: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  td.sign-col { background: var(--card); }
+  tbody tr:nth-child(even) td.sign-col { background: #0C1220; }
+  tbody tr:nth-child(even) th.sign-col { background: #0C1220; }
+  tbody td {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    border-right: 1px solid rgba(255,255,255,0.04);
+    vertical-align: top;
+    font-size: 0.79rem;
+    line-height: 1.65;
+    max-width: 270px;
+  }
+  .houses {
+    display: inline-block;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--muted);
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 2px 8px;
+    margin-bottom: 8px;
+    font-variant-numeric: tabular-nums;
+  }
+  tbody td em { color: var(--accent-bright); font-style: normal; font-weight: 700; }
+  tbody td u { text-decoration-color: var(--accent-bright); }
+</style>
+
+<div class="wrap">
+  <h1>Barbault's Basket — Rising Sign Cheatsheet</h1>
+  <p class="sub">All 12 rising signs &times; the 5 transits, at a glance. Scroll right for the rest of the columns.</p>
+
+  <div class="legend">
+    <div class="legend-card" style="--dot:var(--sextile)">
+      <span class="tag">Sextile</span>
+      <p>You have two separate skills or areas of life — you just haven't consciously connected them yet. Once you do, use the combo to update your identity.</p>
+    </div>
+    <div class="legend-card" style="--dot:var(--trine)">
+      <span class="tag">Trine</span>
+      <p>These two areas are already working together on their own. Use the combo you already have to get <em>MASSIVELY</em> ahead or compound results fast.</p>
+    </div>
+    <div class="legend-card" style="--dot:var(--opposition)">
+      <span class="tag">Opposition</span>
+      <p>One area of your life has quietly been overcompensating for the other. This time, you make $$$ by <u>flipping the dynamic</u> — leaning into the underused side, even if it's uncomfortable at first.</p>
+    </div>
+  </div>
+
+  <details class="house-key">
+    <summary>What do the house numbers actually mean? (click to expand)</summary>
+    <div class="house-key-grid">
+      <div><b>1st</b> — how you present yourself, your image, first impressions</div>
+      <div><b>2nd</b> — your income, your rates, your sense of self-worth</div>
+      <div><b>3rd</b> — day-to-day communication: texts, posts, conversations</div>
+      <div><b>4th</b> — your home, family, living situation</div>
+      <div><b>5th</b> — what you create and put out there, dating, self-expression</div>
+      <div><b>6th</b> — your daily routine, job, health habits</div>
+      <div><b>7th</b> — one-on-one partnerships, romantic or business</div>
+      <div><b>8th</b> — shared/joint money, deep intimacy, transformation</div>
+      <div><b>9th</b> — what you believe, teaching, publishing, big-picture vision</div>
+      <div><b>10th</b> — your career, public reputation, title</div>
+      <div><b>11th</b> — your network, online community, group projects</div>
+      <div><b>12th</b> — your inner/private world, rest, spirituality</div>
+    </div>
+  </details>
+
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th class="sign-col">Rising Sign</th>
+          <th><span class="col-title">Neptune &#9737; Pluto</span><span class="col-aspect" style="color:var(--sextile);background:rgba(91,148,255,0.12)">Sextile</span></th>
+          <th><span class="col-title">Jupiter &#9776; Pluto</span><span class="col-aspect" style="color:var(--opposition);background:rgba(248,113,113,0.12)">Opposition</span></th>
+          <th><span class="col-title">Uranus &#9651; Pluto</span><span class="col-aspect" style="color:var(--trine);background:rgba(74,222,128,0.12)">Trine</span></th>
+          <th><span class="col-title">Uranus &#9737; Neptune</span><span class="col-aspect" style="color:var(--sextile);background:rgba(91,148,255,0.12)">Sextile</span></th>
+          <th><span class="col-title">NN Aquarius / SN Leo</span><span class="col-aspect" style="color:var(--opposition);background:rgba(248,113,113,0.12)">Axis</span></th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <tr>
+          <th class="sign-col">Aries</th>
+          <td><span class="houses">1st &harr; 11th</span>You already know how you want to be seen &mdash; the identity you're reinventing (1st). The missing piece: <em>actually put that reinvented image in front of your network or the internet</em> (11th), instead of just planning it privately.</td>
+          <td><span class="houses">5th &harr; 11th</span>You've been creating, dating, and putting yourself out there entirely on your own (5th), while your actual network or online community stayed underused (11th). <u>Flip the dynamic</u>: bring in collaborators, a team, or an audience to amplify what you make &mdash; don't keep doing it solo. That's where the $$$ is.</td>
+          <td><span class="houses">3rd &harr; 11th</span>How you communicate (3rd) and your network (11th) are <em>already working together</em>. Post the idea, send the pitch &mdash; get <em>MASSIVELY</em> ahead because your circle is primed to spread it fast.</td>
+          <td><span class="houses">3rd &harr; 1st</span>You know how to communicate (3rd), but you keep filtering what you say to protect the image you think you need (1st). Say the real, unpolished thing &mdash; it'll do more for you than staying careful.</td>
+          <td><span class="houses">NN 11th &harr; SN 5th</span>Chasing your own spotlight (5th) has quietly been the default. <u>Flip the dynamic</u>: plug into a community, team, or online audience (11th) instead of trying to shine solo &mdash; that's where the growth and the money are.</td>
+        </tr>
+
+        <tr>
+          <th class="sign-col">Taurus</th>
+          <td><span class="houses">12th &harr; 10th</span>Your gut instincts (12th) and your public career (10th) need to <em>actually work together</em> &mdash; stop keeping your intuition private and let it steer an actual career move.</td>
+          <td><span class="houses">4th &harr; 10th</span>You've made home so comfortable (4th) that it's let you avoid confronting an unstable or unfulfilling career (10th). <u>Flip the dynamic</u>: make the actual career move &mdash; ask for the raise, change jobs, go for the promotion &mdash; instead of retreating home just to feel okay.</td>
+          <td><span class="houses">2nd &harr; 10th</span>Your relationship to money (2nd) and your career path (10th) are <em>already working together</em>. Raise your rate or make the career move now &mdash; this combo compounds <em>MASSIVELY</em> fast.</td>
+          <td><span class="houses">2nd &harr; 12th</span>You have real instincts about money and what you're worth (2nd), but you treat your inner or spiritual life like it's unrelated to your finances (12th). Let what actually feels meaningful guide your pricing and money decisions &mdash; being aligned and being well-paid aren't opposites.</td>
+          <td><span class="houses">NN 10th &harr; SN 4th</span>Staying comfortable at home (4th) has quietly been the default. <u>Flip the dynamic</u>: step into public career visibility (10th), even if it feels exposed.</td>
+        </tr>
+
+        <tr>
+          <th class="sign-col">Gemini</th>
+          <td><span class="houses">11th &harr; 9th</span>Your network (11th) will rally, but only once you're clear on what you actually believe (9th). Nail the message first, then let your community spread it.</td>
+          <td><span class="houses">3rd &harr; 9th</span>You've been talking a lot day-to-day (3rd) without ever fully committing to what you actually believe or want to build (9th). <u>Flip the dynamic</u>: stop talking around it &mdash; publish the thing, teach the class, or commit publicly to the actual point of view.</td>
+          <td><span class="houses">1st &harr; 9th</span>Your sense of self (1st) and your bigger beliefs (9th) are <em>already working together</em>. Teach, publish, or speak from exactly where you stand &mdash; get <em>MASSIVELY</em> ahead doing it now.</td>
+          <td><span class="houses">1st &harr; 11th</span>You have a strong, clear sense of who you are (1st), but you hold back from bringing that fully into your community or online presence (11th). Show up as your actual self in the group &mdash; toning yourself down isn't the price of belonging.</td>
+          <td><span class="houses">NN 9th &harr; SN 3rd</span>Staying in quick, surface-level conversation (3rd) has quietly been the default. <u>Flip the dynamic</u>: commit to one bigger belief or body of work (9th) and actually build it out.</td>
+        </tr>
+
+        <tr>
+          <th class="sign-col">Cancer</th>
+          <td><span class="houses">10th &harr; 8th</span>Your career ambitions (10th) and how you handle shared money or intimacy (8th) need to <em>actually work together</em> &mdash; don't let financial vulnerability with a partner hold back a career move you're ready to make.</td>
+          <td><span class="houses">2nd &harr; 8th</span>You've kept your own savings protected and separate (2nd) while joint or shared finances with a partner stayed messy or unaddressed (8th). <u>Flip the dynamic</u>: have the honest conversation about the joint money instead of just guarding your own account.</td>
+          <td><span class="houses">12th &harr; 8th</span>Your intuition (12th) and your instincts around shared money or deep change (8th) are <em>already working together</em>. Strong window to get <em>MASSIVELY</em> ahead through inheritance, investment, or a deal involving someone else's resources.</td>
+          <td><span class="houses">12th &harr; 10th</span>You have deep intuition (12th), but you keep it out of how you build your public career (10th). Let your gut instincts actually steer a career decision &mdash; your career doesn't need to look conventional to be respected.</td>
+          <td><span class="houses">NN 8th &harr; SN 2nd</span>Holding onto your own resources (2nd) has quietly been the default. <u>Flip the dynamic</u>: merge finances or energy with someone else (8th), even if it feels exposed.</td>
+        </tr>
+
+        <tr>
+          <th class="sign-col">Leo</th>
+          <td><span class="houses">9th &harr; 7th</span>You have a strong point of view (9th), but you have to <em>actually bring it into your relationships</em> (7th) &mdash; stop softening what you believe just to keep a partner comfortable.</td>
+          <td><span class="houses">1st &harr; 7th</span>You've built up your own confidence and identity on your own (1st), while your partnerships stay one-sided &mdash; you do the emotional heavy lifting, they don't meet you halfway (7th). <u>Flip the dynamic</u>: choose or renegotiate a partnership where the other person shows up as an equal, instead of overperforming to make it work.</td>
+          <td><span class="houses">11th &harr; 7th</span>Your network (11th) and your one-on-one partnerships (7th) are <em>already working together</em>. Turn your circle into real collaborators, not just an audience &mdash; get <em>MASSIVELY</em> ahead.</td>
+          <td><span class="houses">11th &harr; 9th</span>You're good at building a following or network (11th), but you soften your actual beliefs to keep people liking you (9th). Say what you really think &mdash; being popular and having real convictions aren't mutually exclusive.</td>
+          <td><span class="houses">NN 7th &harr; SN 1st</span>Centering yourself (1st) has quietly been the default. <u>Flip the dynamic</u>: build a real one-on-one partnership (7th), even if sharing the spotlight feels unfamiliar.</td>
+        </tr>
+
+        <tr>
+          <th class="sign-col">Virgo</th>
+          <td><span class="houses">8th &harr; 6th</span>Your instincts about shared money and deep change (8th) need to <em>actually connect to your daily routine and health</em> (6th). Rest is productive &mdash; stop treating it as something you have to earn.</td>
+          <td><span class="houses">12th &harr; 6th</span>Your private, spiritual, or inner-work practices (12th) have quietly become an escape hatch from an unsustainable job, workload, or health routine that actually needs to change (6th). <u>Flip the dynamic</u>: use the clarity from that inner work to make a real change at your literal job &mdash; cut your hours, ask for help, quit what's burning you out, or fix your health habits &mdash; instead of retreating inward just to feel better.</td>
+          <td><span class="houses">10th &harr; 6th</span>Your career instincts (10th) and your daily habits (6th) are <em>already working together</em>. Few people have ambition and execution this in sync &mdash; use it to get <em>MASSIVELY</em> ahead.</td>
+          <td><span class="houses">10th &harr; 8th</span>You have real career instincts (10th), but you avoid asking for help or sharing resources with others to get there (8th). Let someone else in on the project or the money &mdash; asking for help doesn't make you less competent.</td>
+          <td><span class="houses">NN 6th &harr; SN 12th</span>Retreating into your private world (12th) has quietly been the default. <u>Flip the dynamic</u>: show up visibly in your daily work (6th), even if it feels less introspective.</td>
+        </tr>
+
+        <tr>
+          <th class="sign-col">Libra</th>
+          <td><span class="houses">7th &harr; 5th</span>Your relationships (7th) and your creative self-expression (5th) need to <em>actually work together</em> &mdash; don't shrink your art or your voice to keep a partner comfortable.</td>
+          <td><span class="houses">11th &harr; 5th</span>You've stayed comfortable inside your social circle or group consensus (11th) instead of taking the risk of putting your own individual creative work out into the world (5th). <u>Flip the dynamic</u>: make or share the thing that's actually yours, even if your friend group or followers don't immediately love it.</td>
+          <td><span class="houses">9th &harr; 5th</span>Your bigger vision (9th) and your creative output (5th) are <em>already working together</em>. Turn what you believe into something you actually make and publish &mdash; get <em>MASSIVELY</em> ahead.</td>
+          <td><span class="houses">9th &harr; 7th</span>You have a clear point of view (9th), but you soften it inside your relationships to avoid conflict (7th). Actually say what you believe to your partner &mdash; agreement isn't the condition for being loved.</td>
+          <td><span class="houses">NN 5th &harr; SN 11th</span>Blending into the group (11th) has quietly been the default. <u>Flip the dynamic</u>: step into your own creative spotlight (5th), even if standing out feels uncomfortable.</td>
+        </tr>
+
+        <tr>
+          <th class="sign-col">Scorpio</th>
+          <td><span class="houses">6th &harr; 4th</span>Your daily discipline (6th) and your home life (4th) need to <em>actually work together</em>. Productivity at work and rest at home are not in competition.</td>
+          <td><span class="houses">10th &harr; 4th</span>You've thrown yourself into career ambition (10th) partly to avoid dealing with an unstable home or family situation (4th). <u>Flip the dynamic</u>: fix the home foundation first &mdash; move, set boundaries with family, or create real stability there &mdash; so your career success has something solid to stand on.</td>
+          <td><span class="houses">8th &harr; 4th</span>Your instincts about shared resources (8th) and your home base (4th) are <em>already working together</em>. Favors real estate, inheritance, or household wealth &mdash; get <em>MASSIVELY</em> ahead.</td>
+          <td><span class="houses">8th &harr; 6th</span>You have sharp instincts about deep change and shared resources (8th), but you treat transformation like it has to be a huge, dramatic event (6th). Build the change into a small daily habit instead &mdash; it counts just as much.</td>
+          <td><span class="houses">NN 4th &harr; SN 10th</span>Chasing public achievement (10th) has quietly been the default. <u>Flip the dynamic</u>: invest in home and family (4th), even if it feels like it's slowing you down.</td>
+        </tr>
+
+        <tr>
+          <th class="sign-col">Sagittarius</th>
+          <td><span class="houses">5th &harr; 3rd</span>Your creative ideas (5th) need to <em>actually get said out loud, day to day</em> (3rd) &mdash; texts, posts, conversations. Don't let a good idea just live in your head.</td>
+          <td><span class="houses">9th &harr; 3rd</span>Your big-picture philosophy or vision (9th) has been an excuse to skip small, direct conversations you actually need to have (3rd). <u>Flip the dynamic</u>: have the specific, uncomfortable conversation you've been avoiding &mdash; the vision won't land without it.</td>
+          <td><span class="houses">7th &harr; 3rd</span>Your partnerships (7th) and your everyday communication (3rd) are <em>already working together</em>. Pair up with the right person and just say what you mean &mdash; get <em>MASSIVELY</em> ahead.</td>
+          <td><span class="houses">7th &harr; 5th</span>You have strong instincts about partnership (7th), but you've been treating love and your creative or artistic life as competing priorities (5th). Let a partner into your creative process &mdash; you don't have to choose between the two.</td>
+          <td><span class="houses">NN 3rd &harr; SN 9th</span>Staying in the big-picture philosophy (9th) has quietly been the default. <u>Flip the dynamic</u>: handle the small, everyday conversations you've been skipping (3rd).</td>
+        </tr>
+
+        <tr>
+          <th class="sign-col">Capricorn</th>
+          <td><span class="houses">4th &harr; 2nd</span>Your sense of home (4th) and your relationship to money (2nd) need to <em>actually work together</em>. Security doesn't have to come from outside your own household.</td>
+          <td><span class="houses">8th &harr; 2nd</span>You've gotten good at managing other people's money or resources (8th) partly to avoid facing insecurity about your own finances (2nd). <u>Flip the dynamic</u>: build your own independent income and financial base before you keep managing everyone else's.</td>
+          <td><span class="houses">6th &harr; 2nd</span>Your work ethic (6th) and your relationship to money (2nd) are <em>already working together</em>. Put in the hours now &mdash; one of your most naturally compounding combos to get <em>MASSIVELY</em> ahead.</td>
+          <td><span class="houses">6th &harr; 4th</span>You have a strong work ethic (6th), but you treat rest and time at home as unproductive (4th). Actually let yourself rest at home &mdash; it's not wasted time, it's what makes the work sustainable.</td>
+          <td><span class="houses">NN 2nd &harr; SN 8th</span>Relying on shared or borrowed resources (8th) has quietly been the default. <u>Flip the dynamic</u>: build your own independent income (2nd), even if it's slower.</td>
+        </tr>
+
+        <tr>
+          <th class="sign-col">Aquarius</th>
+          <td><span class="houses">3rd &harr; 1st</span>You have sharp things to say (3rd), but you have to <em>actually say them as yourself</em> (1st), without filtering to be accepted. Post the real version, not the safe one.</td>
+          <td><span class="houses">7th &harr; 1st</span>You've relied on relationships to help define who you are (7th), instead of building a clear sense of identity and personal goals on your own (1st). <u>Flip the dynamic</u>: get clear on who you are and what you want by yourself first &mdash; then a partner can add to that life, instead of being the reason you have one.</td>
+          <td><span class="houses">5th &harr; 1st</span>Your creative self-expression (5th) and your identity (1st) are <em>already working together</em>. Put yourself into your work without filtering it &mdash; get <em>MASSIVELY</em> ahead.</td>
+          <td><span class="houses">5th &harr; 3rd</span>You have real creative ideas (5th), but you wait until they're "finished" before you say them out loud (3rd). Share the rough, unfinished version in conversation or online &mdash; your ideas count before they're polished.</td>
+          <td><span class="houses">NN 1st &harr; SN 7th</span>Shaping yourself around a partner (7th) has quietly been the default. <u>Flip the dynamic</u>: build your own independent identity (1st), even if it feels selfish at first.</td>
+        </tr>
+
+        <tr>
+          <th class="sign-col">Pisces</th>
+          <td><span class="houses">2nd &harr; 12th</span>You have real instincts about what you're worth (2nd), but you have to <em>actually connect that to your inner world</em> (12th). Money and meaning aren't at odds &mdash; you can charge well and stay aligned.</td>
+          <td><span class="houses">6th &harr; 12th</span>You've stayed busy with your daily routine and to-do list (6th) partly as a way to avoid sitting with your inner or spiritual world (12th). <u>Flip the dynamic</u>: let your actual values and rest needs shape your schedule, instead of using busyness to dodge them.</td>
+          <td><span class="houses">4th &harr; 12th</span>Your home base (4th) and your inner world (12th) are <em>already working together</em>. Build a home that actually supports your inner life &mdash; get <em>MASSIVELY</em> ahead.</td>
+          <td><span class="houses">4th &harr; 2nd</span>You have real instincts about home and family (4th), but you treat money like it's somehow at odds with a peaceful home life (2nd). Let a stronger income actually support your home, instead of treating the two as separate goals.</td>
+          <td><span class="houses">NN 12th &harr; SN 6th</span>Staying buried in daily routine (6th) has quietly been the default. <u>Flip the dynamic</u>: make real space for your inner/spiritual life (12th), even if it looks unproductive on paper.</td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+</div>
