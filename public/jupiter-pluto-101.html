@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jupiter × Pluto — The 101</title>
+<style>
+  :root {
+    --bg: #03060D;
+    --card: #0A0F1C;
+    --border: rgba(255,255,255,0.1);
+    --accent: #F87171;
+    --accent-bright: #FCA5A5;
+    --heading: #FFFFFF;
+    --muted: #8B93A7;
+    --body: #E7EAF2;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 48px 20px 80px;
+    background: var(--bg);
+    color: var(--body);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+  }
+  .wrap { max-width: 640px; margin: 0 auto; }
+  .kicker {
+    text-align: center;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--accent-bright);
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  h1 {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: clamp(28px, 6vw, 40px);
+    font-weight: 700;
+    color: var(--heading);
+    margin: 0 0 14px;
+    text-align: center;
+    text-wrap: balance;
+  }
+  .intro {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.92rem;
+    line-height: 1.7;
+    max-width: 520px;
+    margin: 0 auto 36px;
+  }
+  .intro strong { color: var(--body); }
+  .picker {
+    margin-bottom: 28px;
+  }
+  .picker label {
+    display: block;
+    text-align: center;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  select {
+    display: block;
+    width: 100%;
+    max-width: 360px;
+    margin: 0 auto;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--body);
+    font-size: 0.95rem;
+    font-family: inherit;
+    cursor: pointer;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px 28px;
+    display: none;
+  }
+  .card.active { display: block; }
+  .houses {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--muted);
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 3px 10px;
+    margin-bottom: 18px;
+    font-variant-numeric: tabular-nums;
+  }
+  .mantra-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--accent-bright);
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .mantra {
+    font-family: Georgia, serif;
+    font-style: italic;
+    font-size: 1.3rem;
+    line-height: 1.4;
+    color: var(--heading);
+    margin: 0 0 24px;
+    text-wrap: balance;
+  }
+  .context {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: var(--body);
+    margin: 0 0 28px;
+  }
+  .worksheet {
+    border-top: 1px solid var(--border);
+    padding-top: 24px;
+  }
+  .field-label {
+    font-size: 0.85rem;
+    color: var(--body);
+    margin-bottom: 8px;
+    display: block;
+  }
+  textarea, input[type="text"] {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.03);
+    color: var(--body);
+    font-family: inherit;
+    font-size: 0.9rem;
+    outline: none;
+    resize: vertical;
+  }
+  textarea:focus, input[type="text"]:focus { border-color: var(--accent); }
+  .field { margin-bottom: 18px; }
+  .field:last-child { margin-bottom: 0; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="kicker">The 101 &middot; Jupiter Opposite Pluto</p>
+  <h1>Your Wealth Transfer Mantra</h1>
+  <p class="intro">
+    Jupiter opposite Pluto is the classic signature of extreme reversals of fortune and massive wealth redistribution &mdash; the last one, in 2020, marked the start of the greatest wealth transfer in modern history. <strong>This time it's exact on July 20, 2026</strong>, and an opposition puts you at a fork: you choose which side of the transfer you land on.
+  </p>
+
+  <div class="picker">
+    <label for="sign-select">Your Rising Sign</label>
+    <select id="sign-select" onchange="showSign(this.value)">
+      <option value="Aries">Aries Rising</option>
+      <option value="Taurus">Taurus Rising</option>
+      <option value="Gemini">Gemini Rising</option>
+      <option value="Cancer">Cancer Rising</option>
+      <option value="Leo">Leo Rising</option>
+      <option value="Virgo">Virgo Rising</option>
+      <option value="Libra">Libra Rising</option>
+      <option value="Scorpio">Scorpio Rising</option>
+      <option value="Sagittarius">Sagittarius Rising</option>
+      <option value="Capricorn">Capricorn Rising</option>
+      <option value="Aquarius">Aquarius Rising</option>
+      <option value="Pisces">Pisces Rising</option>
+    </select>
+  </div>
+
+  <div class="card active" id="card-Aries">
+    <span class="houses">Jupiter 5th &harr; Pluto 11th</span>
+    <p class="mantra-label">Mantra</p>
+    <p class="mantra">"I stop creating alone and let my community carry my work further."</p>
+    <p class="context">You've been putting yourself out there solo &mdash; creating, dating, self-expressing &mdash; while your network stayed underused. Bring in collaborators or an audience to amplify what you make. That's where the money is this time.</p>
+    <div class="worksheet">
+      <div class="field">
+        <label class="field-label">Where have I been doing this alone?</label>
+        <textarea rows="2"></textarea>
+      </div>
+      <div class="field">
+        <label class="field-label">This week, I will bring in:</label>
+        <input type="text" placeholder="a collaborator, a platform, an audience...">
+      </div>
+    </div>
+  </div>
+
+  <div class="card" id="card-Taurus">
+    <span class="houses">Jupiter 4th &harr; Pluto 10th</span>
+    <p class="mantra-label">Mantra</p>
+    <p class="mantra">"I choose the career move first &mdash; comfort at home can wait."</p>
+    <p class="context">You've made home so comfortable that it's let you avoid confronting an unstable or unfulfilling career. Make the actual career move &mdash; ask for the raise, change jobs, go for the promotion &mdash; instead of retreating home just to feel okay.</p>
+    <div class="worksheet">
+      <div class="field">
+        <label class="field-label">What career move have I been avoiding?</label>
+        <textarea rows="2"></textarea>
+      </div>
+      <div class="field">
+        <label class="field-label">This week, I will:</label>
+        <input type="text" placeholder="ask, apply, negotiate...">
+      </div>
+    </div>
+  </div>
+
+  <div class="card" id="card-Gemini">
+    <span class="houses">Jupiter 3rd &harr; Pluto 9th</span>
+    <p class="mantra-label">Mantra</p>
+    <p class="mantra">"I stop talking around it and commit to what I actually believe."</p>
+    <p class="context">You've been talking a lot day-to-day without ever fully committing to what you actually believe or want to build. Stop talking around it &mdash; publish the thing, teach the class, or commit publicly to the actual point of view.</p>
+    <div class="worksheet">
+      <div class="field">
+        <label class="field-label">What have I been talking around instead of saying directly?</label>
+        <textarea rows="2"></textarea>
+      </div>
+      <div class="field">
+        <label class="field-label">This week, I will commit to:</label>
+        <input type="text" placeholder="publish, teach, state it plainly...">
+      </div>
+    </div>
+  </div>
+
+  <div class="card" id="card-Cancer">
+    <span class="houses">Jupiter 2nd &harr; Pluto 8th</span>
+    <p class="mantra-label">Mantra</p>
+    <p class="mantra">"I get honest about our money instead of guarding only mine."</p>
+    <p class="context">You've kept your own savings protected and separate while joint or shared finances with a partner stayed messy or unaddressed. Have the honest conversation about the joint money instead of just guarding your own account.</p>
+    <div class="worksheet">
+      <div class="field">
+        <label class="field-label">What shared money conversation have I been avoiding?</label>
+        <textarea rows="2"></textarea>
+      </div>
+      <div class="field">
+        <label class="field-label">This week, I will:</label>
+        <input type="text" placeholder="have the conversation, open the account...">
+      </div>
+    </div>
+  </div>
+
+  <div class="card" id="card-Leo">
+    <span class="houses">Jupiter 1st &harr; Pluto 7th</span>
+    <p class="mantra-label">Mantra</p>
+    <p class="mantra">"I choose partners who meet me as an equal, not audiences who watch me perform."</p>
+    <p class="context">You've built up your own confidence and identity on your own, while your partnerships stay one-sided &mdash; you do the emotional heavy lifting, they don't meet you halfway. Choose or renegotiate a partnership where the other person shows up as an equal.</p>
+    <div class="worksheet">
+      <div class="field">
+        <label class="field-label">Where am I overperforming in a relationship?</label>
+        <textarea rows="2"></textarea>
+      </div>
+      <div class="field">
+        <label class="field-label">This week, I will:</label>
+        <input type="text" placeholder="ask for reciprocity, renegotiate, step back...">
+      </div>
+    </div>
+  </div>
+
+  <div class="card" id="card-Virgo">
+    <span class="houses">Jupiter 12th &harr; Pluto 6th</span>
+    <p class="mantra-label">Mantra</p>
+    <p class="mantra">"I use my inner clarity to actually fix my job, not escape it."</p>
+    <p class="context">Your private, spiritual, or inner-work practices have quietly become an escape hatch from an unsustainable job, workload, or health routine that actually needs to change. Use the clarity from that inner work to make a real change at your literal job.</p>
+    <div class="worksheet">
+      <div class="field">
+        <label class="field-label">What job or health problem have I been avoiding by retreating inward?</label>
+        <textarea rows="2"></textarea>
+      </div>
+      <div class="field">
+        <label class="field-label">This week, I will:</label>
+        <input type="text" placeholder="cut hours, ask for help, quit, fix a habit...">
+      </div>
+    </div>
+  </div>
+
+  <div class="card" id="card-Libra">
+    <span class="houses">Jupiter 11th &harr; Pluto 5th</span>
+    <p class="mantra-label">Mantra</p>
+    <p class="mantra">"I put my own creative work out, even if the group doesn't love it first."</p>
+    <p class="context">You've stayed comfortable inside your social circle or group consensus instead of taking the risk of putting your own individual creative work out into the world. Make or share the thing that's actually yours.</p>
+    <div class="worksheet">
+      <div class="field">
+        <label class="field-label">What creative work have I been holding back?</label>
+        <textarea rows="2"></textarea>
+      </div>
+      <div class="field">
+        <label class="field-label">This week, I will share:</label>
+        <input type="text" placeholder="the project, the post, the idea...">
+      </div>
+    </div>
+  </div>
+
+  <div class="card" id="card-Scorpio">
+    <span class="houses">Jupiter 10th &harr; Pluto 4th</span>
+    <p class="mantra-label">Mantra</p>
+    <p class="mantra">"I build a stable home first &mdash; then my career has something to stand on."</p>
+    <p class="context">You've thrown yourself into career ambition partly to avoid dealing with an unstable home or family situation. Fix the home foundation first &mdash; move, set boundaries with family, or create real stability there.</p>
+    <div class="worksheet">
+      <div class="field">
+        <label class="field-label">What's unstable at home that I've been outrunning with career drive?</label>
+        <textarea rows="2"></textarea>
+      </div>
+      <div class="field">
+        <label class="field-label">This week, I will:</label>
+        <input type="text" placeholder="set a boundary, make a home decision...">
+      </div>
+    </div>
+  </div>
+
+  <div class="card" id="card-Sagittarius">
+    <span class="houses">Jupiter 9th &harr; Pluto 3rd</span>
+    <p class="mantra-label">Mantra</p>
+    <p class="mantra">"I have the small, direct conversation instead of hiding behind the big vision."</p>
+    <p class="context">Your big-picture philosophy or vision has been an excuse to skip small, direct conversations you actually need to have. Have the specific, uncomfortable conversation you've been avoiding &mdash; the vision won't land without it.</p>
+    <div class="worksheet">
+      <div class="field">
+        <label class="field-label">What small conversation have I been avoiding?</label>
+        <textarea rows="2"></textarea>
+      </div>
+      <div class="field">
+        <label class="field-label">This week, I will talk to:</label>
+        <input type="text" placeholder="who, about what...">
+      </div>
+    </div>
+  </div>
+
+  <div class="card" id="card-Capricorn">
+    <span class="houses">Jupiter 8th &harr; Pluto 2nd</span>
+    <p class="mantra-label">Mantra</p>
+    <p class="mantra">"I build my own income before I keep managing everyone else's."</p>
+    <p class="context">You've gotten good at managing other people's money or resources partly to avoid facing insecurity about your own finances. Build your own independent income and financial base before you keep managing everyone else's.</p>
+    <div class="worksheet">
+      <div class="field">
+        <label class="field-label">Where am I managing someone else's money/resources instead of building my own?</label>
+        <textarea rows="2"></textarea>
+      </div>
+      <div class="field">
+        <label class="field-label">This week, I will:</label>
+        <input type="text" placeholder="raise a rate, open an account, start a fund...">
+      </div>
+    </div>
+  </div>
+
+  <div class="card" id="card-Aquarius">
+    <span class="houses">Jupiter 7th &harr; Pluto 1st</span>
+    <p class="mantra-label">Mantra</p>
+    <p class="mantra">"I define who I am on my own before I let a partner complete me."</p>
+    <p class="context">You've relied on relationships to help define who you are, instead of building a clear sense of identity and personal goals on your own. Get clear on who you are and what you want by yourself first.</p>
+    <div class="worksheet">
+      <div class="field">
+        <label class="field-label">Where have I let a relationship define my identity or goals?</label>
+        <textarea rows="2"></textarea>
+      </div>
+      <div class="field">
+        <label class="field-label">This week, I will do this on my own:</label>
+        <input type="text" placeholder="a decision, a goal, a boundary...">
+      </div>
+    </div>
+  </div>
+
+  <div class="card" id="card-Pisces">
+    <span class="houses">Jupiter 6th &harr; Pluto 12th</span>
+    <p class="mantra-label">Mantra</p>
+    <p class="mantra">"I make space for my inner world instead of hiding in busyness."</p>
+    <p class="context">You've stayed busy with your daily routine and to-do list partly as a way to avoid sitting with your inner or spiritual world. Let your actual values and rest needs shape your schedule, instead of using busyness to dodge them.</p>
+    <div class="worksheet">
+      <div class="field">
+        <label class="field-label">What am I avoiding by staying busy?</label>
+        <textarea rows="2"></textarea>
+      </div>
+      <div class="field">
+        <label class="field-label">This week, I will make space for:</label>
+        <input type="text" placeholder="rest, reflection, a spiritual practice...">
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  function showSign(sign) {
+    document.querySelectorAll('.card').forEach(function (el) {
+      el.classList.remove('active');
+    });
+    document.getElementById('card-' + sign).classList.add('active');
+  }
+</script>
+</body>
+</html>

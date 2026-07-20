@@ -23,6 +23,7 @@
     { "source": "/fortune", "destination": "/fortune.html" },
     { "source": "/heyjunes-tarot", "destination": "/heyjune-tarot.html" },
     { "source": "/barbault-cheatsheet", "destination": "/barbault-cheatsheet.html" },
+    { "source": "/jupiter-pluto-101", "destination": "/jupiter-pluto-101.html" },
     { "source": "/((?!api/.*|.*\\..*).*)", "destination": "/index.html" }
   ]
 }
