@@ -144,7 +144,25 @@
   }
   textarea:focus, input[type="text"]:focus { border-color: var(--accent); }
   .field { margin-bottom: 18px; }
-  .field:last-child { margin-bottom: 0; }
+  .field:last-child { margin-bottom: 18px; }
+  .pdf-button {
+    display: block;
+    width: 100%;
+    margin-top: 4px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid rgba(248,113,113,0.4);
+    background: rgba(248,113,113,0.08);
+    color: var(--accent-bright);
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+  }
+  .pdf-button:hover:not(:disabled) { background: rgba(248,113,113,0.16); border-color: var(--accent); }
+  .pdf-button:disabled { opacity: 0.6; cursor: default; }
 </style>
 </head>
 <body>
@@ -385,6 +403,90 @@
       el.classList.remove('active');
     });
     document.getElementById('card-' + sign).classList.add('active');
+  }
+
+  document.querySelectorAll('.card').forEach(function (card) {
+    var sign = card.id.replace('card-', '');
+    var worksheet = card.querySelector('.worksheet');
+    var button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'pdf-button';
+    button.id = 'pdf-btn-' + sign;
+    button.textContent = 'Save as PDF';
+    button.onclick = function () { exportPdf(sign); };
+    worksheet.appendChild(button);
+  });
+
+  function escapeHtml(str) {
+    return (str || '').replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[c];
+    });
+  }
+
+  function loadHtml2Pdf() {
+    if (window.html2pdf) return Promise.resolve(window.html2pdf);
+    return new Promise(function (resolve, reject) {
+      var script = document.createElement('script');
+      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';
+      script.onload = function () { resolve(window.html2pdf); };
+      script.onerror = function () { reject(new Error('Failed to load PDF library')); };
+      document.head.appendChild(script);
+    });
+  }
+
+  function exportPdf(sign) {
+    var button = document.getElementById('pdf-btn-' + sign);
+    var originalLabel = button.textContent;
+    button.disabled = true;
+    button.textContent = 'Generating PDF…';
+
+    loadHtml2Pdf().then(function (html2pdf) {
+      var card = document.getElementById('card-' + sign);
+      var houses = card.querySelector('.houses').textContent;
+      var mantra = card.querySelector('.mantra').textContent;
+      var context = card.querySelector('.context').textContent;
+      var fieldLabels = card.querySelectorAll('.field-label');
+      var reflectionLabel = fieldLabels[0].textContent;
+      var actionLabel = fieldLabels[1].textContent;
+      var reflectionValue = card.querySelector('textarea').value;
+      var actionValue = card.querySelector('input[type="text"]').value;
+
+      var html =
+        '<div style="background:#03060D;padding:36px;font-family:Arial,Helvetica,sans-serif;">' +
+          '<p style="text-align:center;font-size:11px;text-transform:uppercase;letter-spacing:0.16em;color:#FCA5A5;font-weight:700;margin:0 0 10px;">The 101 &middot; Jupiter Opposite Pluto</p>' +
+          '<h1 style="text-align:center;font-family:Georgia,\'Times New Roman\',serif;font-size:26px;color:#FFFFFF;margin:0 0 4px;">Your Wealth Transfer Mantra</h1>' +
+          '<p style="text-align:center;color:#8B93A7;font-size:12px;margin:0 0 26px;">' + escapeHtml(sign) + ' Rising</p>' +
+          '<div style="background:#0A0F1C;border:1px solid rgba(255,255,255,0.12);border-radius:16px;padding:30px 26px;">' +
+            '<span style="display:inline-block;font-size:11px;font-weight:700;color:#8B93A7;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:999px;padding:4px 12px;margin-bottom:18px;">' + escapeHtml(houses) + '</span>' +
+            '<p style="font-size:11px;text-transform:uppercase;letter-spacing:0.12em;color:#FCA5A5;font-weight:700;margin:0 0 8px;">Mantra</p>' +
+            '<p style="font-family:Georgia,serif;font-style:italic;font-size:18px;color:#FFFFFF;margin:0 0 22px;">' + escapeHtml(mantra) + '</p>' +
+            '<p style="font-size:13px;line-height:1.7;color:#E7EAF2;margin:0 0 26px;">' + escapeHtml(context) + '</p>' +
+            '<div style="border-top:1px solid rgba(255,255,255,0.12);padding-top:22px;">' +
+              '<p style="font-size:12px;color:#8B93A7;margin:0 0 6px;">' + escapeHtml(reflectionLabel) + '</p>' +
+              '<p style="font-size:13px;color:#FFFFFF;margin:0 0 20px;border-bottom:1px solid rgba(255,255,255,0.18);padding-bottom:10px;min-height:18px;">' + escapeHtml(reflectionValue) + '</p>' +
+              '<p style="font-size:12px;color:#8B93A7;margin:0 0 6px;">' + escapeHtml(actionLabel) + '</p>' +
+              '<p style="font-size:13px;color:#FFFFFF;margin:0;border-bottom:1px solid rgba(255,255,255,0.18);padding-bottom:10px;min-height:18px;">' + escapeHtml(actionValue) + '</p>' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+
+      var container = document.createElement('div');
+      container.innerHTML = html;
+
+      return html2pdf().set({
+        margin: 10,
+        filename: 'Jupiter-Pluto-101-' + sign + '-Worksheet.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, logging: false, useCORS: true },
+        jsPDF: { orientation: 'portrait', unit: 'mm', format: 'a4' }
+      }).from(container).save();
+    }).catch(function (err) {
+      console.error(err);
+      alert('Something went wrong generating the PDF. Please try again.');
+    }).finally(function () {
+      button.disabled = false;
+      button.textContent = originalLabel;
+    });
   }
 </script>
 </body>
