@@ -22,6 +22,7 @@ import {
   BusinessEnergyBlueprintPage,
   RewriteYourPastPage,
   BarbaultWorksheetPage,
+  MercuryPlacementPage,
 } from './views/standalone';
 import './App.css';
 
@@ -54,6 +55,7 @@ function App() {
         <Route path="pheydrus-HD" element={<BusinessEnergyBlueprintPage />} />
         <Route path="rewrite-your-past" element={<RewriteYourPastPage />} />
         <Route path="once-in-a-century-upgrade" element={<BarbaultWorksheetPage />} />
+        <Route path="mercury" element={<MercuryPlacementPage />} />
       </Routes>
     </BrowserRouter>
   );

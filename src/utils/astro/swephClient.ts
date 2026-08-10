@@ -177,6 +177,38 @@ export async function getPlanetLongitudes(jdUT: number): Promise<Record<string, 
 }
 
 /**
+ * Get a planet's ecliptic longitude speed (degrees/day) for a given Julian Day UT.
+ * Negative speed means the planet is retrograde. Additive helper — does not
+ * change the behavior of getPlanetLongitudes.
+ *
+ * @param jdUT - Julian Day in UT
+ * @param planetName - Planet name matching PLANET_IDS (e.g. "Mercury")
+ * @returns Longitude speed in degrees/day (negative = retrograde)
+ */
+export async function getPlanetSpeed(jdUT: number, planetName: string): Promise<number> {
+  await initEphemeris();
+
+  if (!swe) {
+    throw new Error('Swiss Ephemeris not initialized');
+  }
+
+  const planetId = PLANET_IDS[planetName];
+  if (planetId === undefined || planetId === -999) {
+    throw new Error(`No body ID available for ${planetName}`);
+  }
+
+  const iflag = swe.SEFLG_SWIEPH | swe.SEFLG_SPEED;
+  const data = swe.swe_calc_ut(jdUT, planetId, iflag);
+  const speed = data[3];
+
+  if (typeof speed !== 'number') {
+    throw new Error(`Invalid speed for ${planetName}`);
+  }
+
+  return speed;
+}
+
+/**
  * Get angles (ASC, DSC, MC, IC) for a given location and time
  *
  * @param jdUT - Julian Day in UT
