@@ -1,19 +1,17 @@
 /**
  * Standalone Mercury Placement Tool at /mercury.
  * Visual language matches the "Activate Your Mercury" landing page (void background,
- * cyan/magenta/gold accents, Bree Serif headlines). Lead-gated, then computes
+ * cyan/magenta/gold accents, Bree Serif headlines). Open access — computes
  * Mercury's sign/house/retrograde/aspects via calculateMercuryPlacement.
  */
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { calculateMercuryPlacement } from '../../calculators/mercuryPlacementCalculator';
 import type { MercuryPlacementResult } from '../../calculators/mercuryPlacementCalculator';
-import { MercuryPlacementResults, LeadGateModal } from '../../components/MercuryPlacement';
+import { MercuryPlacementResults } from '../../components/MercuryPlacement';
 import { CityAutocomplete } from '../../components/form/CityAutocomplete';
 import type { CityData } from '../../models/form';
-
-const LEAD_STORAGE_KEY = 'mercuryPlacementLeadV1';
 
 const FONT_HEADLINE = { fontFamily: "'Bree Serif', Georgia, serif" };
 const FONT_MONO = { fontFamily: "'Courier New', 'Lucida Console', monospace" };
@@ -23,9 +21,6 @@ const inputClass =
 const labelClass = 'mb-2 block text-sm font-semibold text-[#9aa4cc]';
 
 export function MercuryPlacementPage() {
-  const [isLeadGateUnlocked, setIsLeadGateUnlocked] = useState(false);
-  const [isGateChecked, setIsGateChecked] = useState(false);
-
   const [dateOfBirth, setDateOfBirth] = useState('');
   const [timeOfBirth, setTimeOfBirth] = useState('');
   const [birthCity, setBirthCity] = useState<CityData | null>(null);
@@ -33,20 +28,6 @@ export function MercuryPlacementPage() {
   const [result, setResult] = useState<MercuryPlacementResult | null>(null);
   const [error, setError] = useState('');
   const [isCalculating, setIsCalculating] = useState(false);
-
-  useEffect(() => {
-    const stored = localStorage.getItem(LEAD_STORAGE_KEY);
-    if (stored) setIsLeadGateUnlocked(true);
-    setIsGateChecked(true);
-  }, []);
-
-  const handleLeadGateUnlock = (name: string, email: string) => {
-    localStorage.setItem(
-      LEAD_STORAGE_KEY,
-      JSON.stringify({ name, email, unlockedAt: new Date().toISOString() })
-    );
-    setIsLeadGateUnlocked(true);
-  };
 
   const handleCalculate = async () => {
     if (!dateOfBirth || !timeOfBirth || !birthCity) return;
@@ -83,14 +64,6 @@ export function MercuryPlacementPage() {
   };
 
   const isReady = Boolean(dateOfBirth && timeOfBirth && birthCity);
-
-  if (!isGateChecked) {
-    return <div className="min-h-screen bg-[#05060f]" />;
-  }
-
-  if (!isLeadGateUnlocked) {
-    return <LeadGateModal onUnlock={handleLeadGateUnlock} />;
-  }
 
   return (
     <div className="relative min-h-screen overflow-x-hidden bg-[#05060f] text-[#eef1ff]">
