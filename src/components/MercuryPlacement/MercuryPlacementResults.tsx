@@ -112,34 +112,17 @@ export function MercuryPlacementResults({ result, onReset }: MercuryPlacementRes
         </div>
       )}
 
-      <div className="mt-9 border-t border-dashed border-[#4ad9ff]/20 pt-6 text-center">
-        <p className="mx-auto mb-4 max-w-[48ch] text-sm italic text-[#9aa4cc]">
-          This is your Mercury, decoded — the sign, the house, and every aspect shaping how you
-          speak.
-        </p>
-        <a
-          href="https://pheydrusmetaverse.com/products/activate-your-mercury"
-          className="inline-block rounded-sm px-6 py-3 text-sm font-normal uppercase tracking-[0.12em] text-[#05060f] no-underline transition-transform hover:-translate-y-0.5"
-          style={{
-            ...FONT_HEADLINE,
-            background: '#ffd166',
-            boxShadow: '0 0 24px rgba(255,209,102,0.35)',
-          }}
-        >
-          Activate Your Mercury
-        </a>
-        {onReset && (
-          <div className="mt-4">
-            <button
-              type="button"
-              onClick={onReset}
-              className="text-xs uppercase tracking-widest text-[#9aa4cc] underline decoration-dotted underline-offset-4 hover:text-[#4ad9ff]"
-            >
-              Run another chart
-            </button>
-          </div>
-        )}
-      </div>
+      {onReset && (
+        <div className="mt-9 border-t border-dashed border-[#4ad9ff]/20 pt-6 text-center">
+          <button
+            type="button"
+            onClick={onReset}
+            className="text-xs uppercase tracking-widest text-[#9aa4cc] underline decoration-dotted underline-offset-4 hover:text-[#4ad9ff]"
+          >
+            Run another chart
+          </button>
+        </div>
+      )}
     </div>
   );
 }
