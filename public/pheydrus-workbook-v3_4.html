@@ -1619,16 +1619,18 @@ setupPdfDownload('bottomDownloadBtn');
     submitBtn.textContent = '⏳ Saving…';
 
     try {
-      // 1. Save profile to Notion
-      var profileRes = await fetch('/api/submit-profile', {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ firstName: firstName, lastName: lastName, email: email })
-      });
-
-      if (!profileRes.ok) {
-        var err = await profileRes.json().catch(function() { return {}; });
-        throw new Error(err.error || 'Failed to save profile');
+      // 1. Save profile to Notion (best-effort — don't block the PDF download on this)
+      try {
+        var profileRes = await fetch('/api/submit-profile', {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify({ firstName: firstName, lastName: lastName, email: email })
+        });
+        if (!profileRes.ok) {
+          console.error('Profile save failed:', await profileRes.text());
+        }
+      } catch (profileErr) {
+        console.error('Profile save error:', profileErr);
       }
 
       // 2. Trigger PDF download with the user's workbook answers
