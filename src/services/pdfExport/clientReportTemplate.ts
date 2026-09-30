@@ -21,6 +21,7 @@ import {
  type GoalCategory,
 } from './clientInterpretations';
 import { applyKmsStyle, applyKmsStyleToHtml } from './kmsStyle';
+import { PILLAR_VOICE_NOTES, voiceNoteUrl } from '../../data/pillarVoiceNotes';
 
 // ── Utilities ─────────────────────────────────────────────────────────────────
 
@@ -630,7 +631,27 @@ function renderPage2(results: ConsolidatedResults, _intake: ClientIntakeData, __
 
 // ── PAGE 3: PILLAR BREAKDOWN ──────────────────────────────────────────────────
 
-function renderPage3(results: ConsolidatedResults, intake: ClientIntakeData, goal: GoalCategory): string {
+// A PDF can't play audio, so the voice note becomes a link that opens the recording.
+function renderVoiceNoteLink(num: 1 | 2 | 3, assetOrigin: string): string {
+ const note = PILLAR_VOICE_NOTES[num];
+ if (!note) return '';
+ return `
+ <a href="${esc(voiceNoteUrl(note.src, assetOrigin))}" target="_blank" rel="noopener noreferrer"
+ style="display:flex;align-items:center;gap:12px;margin:0 0 12px;padding:10px 14px;background:#FFF9E6;border:1px solid #C9A84C;border-radius:6px;text-decoration:none;page-break-inside:avoid;break-inside:avoid;">
+ <svg width="30" height="30" viewBox="0 0 30 30" style="flex-shrink:0;"><circle cx="15" cy="15" r="15" fill="#C9A84C"/><path d="M12 9.5v11l9-5.5z" fill="#1C1A2E"/></svg>
+ <span style="display:block;">
+ <span style="display:block;font-size:15px;font-style:italic;font-weight:600;color:#1C1A2E;font-family:${CORMORANT};">${esc(note.label)}</span>
+ <span style="display:block;font-size:10px;color:#7A5A1A;font-family:${INTER};margin-top:2px;">Click to listen to the voice note &rarr;</span>
+ </span>
+ </a>`;
+}
+
+function renderPage3(
+ results: ConsolidatedResults,
+ intake: ClientIntakeData,
+ goal: GoalCategory,
+ assetOrigin: string,
+): string {
  const { diagnostic } = results;
  if (!diagnostic) return '';
 
@@ -670,6 +691,7 @@ function renderPage3(results: ConsolidatedResults, intake: ClientIntakeData, goa
  <span style="font-size:34px;font-weight:700;color:#1C1A2E;font-family:${CORMORANT};">${title} &mdash; ${subtitle}</span>
  <span style="margin-left:auto;font-size:18px;font-weight:900;color:${accent};font-family:${INTER};">${pillarGrade}</span>
  </div>
+ ${renderVoiceNoteLink(num, assetOrigin)}
  <p style="margin:0 0 12px;font-size:12px;font-style:italic;color:#7A5A1A;line-height:1.5;padding:7px 12px;background:rgba(201,168,76,0.06);border-bottom:1px solid rgba(201,168,76,0.18);border-radius:4px 4px 0 0;font-family:${CORMORANT};">${callout}</p>
  <div style="display:flex;gap:14px;align-items:flex-start;">
  <div style="flex-shrink:0;text-align:center;width:108px;">
@@ -819,9 +841,14 @@ function renderPage4(results: ConsolidatedResults, intake: ClientIntakeData): st
 
 // ── Full template ─────────────────────────────────────────────────────────────
 
+/**
+ * @param assetOrigin Site the voice note links point at. Defaults to the site the report
+ * was opened on, so a Vercel preview links to the preview's recordings.
+ */
 export function generateClientReportTemplate(
  results: ConsolidatedResults,
  intake: ClientIntakeData,
+ assetOrigin: string = typeof window !== 'undefined' ? window.location.origin : '',
 ): string {
  const goal = detectGoalCategory(intake.desiredOutcome);
 
@@ -852,7 +879,7 @@ export function generateClientReportTemplate(
 <body>
  <div class="page-break">${renderPage1(results, intake, goal)}</div>
  <div class="page-break">${renderPage2(results, intake, goal)}</div>
- <div class="page-break">${renderPage3(results, intake, goal)}</div>
+ <div class="page-break">${renderPage3(results, intake, goal, assetOrigin)}</div>
  <div>${renderPage4(results, intake)}</div>
 </body>
 </html>`.trim());

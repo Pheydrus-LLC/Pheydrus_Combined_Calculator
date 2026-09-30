@@ -18,6 +18,8 @@ import {
 } from '../../services/pdfExport/clientInterpretations';
 import { applyKmsStyle } from '../../services/pdfExport/kmsStyle';
 import { getLibraryEntry, getDefaultSteps2, BENEFIC_PLANETS } from '../../data/planetHouseLibrary';
+import { PILLAR_VOICE_NOTES } from '../../data/pillarVoiceNotes';
+import { VoiceNotePlayer } from '../../components/results/VoiceNotePlayer';
 import type { GradeItem, PillarSummary } from '../../models/diagnostic';
 import type { PlanetaryTransit } from '../../models/calculators';
 import type { ConsolidatedResults } from '../../models';
@@ -692,6 +694,7 @@ function PillarDeepDiveCard({
  const callout = PILLAR_CALLOUT[index](goalShort, location);
  const accentColor = index === 1 ? '#F87171' : index === 2 ? '#C9A84C' : '#9a7d4e';
  const pillarGrade = getPillarLetterGrade(pillar);
+ const voiceNote = PILLAR_VOICE_NOTES[index];
 
  return (
  <div
@@ -741,6 +744,8 @@ function PillarDeepDiveCard({
  {pillarGrade}
  </span>
  </div>
+
+ {voiceNote && <VoiceNotePlayer src={voiceNote.src} label={voiceNote.label} />}
 
  {/* Goal callout */}
  <p
