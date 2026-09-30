@@ -21,9 +21,10 @@ import { getLibraryEntry, getDefaultSteps2, BENEFIC_PLANETS } from '../../data/p
 import { PILLAR_VOICE_NOTES } from '../../data/pillarVoiceNotes';
 import { VoiceNotePlayer } from '../../components/results/VoiceNotePlayer';
 import {
+ PILLAR_RESOURCE_CARDS,
  PILLAR_RESOURCES,
- BONUS_RESOURCE,
- type FreeResource,
+ BONUS_RESOURCE_CARD,
+ type ResourceCard,
 } from '../../data/freeResources';
 import type { GradeItem, PillarSummary } from '../../models/diagnostic';
 import type { PlanetaryTransit } from '../../models/calculators';
@@ -164,50 +165,32 @@ function VennDiagram() {
  );
 }
 
-// ── Free resource box ─────────────────────────────────────────────────────────
+// ── Free resource card ────────────────────────────────────────────────────────
 
-const RESOURCE_THEME = {
- // Pillar resources: lavender on the dark card
- pillar: {
- background: 'rgba(167,139,250,0.1)',
- border: '1px solid rgba(167,139,250,0.35)',
- label: '#C4B5FD',
- title: '#E8DEFF',
- text: '#DDD8F8',
- pillBg: '#C4B5FD',
- pillText: '#0C1128',
- buttonBg: '#7C5CE0',
- buttonText: '#fff',
- },
- // Bonus: solid gold card
+const FREE_GREEN = '#22C55E';
+
+// Pillar colours match the three circles of the Venn diagram.
+const RESOURCE_CARD_THEME: Record<'1' | '2' | '3' | 'bonus', { background: string; border: string; accent: string }> = {
+ '1': { background: 'rgba(201,168,76,0.12)', border: 'rgba(212,168,67,0.45)', accent: '#E8C46A' },
+ '2': { background: 'rgba(123,94,167,0.18)', border: 'rgba(184,168,224,0.45)', accent: '#C0B0F0' },
+ '3': { background: 'rgba(46,139,122,0.16)', border: 'rgba(126,207,196,0.45)', accent: '#7ECFC4' },
  bonus: {
- background: 'linear-gradient(135deg, #C9A84C 0%, #E6C877 100%)',
- border: '1px solid #E6C877',
- label: '#3B2F0E',
- title: '#0C1128',
- text: '#1C1A2E',
- pillBg: '#0C1128',
- pillText: '#E6C877',
- buttonBg: '#0C1128',
- buttonText: '#E6C877',
+ background: 'linear-gradient(180deg, rgba(201,168,76,0.10) 0%, rgba(12,17,40,0) 70%), #0C1128',
+ border: 'rgba(201,168,76,0.6)',
+ accent: '#D4A843',
  },
 };
 
-function FreeResourceBox({
- resource,
- variant = 'pillar',
-}: {
- resource: FreeResource;
- variant?: keyof typeof RESOURCE_THEME;
-}) {
- const t = RESOURCE_THEME[variant];
+function ResourceCardBox({ card }: { card: ResourceCard }) {
+ const t = RESOURCE_CARD_THEME[card.pillar === null ? 'bonus' : String(card.pillar) as '1' | '2' | '3'];
  return (
  <div
  style={{
  background: t.background,
- border: t.border,
+ border: `1px solid ${t.border}`,
+ borderTop: card.pillar === null ? `3px solid ${t.accent}` : `1px solid ${t.border}`,
  borderRadius: '4px',
- padding: variant === 'bonus' ? '22px 22px' : '16px 18px',
+ padding: '16px 18px',
  }}
  >
  <div
@@ -216,7 +199,7 @@ function FreeResourceBox({
  alignItems: 'center',
  gap: '8px',
  flexWrap: 'wrap' as const,
- marginBottom: '4px',
+ marginBottom: '6px',
  }}
  >
  <span
@@ -224,20 +207,20 @@ function FreeResourceBox({
  fontSize: '10px',
  textTransform: 'uppercase',
  letterSpacing: '0.08em',
- color: t.label,
+ color: t.accent,
  fontWeight: 700,
  fontFamily: INTER,
  }}
  >
- {resource.label}
+ {card.label}
  </span>
  <span
  style={{
  fontSize: '9px',
- fontWeight: 700,
+ fontWeight: 800,
  letterSpacing: '0.08em',
- color: t.pillText,
- background: t.pillBg,
+ color: '#0C1128',
+ background: FREE_GREEN,
  padding: '1px 6px',
  borderRadius: '2px',
  fontFamily: INTER,
@@ -246,12 +229,21 @@ function FreeResourceBox({
  FREE
  </span>
  </div>
+ {card.resources.map((resource, i) => (
+ <div
+ key={resource.link}
+ style={
+ i > 0
+ ? { marginTop: '14px', paddingTop: '14px', borderTop: `1px solid ${t.border}` }
+ : undefined
+ }
+ >
  <div
  style={{
  fontFamily: CORMORANT,
- fontSize: variant === 'bonus' ? '1.5rem' : '1.2rem',
+ fontSize: '1.2rem',
  fontWeight: 700,
- color: t.title,
+ color: '#E8DEFF',
  marginBottom: '4px',
  }}
  >
@@ -261,7 +253,7 @@ function FreeResourceBox({
  style={{
  margin: '0 0 10px',
  fontSize: '0.8rem',
- color: t.text,
+ color: '#DDD8F8',
  lineHeight: 1.6,
  fontFamily: INTER,
  }}
@@ -269,12 +261,12 @@ function FreeResourceBox({
  {resource.description}
  </p>
  {resource.code && (
- <p style={{ margin: '0 0 10px', fontSize: '0.8rem', color: t.text, fontFamily: INTER }}>
+ <p style={{ margin: '0 0 10px', fontSize: '0.8rem', color: '#DDD8F8', fontFamily: INTER }}>
  Use code{' '}
  <strong
  style={{
- color: t.label,
- border: `1px dashed ${t.label}`,
+ color: t.accent,
+ border: `1px dashed ${t.accent}`,
  padding: '1px 6px',
  borderRadius: '2px',
  letterSpacing: '0.05em',
@@ -292,9 +284,9 @@ function FreeResourceBox({
  style={{
  display: 'inline-block',
  padding: '8px 16px',
- background: t.buttonBg,
- color: t.buttonText,
- fontWeight: 700,
+ background: FREE_GREEN,
+ color: '#0C1128',
+ fontWeight: 800,
  fontSize: '0.72rem',
  letterSpacing: '0.08em',
  textTransform: 'uppercase',
@@ -305,6 +297,8 @@ function FreeResourceBox({
  >
  {resource.cta}
  </a>
+ </div>
+ ))}
  </div>
  );
 }
@@ -2310,13 +2304,13 @@ export function InvisibleForcesResultsPage() {
  <h2
  style={{
  fontFamily: CORMORANT,
- color: '#C4B5FD',
+ color: '#E8C46A',
  fontSize: '1.7rem',
  fontWeight: 700,
  margin: '0 0 6px',
  }}
  >
- Your Pillar Remedy Care Package + 1 Bonus
+ Your Pillar Remedy Kit + 1 Bonus
  </h2>
  <p
  style={{
@@ -2327,13 +2321,12 @@ export function InvisibleForcesResultsPage() {
  lineHeight: 1.6,
  }}
  >
- Your report comes with <strong>4 free resources</strong> to address each of your three
- pillars, plus <strong>1 bonus resource</strong> below. All yours, no cost - start with
- the pillar that scored lowest.
+ <strong>{PILLAR_RESOURCES.length} free resources</strong> matched to your three pillars,
+ plus a bonus. Start with the pillar that scored lowest.
  </p>
  <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
- {PILLAR_RESOURCES.map((resource) => (
- <FreeResourceBox key={resource.link} resource={resource} />
+ {PILLAR_RESOURCE_CARDS.map((card) => (
+ <ResourceCardBox key={card.label} card={card} />
  ))}
  </div>
  </div>
@@ -2342,15 +2335,15 @@ export function InvisibleForcesResultsPage() {
  <h2
  style={{
  fontFamily: CORMORANT,
- color: '#E6C877',
+ color: '#D4A843',
  fontSize: '1.7rem',
  fontWeight: 700,
  margin: '0 0 16px',
  }}
  >
- Your Bonus Resource
+ Your Bonus
  </h2>
- <FreeResourceBox resource={BONUS_RESOURCE} variant="bonus" />
+ <ResourceCardBox card={BONUS_RESOURCE_CARD} />
  </div>
 
  <div style={optionCardStyle}>

@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { generateClientReportTemplate } from '../clientReportTemplate';
-import { BONUS_RESOURCE, PILLAR_RESOURCES } from '../../../data/freeResources';
+import {
+  BONUS_RESOURCE_CARD,
+  PILLAR_RESOURCE_CARDS,
+  PILLAR_RESOURCES,
+} from '../../../data/freeResources';
 import { DEMO_INTAKE, DEMO_RESULTS } from '../../../data/demoClientReport';
 
 const html = generateClientReportTemplate(DEMO_RESULTS, DEMO_INTAKE, 'https://report.example.com');
@@ -9,15 +13,14 @@ const html = generateClientReportTemplate(DEMO_RESULTS, DEMO_INTAKE, 'https://re
 const inHtml = (s: string) => s.replace(/&/g, '&amp;');
 
 describe('free resources', () => {
-  it('offers 4 resources plus 1 bonus, covering every pillar', () => {
+  it('offers 4 resources across one card per pillar, plus 1 bonus', () => {
     expect(PILLAR_RESOURCES).toHaveLength(4);
-    for (const pillar of [1, 2, 3]) {
-      expect(PILLAR_RESOURCES.some((r) => r.label.includes(`Pillar ${pillar}`))).toBe(true);
-    }
-    expect(BONUS_RESOURCE.label).toMatch(/Bonus/);
+    expect(PILLAR_RESOURCE_CARDS.map((c) => c.pillar)).toEqual([1, 2, 3]);
+    expect(BONUS_RESOURCE_CARD.pillar).toBeNull();
+    expect(BONUS_RESOURCE_CARD.resources).toHaveLength(1);
   });
 
-  it.each([...PILLAR_RESOURCES, BONUS_RESOURCE])('PDF links to $title', (resource) => {
+  it.each([...PILLAR_RESOURCES, ...BONUS_RESOURCE_CARD.resources])('PDF links to $title', (resource) => {
     expect(html).toContain(`href="${inHtml(resource.link)}"`);
     expect(html).toContain(resource.title);
   });
@@ -28,8 +31,8 @@ describe('free resources', () => {
     }
   });
 
-  it('PDF uses the Pillar Remedy Care Package heading', () => {
-    expect(html).toContain('Your Pillar Remedy Care Package + 1 Bonus');
+  it('PDF uses the Pillar Remedy Kit heading', () => {
+    expect(html).toContain('Your Pillar Remedy Kit + 1 Bonus');
   });
 
   it('PDF no longer advertises the old paid trainings', () => {

@@ -5,7 +5,7 @@
  * Page 1 - Cover
  * Page 2 - Why This Keeps Happening
  * Page 3 - Pillar Breakdown
- * Free Resources (4 + 1 bonus)
+ * Pillar Remedy Kit (4 free resources + 1 bonus)
  * Page 4 - Cost of Inaction + CTA
  */
 
@@ -24,9 +24,10 @@ import {
 import { applyKmsStyle, applyKmsStyleToHtml } from './kmsStyle';
 import { PILLAR_VOICE_NOTES, voiceNoteUrl } from '../../data/pillarVoiceNotes';
 import {
+ PILLAR_RESOURCE_CARDS,
  PILLAR_RESOURCES,
- BONUS_RESOURCE,
- type FreeResource,
+ BONUS_RESOURCE_CARD,
+ type ResourceCard,
 } from '../../data/freeResources';
 
 // ── Utilities ─────────────────────────────────────────────────────────────────
@@ -747,27 +748,39 @@ function renderPage3(
 
 // ── FREE RESOURCES PAGE ──────────────────────────────────────────────────────
 
-const PDF_RESOURCE_THEME = {
- pillar: { bg: '#F4F0FF', border: '#D6CCF5', label: '#6D4FC9', pillBg: '#6D4FC9', pillText: '#fff', buttonBg: '#6D4FC9', buttonText: '#fff', text: '#444' },
- bonus: { bg: 'linear-gradient(135deg,#C9A84C 0%,#E6C877 100%)', border: '#C9A84C', label: '#3B2F0E', pillBg: '#1C1A2E', pillText: '#E6C877', buttonBg: '#1C1A2E', buttonText: '#E6C877', text: '#1C1A2E' },
+// Pillar colours match the Venn diagram, lightened for the cream page.
+const PDF_RESOURCE_THEME: Record<'1' | '2' | '3' | 'bonus', { bg: string; border: string; accent: string }> = {
+ '1': { bg: '#FBF5E4', border: '#E3CD8E', accent: '#8B6914' },
+ '2': { bg: '#F3EFFA', border: '#CFC2EA', accent: '#6B4F99' },
+ '3': { bg: '#EAF6F3', border: '#A9DDD3', accent: '#1F6F61' },
+ bonus: { bg: '#FFFDF7', border: '#C9A84C', accent: '#8B6914' },
 };
+const PDF_FREE_GREEN = '#16a34a';
 
-function renderResourceBox(resource: FreeResource, variant: keyof typeof PDF_RESOURCE_THEME = 'pillar'): string {
- const t = PDF_RESOURCE_THEME[variant];
+function renderResourceCard(card: ResourceCard): string {
+ const t = PDF_RESOURCE_THEME[card.pillar === null ? 'bonus' : (String(card.pillar) as '1' | '2' | '3')];
+ const topBorder = card.pillar === null ? `border-top:3px solid ${t.accent};` : '';
+ const items = card.resources.map((resource, i) => {
+ const divider = i > 0 ? `margin-top:12px;padding-top:12px;border-top:1px solid ${t.border};` : '';
  const codeLine = resource.code
- ? `<p style="margin:0 0 8px;font-size:12px;color:${t.text};font-family:${INTER};">Use code <strong style="color:${t.label};border:1px dashed ${t.label};padding:1px 6px;border-radius:2px;">${esc(resource.code)}</strong> at checkout for <strong>100% off</strong>.</p>`
+ ? `<p style="margin:0 0 8px;font-size:12px;color:#444;font-family:${INTER};">Use code <strong style="color:${t.accent};border:1px dashed ${t.accent};padding:1px 6px;border-radius:2px;">${esc(resource.code)}</strong> at checkout for <strong>100% off</strong>.</p>`
  : '';
  return `
- <div style="background:${t.bg};border:1px solid ${t.border};border-radius:4px;padding:14px 18px;margin-bottom:12px;page-break-inside:avoid;break-inside:avoid;">
- <div style="margin-bottom:3px;">
- <span style="font-size:10px;text-transform:uppercase;letter-spacing:0.08em;color:${t.label};font-weight:700;font-family:${INTER};">${esc(resource.label)}</span>
- <span style="margin-left:6px;font-size:9px;font-weight:700;letter-spacing:0.08em;color:${t.pillText};background:${t.pillBg};padding:1px 6px;border-radius:2px;font-family:${INTER};">FREE</span>
- </div>
- <div style="font-size:${variant === 'bonus' ? 22 : 18}px;font-weight:700;color:#1C1A2E;font-family:${CORMORANT};margin-bottom:4px;">${esc(resource.title)}</div>
- <p style="margin:0 0 8px;font-size:12px;color:${t.text};line-height:1.6;font-family:${INTER};">${esc(resource.description)}</p>
+ <div style="${divider}">
+ <div style="font-size:18px;font-weight:700;color:#1C1A2E;font-family:${CORMORANT};margin-bottom:4px;">${esc(resource.title)}</div>
+ <p style="margin:0 0 8px;font-size:12px;color:#444;line-height:1.6;font-family:${INTER};">${esc(resource.description)}</p>
  ${codeLine}
  <a href="${esc(resource.link)}" target="_blank" rel="noopener noreferrer"
- style="display:inline-block;padding:7px 14px;background:${t.buttonBg};color:${t.buttonText};font-weight:700;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;text-decoration:none;border-radius:2px;font-family:${INTER};">${esc(resource.cta)}</a>
+ style="display:inline-block;padding:7px 14px;background:${PDF_FREE_GREEN};color:#fff;font-weight:700;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;text-decoration:none;border-radius:2px;font-family:${INTER};">${esc(resource.cta)}</a>
+ </div>`;
+ }).join('');
+ return `
+ <div style="background:${t.bg};border:1px solid ${t.border};${topBorder}border-radius:4px;padding:14px 18px;margin-bottom:12px;page-break-inside:avoid;break-inside:avoid;">
+ <div style="margin-bottom:5px;">
+ <span style="font-size:10px;text-transform:uppercase;letter-spacing:0.08em;color:${t.accent};font-weight:700;font-family:${INTER};">${esc(card.label)}</span>
+ <span style="margin-left:6px;font-size:9px;font-weight:700;letter-spacing:0.08em;color:#fff;background:${PDF_FREE_GREEN};padding:1px 6px;border-radius:2px;font-family:${INTER};">FREE</span>
+ </div>
+ ${items}
  </div>`;
 }
 
@@ -776,11 +789,11 @@ function renderResourcesPage(): string {
 <!-- FREE RESOURCES -->
 <div style="background:#F5F1EB;padding:40px 48px;color:#1C1A2E;">
  <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.14em;color:#999;font-family:${INTER};margin-bottom:8px;">Your Next Steps</div>
- <h2 style="margin:0 0 6px;font-size:30px;font-weight:700;color:#6D4FC9;font-family:${CORMORANT};">Your Pillar Remedy Care Package + 1 Bonus</h2>
- <p style="margin:0 0 20px;font-size:13px;color:#444;line-height:1.7;font-family:${INTER};">Your report comes with <strong>4 free resources</strong> to address each of your three pillars, plus <strong>1 bonus resource</strong> below. All yours, no cost - start with the pillar that scored lowest.</p>
- ${PILLAR_RESOURCES.map((r) => renderResourceBox(r)).join('')}
- <h3 style="margin:24px 0 10px;font-size:22px;font-weight:700;color:#9A7B2C;font-family:${CORMORANT};">Your Bonus Resource</h3>
- ${renderResourceBox(BONUS_RESOURCE, 'bonus')}
+ <h2 style="margin:0 0 6px;font-size:30px;font-weight:700;color:#9A7B2C;font-family:${CORMORANT};">Your Pillar Remedy Kit + 1 Bonus</h2>
+ <p style="margin:0 0 20px;font-size:13px;color:#444;line-height:1.7;font-family:${INTER};"><strong>${PILLAR_RESOURCES.length} free resources</strong> matched to your three pillars, plus a bonus. Start with the pillar that scored lowest.</p>
+ ${PILLAR_RESOURCE_CARDS.map(renderResourceCard).join('')}
+ <h3 style="margin:24px 0 10px;font-size:22px;font-weight:700;color:#9A7B2C;font-family:${CORMORANT};">Your Bonus</h3>
+ ${renderResourceCard(BONUS_RESOURCE_CARD)}
 </div>`;
 }
 
