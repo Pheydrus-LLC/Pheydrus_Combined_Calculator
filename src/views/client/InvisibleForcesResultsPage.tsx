@@ -200,24 +200,44 @@ function ResourceCardBox({ card }: { card: ResourceCard }) {
  >
  <div
  style={{
- display: 'flex',
- alignItems: 'center',
- gap: '8px',
- flexWrap: 'wrap' as const,
- marginBottom: '6px',
- }}
- >
- <span
- style={{
  fontSize: '10px',
  textTransform: 'uppercase',
  letterSpacing: '0.08em',
  color: t.accent,
  fontWeight: 700,
  fontFamily: INTER,
+ marginBottom: '6px',
  }}
  >
  {card.label}
+ </div>
+ {card.resources.map((resource, i) => (
+ <div
+ key={resource.link}
+ style={
+ i > 0
+ ? { marginTop: '14px', paddingTop: '14px', borderTop: `1px solid ${t.border}` }
+ : undefined
+ }
+ >
+ <div
+ style={{
+ display: 'flex',
+ alignItems: 'center',
+ gap: '8px',
+ flexWrap: 'wrap' as const,
+ marginBottom: '4px',
+ }}
+ >
+ <span
+ style={{
+ fontFamily: CORMORANT,
+ fontSize: '1.2rem',
+ fontWeight: 700,
+ color: '#E8DEFF',
+ }}
+ >
+ {resource.title}
  </span>
  <span
  style={{
@@ -233,26 +253,6 @@ function ResourceCardBox({ card }: { card: ResourceCard }) {
  >
  FREE
  </span>
- </div>
- {card.resources.map((resource, i) => (
- <div
- key={resource.link}
- style={
- i > 0
- ? { marginTop: '14px', paddingTop: '14px', borderTop: `1px solid ${t.border}` }
- : undefined
- }
- >
- <div
- style={{
- fontFamily: CORMORANT,
- fontSize: '1.2rem',
- fontWeight: 700,
- color: '#E8DEFF',
- marginBottom: '4px',
- }}
- >
- {resource.title}
  </div>
  <p
  style={{
@@ -2326,8 +2326,10 @@ export function InvisibleForcesResultsPage() {
  lineHeight: 1.6,
  }}
  >
- <strong>{PILLAR_RESOURCES.length} free resources</strong> matched to your three pillars,
- plus a bonus gift. Start with the pillar that scored lowest.
+ You don't have to repair each pillar alone. Below you'll find our state-of-the-art starter
+ resources, designed to target each invisible force.{' '}
+ <strong>{PILLAR_RESOURCES.length} free resources, plus 1 bonus gift.</strong> The full
+ 5-package repair kit, at your fingertips. Start with the pillar that scored lowest.
  </p>
  <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
  {PILLAR_RESOURCE_CARDS.map((card) => (

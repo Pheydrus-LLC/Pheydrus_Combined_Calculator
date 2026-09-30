@@ -25,6 +25,11 @@ describe('free resources', () => {
     expect(html).toContain(resource.title);
   });
 
+  it('PDF tags every resource as FREE', () => {
+    const total = PILLAR_RESOURCES.length + BONUS_RESOURCE_CARD.resources.length;
+    expect(html.match(/>FREE<\/span>/g)).toHaveLength(total);
+  });
+
   it('PDF shows the checkout code for resources that need one', () => {
     for (const resource of PILLAR_RESOURCES.filter((r) => r.code)) {
       expect(html).toContain(resource.code);

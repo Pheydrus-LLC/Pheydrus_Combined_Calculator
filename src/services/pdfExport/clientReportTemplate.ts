@@ -767,7 +767,7 @@ function renderResourceCard(card: ResourceCard): string {
  : '';
  return `
  <div style="${divider}">
- <div style="font-size:18px;font-weight:700;color:#1C1A2E;font-family:${CORMORANT};margin-bottom:4px;">${esc(resource.title)}</div>
+ <div style="font-size:18px;font-weight:700;color:#1C1A2E;font-family:${CORMORANT};margin-bottom:4px;">${esc(resource.title)}<span style="margin-left:8px;vertical-align:middle;font-size:9px;font-weight:700;letter-spacing:0.08em;color:#fff;background:${PDF_FREE_GREEN};padding:1px 6px;border-radius:2px;font-family:${INTER};">FREE</span></div>
  <p style="margin:0 0 8px;font-size:12px;color:#444;line-height:1.6;font-family:${INTER};">${esc(resource.description)}</p>
  ${codeLine}
  <a href="${esc(resource.link)}" target="_blank" rel="noopener noreferrer"
@@ -778,7 +778,6 @@ function renderResourceCard(card: ResourceCard): string {
  <div style="background:${t.bg};border:1px solid ${t.border};${topBorder}border-radius:4px;padding:14px 18px;margin-bottom:12px;page-break-inside:avoid;break-inside:avoid;">
  <div style="margin-bottom:5px;">
  <span style="font-size:10px;text-transform:uppercase;letter-spacing:0.08em;color:${t.accent};font-weight:700;font-family:${INTER};">${esc(card.label)}</span>
- <span style="margin-left:6px;font-size:9px;font-weight:700;letter-spacing:0.08em;color:#fff;background:${PDF_FREE_GREEN};padding:1px 6px;border-radius:2px;font-family:${INTER};">FREE</span>
  </div>
  ${items}
  </div>`;
@@ -790,7 +789,7 @@ function renderResourcesPage(): string {
 <div style="background:#F5F1EB;padding:40px 48px;color:#1C1A2E;">
  <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.14em;color:#999;font-family:${INTER};margin-bottom:8px;">Your Next Steps</div>
  <h2 style="margin:0 0 6px;font-size:30px;font-weight:700;color:#9A7B2C;font-family:${CORMORANT};">Your Pillar Repair Kit + 1 Bonus Gift</h2>
- <p style="margin:0 0 20px;font-size:13px;color:#444;line-height:1.7;font-family:${INTER};"><strong>${PILLAR_RESOURCES.length} free resources</strong> matched to your three pillars, plus a bonus gift. Start with the pillar that scored lowest.</p>
+ <p style="margin:0 0 20px;font-size:13px;color:#444;line-height:1.7;font-family:${INTER};">You don't have to repair each pillar alone. Below you'll find our state-of-the-art starter resources, designed to target each invisible force. <strong>${PILLAR_RESOURCES.length} free resources, plus 1 bonus gift.</strong> The full 5-package repair kit, at your fingertips. Start with the pillar that scored lowest.</p>
  ${PILLAR_RESOURCE_CARDS.map(renderResourceCard).join('')}
  <h3 style="margin:24px 0 10px;font-size:22px;font-weight:700;color:#9A7B2C;font-family:${CORMORANT};">Bonus Gift</h3>
  ${renderResourceCard(BONUS_RESOURCE_CARD)}
