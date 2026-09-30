@@ -31,8 +31,8 @@ describe('free resources', () => {
     }
   });
 
-  it('PDF uses the Pillar Remedy Kit heading', () => {
-    expect(html).toContain('Your Pillar Remedy Kit + 1 Bonus');
+  it('PDF uses the Pillar Repair Kit heading', () => {
+    expect(html).toContain('Your Pillar Repair Kit + 1 Bonus Gift');
   });
 
   it('PDF no longer advertises the old paid trainings', () => {

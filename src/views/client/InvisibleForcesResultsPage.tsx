@@ -167,17 +167,22 @@ function VennDiagram() {
 
 // ── Free resource card ────────────────────────────────────────────────────────
 
-const FREE_GREEN = '#22C55E';
+const FREE_GREEN = '#16a34a';
 
 // Pillar colours match the three circles of the Venn diagram.
-const RESOURCE_CARD_THEME: Record<'1' | '2' | '3' | 'bonus', { background: string; border: string; accent: string }> = {
- '1': { background: 'rgba(201,168,76,0.12)', border: 'rgba(212,168,67,0.45)', accent: '#E8C46A' },
- '2': { background: 'rgba(123,94,167,0.18)', border: 'rgba(184,168,224,0.45)', accent: '#C0B0F0' },
- '3': { background: 'rgba(46,139,122,0.16)', border: 'rgba(126,207,196,0.45)', accent: '#7ECFC4' },
+const RESOURCE_CARD_THEME: Record<
+ '1' | '2' | '3' | 'bonus',
+ { background: string; border: string; accent: string; button: string; buttonText: string }
+> = {
+ '1': { background: 'rgba(201,168,76,0.12)', border: 'rgba(212,168,67,0.45)', accent: '#E8C46A', button: '#C9A84C', buttonText: '#0C1128' },
+ '2': { background: 'rgba(123,94,167,0.18)', border: 'rgba(184,168,224,0.45)', accent: '#C0B0F0', button: '#7B5EA7', buttonText: '#fff' },
+ '3': { background: 'rgba(46,139,122,0.16)', border: 'rgba(126,207,196,0.45)', accent: '#7ECFC4', button: '#2E8B7A', buttonText: '#fff' },
  bonus: {
  background: 'linear-gradient(180deg, rgba(201,168,76,0.10) 0%, rgba(12,17,40,0) 70%), #0C1128',
  border: 'rgba(201,168,76,0.6)',
  accent: '#D4A843',
+ button: '#C9A84C',
+ buttonText: '#0C1128',
  },
 };
 
@@ -217,9 +222,9 @@ function ResourceCardBox({ card }: { card: ResourceCard }) {
  <span
  style={{
  fontSize: '9px',
- fontWeight: 800,
+ fontWeight: 700,
  letterSpacing: '0.08em',
- color: '#0C1128',
+ color: '#fff',
  background: FREE_GREEN,
  padding: '1px 6px',
  borderRadius: '2px',
@@ -284,9 +289,9 @@ function ResourceCardBox({ card }: { card: ResourceCard }) {
  style={{
  display: 'inline-block',
  padding: '8px 16px',
- background: FREE_GREEN,
- color: '#0C1128',
- fontWeight: 800,
+ background: t.button,
+ color: t.buttonText,
+ fontWeight: 700,
  fontSize: '0.72rem',
  letterSpacing: '0.08em',
  textTransform: 'uppercase',
@@ -2310,7 +2315,7 @@ export function InvisibleForcesResultsPage() {
  margin: '0 0 6px',
  }}
  >
- Your Pillar Remedy Kit + 1 Bonus
+ Your Pillar Repair Kit + 1 Bonus Gift
  </h2>
  <p
  style={{
@@ -2322,7 +2327,7 @@ export function InvisibleForcesResultsPage() {
  }}
  >
  <strong>{PILLAR_RESOURCES.length} free resources</strong> matched to your three pillars,
- plus a bonus. Start with the pillar that scored lowest.
+ plus a bonus gift. Start with the pillar that scored lowest.
  </p>
  <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
  {PILLAR_RESOURCE_CARDS.map((card) => (
@@ -2341,7 +2346,7 @@ export function InvisibleForcesResultsPage() {
  margin: '0 0 16px',
  }}
  >
- Your Bonus
+ Bonus Gift
  </h2>
  <ResourceCardBox card={BONUS_RESOURCE_CARD} />
  </div>

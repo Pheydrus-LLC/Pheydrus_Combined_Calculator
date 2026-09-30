@@ -5,7 +5,7 @@
  * Page 1 - Cover
  * Page 2 - Why This Keeps Happening
  * Page 3 - Pillar Breakdown
- * Pillar Remedy Kit (4 free resources + 1 bonus)
+ * Pillar Repair Kit (4 free resources + 1 bonus gift)
  * Page 4 - Cost of Inaction + CTA
  */
 
@@ -771,7 +771,7 @@ function renderResourceCard(card: ResourceCard): string {
  <p style="margin:0 0 8px;font-size:12px;color:#444;line-height:1.6;font-family:${INTER};">${esc(resource.description)}</p>
  ${codeLine}
  <a href="${esc(resource.link)}" target="_blank" rel="noopener noreferrer"
- style="display:inline-block;padding:7px 14px;background:${PDF_FREE_GREEN};color:#fff;font-weight:700;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;text-decoration:none;border-radius:2px;font-family:${INTER};">${esc(resource.cta)}</a>
+ style="display:inline-block;padding:7px 14px;background:${t.accent};color:#fff;font-weight:700;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;text-decoration:none;border-radius:2px;font-family:${INTER};">${esc(resource.cta)}</a>
  </div>`;
  }).join('');
  return `
@@ -789,10 +789,10 @@ function renderResourcesPage(): string {
 <!-- FREE RESOURCES -->
 <div style="background:#F5F1EB;padding:40px 48px;color:#1C1A2E;">
  <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.14em;color:#999;font-family:${INTER};margin-bottom:8px;">Your Next Steps</div>
- <h2 style="margin:0 0 6px;font-size:30px;font-weight:700;color:#9A7B2C;font-family:${CORMORANT};">Your Pillar Remedy Kit + 1 Bonus</h2>
- <p style="margin:0 0 20px;font-size:13px;color:#444;line-height:1.7;font-family:${INTER};"><strong>${PILLAR_RESOURCES.length} free resources</strong> matched to your three pillars, plus a bonus. Start with the pillar that scored lowest.</p>
+ <h2 style="margin:0 0 6px;font-size:30px;font-weight:700;color:#9A7B2C;font-family:${CORMORANT};">Your Pillar Repair Kit + 1 Bonus Gift</h2>
+ <p style="margin:0 0 20px;font-size:13px;color:#444;line-height:1.7;font-family:${INTER};"><strong>${PILLAR_RESOURCES.length} free resources</strong> matched to your three pillars, plus a bonus gift. Start with the pillar that scored lowest.</p>
  ${PILLAR_RESOURCE_CARDS.map(renderResourceCard).join('')}
- <h3 style="margin:24px 0 10px;font-size:22px;font-weight:700;color:#9A7B2C;font-family:${CORMORANT};">Your Bonus</h3>
+ <h3 style="margin:24px 0 10px;font-size:22px;font-weight:700;color:#9A7B2C;font-family:${CORMORANT};">Bonus Gift</h3>
  ${renderResourceCard(BONUS_RESOURCE_CARD)}
 </div>`;
 }
