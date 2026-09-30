@@ -23,7 +23,6 @@ import { VoiceNotePlayer } from '../../components/results/VoiceNotePlayer';
 import {
  PILLAR_RESOURCES,
  BONUS_RESOURCE,
- PILLAR_NAMES,
  type FreeResource,
 } from '../../data/freeResources';
 import type { GradeItem, PillarSummary } from '../../models/diagnostic';
@@ -167,14 +166,48 @@ function VennDiagram() {
 
 // ── Free resource box ─────────────────────────────────────────────────────────
 
-function FreeResourceBox({ resource }: { resource: FreeResource }) {
+const RESOURCE_THEME = {
+ // Pillar resources: lavender on the dark card
+ pillar: {
+ background: 'rgba(167,139,250,0.1)',
+ border: '1px solid rgba(167,139,250,0.35)',
+ label: '#C4B5FD',
+ title: '#E8DEFF',
+ text: '#DDD8F8',
+ pillBg: '#C4B5FD',
+ pillText: '#0C1128',
+ buttonBg: '#7C5CE0',
+ buttonText: '#fff',
+ },
+ // Bonus: solid gold card
+ bonus: {
+ background: 'linear-gradient(135deg, #C9A84C 0%, #E6C877 100%)',
+ border: '1px solid #E6C877',
+ label: '#3B2F0E',
+ title: '#0C1128',
+ text: '#1C1A2E',
+ pillBg: '#0C1128',
+ pillText: '#E6C877',
+ buttonBg: '#0C1128',
+ buttonText: '#E6C877',
+ },
+};
+
+function FreeResourceBox({
+ resource,
+ variant = 'pillar',
+}: {
+ resource: FreeResource;
+ variant?: keyof typeof RESOURCE_THEME;
+}) {
+ const t = RESOURCE_THEME[variant];
  return (
  <div
  style={{
- background: 'rgba(22,163,74,0.1)',
- border: '1px solid rgba(22,163,74,0.25)',
+ background: t.background,
+ border: t.border,
  borderRadius: '4px',
- padding: '16px 18px',
+ padding: variant === 'bonus' ? '22px 22px' : '16px 18px',
  }}
  >
  <div
@@ -191,22 +224,20 @@ function FreeResourceBox({ resource }: { resource: FreeResource }) {
  fontSize: '10px',
  textTransform: 'uppercase',
  letterSpacing: '0.08em',
- color: '#16a34a',
+ color: t.label,
  fontWeight: 700,
  fontFamily: INTER,
  }}
  >
- {resource.pillar
- ? `To address Pillar ${resource.pillar}: ${PILLAR_NAMES[resource.pillar]}`
- : 'Bonus resource'}
+ {resource.label}
  </span>
  <span
  style={{
  fontSize: '9px',
  fontWeight: 700,
  letterSpacing: '0.08em',
- color: '#0C1128',
- background: '#4ADE80',
+ color: t.pillText,
+ background: t.pillBg,
  padding: '1px 6px',
  borderRadius: '2px',
  fontFamily: INTER,
@@ -218,9 +249,9 @@ function FreeResourceBox({ resource }: { resource: FreeResource }) {
  <div
  style={{
  fontFamily: CORMORANT,
- fontSize: '1.2rem',
+ fontSize: variant === 'bonus' ? '1.5rem' : '1.2rem',
  fontWeight: 700,
- color: '#E8DEFF',
+ color: t.title,
  marginBottom: '4px',
  }}
  >
@@ -230,7 +261,7 @@ function FreeResourceBox({ resource }: { resource: FreeResource }) {
  style={{
  margin: '0 0 10px',
  fontSize: '0.8rem',
- color: '#DDD8F8',
+ color: t.text,
  lineHeight: 1.6,
  fontFamily: INTER,
  }}
@@ -238,12 +269,12 @@ function FreeResourceBox({ resource }: { resource: FreeResource }) {
  {resource.description}
  </p>
  {resource.code && (
- <p style={{ margin: '0 0 10px', fontSize: '0.8rem', color: '#DDD8F8', fontFamily: INTER }}>
+ <p style={{ margin: '0 0 10px', fontSize: '0.8rem', color: t.text, fontFamily: INTER }}>
  Use code{' '}
  <strong
  style={{
- color: '#4ADE80',
- border: '1px dashed #4ADE80',
+ color: t.label,
+ border: `1px dashed ${t.label}`,
  padding: '1px 6px',
  borderRadius: '2px',
  letterSpacing: '0.05em',
@@ -261,8 +292,8 @@ function FreeResourceBox({ resource }: { resource: FreeResource }) {
  style={{
  display: 'inline-block',
  padding: '8px 16px',
- background: '#16a34a',
- color: '#fff',
+ background: t.buttonBg,
+ color: t.buttonText,
  fontWeight: 700,
  fontSize: '0.72rem',
  letterSpacing: '0.08em',
@@ -2276,29 +2307,16 @@ export function InvisibleForcesResultsPage() {
  return (
  <>
  <div style={optionCardStyle}>
- <div
- style={{
- fontSize: '11px',
- textTransform: 'uppercase',
- letterSpacing: '0.12em',
- fontWeight: 700,
- color: '#16a34a',
- marginBottom: '10px',
- fontFamily: INTER,
- }}
- >
- #1 Option
- </div>
  <h2
  style={{
  fontFamily: CORMORANT,
- color: '#16a34a',
+ color: '#C4B5FD',
  fontSize: '1.7rem',
  fontWeight: 700,
  margin: '0 0 6px',
  }}
  >
- Your 4 Free Resources + 1 Bonus 🎁
+ Your Pillar Remedy Care Package + 1 Bonus
  </h2>
  <p
  style={{
@@ -2309,9 +2327,9 @@ export function InvisibleForcesResultsPage() {
  lineHeight: 1.6,
  }}
  >
- This report comes with <strong>4 free resources</strong> to address each of your three
- pillars, plus <strong>1 bonus resource</strong> (Option #2 below). They're yours at no
- cost - start with the pillar that scored lowest.
+ Your report comes with <strong>4 free resources</strong> to address each of your three
+ pillars, plus <strong>1 bonus resource</strong> below. All yours, no cost - start with
+ the pillar that scored lowest.
  </p>
  <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
  {PILLAR_RESOURCES.map((resource) => (
@@ -2321,31 +2339,18 @@ export function InvisibleForcesResultsPage() {
  </div>
 
  <div style={optionCardStyle}>
- <div
- style={{
- fontSize: '11px',
- textTransform: 'uppercase',
- letterSpacing: '0.12em',
- fontWeight: 700,
- color: '#60A5FA',
- marginBottom: '10px',
- fontFamily: INTER,
- }}
- >
- #2 Option · Bonus Resource
- </div>
  <h2
  style={{
  fontFamily: CORMORANT,
- color: '#60A5FA',
+ color: '#E6C877',
  fontSize: '1.7rem',
  fontWeight: 700,
  margin: '0 0 16px',
  }}
  >
- Your Bonus: {BONUS_RESOURCE.title} 📅
+ Your Bonus Resource
  </h2>
- <FreeResourceBox resource={BONUS_RESOURCE} />
+ <FreeResourceBox resource={BONUS_RESOURCE} variant="bonus" />
  </div>
 
  <div style={optionCardStyle}>

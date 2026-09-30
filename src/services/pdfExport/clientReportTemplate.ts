@@ -26,7 +26,6 @@ import { PILLAR_VOICE_NOTES, voiceNoteUrl } from '../../data/pillarVoiceNotes';
 import {
  PILLAR_RESOURCES,
  BONUS_RESOURCE,
- PILLAR_NAMES,
  type FreeResource,
 } from '../../data/freeResources';
 
@@ -748,24 +747,27 @@ function renderPage3(
 
 // ── FREE RESOURCES PAGE ──────────────────────────────────────────────────────
 
-function renderResourceBox(resource: FreeResource): string {
- const label = resource.pillar
- ? `To address Pillar ${resource.pillar}: ${PILLAR_NAMES[resource.pillar]}`
- : 'Bonus resource';
+const PDF_RESOURCE_THEME = {
+ pillar: { bg: '#F4F0FF', border: '#D6CCF5', label: '#6D4FC9', pillBg: '#6D4FC9', pillText: '#fff', buttonBg: '#6D4FC9', buttonText: '#fff', text: '#444' },
+ bonus: { bg: 'linear-gradient(135deg,#C9A84C 0%,#E6C877 100%)', border: '#C9A84C', label: '#3B2F0E', pillBg: '#1C1A2E', pillText: '#E6C877', buttonBg: '#1C1A2E', buttonText: '#E6C877', text: '#1C1A2E' },
+};
+
+function renderResourceBox(resource: FreeResource, variant: keyof typeof PDF_RESOURCE_THEME = 'pillar'): string {
+ const t = PDF_RESOURCE_THEME[variant];
  const codeLine = resource.code
- ? `<p style="margin:0 0 8px;font-size:12px;color:#444;font-family:${INTER};">Use code <strong style="color:#15803d;border:1px dashed #16a34a;padding:1px 6px;border-radius:2px;">${esc(resource.code)}</strong> at checkout for <strong>100% off</strong>.</p>`
+ ? `<p style="margin:0 0 8px;font-size:12px;color:${t.text};font-family:${INTER};">Use code <strong style="color:${t.label};border:1px dashed ${t.label};padding:1px 6px;border-radius:2px;">${esc(resource.code)}</strong> at checkout for <strong>100% off</strong>.</p>`
  : '';
  return `
- <div style="background:#F3FAF4;border:1px solid #BBE3C4;border-radius:4px;padding:14px 18px;margin-bottom:12px;page-break-inside:avoid;break-inside:avoid;">
+ <div style="background:${t.bg};border:1px solid ${t.border};border-radius:4px;padding:14px 18px;margin-bottom:12px;page-break-inside:avoid;break-inside:avoid;">
  <div style="margin-bottom:3px;">
- <span style="font-size:10px;text-transform:uppercase;letter-spacing:0.08em;color:#15803d;font-weight:700;font-family:${INTER};">${esc(label)}</span>
- <span style="margin-left:6px;font-size:9px;font-weight:700;letter-spacing:0.08em;color:#fff;background:#16a34a;padding:1px 6px;border-radius:2px;font-family:${INTER};">FREE</span>
+ <span style="font-size:10px;text-transform:uppercase;letter-spacing:0.08em;color:${t.label};font-weight:700;font-family:${INTER};">${esc(resource.label)}</span>
+ <span style="margin-left:6px;font-size:9px;font-weight:700;letter-spacing:0.08em;color:${t.pillText};background:${t.pillBg};padding:1px 6px;border-radius:2px;font-family:${INTER};">FREE</span>
  </div>
- <div style="font-size:18px;font-weight:700;color:#1C1A2E;font-family:${CORMORANT};margin-bottom:4px;">${esc(resource.title)}</div>
- <p style="margin:0 0 8px;font-size:12px;color:#444;line-height:1.6;font-family:${INTER};">${esc(resource.description)}</p>
+ <div style="font-size:${variant === 'bonus' ? 22 : 18}px;font-weight:700;color:#1C1A2E;font-family:${CORMORANT};margin-bottom:4px;">${esc(resource.title)}</div>
+ <p style="margin:0 0 8px;font-size:12px;color:${t.text};line-height:1.6;font-family:${INTER};">${esc(resource.description)}</p>
  ${codeLine}
  <a href="${esc(resource.link)}" target="_blank" rel="noopener noreferrer"
- style="display:inline-block;padding:7px 14px;background:#16a34a;color:#fff;font-weight:700;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;text-decoration:none;border-radius:2px;font-family:${INTER};">${esc(resource.cta)}</a>
+ style="display:inline-block;padding:7px 14px;background:${t.buttonBg};color:${t.buttonText};font-weight:700;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;text-decoration:none;border-radius:2px;font-family:${INTER};">${esc(resource.cta)}</a>
  </div>`;
 }
 
@@ -774,11 +776,11 @@ function renderResourcesPage(): string {
 <!-- FREE RESOURCES -->
 <div style="background:#F5F1EB;padding:40px 48px;color:#1C1A2E;">
  <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.14em;color:#999;font-family:${INTER};margin-bottom:8px;">Your Next Steps</div>
- <h2 style="margin:0 0 6px;font-size:30px;font-weight:700;color:#15803d;font-family:${CORMORANT};">Your 4 Free Resources + 1 Bonus</h2>
- <p style="margin:0 0 20px;font-size:13px;color:#444;line-height:1.7;font-family:${INTER};">This report comes with <strong>4 free resources</strong> to address each of your three pillars, plus <strong>1 bonus resource</strong>. They're yours at no cost - start with the pillar that scored lowest.</p>
- ${PILLAR_RESOURCES.map(renderResourceBox).join('')}
- <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.14em;color:#999;font-family:${INTER};margin:22px 0 10px;">Your Bonus</div>
- ${renderResourceBox(BONUS_RESOURCE)}
+ <h2 style="margin:0 0 6px;font-size:30px;font-weight:700;color:#6D4FC9;font-family:${CORMORANT};">Your Pillar Remedy Care Package + 1 Bonus</h2>
+ <p style="margin:0 0 20px;font-size:13px;color:#444;line-height:1.7;font-family:${INTER};">Your report comes with <strong>4 free resources</strong> to address each of your three pillars, plus <strong>1 bonus resource</strong> below. All yours, no cost - start with the pillar that scored lowest.</p>
+ ${PILLAR_RESOURCES.map((r) => renderResourceBox(r)).join('')}
+ <h3 style="margin:24px 0 10px;font-size:22px;font-weight:700;color:#9A7B2C;font-family:${CORMORANT};">Your Bonus Resource</h3>
+ ${renderResourceBox(BONUS_RESOURCE, 'bonus')}
 </div>`;
 }
 

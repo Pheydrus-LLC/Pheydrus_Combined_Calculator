@@ -11,8 +11,10 @@ const inHtml = (s: string) => s.replace(/&/g, '&amp;');
 describe('free resources', () => {
   it('offers 4 resources plus 1 bonus, covering every pillar', () => {
     expect(PILLAR_RESOURCES).toHaveLength(4);
-    expect(new Set(PILLAR_RESOURCES.map((r) => r.pillar))).toEqual(new Set([1, 2, 3]));
-    expect(BONUS_RESOURCE.pillar).toBeNull();
+    for (const pillar of [1, 2, 3]) {
+      expect(PILLAR_RESOURCES.some((r) => r.label.includes(`Pillar ${pillar}`))).toBe(true);
+    }
+    expect(BONUS_RESOURCE.label).toMatch(/Bonus/);
   });
 
   it.each([...PILLAR_RESOURCES, BONUS_RESOURCE])('PDF links to $title', (resource) => {
@@ -24,6 +26,10 @@ describe('free resources', () => {
     for (const resource of PILLAR_RESOURCES.filter((r) => r.code)) {
       expect(html).toContain(resource.code);
     }
+  });
+
+  it('PDF uses the Pillar Remedy Care Package heading', () => {
+    expect(html).toContain('Your Pillar Remedy Care Package + 1 Bonus');
   });
 
   it('PDF no longer advertises the old paid trainings', () => {
