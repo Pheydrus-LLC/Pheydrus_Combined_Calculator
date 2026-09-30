@@ -755,7 +755,7 @@ const PDF_RESOURCE_THEME: Record<'1' | '2' | '3' | 'bonus', { bg: string; border
  '3': { bg: '#EAF6F3', border: '#A9DDD3', accent: '#1F6F61' },
  bonus: { bg: '#FFFDF7', border: '#C9A84C', accent: '#8B6914' },
 };
-const PDF_FREE_GREEN = '#16a34a';
+const PDF_FREE_GREEN = '#1E7B45';
 
 function renderResourceCard(card: ResourceCard): string {
  const t = PDF_RESOURCE_THEME[card.pillar === null ? 'bonus' : (String(card.pillar) as '1' | '2' | '3')];

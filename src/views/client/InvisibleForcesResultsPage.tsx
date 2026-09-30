@@ -167,7 +167,7 @@ function VennDiagram() {
 
 // ── Free resource card ────────────────────────────────────────────────────────
 
-const FREE_GREEN = '#16a34a';
+const FREE_GREEN = '#1E7B45';
 
 // Pillar colours match the three circles of the Venn diagram.
 const RESOURCE_CARD_THEME: Record<
