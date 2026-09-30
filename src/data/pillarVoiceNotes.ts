@@ -16,15 +16,15 @@ export interface PillarVoiceNote {
 
 export const PILLAR_VOICE_NOTES: Record<1 | 2 | 3, PillarVoiceNote | null> = {
   1: {
-    src: '/audio/pillar-1-intro.wav',
+    src: '/audio/pillar-1-intro.mp3',
     label: 'Hear Pillar 1 explained, from HeyJune herself',
   },
   2: {
-    src: '/audio/pillar-2-intro.wav',
+    src: '/audio/pillar-2-intro.mp3',
     label: 'Hear Pillar 2 explained, from HeyJune herself',
   },
   3: {
-    src: '/audio/pillar-3-intro.wav',
+    src: '/audio/pillar-3-intro.mp3',
     label: 'Hear Pillar 3 explained, from HeyJune herself',
   },
 };
