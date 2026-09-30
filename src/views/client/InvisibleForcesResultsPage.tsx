@@ -20,6 +20,12 @@ import { applyKmsStyle } from '../../services/pdfExport/kmsStyle';
 import { getLibraryEntry, getDefaultSteps2, BENEFIC_PLANETS } from '../../data/planetHouseLibrary';
 import { PILLAR_VOICE_NOTES } from '../../data/pillarVoiceNotes';
 import { VoiceNotePlayer } from '../../components/results/VoiceNotePlayer';
+import {
+ PILLAR_RESOURCES,
+ BONUS_RESOURCE,
+ PILLAR_NAMES,
+ type FreeResource,
+} from '../../data/freeResources';
 import type { GradeItem, PillarSummary } from '../../models/diagnostic';
 import type { PlanetaryTransit } from '../../models/calculators';
 import type { ConsolidatedResults } from '../../models';
@@ -41,88 +47,6 @@ function getPillarLetterGrade(pillar: PillarSummary): string {
  if (grades.includes('F') || pillar.fCount > 0) return 'F';
  if (grades.includes('C') || pillar.cCount > 0) return 'C';
  return 'A';
-}
-
-function isCOrBelow(grade: string): boolean {
- return grade === 'C' || grade === 'F';
-}
-
-type ProgramRoute = 'hero' | 'artists-way' | 'business';
-
-type ProgramRecommendation = {
- route: ProgramRoute;
- title: string;
- description: string;
- link: string;
- buttonLabel: string;
-};
-
-const PROGRAM_DETAILS: Record<ProgramRoute, ProgramRecommendation> = {
- hero: {
- route: 'hero',
- title: `Hero's Journey`,
- description:
- "Have you spent years being told you're too much, too difficult, too intense - no matter how much you work on yourself? That's not a personality flaw. That's a Pillar 1 pattern running unchecked. We use a proprietary sequential deconditioning method to decode your exact angular house placements - and turn what's been misread as your weakness into your most powerful asset.",
- link: 'https://pheydrusmetaverse.com/heros-journey/',
- buttonLabel: "Watch Hero's Journey →",
- },
- 'artists-way': {
- route: 'artists-way',
- title: 'Checkout These Viral Mini Courses ✍️ at 50%+ Off',
- description:
- "For people who REALLY need to fix Pillar 3 FAST. If you've done all the inner work and now looking for the PERFECT environment, Portal Activation is for you. It's our proprietary Feng Shui × Astrocartography × Real Estate Numerology method that helps you realign your external reality to match who you've already become.",
- link: 'https://pheydrusmetaverse.com/portal-activation/#',
- buttonLabel: 'Watch Portal Activation →',
- },
- business: {
- route: 'business',
- title: 'Business Energy Blueprint Bundle 💵',
- description:
- "Good for people looking to discover their voice, quit their first content/course, go viral, and quit their job. If you're feeling the urge to launch, pivot, or make money in a completely new way, that's your business houses activating and telling you it's YOUR TIME to SHINE. Fully step into your purpose with our two viral business/purpose courses!",
- link: 'https://pheydrusmetaverse.com/career-bundle/',
- buttonLabel: 'Activate Your Business Energy Blueprint! →',
- },
-};
-
-function getTwoProgramRecommendations(
- p1: PillarSummary,
- p2: PillarSummary,
- p3: PillarSummary,
- allItems: GradeItem[]
-): ProgramRecommendation[] {
- const s1 = pillarScore(p1);
- const s2 = pillarScore(p2);
- const s3 = pillarScore(p3);
- const p2Grade = getPillarLetterGrade(p2);
- const p3Grade = getPillarLetterGrade(p3);
-
- const businessHouses = [2, 6, 8, 10];
- const hasBusinessHouseActivation = allItems.some((item) =>
- businessHouses.includes(item.house ?? 0)
- );
- const isP1Worst = s1 >= s2 && s1 >= s3;
- const isP3Worst = s3 >= s1 && s3 >= s2;
- const primaryRoute: ProgramRoute = isP1Worst
- ? 'hero'
- : isP3Worst
- ? 'artists-way'
- : hasBusinessHouseActivation
- ? 'business'
- : s1 >= s3
- ? 'hero'
- : 'artists-way';
-
- let secondaryRoute: ProgramRoute;
-
- if (primaryRoute === 'business') {
- secondaryRoute = isCOrBelow(p2Grade) || isCOrBelow(p3Grade) ? 'artists-way' : 'hero';
- } else if (primaryRoute === 'artists-way') {
- secondaryRoute = hasBusinessHouseActivation ? 'business' : 'hero';
- } else {
- secondaryRoute = hasBusinessHouseActivation ? 'business' : 'artists-way';
- }
-
- return [PROGRAM_DETAILS[primaryRoute], PROGRAM_DETAILS[secondaryRoute]];
 }
 
 const GOAL_LABEL: Record<GoalCategory, string> = {
@@ -238,6 +162,119 @@ function VennDiagram() {
  <text x="100" y="110" textAnchor="middle" fontSize="11" fill="#E8DEFF" fontFamily="'Cormorant Garamond',Georgia,serif" fontStyle="italic">Full</text>
  <text x="100" y="123" textAnchor="middle" fontSize="11" fill="#E8DEFF" fontFamily="'Cormorant Garamond',Georgia,serif" fontStyle="italic">Alignment</text>
  </svg>
+ );
+}
+
+// ── Free resource box ─────────────────────────────────────────────────────────
+
+function FreeResourceBox({ resource }: { resource: FreeResource }) {
+ return (
+ <div
+ style={{
+ background: 'rgba(22,163,74,0.1)',
+ border: '1px solid rgba(22,163,74,0.25)',
+ borderRadius: '4px',
+ padding: '16px 18px',
+ }}
+ >
+ <div
+ style={{
+ display: 'flex',
+ alignItems: 'center',
+ gap: '8px',
+ flexWrap: 'wrap' as const,
+ marginBottom: '4px',
+ }}
+ >
+ <span
+ style={{
+ fontSize: '10px',
+ textTransform: 'uppercase',
+ letterSpacing: '0.08em',
+ color: '#16a34a',
+ fontWeight: 700,
+ fontFamily: INTER,
+ }}
+ >
+ {resource.pillar
+ ? `To address Pillar ${resource.pillar}: ${PILLAR_NAMES[resource.pillar]}`
+ : 'Bonus resource'}
+ </span>
+ <span
+ style={{
+ fontSize: '9px',
+ fontWeight: 700,
+ letterSpacing: '0.08em',
+ color: '#0C1128',
+ background: '#4ADE80',
+ padding: '1px 6px',
+ borderRadius: '2px',
+ fontFamily: INTER,
+ }}
+ >
+ FREE
+ </span>
+ </div>
+ <div
+ style={{
+ fontFamily: CORMORANT,
+ fontSize: '1.2rem',
+ fontWeight: 700,
+ color: '#E8DEFF',
+ marginBottom: '4px',
+ }}
+ >
+ {resource.title}
+ </div>
+ <p
+ style={{
+ margin: '0 0 10px',
+ fontSize: '0.8rem',
+ color: '#DDD8F8',
+ lineHeight: 1.6,
+ fontFamily: INTER,
+ }}
+ >
+ {resource.description}
+ </p>
+ {resource.code && (
+ <p style={{ margin: '0 0 10px', fontSize: '0.8rem', color: '#DDD8F8', fontFamily: INTER }}>
+ Use code{' '}
+ <strong
+ style={{
+ color: '#4ADE80',
+ border: '1px dashed #4ADE80',
+ padding: '1px 6px',
+ borderRadius: '2px',
+ letterSpacing: '0.05em',
+ }}
+ >
+ {resource.code}
+ </strong>{' '}
+ at checkout for <strong>100% off</strong>.
+ </p>
+ )}
+ <a
+ href={resource.link}
+ target="_blank"
+ rel="noopener noreferrer"
+ style={{
+ display: 'inline-block',
+ padding: '8px 16px',
+ background: '#16a34a',
+ color: '#fff',
+ fontWeight: 700,
+ fontSize: '0.72rem',
+ letterSpacing: '0.08em',
+ textTransform: 'uppercase',
+ textDecoration: 'none',
+ borderRadius: '2px',
+ fontFamily: INTER,
+ }}
+ >
+ {resource.cta}
+ </a>
+ </div>
  );
 }
 
@@ -2229,8 +2266,6 @@ export function InvisibleForcesResultsPage() {
  >
  {/* PROGRAM RECOMMENDATION + BOOK A CALL OPTIONS */}
  {(() => {
- const recommendations = getTwoProgramRecommendations(p1, p2, p3, diagnosticItems);
-
  const optionCardStyle: CSSProperties = {
  background: 'rgba(201,168,76,0.07)',
  border: '1px solid #C9A84C',
@@ -2263,114 +2298,24 @@ export function InvisibleForcesResultsPage() {
  margin: '0 0 6px',
  }}
  >
- Start With Our 101 Trainings at 50% Off 💸
+ Your 4 Free Resources + 1 Bonus 🎁
  </h2>
  <p
  style={{
  color: '#DDD8F8',
- fontSize: '0.82rem',
+ fontSize: '0.88rem',
  margin: '0 0 20px',
  fontFamily: INTER,
  lineHeight: 1.6,
  }}
  >
- Recommend our 101 trainings at <strong>50% off</strong> - use code <strong style={{ color: '#16a34a' }}>"VIPTraining"</strong> at checkout.
+ This report comes with <strong>4 free resources</strong> to address each of your three
+ pillars, plus <strong>1 bonus resource</strong> (Option #2 below). They're yours at no
+ cost - start with the pillar that scored lowest.
  </p>
  <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
- {[
- {
- pillar: 'Pillar 1: Structure',
- title: '4 Steps to Rewriting Your Past',
- desc: 'Want to finally release the "story" that your emotional body is still holding onto? Check out our most transformational training →',
- link: 'https://pheydrusacademy.mysamcart.com/checkout/rsvp-4-steps-to-letting-go',
- cta: 'Get Access →',
- },
- {
- pillar: 'Pillar 2: Timing',
- title: 'Outer Planets & Your Next 20 Years',
- desc: 'Want to know exactly what\'s coming in the next 20 years - and how to use it strategically? Check out our most popular timing training →',
- link: 'https://pheydrusmetaverse.com/checkout/outer-planets',
- cta: 'Get Access →',
- },
- {
- pillar: 'Pillar 3: Environment',
- title: 'Energetically Change Your Address',
- desc: 'Want to know if your home is amplifying your life - or quietly working against it? Check out our most viral training →',
- link: 'https://pheydrusmetaverse.com/checkout/energetically-change-your-address',
- cta: 'Get Access →',
- },
- ].map((item) => (
- <div
- key={item.pillar}
- style={{
- background: 'rgba(22,163,74,0.1)',
- border: '1px solid rgba(22,163,74,0.25)',
- borderRadius: '4px',
- padding: '16px 18px',
- display: 'flex',
- gap: '12px',
- alignItems: 'flex-start',
- }}
- >
- <span style={{ fontSize: '1.1rem', lineHeight: 1, marginTop: '2px' }}>✓</span>
- <div style={{ flex: 1 }}>
- <div
- style={{
- fontSize: '10px',
- textTransform: 'uppercase',
- letterSpacing: '0.08em',
- color: '#16a34a',
- fontWeight: 700,
- fontFamily: INTER,
- marginBottom: '2px',
- }}
- >
- {item.pillar}
- </div>
- <div
- style={{
- fontFamily: CORMORANT,
- fontSize: '1.1rem',
- fontWeight: 700,
- color: '#E8DEFF',
- marginBottom: '4px',
- }}
- >
- {item.title}
- </div>
- <p
- style={{
- margin: '0 0 8px',
- fontSize: '0.8rem',
- color: '#DDD8F8',
- lineHeight: 1.6,
- fontFamily: INTER,
- }}
- >
- {item.desc}
- </p>
- <a
- href={item.link}
- target="_blank"
- rel="noopener noreferrer"
- style={{
- display: 'inline-block',
- padding: '8px 16px',
- background: '#16a34a',
- color: '#fff',
- fontWeight: 700,
- fontSize: '0.72rem',
- letterSpacing: '0.08em',
- textTransform: 'uppercase',
- textDecoration: 'none',
- borderRadius: '2px',
- fontFamily: INTER,
- }}
- >
- {item.cta}
- </a>
- </div>
- </div>
+ {PILLAR_RESOURCES.map((resource) => (
+ <FreeResourceBox key={resource.link} resource={resource} />
  ))}
  </div>
  </div>
@@ -2387,7 +2332,7 @@ export function InvisibleForcesResultsPage() {
  fontFamily: INTER,
  }}
  >
- #2 Option
+ #2 Option · Bonus Resource
  </div>
  <h2
  style={{
@@ -2398,104 +2343,9 @@ export function InvisibleForcesResultsPage() {
  margin: '0 0 16px',
  }}
  >
- Checkout These Viral Mini Courses - Up to 50% Off ✍️
+ Your Bonus: {BONUS_RESOURCE.title} 📅
  </h2>
-
- <p
- style={{
- margin: '0 0 18px',
- fontSize: '0.88rem',
- color: '#DDD8F8',
- lineHeight: 1.7,
- fontFamily: INTER,
- }}
- >
- Based on your pillar pattern, these are the two closest paths to start with
- next.
- </p>
-
- <div
- style={{
- display: 'flex',
- gap: '18px',
- alignItems: 'stretch',
- flexWrap: 'wrap' as const,
- }}
- >
- {recommendations.map((recommendation, index) => (
- <div
- key={recommendation.route}
- style={{
- flex: 1,
- minWidth: '250px',
- background: '#0C1128',
- border: '1px solid #D9C78E',
- borderRadius: '4px',
- padding: '22px 20px',
- display: 'flex',
- flexDirection: 'column',
- }}
- >
- <div
- style={{
- fontSize: '10px',
- textTransform: 'uppercase',
- letterSpacing: '0.1em',
- color: '#9A8650',
- fontWeight: 700,
- marginBottom: '8px',
- fontFamily: INTER,
- }}
- >
- Recommendation {index + 1}
- </div>
- <h3
- style={{
- margin: '0 0 10px',
- fontFamily: CORMORANT,
- fontSize: '1.45rem',
- fontWeight: 700,
- color: '#E8DEFF',
- }}
- >
- {recommendation.title}
- </h3>
- <p
- style={{
- margin: '0 0 18px',
- fontSize: '0.9rem',
- color: '#DDD8F8',
- lineHeight: 1.75,
- fontFamily: INTER,
- flex: 1,
- }}
- >
- {recommendation.description}
- </p>
- <a
- href={recommendation.link}
- target="_blank"
- rel="noopener noreferrer"
- style={{
- display: 'inline-block',
- padding: '12px 20px',
- background: '#C9A84C',
- color: '#E8DEFF',
- fontWeight: 700,
- fontSize: '0.75rem',
- letterSpacing: '0.1em',
- textTransform: 'uppercase',
- textDecoration: 'none',
- borderRadius: '2px',
- fontFamily: INTER,
- alignSelf: 'flex-start',
- }}
- >
- {recommendation.buttonLabel}
- </a>
- </div>
- ))}
- </div>
+ <FreeResourceBox resource={BONUS_RESOURCE} />
  </div>
 
  <div style={optionCardStyle}>
