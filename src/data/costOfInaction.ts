@@ -39,8 +39,8 @@ export function getCostOfInactionCopy(
     intro:
       'Right now, your pattern has a default path: another year of almost-breakthroughs, unfinished ideas, and promises that next month will be different.',
     yearLine: endYear
-      ? `Without targeted deconditioning of the specific layers identified above, the data points to ${endYear}.`
-      : 'Without targeted deconditioning of the specific layers identified above, this pattern does not self-resolve.',
+      ? `Without targeted deconditioning, the data shows these patterns will last well into ${endYear}.`
+      : 'Without targeted deconditioning, the data shows these patterns will not resolve on their own.',
     goodNews: {
       before: `The good news? Patterns that can be identified can be broken. And you have the power to collapse ${hasYears ? 'those ' : ''}`,
       years: hasYears ? `${yearsRemaining} year${yearsRemaining === 1 ? '' : 's'}` : 'that timeline',
