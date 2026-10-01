@@ -23,7 +23,7 @@ import {
 } from './clientInterpretations';
 import { applyKmsStyle, applyKmsStyleToHtml, kmsExempt } from './kmsStyle';
 import { PILLAR_VOICE_NOTES, voiceNoteUrl } from '../../data/pillarVoiceNotes';
-import { COACHING_CTA_TITLE, COACHING_CTA_PARAGRAPHS } from '../../data/coachingCta';
+import { COACHING_CTA_TITLE, COACHING_CTA_PARAGRAPHS, COACHING_CALL_URL } from '../../data/coachingCta';
 import {
  PILLAR_RESOURCE_CARDS,
  PILLAR_RESOURCES,
@@ -874,7 +874,7 @@ function renderPage4(results: ConsolidatedResults, intake: ClientIntakeData): st
  ${COACHING_CTA_PARAGRAPHS.map((p) => `<p style="margin:0 0 10px;font-size:12px;color:#444;line-height:1.7;font-family:${INTER};">${esc(p)}</p>`).join('')}
  </div>`)}
 
- <a href="https://calendly.com/pheydrus_strategy/1-1-alignment-strategy-call-report"
+ <a href="${esc(COACHING_CALL_URL)}"
  style="display:block;width:100%;max-width:420px;margin:0 auto 12px;padding:15px 24px;background:#C9A84C;color:#1C1A2E;font-weight:700;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;border-radius:2px;text-align:center;box-sizing:border-box;font-family:${INTER};">
  BOOK YOUR ALIGNMENT CALL &rarr;
  </a>

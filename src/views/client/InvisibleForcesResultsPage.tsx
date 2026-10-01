@@ -20,7 +20,12 @@ import { applyKmsStyle } from '../../services/pdfExport/kmsStyle';
 import { getLibraryEntry, getDefaultSteps2, BENEFIC_PLANETS } from '../../data/planetHouseLibrary';
 import { PILLAR_VOICE_NOTES } from '../../data/pillarVoiceNotes';
 import { VoiceNotePlayer } from '../../components/results/VoiceNotePlayer';
-import { COACHING_CTA_TITLE, COACHING_CTA_PARAGRAPHS } from '../../data/coachingCta';
+import { CalendlyEmbed } from '../../components/results/CalendlyEmbed';
+import {
+ COACHING_CTA_TITLE,
+ COACHING_CTA_PARAGRAPHS,
+ COACHING_CALL_URL,
+} from '../../data/coachingCta';
 import {
  PILLAR_RESOURCE_CARDS,
  PILLAR_RESOURCES,
@@ -2426,6 +2431,28 @@ export function InvisibleForcesResultsPage() {
  }}
  />
  </div>
+ </div>
+
+ <div id="book-call" style={{ marginTop: '24px', scrollMarginTop: '120px' }}>
+ <h3
+ style={{
+ margin: '0 0 6px',
+ fontFamily: CORMORANT,
+ fontSize: '1.4rem',
+ fontWeight: 700,
+ color: '#E8C46A',
+ }}
+ >
+ Book Your 15-Minute Call
+ </h3>
+ <p style={{ margin: '0 0 14px', fontSize: '0.8rem', color: '#A098C0', fontFamily: INTER }}>
+ Pick a time that works for you below.
+ </p>
+ <CalendlyEmbed
+ url={COACHING_CALL_URL}
+ name={results.userInfo.name}
+ email={intake.email}
+ />
  </div>
  </div>
  </>

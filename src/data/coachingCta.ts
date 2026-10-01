@@ -5,6 +5,9 @@
 
 export const COACHING_CTA_TITLE = 'Some Patterns Need More Than a Report.';
 
+/** 15-minute call: embedded on the web report, linked from the PDF */
+export const COACHING_CALL_URL = 'https://calendly.com/pheydrus_strategy/onboarding-call';
+
 export const COACHING_CTA_PARAGRAPHS: string[] = [
   "This report gave you a score. But a score on its own doesn't change anything.",
   "What changes things is knowing what to DO with the unseen forces it just surfaced, and that's almost impossible to see from the inside. Patterns are invisible to the person living them. That's what makes them patterns.",
