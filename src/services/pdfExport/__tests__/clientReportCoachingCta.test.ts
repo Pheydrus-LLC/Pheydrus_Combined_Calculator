@@ -25,7 +25,7 @@ describe('coaching call-to-action', () => {
   });
 
   it('PDF matches the 15-minute call described on the web report', () => {
-    expect(html).toContain('In 15 minutes');
+    expect(html).toContain('Fifteen minutes');
     expect(html).not.toContain('30-minute');
   });
 });

@@ -2398,26 +2398,6 @@ export function InvisibleForcesResultsPage() {
  Explore if Pheydrus Coaching is Right For You
  </a>
  </p>
- <a
- href="https://pheydrusmetaverse.com/thank-you-onboarding/"
- target="_blank"
- rel="noopener noreferrer"
- style={{
- display: 'inline-block',
- padding: '12px 20px',
- background: '#C9A84C',
- color: '#E8DEFF',
- fontWeight: 700,
- fontSize: '0.75rem',
- letterSpacing: '0.08em',
- textTransform: 'uppercase',
- textDecoration: 'none',
- borderRadius: '2px',
- fontFamily: INTER,
- }}
- >
- Explore if Pheydrus Coaching is Right For You
- </a>
  </div>
  <div style={{ flexShrink: 0, width: '220px' }}>
  <img
