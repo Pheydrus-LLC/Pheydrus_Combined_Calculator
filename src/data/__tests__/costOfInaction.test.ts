@@ -1,7 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { COST_OF_INACTION_TITLE, getCostOfInactionCopy } from '../costOfInaction';
-import { generateClientReportTemplate } from '../../services/pdfExport/clientReportTemplate';
-import { DEMO_INTAKE, DEMO_RESULTS } from '../demoClientReport';
+import { getCostOfInactionCopy } from '../costOfInaction';
 
 describe('cost of inaction copy', () => {
   it('names the end year and the years remaining', () => {
@@ -34,12 +32,5 @@ describe('cost of inaction copy', () => {
     expect(getCostOfInactionCopy('general', null).noMore).toContain(
       'No more stunted growth toward your goals.',
     );
-  });
-
-  it('appears in the PDF', () => {
-    const html = generateClientReportTemplate(DEMO_RESULTS, DEMO_INTAKE, 'https://report.example.com');
-    expect(html).toContain(COST_OF_INACTION_TITLE.replace(/'/g, '&#039;'));
-    expect(html).toContain('The pattern ends when you say it does.');
-    expect(html).not.toContain('Or - you begin the decondition now.');
   });
 });

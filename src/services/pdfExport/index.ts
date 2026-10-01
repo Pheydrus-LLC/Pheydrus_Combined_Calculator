@@ -1,6 +1,5 @@
-export { exportToPDF, exportClientReportToPDF, exportBarbaultWorksheetToPDF } from './pdfExporter';
+export { exportToPDF, exportBarbaultWorksheetToPDF } from './pdfExporter';
 export { generatePDFTemplate, generateFilename } from './pdfTemplate';
-export { generateClientReportTemplate, generateClientReportFilename } from './clientReportTemplate';
 export {
   generateBarbaultWorksheetTemplate,
   generateBarbaultWorksheetFilename,

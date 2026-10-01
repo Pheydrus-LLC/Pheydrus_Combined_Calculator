@@ -1,8 +1,7 @@
 /**
  * Voice notes from HeyJune introducing each pillar of the Invisible Forces report.
  *
- * Shared by the web report (plays inline) and the PDF export (links out to the file),
- * so both always point at the same recordings.
+ * Played inline in the report's pillar cards.
  *
  * To swap a recording: drop the file into public/audio/ and update its `src` below.
  * To hide a pillar's voice note everywhere, set its entry to null.
@@ -29,7 +28,3 @@ export const PILLAR_VOICE_NOTES: Record<1 | 2 | 3, PillarVoiceNote | null> = {
   },
 };
 
-/** Absolute URL for a voice note, needed wherever the link leaves the site (the PDF). */
-export function voiceNoteUrl(src: string, origin: string): string {
-  return `${origin.replace(/\/$/, '')}${src}`;
-}

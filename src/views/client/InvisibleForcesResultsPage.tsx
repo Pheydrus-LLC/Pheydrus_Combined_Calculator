@@ -6,7 +6,7 @@
 import { useState, useEffect } from 'react';
 import type { CSSProperties } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { renderHouseWheel } from '../../services/pdfExport/clientReportTemplate';
+import { renderHouseWheel } from '../../utils/houseWheel';
 import {
  detectGoalCategory,
  getItemInterpretation,
