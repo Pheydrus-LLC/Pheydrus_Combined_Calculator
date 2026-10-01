@@ -1,9 +1,6 @@
 /**
  * The Pillar Repair Kit: free resources offered at the end of the Invisible
- * Forces report, one card per pillar, plus a bonus.
- *
- * Shared by the web report and the PDF export so both always list the same
- * resources, links and codes.
+ * Forces report, one card per pillar.
  */
 
 export interface FreeResource {
@@ -16,8 +13,8 @@ export interface FreeResource {
 }
 
 export interface ResourceCard {
-  /** Pillar the card addresses (drives its colour), or null for the bonus */
-  pillar: 1 | 2 | 3 | null;
+  /** Pillar the card addresses (drives its colour) */
+  pillar: 1 | 2 | 3;
   /** Small caps line above the resources */
   label: string;
   resources: FreeResource[];
@@ -49,6 +46,13 @@ export const PILLAR_RESOURCE_CARDS: ResourceCard[] = [
         cta: 'Get Free Access →',
         code: 'IF100',
       },
+      {
+        title: 'Astrological Calendar',
+        description:
+          'An interactive calendar of every major transit from July to December 2026. Pick your rising sign to see which events hit hardest, and where in your life they land.',
+        link: 'https://www.pheydrus.com/astro-calendar-2026h2',
+        cta: 'Get the Calendar →',
+      },
     ],
   },
   {
@@ -73,19 +77,5 @@ export const PILLAR_RESOURCE_CARDS: ResourceCard[] = [
   },
 ];
 
-export const BONUS_RESOURCE_CARD: ResourceCard = {
-  pillar: null,
-  label: 'The Sky, By Rising Sign',
-  resources: [
-    {
-      title: 'Astrological Calendar',
-      description:
-        'An interactive calendar of every major transit from July to December 2026. Pick your rising sign to see which events hit hardest, and where in your life they land.',
-      link: 'https://www.pheydrus.com/astro-calendar-2026h2',
-      cta: 'Get the Calendar →',
-    },
-  ],
-};
-
-/** Every free resource across the pillar cards (the "4" in "4 free resources") */
+/** Every free resource across the pillar cards (the "5" in "5 free resources") */
 export const PILLAR_RESOURCES: FreeResource[] = PILLAR_RESOURCE_CARDS.flatMap((c) => c.resources);

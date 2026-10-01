@@ -1,17 +1,20 @@
 import { describe, expect, it } from 'vitest';
-import { BONUS_RESOURCE_CARD, PILLAR_RESOURCE_CARDS, PILLAR_RESOURCES } from '../freeResources';
+import { PILLAR_RESOURCE_CARDS, PILLAR_RESOURCES } from '../freeResources';
 
 describe('free resources', () => {
-  it('offers 4 resources across one card per pillar, plus 1 bonus', () => {
-    expect(PILLAR_RESOURCES).toHaveLength(4);
+  it('offers 5 resources across one card per pillar', () => {
+    expect(PILLAR_RESOURCES).toHaveLength(5);
     expect(PILLAR_RESOURCE_CARDS.map((c) => c.pillar)).toEqual([1, 2, 3]);
-    expect(BONUS_RESOURCE_CARD.pillar).toBeNull();
-    expect(BONUS_RESOURCE_CARD.resources).toHaveLength(1);
+  });
+
+  it('puts the Astrological Calendar under Pillar 2: Timing', () => {
+    const pillar2 = PILLAR_RESOURCE_CARDS.find((c) => c.pillar === 2)!;
+    expect(pillar2.resources.map((r) => r.title)).toContain('Astrological Calendar');
   });
 
   it('gives every resource a full https link and a button label', () => {
-    for (const r of [...PILLAR_RESOURCES, ...BONUS_RESOURCE_CARD.resources]) {
-      expect(r.link).toMatch(/^https:\/\//);
+    for (const r of PILLAR_RESOURCES) {
+      expect(r.link.startsWith('https://')).toBe(true);
       expect(r.cta.length).toBeGreaterThan(0);
     }
   });

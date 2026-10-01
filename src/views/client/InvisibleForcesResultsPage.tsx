@@ -33,7 +33,6 @@ import {
 import {
  PILLAR_RESOURCE_CARDS,
  PILLAR_RESOURCES,
- BONUS_RESOURCE_CARD,
  type ResourceCard,
 } from '../../data/freeResources';
 import type { GradeItem, PillarSummary } from '../../models/diagnostic';
@@ -182,30 +181,22 @@ const FREE_GREEN = '#1E7B45';
 
 // Pillar colours match the three circles of the Venn diagram.
 const RESOURCE_CARD_THEME: Record<
- '1' | '2' | '3' | 'bonus',
+ 1 | 2 | 3,
  { background: string; border: string; accent: string; button: string; buttonText: string }
 > = {
- '1': { background: 'rgba(201,168,76,0.12)', border: 'rgba(212,168,67,0.45)', accent: '#E8C46A', button: '#C9A84C', buttonText: '#0C1128' },
- '2': { background: 'rgba(123,94,167,0.18)', border: 'rgba(184,168,224,0.45)', accent: '#C0B0F0', button: '#7B5EA7', buttonText: '#fff' },
- '3': { background: 'rgba(46,139,122,0.16)', border: 'rgba(126,207,196,0.45)', accent: '#7ECFC4', button: '#2E8B7A', buttonText: '#fff' },
- bonus: {
- background: 'linear-gradient(180deg, rgba(201,168,76,0.10) 0%, rgba(12,17,40,0) 70%), #0C1128',
- border: 'rgba(201,168,76,0.6)',
- accent: '#D4A843',
- button: '#C9A84C',
- buttonText: '#0C1128',
- },
+ 1: { background: 'rgba(201,168,76,0.12)', border: 'rgba(212,168,67,0.45)', accent: '#E8C46A', button: '#C9A84C', buttonText: '#0C1128' },
+ 2: { background: 'rgba(123,94,167,0.18)', border: 'rgba(184,168,224,0.45)', accent: '#C0B0F0', button: '#7B5EA7', buttonText: '#fff' },
+ 3: { background: 'rgba(46,139,122,0.16)', border: 'rgba(126,207,196,0.45)', accent: '#7ECFC4', button: '#2E8B7A', buttonText: '#fff' },
 };
 
 function ResourceCardBox({ card }: { card: ResourceCard }) {
- const t = RESOURCE_CARD_THEME[card.pillar === null ? 'bonus' : String(card.pillar) as '1' | '2' | '3'];
+ const t = RESOURCE_CARD_THEME[card.pillar];
  return (
  <div
  data-print-card
  style={{
  background: t.background,
  border: `1px solid ${t.border}`,
- borderTop: card.pillar === null ? `3px solid ${t.accent}` : `1px solid ${t.border}`,
  borderRadius: '4px',
  padding: '16px 18px',
  }}
@@ -1525,6 +1516,37 @@ export function InvisibleForcesResultsPage() {
  gap: '24px',
  }}
  >
+ {/* As seen on (press strip, above the page menu) */}
+ <div style={{ textAlign: 'center', padding: '4px 0 2px' }}>
+ <div
+ style={{
+ fontSize: '10px',
+ fontWeight: 700,
+ textTransform: 'uppercase',
+ letterSpacing: '0.2em',
+ color: '#A098C0',
+ marginBottom: '12px',
+ fontFamily: INTER,
+ }}
+ >
+ As Seen On
+ </div>
+ <a href={PRESS_URL} target="_blank" rel="noopener noreferrer" style={{ display: 'block' }}>
+ <img
+ data-screen-only
+ src={PRESS_LOGOS_LIGHT}
+ alt={PRESS_LOGOS_ALT}
+ style={{ display: 'block', margin: '0 auto', width: '100%', maxWidth: '700px', height: 'auto', opacity: 0.85 }}
+ />
+ <img
+ data-print-only
+ src={PRESS_LOGOS_DARK}
+ alt={PRESS_LOGOS_ALT}
+ style={{ display: 'block', margin: '0 auto', width: '100%', maxWidth: '700px', height: 'auto', opacity: 0.85 }}
+ />
+ </a>
+ </div>
+
  {/* Sticky table of contents + page progress */}
  <div
  data-print="hide"
@@ -2200,43 +2222,6 @@ export function InvisibleForcesResultsPage() {
  </div>
  )}
 
- {/* As seen on */}
- <div
- style={{
- marginTop: '28px',
- paddingTop: '22px',
- borderTop: '1px solid rgba(255,255,255,0.08)',
- textAlign: 'center',
- }}
- >
- <div
- style={{
- fontSize: '10px',
- fontWeight: 700,
- textTransform: 'uppercase',
- letterSpacing: '0.2em',
- color: '#A098C0',
- marginBottom: '14px',
- fontFamily: INTER,
- }}
- >
- As Seen On
- </div>
- <a href={PRESS_URL} target="_blank" rel="noopener noreferrer" style={{ display: 'block' }}>
- <img
- data-screen-only
- src={PRESS_LOGOS_LIGHT}
- alt={PRESS_LOGOS_ALT}
- style={{ display: 'block', margin: '0 auto', width: '100%', maxWidth: '620px', height: 'auto', opacity: 0.85 }}
- />
- <img
- data-print-only
- src={PRESS_LOGOS_DARK}
- alt={PRESS_LOGOS_ALT}
- style={{ display: 'block', margin: '0 auto', width: '100%', maxWidth: '620px', height: 'auto', opacity: 0.85 }}
- />
- </a>
- </div>
  </div>
  </section>
 
@@ -2377,7 +2362,7 @@ export function InvisibleForcesResultsPage() {
  margin: '0 0 6px',
  }}
  >
- Your Pillar Repair Kit + 1 Bonus Gift
+ Your Pillar Repair Kit
  </h2>
  <p
  style={{
@@ -2390,29 +2375,14 @@ export function InvisibleForcesResultsPage() {
  >
  You don't have to repair each pillar alone. Below you'll find our state-of-the-art starter
  resources, designed to target each invisible force.{' '}
- <strong>{PILLAR_RESOURCES.length} free resources, plus 1 bonus gift.</strong> The full
- 5-package repair kit, at your fingertips. Start with the pillar that scored lowest.
+ <strong>{PILLAR_RESOURCES.length} free resources</strong>, the full repair kit, at your
+ fingertips. Start with the pillar that scored lowest.
  </p>
  <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
  {PILLAR_RESOURCE_CARDS.map((card) => (
  <ResourceCardBox key={card.label} card={card} />
  ))}
  </div>
- </div>
-
- <div style={optionCardStyle}>
- <h2
- style={{
- fontFamily: CORMORANT,
- color: '#D4A843',
- fontSize: '1.7rem',
- fontWeight: 700,
- margin: '0 0 16px',
- }}
- >
- Bonus Gift
- </h2>
- <ResourceCardBox card={BONUS_RESOURCE_CARD} />
  </div>
 
  <div style={optionCardStyle}>
@@ -2444,22 +2414,7 @@ export function InvisibleForcesResultsPage() {
  {paragraph}
  </p>
  ))}
- </div>
- <div style={{ flexShrink: 0, width: '220px' }}>
- <img
- src="/hj-finals-2-of-20-1.jpg"
- alt="HeyJune Jeon - Pheydrus"
- style={{
- width: '100%',
- borderRadius: '4px',
- border: '1px solid #E8E0C8',
- objectFit: 'cover',
- }}
- />
- </div>
- </div>
-
- <div id="book-call" style={{ marginTop: '24px', scrollMarginTop: '120px' }}>
+ <div style={{ marginTop: '22px' }}>
  <h3
  style={{
  margin: '0 0 6px',
@@ -2481,6 +2436,23 @@ export function InvisibleForcesResultsPage() {
  <p data-print="hide" style={{ margin: '0 0 14px', fontSize: '0.8rem', color: '#A098C0', fontFamily: INTER }}>
  Pick a time that works for you below.
  </p>
+ </div>
+ </div>
+ <div style={{ flexShrink: 0, width: '220px' }}>
+ <img
+ src="/hj-finals-2-of-20-1.jpg"
+ alt="HeyJune Jeon - Pheydrus"
+ style={{
+ width: '100%',
+ borderRadius: '4px',
+ border: '1px solid #E8E0C8',
+ objectFit: 'cover',
+ }}
+ />
+ </div>
+ </div>
+
+ <div id="book-call" style={{ marginTop: '20px', scrollMarginTop: '120px' }}>
  <CalendlyEmbed
  url={COACHING_CALL_URL}
  name={results.userInfo.name}
