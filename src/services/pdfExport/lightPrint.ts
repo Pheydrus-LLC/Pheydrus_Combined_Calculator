@@ -8,6 +8,10 @@
  *   data-print-keep-colors   already drawn for a light background (house wheel)
  *   data-print-only / data-screen-only  swapped by the print styles in index.css
  *   data-wave-bar            voice note waveform bars, printed gold
+ *
+ * Regular-weight Inter also prints as Medium: its one-pixel-thin stems (the
+ * "l" especially) smear in PDF viewers at normal zoom, and a touch more weight
+ * keeps every letter crisp.
  */
 
 import {
@@ -46,6 +50,7 @@ function lightStyles(el: Element, cache: Map<Element, boolean>): Array<[string, 
 
   const color = parseColor(cs.color);
   if (color) out.push(['color', toCss(onDarkSurface(el, cache) ? lightText(color) : color)]);
+  if (cs.fontWeight === '400' && cs.fontFamily.includes('Inter')) out.push(['font-weight', '500']);
 
   const bg = parseColor(cs.backgroundColor);
   if (bg && bg.a > 0) out.push(['background-color', toCss(lightSurface(bg))]);
