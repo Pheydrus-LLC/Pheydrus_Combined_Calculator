@@ -19,8 +19,15 @@ describe('waveformBars', () => {
     expect(bars[bars.length - 1]).toBeLessThan(0.2);
   });
 
-  it('looks a little different for each pillar', () => {
+  it.each([0, 1])('shape %i is smooth and tapers at both ends', (variant) => {
+    const bars = waveformBars(44, variant);
+    for (let i = 1; i < bars.length; i++) expect(Math.abs(bars[i] - bars[i - 1])).toBeLessThan(0.2);
+    expect(bars[0]).toBeLessThan(0.2);
+    expect(bars[bars.length - 1]).toBeLessThan(0.2);
+  });
+
+  it('alternates between two shapes', () => {
     expect(waveformBars(44, 0)).not.toEqual(waveformBars(44, 1));
-    expect(waveformBars(44, 1)).not.toEqual(waveformBars(44, 2));
+    expect(waveformBars(44, 2)).toEqual(waveformBars(44, 0));
   });
 });

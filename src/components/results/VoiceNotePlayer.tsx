@@ -26,7 +26,7 @@ export function VoiceNotePlayer({
 }: {
   src: string;
   label: string;
-  /** Changes the waveform's shape slightly, so each note looks distinct */
+  /** Picks one of the two waveform shapes, so neighbouring notes look different */
   variant?: number;
 }) {
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -147,7 +147,7 @@ export function VoiceNotePlayer({
             This voice note is unavailable right now.
           </p>
         ) : (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
             <div
               style={{
                 position: 'relative',
