@@ -67,6 +67,8 @@ export function VoiceNotePlayer({
 
   return (
     <div
+      data-print-card
+      data-print-keep-with-next
       style={{
         display: 'flex',
         alignItems: 'center',

@@ -43,6 +43,7 @@ export function CalendlyEmbed({
     <iframe
       src={src.toString()}
       title="Book your call"
+      data-print="hide"
       loading="lazy"
       style={{
         width: '100%',

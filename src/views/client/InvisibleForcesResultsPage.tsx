@@ -6,7 +6,6 @@
 import { useState, useEffect } from 'react';
 import type { CSSProperties } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { exportClientReportToPDF } from '../../services/pdfExport';
 import { renderHouseWheel } from '../../services/pdfExport/clientReportTemplate';
 import {
  detectGoalCategory,
@@ -200,6 +199,7 @@ function ResourceCardBox({ card }: { card: ResourceCard }) {
  const t = RESOURCE_CARD_THEME[card.pillar === null ? 'bonus' : String(card.pillar) as '1' | '2' | '3'];
  return (
  <div
+ data-print-card
  style={{
  background: t.background,
  border: `1px solid ${t.border}`,
@@ -324,6 +324,7 @@ function TestimonialCard({ quote, attribution }: { quote: string; attribution: s
  return (
  // REPLACE WITH REAL TESTIMONIAL
  <div
+ data-print-card
  style={{
  background: '#0C1128',
  borderLeft: '3px solid #C9A84C',
@@ -491,6 +492,7 @@ function AspectCard({
 
  return (
  <div
+ data-print-card
  style={{
  background: '#0C1128',
  borderLeft: `3px solid ${gc.border}`,
@@ -607,6 +609,7 @@ function AspectCard({
 
  return (
  <div
+ data-print-card
  style={{
  background: '#0C1128',
  borderLeft: `3px solid ${gc.border}`,
@@ -760,6 +763,7 @@ function PillarDeepDiveCard({
  >
  {/* Header */}
  <div
+ data-print-keep-with-next
  style={{
  display: 'flex',
  alignItems: 'center',
@@ -802,6 +806,7 @@ function PillarDeepDiveCard({
 
  {/* Goal callout */}
  <p
+ data-print-keep-with-next
  style={{
  fontFamily: CORMORANT,
  fontStyle: 'italic',
@@ -913,6 +918,7 @@ function CostOfInaction({ goal, endYear }: { goal: GoalCategory; endYear: number
 
  return (
  <div
+ data-print-card
  style={{
  background: 'rgba(248,113,113,0.07)',
  border: '1px solid #FAEAEA',
@@ -964,13 +970,57 @@ function CostOfInaction({ goal, endYear }: { goal: GoalCategory; endYear: number
  );
 }
 
+// ── Printing ──────────────────────────────────────────────────────────────────
+
+// Boxes shorter than this (px) are kept whole when printing; taller ones may split
+const PRINT_KEEP_MAX_HEIGHT = 850;
+
+/**
+ * Print setup for the report: sets the A4 page with dark margins while the
+ * report is open, and just before printing marks every card and callout that
+ * fits on one page so it isn't cut across a page break (index.css turns the
+ * mark into break-inside: avoid). Covers the Download button and the browser's
+ * own Print.
+ */
+function useKeepBoxesWholeWhenPrinting() {
+ useEffect(() => {
+ // A4 with dark margins, only while the report is open
+ const pageStyle = document.createElement('style');
+ pageStyle.textContent = '@media print { @page { size: A4; margin: 12mm; background: #050a18; } }';
+ document.head.appendChild(pageStyle);
+
+ const mark = () => {
+ document.querySelectorAll<HTMLElement>('[data-report-root] *').forEach((el) => {
+ const cs = getComputedStyle(el);
+ const boxed =
+ parseFloat(cs.borderTopWidth) > 0 ||
+ parseFloat(cs.borderLeftWidth) > 0 ||
+ cs.backgroundColor !== 'rgba(0, 0, 0, 0)' ||
+ cs.backgroundImage !== 'none';
+ if (boxed && el.offsetHeight > 0 && el.offsetHeight < PRINT_KEEP_MAX_HEIGHT) {
+ el.setAttribute('data-print-keep', '');
+ }
+ });
+ };
+ const unmark = () =>
+ document.querySelectorAll('[data-print-keep]').forEach((el) => el.removeAttribute('data-print-keep'));
+ window.addEventListener('beforeprint', mark);
+ window.addEventListener('afterprint', unmark);
+ return () => {
+ pageStyle.remove();
+ window.removeEventListener('beforeprint', mark);
+ window.removeEventListener('afterprint', unmark);
+ };
+ }, []);
+}
+
 // ── Main page ─────────────────────────────────────────────────────────────────
 
 export function InvisibleForcesResultsPage() {
  const location = useLocation();
  const navigate = useNavigate();
- const [isExporting, setIsExporting] = useState(false);
  const [scrollProgress, setScrollProgress] = useState(0);
+ useKeepBoxesWholeWhenPrinting();
  const [activeSection, setActiveSection] = useState<string>(REPORT_SECTIONS[0].id);
 
  // Accept any truthy ?demo value (e.g., demo=1, demo=true, demo=yes)
@@ -1246,12 +1296,12 @@ export function InvisibleForcesResultsPage() {
  results: ConsolidatedResults;
  intake: ClientIntakeData;
  } | null>(null);
- const [isFetching, setIsFetching] = useState(false);
+ // Loading from the start when there's a saved report to fetch
+ const [isFetching, setIsFetching] = useState(() => !!reportId && !rawState);
  const [fetchError, setFetchError] = useState<string | null>(null);
 
  useEffect(() => {
  if (!reportId || rawState) return;
- setIsFetching(true);
  fetch(`/api/get-results?id=${encodeURIComponent(reportId)}`)
  .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
  .then((data: { results: ConsolidatedResults; intake: ClientIntakeData }) =>
@@ -1389,15 +1439,14 @@ export function InvisibleForcesResultsPage() {
  // const scoredCOrWorse = finalGrade === 'C' || finalGrade === 'F';
  // const showCTA = wordCount > 1 && soughtTherapyOrCoaches && notMonetizing && scoredCOrWorse;
 
- async function handleExportPDF() {
- setIsExporting(true);
- try {
- await exportClientReportToPDF(results, intake);
- } catch (err) {
- console.error(err);
- } finally {
- setIsExporting(false);
- }
+ // Opens the browser's print dialog, where "Save as PDF" saves the report as it
+ // looks on screen (print styles live in index.css). The page title becomes the
+ // suggested file name.
+ function handleExportPDF() {
+ const originalTitle = document.title;
+ document.title = `Pheydrus Report - ${results.userInfo.name || 'Client'}`;
+ window.addEventListener('afterprint', () => (document.title = originalTitle), { once: true });
+ window.print();
  }
 
  const pillarCardProps = (
@@ -1456,6 +1505,7 @@ export function InvisibleForcesResultsPage() {
  }}
  >
  <div
+ data-report-root
  style={{
  maxWidth: '760px',
  margin: '0 auto',
@@ -1466,6 +1516,7 @@ export function InvisibleForcesResultsPage() {
  >
  {/* Sticky table of contents + page progress */}
  <div
+ data-print="hide"
  style={{
  position: 'sticky',
  top: '12px',
@@ -2409,7 +2460,7 @@ export function InvisibleForcesResultsPage() {
  Book Your 15-Minute Call →
  </a>
  </h3>
- <p style={{ margin: '0 0 14px', fontSize: '0.8rem', color: '#A098C0', fontFamily: INTER }}>
+ <p data-print="hide" style={{ margin: '0 0 14px', fontSize: '0.8rem', color: '#A098C0', fontFamily: INTER }}>
  Pick a time that works for you below.
  </p>
  <CalendlyEmbed
@@ -2425,7 +2476,7 @@ export function InvisibleForcesResultsPage() {
  </section>
 
  {/* Action buttons */}
- <section id="actions" data-report-section style={{ scrollMarginTop: '120px' }}>
+ <section id="actions" data-report-section data-print="hide" style={{ scrollMarginTop: '120px' }}>
  <div
  style={{
  display: 'flex',
@@ -2436,7 +2487,6 @@ export function InvisibleForcesResultsPage() {
  >
  <button
  onClick={handleExportPDF}
- disabled={isExporting}
  style={{
  padding: '12px 28px',
  background: '#C9A84C',
@@ -2446,10 +2496,9 @@ export function InvisibleForcesResultsPage() {
  border: 'none',
  cursor: 'pointer',
  fontFamily: INTER,
- opacity: isExporting ? 0.6 : 1,
  }}
  >
- {isExporting ? 'Generating PDF…' : 'Download Your Report (PDF)'}
+ Download Your Report (PDF)
  </button>
  <button
  onClick={() => navigate('/client')}

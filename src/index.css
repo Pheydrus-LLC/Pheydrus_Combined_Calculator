@@ -49,3 +49,63 @@ button {
   cursor: pointer;
   transition: all 0.25s ease;
 }
+
+/* ── Client report: printing / "Save as PDF" ────────────────────────────────
+   "Download Your Report (PDF)" opens the browser's print dialog. These rules
+   keep the printout looking like the report on screen. */
+@media print {
+  /* The page size and dark page margins are added by the results page itself
+     (an @page rule can't be limited to one page of the site) */
+
+  /* Dark background edge to edge, even if "Background graphics" is off */
+  html:has([data-report-root]),
+  html:has([data-report-root]) body,
+  html:has([data-report-root]) #root {
+    background: #050a18 !important;
+  }
+  html:has([data-report-root]),
+  html:has([data-report-root]) * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* "Fill the screen" heights would add blank space at the end of the printout */
+  html:has([data-report-root]) body,
+  html:has([data-report-root]) #root,
+  :has(> [data-report-root]) {
+    min-height: 0 !important;
+  }
+  :has(> [data-report-root]) {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    /* The starry glow repeats oddly on paper; plain navy instead */
+    background: #050a18 !important;
+  }
+
+  /* Menus, buttons and the booking calendar don't belong on paper */
+  [data-report-root] [data-print='hide'] {
+    display: none !important;
+  }
+
+  /* Keep cards whole and headings with what follows (boxes that fit on a page
+     are also marked data-print-keep just before printing; see the results page) */
+  [data-report-root] [data-print-card],
+  [data-report-root] [data-print-keep],
+  [data-report-root] img,
+  [data-report-root] svg,
+  [data-report-root] h1,
+  [data-report-root] h2,
+  [data-report-root] h3 {
+    break-inside: avoid;
+  }
+  [data-report-root] h1,
+  [data-report-root] h2,
+  [data-report-root] h3,
+  [data-report-root] [data-print-keep-with-next] {
+    break-after: avoid;
+  }
+  [data-report-root] p {
+    orphans: 3;
+    widows: 3;
+  }
+}
