@@ -2388,16 +2388,6 @@ export function InvisibleForcesResultsPage() {
  {paragraph}
  </p>
  ))}
- <p style={{ margin: '0 0 18px', fontSize: '0.88rem', color: '#DDD8F8', fontFamily: INTER, lineHeight: 1.75 }}>
- <a
- href="https://pheydrusmetaverse.com/thank-you-onboarding/"
- target="_blank"
- rel="noopener noreferrer"
- style={{ color: '#E8DEFF', fontWeight: 700, textDecoration: 'underline' }}
- >
- Explore if Pheydrus Coaching is Right For You
- </a>
- </p>
  </div>
  <div style={{ flexShrink: 0, width: '220px' }}>
  <img
@@ -2423,7 +2413,14 @@ export function InvisibleForcesResultsPage() {
  color: '#E8C46A',
  }}
  >
- Book Your 15-Minute Call
+ <a
+ href={COACHING_CALL_URL}
+ target="_blank"
+ rel="noopener noreferrer"
+ style={{ color: 'inherit', textDecoration: 'underline', textUnderlineOffset: '4px' }}
+ >
+ Book Your 15-Minute Call →
+ </a>
  </h3>
  <p style={{ margin: '0 0 14px', fontSize: '0.8rem', color: '#A098C0', fontFamily: INTER }}>
  Pick a time that works for you below.
