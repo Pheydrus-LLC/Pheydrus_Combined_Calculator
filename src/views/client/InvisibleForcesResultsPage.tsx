@@ -9,17 +9,29 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { renderHouseWheel } from '../../utils/houseWheel';
 import {
  detectGoalCategory,
- getItemInterpretation,
  getLongestMaleficTransit,
  formatDuration,
  getTransitEndYear,
  type GoalCategory,
 } from '../../services/pdfExport/clientInterpretations';
 import { applyKmsStyle } from '../../services/pdfExport/kmsStyle';
-import { getLibraryEntry, getDefaultSteps2 } from '../../data/planetHouseLibrary';
+import {
+ GOAL_LABEL,
+ GOAL_SHORT,
+ getPillarLetterGrade,
+ PILLAR_CALLOUT,
+ PILLAR_TITLES,
+ getCoverCopy,
+ COVER_QUOTE,
+ COVER_CLOSING_LINES,
+ PATTERN_COPY,
+ LEGEND_CARDS,
+} from '../../data/reportCopy';
 import { PILLAR_VOICE_NOTES } from '../../data/pillarVoiceNotes';
 import { VoiceNotePlayer } from '../../components/results/VoiceNotePlayer';
 import { getReportItems } from '../../services/diagnostic/reportItems';
+import { getFindingContent } from '../../services/diagnostic/findingContent';
+import { ResourceCardBox } from '../../components/results/ResourceCardBox';
 import { applyLightPrintTheme } from '../../services/pdfExport/lightPrint';
 import { PRESS_URL, PRESS_LOGOS_LIGHT, PRESS_LOGOS_DARK, PRESS_LOGOS_ALT } from '../../data/press';
 import { ROADMAP_TITLE, ROADMAP_STEPS, ROADMAP_PILLARS, ROADMAP_CLOSER } from '../../data/roadmap';
@@ -33,7 +45,6 @@ import {
 import {
  PILLAR_RESOURCE_CARDS,
  PILLAR_RESOURCES,
- type ResourceCard,
 } from '../../data/freeResources';
 import type { GradeItem, PillarSummary } from '../../models/diagnostic';
 import type { PlanetaryTransit } from '../../models/calculators';
@@ -51,25 +62,6 @@ function pillarScore(p: PillarSummary): number {
  return p.fCount + p.cCount * 0.5;
 }
 
-function getPillarLetterGrade(pillar: PillarSummary): string {
- const grades = pillar.items.map((item) => item.grade);
- if (grades.includes('F') || pillar.fCount > 0) return 'F';
- if (grades.includes('C') || pillar.cCount > 0) return 'C';
- return 'A';
-}
-
-const GOAL_LABEL: Record<GoalCategory, string> = {
- career: 'Career & Financial Growth',
- love: 'Love & Relationships',
- general: 'Your Goals',
-};
-
-const GOAL_SHORT: Record<GoalCategory, string> = {
- career: 'career & financial growth',
- love: 'love & relationships',
- general: 'your goals',
-};
-
 const GRADE_COLOR: Record<string, { border: string; bg: string; text: string }> = {
  A: { border: '#4ADE80', bg: 'rgba(74,222,128,0.1)', text: '#4ADE80' },
  B: { border: '#60A5FA', bg: 'rgba(96,165,250,0.1)', text: '#60A5FA' },
@@ -79,48 +71,6 @@ const GRADE_COLOR: Record<string, { border: string; bg: string; text: string }> 
 
 function gradeColor(g: string) {
  return GRADE_COLOR[g] ?? GRADE_COLOR['F'];
-}
-
-/** Mirror line for known planet+house combos */
-function getMirrorLine(item: GradeItem, goalShort: string): string | null {
- const prefix = item.section === 'Address' ? 'Env' : '';
- const key = `${prefix}${item.planet ?? ''}-${item.house ?? 0}`;
- const lines: Record<string, string> = {
- 'Sun-7': `Your most powerful connections - romantic or professional - tend to find you. But converting that natural draw into lasting partnership for ${goalShort} feels like a different skill entirely.`,
- 'Saturn-5': `Does this sound familiar? You build the offer, get excited, draft the content - and then pull back right before you publish. Every time. The same wall appears in romance: you open up enough, then go quiet - not from lack of feeling, but from fear of being truly seen.`,
- 'Uranus-5': `You've probably started building toward ${goalShort} more than once - with real momentum - and then watched yourself abandon it before it could pay off. In relationships, the same cycle: intense connection, then withdrawal before real intimacy takes hold.`,
- 'Neptune-5': `You can see the ${goalShort} version of your life clearly - and the relationship you want. The gap is in bridging vision to reality: both in business and in love, the fog lifts only when you commit to what's already in front of you.`,
- 'Pluto-6': `Are you stuck in performative busyness - doing work that feels productive but isn't moving the needle toward ${goalShort}?`,
- 'Neptune-8': `Have you felt confused about your pricing or what you're worth charging - making ${goalShort} feel like a moving target?`,
- 'Uranus-10': `Does your professional path feel chaotic - like you can't commit to one lane long enough to build real momentum toward ${goalShort}?`,
- 'Saturn-8': `Has accessing the financial partnerships or investment needed to scale toward ${goalShort} felt blocked or fear-inducing?`,
- 'EnvSaturn-2': `Since living at your current address, has there been an invisible ceiling on how much you allow yourself to charge or earn?`,
- 'EnvUranus-2': `Does your income feel erratic - breakthrough months followed by drought - while ${goalShort} stays out of reach?`,
- 'EnvNeptune-2': `Are you chronically undercharging for your work - or genuinely unclear about what to charge?`,
- };
- const text = lines[key] ?? null;
- return text ? applyKmsStyle(text) : null;
-}
-
-/** Higher octave / transmute line */
-function getTransmuteLine(item: GradeItem): string | null {
- const prefix = item.section === 'Address' ? 'Env' : '';
- const key = `${prefix}${item.planet ?? ''}-${item.house ?? 0}`;
- const lines: Record<string, string> = {
- 'Sun-7': `Your highest alignment comes through partnership - in love and in business. The right relationship is not a distraction from your goal. It is the path to it.`,
- 'Saturn-5': `Once activated, you become the most disciplined, unshakeable builder in your market - and the partner who loves with rare, earned depth. Saturn in H5 blocks both at the same threshold; breaking one breaks both.`,
- 'Uranus-5': `The most innovative, category-defining offer in any market - and the most electric, committed romantic connection, once the fear of staying is transmuted into the courage to remain.`,
- 'Neptune-5': `Once grounded, your visionary capacity becomes your greatest differentiator in business - and in love, your depth of feeling becomes a rare gift rather than a source of confusion.`,
- 'Pluto-6': `Pluto in the 6th, activated, builds the most sustainable work machine - systems that compound instead of drain.`,
- 'Neptune-8': `Pricing rooted in genuine purpose becomes your most magnetic quality.`,
- 'Uranus-10': `You're not meant to build a predictable business. You're meant to build one nobody's seen before. That's what's coming next.`,
- 'Saturn-8': `Once fear is transmuted, Saturn in the 8th gives you the most durable financial architecture of anyone in your field.`,
- 'EnvSaturn-2': `Environmental realignment removes the invisible ceiling - and what was once a block becomes a foundation of genuine financial stability.`,
- 'EnvUranus-2': `Environmental shift converts erratic income into breakthrough cycles - shorter troughs, higher peaks.`,
- 'EnvNeptune-2': `Once aligned, your address supports clarity around value - and undercharging becomes a thing of the past.`,
- };
- const text = lines[key] ?? null;
- return text ? applyKmsStyle(text) : null;
 }
 
 // ── SVG wrapper ───────────────────────────────────────────────────────────────
@@ -172,142 +122,6 @@ function VennDiagram() {
  <text x="100" y="110" textAnchor="middle" fontSize="11" fill="#E8DEFF" fontFamily="'Cormorant Garamond',Georgia,serif" fontStyle="italic">Full</text>
  <text x="100" y="123" textAnchor="middle" fontSize="11" fill="#E8DEFF" fontFamily="'Cormorant Garamond',Georgia,serif" fontStyle="italic">Alignment</text>
  </svg>
- );
-}
-
-// ── Free resource card ────────────────────────────────────────────────────────
-
-const FREE_GREEN = '#1E7B45';
-
-// Pillar colours match the three circles of the Venn diagram.
-const RESOURCE_CARD_THEME: Record<
- 1 | 2 | 3,
- { background: string; border: string; accent: string; button: string; buttonText: string }
-> = {
- 1: { background: 'rgba(201,168,76,0.12)', border: 'rgba(212,168,67,0.45)', accent: '#E8C46A', button: '#C9A84C', buttonText: '#0C1128' },
- 2: { background: 'rgba(123,94,167,0.18)', border: 'rgba(184,168,224,0.45)', accent: '#C0B0F0', button: '#7B5EA7', buttonText: '#fff' },
- 3: { background: 'rgba(46,139,122,0.16)', border: 'rgba(126,207,196,0.45)', accent: '#7ECFC4', button: '#2E8B7A', buttonText: '#fff' },
-};
-
-function ResourceCardBox({ card }: { card: ResourceCard }) {
- const t = RESOURCE_CARD_THEME[card.pillar];
- return (
- <div
- data-print-card
- style={{
- background: t.background,
- border: `1px solid ${t.border}`,
- borderRadius: '4px',
- padding: '16px 18px',
- }}
- >
- <div
- style={{
- fontSize: '10px',
- textTransform: 'uppercase',
- letterSpacing: '0.08em',
- color: t.accent,
- fontWeight: 700,
- fontFamily: INTER,
- marginBottom: '6px',
- }}
- >
- {card.label}
- </div>
- {card.resources.map((resource, i) => (
- <div
- key={resource.link}
- style={
- i > 0
- ? { marginTop: '14px', paddingTop: '14px', borderTop: `1px solid ${t.border}` }
- : undefined
- }
- >
- <div
- style={{
- display: 'flex',
- alignItems: 'center',
- gap: '8px',
- flexWrap: 'wrap' as const,
- marginBottom: '4px',
- }}
- >
- <span
- style={{
- fontFamily: CORMORANT,
- fontSize: '1.2rem',
- fontWeight: 700,
- color: '#E8DEFF',
- }}
- >
- {resource.title}
- </span>
- <span
- style={{
- fontSize: '9px',
- fontWeight: 700,
- letterSpacing: '0.08em',
- color: '#fff',
- background: FREE_GREEN,
- padding: '1px 6px',
- borderRadius: '2px',
- fontFamily: INTER,
- }}
- >
- FREE
- </span>
- </div>
- <p
- style={{
- margin: '0 0 10px',
- fontSize: '0.8rem',
- color: '#DDD8F8',
- lineHeight: 1.6,
- fontFamily: INTER,
- }}
- >
- {resource.description}
- </p>
- {resource.code && (
- <p style={{ margin: '0 0 10px', fontSize: '0.8rem', color: '#DDD8F8', fontFamily: INTER }}>
- Use code{' '}
- <strong
- style={{
- color: t.accent,
- border: `1px dashed ${t.accent}`,
- padding: '1px 6px',
- borderRadius: '2px',
- letterSpacing: '0.05em',
- }}
- >
- {resource.code}
- </strong>{' '}
- at checkout for <strong>100% off</strong>.
- </p>
- )}
- <a
- href={resource.link}
- target="_blank"
- rel="noopener noreferrer"
- style={{
- display: 'inline-block',
- padding: '8px 16px',
- background: t.button,
- color: t.buttonText,
- fontWeight: 700,
- fontSize: '0.72rem',
- letterSpacing: '0.08em',
- textTransform: 'uppercase',
- textDecoration: 'none',
- borderRadius: '2px',
- fontFamily: INTER,
- }}
- >
- {resource.cta}
- </a>
- </div>
- ))}
- </div>
  );
 }
 
@@ -451,6 +265,12 @@ function PillarTimeline({
 
 // ── Aspect card ───────────────────────────────────────────────────────────────
 
+const IMPACT_LABEL = {
+ hurts: { text: '⚡ Hurts Goal', bg: 'rgba(248,113,113,0.12)', color: '#F87171', border: 'rgba(248,113,113,0.4)' },
+ caution: { text: '⚠️ Caution', bg: 'rgba(212,168,67,0.1)', color: '#E8A838', border: '#C9A84C' },
+ helps: { text: '✓ Helps Goal', bg: 'rgba(74,222,128,0.1)', color: '#4ADE80', border: '#2ecc71' },
+};
+
 function AspectCard({
  item,
  goal,
@@ -465,23 +285,12 @@ function AspectCard({
  transits: PlanetaryTransit[];
 }) {
  const gc = gradeColor(item.grade);
- const libraryEntry = getLibraryEntry(item.planet, item.house, item.pillar);
- const addressLevel = item.section === 'Address' && item.source ? ` (${item.source.split(':')[0]})` : '';
- const label = item.section === 'Address' ? `🏠 Address Energy${addressLevel}` : item.source;
- const endYear =
- item.section === 'Transit Angular' || item.section === 'Life Cycle'
- ? getTransitEndYear(item.planet ?? '', transits)
- : null;
+ const content = getFindingContent(item, { goal, goalShort, goalText, transits });
+ const { label, endYear } = content;
 
- if (libraryEntry) {
- const hurtHelpLabel =
- item.grade === 'F'
- ? { text: '⚡ Hurts Goal', bg: 'rgba(248,113,113,0.12)', color: '#F87171', border: 'rgba(248,113,113,0.4)' }
- : item.grade === 'C'
- ? { text: '⚠️ Caution', bg: 'rgba(212,168,67,0.1)', color: '#E8A838', border: '#C9A84C' }
- : item.grade === 'A'
- ? { text: '✓ Helps Goal', bg: 'rgba(74,222,128,0.1)', color: '#4ADE80', border: '#2ecc71' }
- : null;
+ if (content.library) {
+ const libraryEntry = content.library;
+ const hurtHelpLabel = content.impact ? IMPACT_LABEL[content.impact] : null;
 
  return (
  <div
@@ -550,7 +359,7 @@ function AspectCard({
  margin: '0 0 6px',
  }}
  >
- {applyKmsStyle(libraryEntry.hurt_or_help)}
+ {libraryEntry.hurtOrHelp}
  </p>
  {libraryEntry.note && (
  <p
@@ -565,7 +374,7 @@ function AspectCard({
  borderLeft: '2px solid #C9A84C',
  }}
  >
- {applyKmsStyle(libraryEntry.note)}
+ {libraryEntry.note}
  </p>
  )}
  <p
@@ -577,7 +386,7 @@ function AspectCard({
  margin: 0,
  }}
  >
- <strong style={{ color: '#16a34a' }}>✅ Do This:</strong> {applyKmsStyle(libraryEntry.steps)}
+ <strong style={{ color: '#16a34a' }}>✅ Do This:</strong> {libraryEntry.steps[0]}
  </p>
  <p
  style={{
@@ -589,16 +398,14 @@ function AspectCard({
  }}
  >
  <strong style={{ color: '#16a34a' }}>✅ Do This:</strong>{' '}
- {applyKmsStyle(libraryEntry.steps2 ?? getDefaultSteps2(item.planet ?? '', item.pillar))}
+ {libraryEntry.steps[1]}
  </p>
  </div>
  );
  }
 
  // Fallback: original mirror/interp/transmute layout for entries not in the library
- const interp = getItemInterpretation(item, goal, transits, goalText);
- const mirror = getMirrorLine(item, goalShort);
- const transmute = getTransmuteLine(item);
+ const { mirror, interpretation: interp, transmute } = content.fallback!;
 
  return (
  <div
@@ -664,7 +471,7 @@ function AspectCard({
  margin: transmute ? '0 0 8px' : '0',
  }}
  >
- {applyKmsStyle(interp)}
+ {interp}
  </p>
  {transmute && (
  <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: '7px' }}>
@@ -692,14 +499,6 @@ const PILLAR_BADGE_STYLE: Record<1 | 2 | 3, CSSProperties> = {
  1: { background: 'rgba(248,113,113,0.12)', color: '#F87171', border: '1px solid rgba(248,113,113,0.4)' },
  2: { background: 'rgba(212,168,67,0.12)', color: '#D4A843', border: '1px solid rgba(212,168,67,0.5)' },
  3: { background: 'rgba(212,168,67,0.08)', color: '#D4A843', border: '1px solid rgba(150,120,80,0.5)' },
-};
-
-const PILLAR_CALLOUT: Record<1 | 2 | 3, (goal: string, loc: string) => string> = {
- 1: (goal) => `Here is how Pillar 1 is specifically blocking your goal of ${goal}:`,
- 2: (goal) =>
- `Here is how your current timing window is directly affecting your ability to reach ${goal}:`,
- 3: (goal, loc) =>
- `Here is how your current address${loc ? ` in ${loc}` : ''} is interacting with your goal of ${goal}:`,
 };
 
 const REPORT_SECTIONS: Array<{ id: string; label: string }> = [
@@ -1471,27 +1270,6 @@ export function InvisibleForcesResultsPage() {
  addressMoveDate: intake.addressMoveDate,
  });
 
- const legendCards = [
- {
- dot: '#C9A84C',
- label: 'IDENTITY/PERSONALITY - PILLAR 1',
- question: `Have people always called you 'too much' - or felt emotions more intensely, like you were wired differently from birth?`,
- desc: `Your permanent, energetic blueprint. Just as how you didn't choose your eye color or height, you are also born with certain personality traits. Once you become aware of them and learn how to channel them in a productive way, it could become your greatest asset.`,
- },
- {
- dot: '#9B8EC4',
- label: 'PLANETARY TIMING - PILLAR 2',
- question: `Did life suddenly shift - a separation, unexpected move, sudden urge to quit your job - even when you weren't asking for change?`,
- desc: `Slow-moving planets define your current window. Knowing when it lifts gives you a timeline, not an open question mark.`,
- },
- {
- dot: '#5BB5A5',
- label: 'ENVIRONMENT - PILLAR 3',
- question: `Ever since you moved to your current city, does it feel harder to be yourself - like opportunities now require twice the effort?`,
- desc: `Your address carries a frequency. It amplifies or dampens everything else in your chart - and it's the most immediately actionable layer.`,
- },
- ];
-
  const endYear = longest?.endYear ?? null;
  const yearsRemaining = endYear ? endYear - new Date().getFullYear() : null;
 
@@ -1759,37 +1537,9 @@ export function InvisibleForcesResultsPage() {
 
  {/* Hero card - grade + headline + dynamic description */}
  {(() => {
- const hl: Record<string, [string, string]> = {
- A: ['A means alignment is close.', 'One right move, and you can 10x your life.'],
- B: [
- "You're doing well - ",
- "'doing well' and 'living fully' are two different things.",
- ],
- C: ['A passing grade - ', 'but who wants a passing-grade life?'],
- D: [
- "D means you're one step away from failing - ",
- "and you're probably feeling the pressure.",
- ],
- F: [
- "Don't let the score alarm you - this isn't a class exam.",
- 'This simply means you have an unseen force working AGAINST you. Once you address this force, the score (and your life) will improve dramatically!',
- ],
- };
- const [h1, h2] = hl[finalGrade] ?? ['Overall Deconditioning Score', ''];
  const forceCount =
  (results.diagnostic!.totalFs ?? 0) + (results.diagnostic!.totalCs ?? 0);
- const descLine =
- finalGrade === 'F'
- ? endYear
- ? `Getting an F simply means multiple invisible forces are holding you back behind the scenes. Left unaddressed, they can persist until ${endYear}: impacting your relationships, career, and overall well-being. The calculations below are based on thousands of case studies, where we identified exactly which configurations caused the biggest disruptions in people's lives.`
- : `Getting an F simply means multiple invisible forces are holding you back behind the scenes. Left unaddressed, they can persist for years to come, impacting your relationships, career, and overall well-being. The calculations below are based on thousands of case studies, where we identified exactly which configurations caused the biggest disruptions in people's lives.`
- : endYear && yearsRemaining
- ? `Your ${finalGrade} score traces back to ${forceCount} specific force${forceCount !== 1 ? 's' : ''} - all identified below. Left unaddressed, this configuration persists through ${endYear} - ${yearsRemaining} more year${yearsRemaining !== 1 ? 's' : ''} of a reality that passes, but doesn't 10x.`
- : `Your ${finalGrade} score traces back to ${forceCount} specific force${forceCount !== 1 ? 's' : ''} - all identified below. This configuration does not self-resolve without targeted intervention.`;
- const secondLine =
- finalGrade === 'F'
- ? "The good news? This report shows you precisely which invisible forces are at play, what they mean, and some initial steps you can take. The grade may seem harsh, but that's intentional: it's here to make sure addressing these forces becomes YOUR #1 priority. Once you do, you'll be surprised how quickly life feels in flow again."
- : 'This report shows exactly where momentum is leaking and what to change first. Every pressure point has a usable upside once you work it directly.';
+ const cover = getCoverCopy({ finalGrade, endYear, yearsRemaining, forceCount });
  return (
  <div
  style={{
@@ -1850,27 +1600,27 @@ export function InvisibleForcesResultsPage() {
  lineHeight: 1.3,
  }}
  >
- {h1} <em style={{ color: '#D4A843' }}>{h2}</em>
+ {cover.headline} <em style={{ color: '#D4A843' }}>{cover.emphasis}</em>
  </div>
  <p style={{ margin: '0 0 12px', fontSize: '0.82rem', color: '#DDD8F8', lineHeight: 1.75 }}>
- {descLine}
+ {cover.description}
  </p>
  <p style={{ margin: '0 0 10px', fontSize: '0.82rem', color: '#DDD8F8', lineHeight: 1.75 }}>
- {secondLine}
+ {cover.secondLine}
  </p>
  <div style={{ borderLeft: '3px solid #C9A84C', paddingLeft: '12px', marginBottom: '12px' }}>
  <p style={{ margin: 0, fontFamily: CORMORANT, fontStyle: 'italic', color: '#D4A843', fontSize: '0.9rem', lineHeight: 1.7 }}>
- "Pluto transiting your 1st house? Stop playing nice. Stop softening your edges. Step fully into your power - that is the higher octave." - Pheydrus team
+ {COVER_QUOTE}
  </p>
  </div>
  <p style={{ margin: '0 0 8px', fontSize: '0.82rem', color: '#DDD8F8', lineHeight: 1.75 }}>
- You did the mindset work, the strategy work, and the coaching. Results still stall at the same point.
+ {COVER_CLOSING_LINES[0]}
  </p>
  <p style={{ margin: '0 0 8px', fontSize: '0.82rem', color: '#DDD8F8', lineHeight: 1.75 }}>
- The missing variable is energetic structure. Thinking harder does not solve this layer.
+ {COVER_CLOSING_LINES[1]}
  </p>
  <p style={{ margin: 0, fontSize: '0.82rem', color: '#DDD8F8', lineHeight: 1.75 }}>
- You already have the capacity. This report shows the sequence to unlock it.
+ {COVER_CLOSING_LINES[2]}
  </p>
  </div>
  </div>
@@ -2062,7 +1812,7 @@ export function InvisibleForcesResultsPage() {
  lineHeight: 1.7,
  }}
  >
-								"You did the degree, the career, and the inner work. Results still stall at the same point. This pressure pattern is the pre-upgrade signal this report maps."
+								{PATTERN_COPY.quote}
  </p>
  </div>
 
@@ -2075,14 +1825,12 @@ export function InvisibleForcesResultsPage() {
  fontWeight: 700,
  }}
  >
-						You are in an identity shift.
+						{PATTERN_COPY.lead}
  </p>
  <p
  style={{ margin: '0 0 12px', fontSize: '0.85rem', color: '#DDD8F8', lineHeight: 1.8 }}
  >
-						These patterns are the exact conditions that precede a major identity upgrade.
-						Three invisible forces are pulling against each other, and that friction marks the
-						edge where your previous identity loses control and your next identity takes over.
+						{PATTERN_COPY.body}
  </p>
  <p
  style={{
@@ -2093,13 +1841,12 @@ export function InvisibleForcesResultsPage() {
  lineHeight: 1.6,
  }}
  >
-						Your identity upgrade is around the corner, and the first signals are active now.
+						{PATTERN_COPY.highlight}
  </p>
  <p
  style={{ margin: '0 0 24px', fontSize: '0.85rem', color: '#DDD8F8', lineHeight: 1.8 }}
  >
-						You now choose how you enter this window: with a map and deliberate action, or by
-						repeating the same loop.
+						{PATTERN_COPY.closing}
  </p>
 
  {/* Venn + legend */}
@@ -2124,7 +1871,7 @@ export function InvisibleForcesResultsPage() {
  gap: '10px',
  }}
  >
- {legendCards.map((c) => (
+ {LEGEND_CARDS.map((c) => (
  <div
  key={c.label}
  style={{
@@ -2243,15 +1990,15 @@ export function InvisibleForcesResultsPage() {
  </h2>
  <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
  <PillarDeepDiveCard
- {...pillarCardProps(p1, 1, 'Structure', 'Your Energetic Blueprint')}
+ {...pillarCardProps(p1, 1, PILLAR_TITLES[1].title, PILLAR_TITLES[1].subtitle)}
  />
  <TestimonialCard
  quote="e.g. - 'I had the exact same Saturn/House 5 configuration. I'd been building the same offer in my head for two years. Within 60 days of working with the Pheydrus team, I launched, signed 3 clients, and finally felt like my energy matched my output.'"
  attribution="Jordan M., Los Angeles"
  />
- <PillarDeepDiveCard {...pillarCardProps(p2, 2, 'Timing', 'The Window You Are In')} />
+ <PillarDeepDiveCard {...pillarCardProps(p2, 2, PILLAR_TITLES[2].title, PILLAR_TITLES[2].subtitle)} />
  <PillarDeepDiveCard
- {...pillarCardProps(p3, 3, 'Environment', 'Location & Address')}
+ {...pillarCardProps(p3, 3, PILLAR_TITLES[3].title, PILLAR_TITLES[3].subtitle)}
  />
  <TestimonialCard
  quote="e.g. - 'The environment piece was the one I almost skipped. After my Pillar 3 session I raised my rates by 40% and signed my highest-paying client that same week. The address work is real.'"

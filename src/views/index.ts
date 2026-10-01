@@ -4,3 +4,4 @@ export { ResultsPage } from './ResultsPage';
 export { InvisibleForcesReportPage } from './client/InvisibleForcesReportPage';
 export { InvisibleForcesResultsPage } from './client/InvisibleForcesResultsPage';
 export { InvisibleForcesDemoPage } from './client/InvisibleForcesDemoPage';
+export { InvisibleForcesBookPage } from './client/InvisibleForcesBookPage';

@@ -7,6 +7,7 @@ import {
   InvisibleForcesReportPage,
   InvisibleForcesResultsPage,
   InvisibleForcesDemoPage,
+  InvisibleForcesBookPage,
 } from './views';
 import {
   TransitsPage,
@@ -38,6 +39,8 @@ function App() {
         <Route path="client" element={<InvisibleForcesReportPage />} />
         <Route path="client/results" element={<InvisibleForcesResultsPage />} />
         <Route path="client/demo" element={<InvisibleForcesDemoPage />} />
+        <Route path="client/book" element={<InvisibleForcesBookPage />} />
+        <Route path="client/book/demo" element={<InvisibleForcesBookPage demo />} />
         {/* Standalone calculator pages (no layout shell) */}
         <Route path="transits" element={<TransitsPage />} />
         <Route path="life-path" element={<LifePathPage />} />
