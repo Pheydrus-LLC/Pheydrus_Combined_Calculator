@@ -24,6 +24,7 @@ import {
 import { applyKmsStyle, applyKmsStyleToHtml, kmsExempt } from './kmsStyle';
 import { PILLAR_VOICE_NOTES, voiceNoteUrl } from '../../data/pillarVoiceNotes';
 import { COACHING_CTA_TITLE, COACHING_CTA_PARAGRAPHS, COACHING_CALL_URL } from '../../data/coachingCta';
+import { COST_OF_INACTION_TITLE, getCostOfInactionCopy } from '../../data/costOfInaction';
 import {
  PILLAR_RESOURCE_CARDS,
  PILLAR_RESOURCES,
@@ -803,7 +804,6 @@ function renderPage4(results: ConsolidatedResults, intake: ClientIntakeData): st
  const { finalGrade, pillars } = results.diagnostic!;
  const [p1, p2, p3] = pillars;
  const goal = detectGoalCategory(intake.desiredOutcome);
- const goalShort = GOAL_SHORT[goal];
 
  // CTA eligibility
  const wordCount = intake.desiredOutcome.trim().split(/\s+/).filter(Boolean).length;
@@ -823,12 +823,7 @@ function renderPage4(results: ConsolidatedResults, intake: ClientIntakeData): st
  results.diagnostic!.allItems,
  results.calculators.transits?.transits ?? [],
  );
- const endYear = longest?.endYear ?? null;
- const yearsRemaining = endYear ? endYear - new Date().getFullYear() : null;
-
- const yearLine = endYear
- ? `Without targeted deconditioning of the specific layers identified above, the data points to <strong>${endYear}</strong>.`
- : `Without targeted deconditioning of the specific layers identified above, this pattern does not self-resolve.`;
+ const cost = getCostOfInactionCopy(goal, longest?.endYear ?? null);
 
  // Suppress unused
  void activePillars;
@@ -839,20 +834,14 @@ function renderPage4(results: ConsolidatedResults, intake: ClientIntakeData): st
 <div style="background:#F5F1EB;padding:40px 48px;color:#1C1A2E;">
 
  <!-- Cost of Inaction -->
- <div style="background:#FFF5F5;border:1px solid #FAEAEA;border-radius:4px;padding:24px 28px;margin-bottom:20px;">
- <h3 style="margin:0 0 18px;font-size:22px;font-weight:700;color:#1C1A2E;font-family:${CORMORANT};line-height:1.3;">What Another Year of This Pattern Costs You</h3>
- ${[
- `Another 12 months of knowing exactly what to do - and watching yourself not do it.`,
- `Another year of income that almost hits ${esc(goalShort)}, but resets every time you get close.`,
- `Another year of brilliant ideas living in your drafts folder instead of the marketplace.`,
- `Another year of telling yourself next month will be different.`,
- ].map((line) => `<p style="margin:0 0 10px;font-size:13px;color:#555;line-height:1.7;font-family:${INTER};border-left:2px solid #C0392B;padding-left:12px;">${line}</p>`).join('')}
- <p style="margin:8px 0 6px;font-size:12px;color:#888;line-height:1.7;font-family:${INTER};">${yearLine}</p>
- ${yearsRemaining !== null && yearsRemaining > 0
- ? `<p style="margin:0 0 8px;font-size:14px;font-weight:700;color:#C0392B;font-family:${INTER};">That's ${yearsRemaining} more year${yearsRemaining !== 1 ? 's' : ''}.</p>`
- : ''}
- <p style="margin:0;font-size:15px;font-weight:700;color:#C9A84C;font-family:${INTER};">Or - you begin the decondition now.</p>
- </div>
+ ${kmsExempt(`<div style="background:#FFF5F5;border:1px solid #FAEAEA;border-radius:4px;padding:24px 28px;margin-bottom:20px;">
+ <h3 style="margin:0 0 16px;font-size:22px;font-weight:700;color:#1C1A2E;font-family:${CORMORANT};line-height:1.3;">${esc(COST_OF_INACTION_TITLE)}</h3>
+ <p style="margin:0 0 10px;font-size:13px;color:#555;line-height:1.7;font-family:${INTER};">${esc(cost.intro)}</p>
+ <p style="margin:0 0 10px;font-size:13px;font-weight:700;color:#C0392B;line-height:1.7;font-family:${INTER};">${esc(cost.yearLine)}</p>
+ <p style="margin:0 0 12px;font-size:13px;color:#555;line-height:1.7;font-family:${INTER};">${esc(cost.goodNews.before)}<strong style="color:#1C1A2E;">${esc(cost.goodNews.years)}</strong>${esc(cost.goodNews.middle)}<strong style="color:#1C1A2E;">${esc(cost.goodNews.fraction)}</strong></p>
+ ${cost.noMore.map((line) => `<p style="margin:0 0 8px;font-size:13px;color:#555;line-height:1.7;font-family:${INTER};border-left:2px solid #C9A84C;padding-left:12px;">${esc(line)}</p>`).join('')}
+ <p style="margin:10px 0 0;font-size:15px;font-weight:700;color:#C9A84C;font-family:${INTER};">${esc(cost.closer)}</p>
+ </div>`)}
 
  <!-- Destiny block -->
  <div style="background:#F5FBF5;border:1px solid #C8E6C8;border-radius:4px;padding:20px 24px;margin-bottom:20px;">

@@ -20,6 +20,7 @@ import { applyKmsStyle } from '../../services/pdfExport/kmsStyle';
 import { getLibraryEntry, getDefaultSteps2, BENEFIC_PLANETS } from '../../data/planetHouseLibrary';
 import { PILLAR_VOICE_NOTES } from '../../data/pillarVoiceNotes';
 import { VoiceNotePlayer } from '../../components/results/VoiceNotePlayer';
+import { COST_OF_INACTION_TITLE, getCostOfInactionCopy } from '../../data/costOfInaction';
 import { CalendlyEmbed } from '../../components/results/CalendlyEmbed';
 import {
  COACHING_CTA_TITLE,
@@ -921,11 +922,15 @@ function PillarDeepDiveCard({
 
 // ── Cost of Inaction ──────────────────────────────────────────────────────────
 
-function CostOfInaction({ goalShort, endYear }: { goalShort: string; endYear: number | null }) {
- const yearsRemaining = endYear ? endYear - new Date().getFullYear() : null;
- const yearLine = endYear
- ? `Without targeted deconditioning of the specific layers identified above, the data points to ${endYear}.`
- : `Without targeted deconditioning of the specific layers identified above, this pattern does not self-resolve.`;
+function CostOfInaction({ goal, endYear }: { goal: GoalCategory; endYear: number | null }) {
+ const copy = getCostOfInactionCopy(goal, endYear);
+ const body: CSSProperties = {
+ margin: 0,
+ fontSize: '0.88rem',
+ color: '#DDD8F8',
+ lineHeight: 1.7,
+ fontFamily: INTER,
+ };
 
  return (
  <div
@@ -946,54 +951,34 @@ function CostOfInaction({ goalShort, endYear }: { goalShort: string; endYear: nu
  lineHeight: 1.3,
  }}
  >
- What Another Year of This Pattern Costs You
+ {COST_OF_INACTION_TITLE}
  </h3>
- <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
- {[
- `Another 12 months of knowing exactly what to do - and watching yourself not do it.`,
- `Another year of income that almost hits ${goalShort}, but resets every time you get close.`,
- `Another year of brilliant ideas living in your drafts folder instead of the marketplace.`,
- `Another year of telling yourself next month will be different.`,
- yearLine,
- ].map((line, i) => (
- <p
- key={i}
- style={{
- margin: 0,
- fontSize: '0.85rem',
- color: '#DDD8F8',
- lineHeight: 1.7,
- fontFamily: INTER,
- borderLeft: '2px solid #C0392B',
- paddingLeft: '12px',
- }}
- >
+ <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+ <p style={body}>{copy.intro}</p>
+ <p style={{ ...body, color: '#F87171', fontWeight: 700 }}>{copy.yearLine}</p>
+ <p style={body}>
+ {copy.goodNews.before}
+ <strong style={{ color: '#E8DEFF' }}>{copy.goodNews.years}</strong>
+ {copy.goodNews.middle}
+ <strong style={{ color: '#E8DEFF' }}>{copy.goodNews.fraction}</strong>
+ </p>
+ <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+ {copy.noMore.map((line) => (
+ <p key={line} style={{ ...body, borderLeft: '2px solid #C9A84C', paddingLeft: '12px' }}>
  {line}
  </p>
  ))}
- {yearsRemaining !== null && yearsRemaining > 0 && (
+ </div>
  <p
  style={{
- margin: 0,
- fontSize: '0.9rem',
- fontWeight: 700,
- color: '#F87171',
- fontFamily: INTER,
- }}
- >
- That's {yearsRemaining} more year{yearsRemaining !== 1 ? 's' : ''}.
- </p>
- )}
- <p
- style={{
- margin: 0,
- fontSize: '1rem',
+ margin: '4px 0 0',
+ fontSize: '1.05rem',
  fontWeight: 700,
  color: '#C9A84C',
  fontFamily: INTER,
  }}
  >
- Or - you begin the decondition now.
+ {copy.closer}
  </p>
  </div>
  </div>
@@ -2215,7 +2200,7 @@ export function InvisibleForcesResultsPage() {
  {/* ── SECTION 4: COST OF INACTION + CTA ── */}
  <section id="solution" data-report-section style={{ scrollMarginTop: '120px' }}>
  <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
- <CostOfInaction goalShort={goalShort} endYear={longest?.endYear ?? null} />
+ <CostOfInaction goal={goal} endYear={longest?.endYear ?? null} />
 
  <TestimonialCard
  quote="e.g. - 'I came in skeptical. Three years of coaches and nothing had shifted. I left my first session with a sequenced 90-day plan that made more sense than anything I'd tried before.'"
