@@ -48,7 +48,21 @@ export function applyKmsStyle(text: string): string {
   return out;
 }
 
+const KMS_OFF = '<!--kms-off-->';
+const KMS_ON = '<!--kms-on-->';
+
+/**
+ * Marks hand-written copy (marketing text, resource blurbs) so the KMS pass
+ * leaves it exactly as written and the PDF matches the web report.
+ */
+export function kmsExempt(html: string): string {
+  return `${KMS_OFF}${html}${KMS_ON}`;
+}
+
 export function applyKmsStyleToHtml(html: string): string {
-  // Safe lightweight pass for full template output.
-  return applyKmsStyle(html);
+  // Safe lightweight pass for full template output, skipping kmsExempt() sections.
+  return html
+    .split(/(<!--kms-off-->[\s\S]*?<!--kms-on-->)/)
+    .map((part) => (part.startsWith(KMS_OFF) ? part : applyKmsStyle(part)))
+    .join('');
 }

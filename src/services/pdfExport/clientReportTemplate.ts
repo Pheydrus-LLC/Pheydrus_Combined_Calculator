@@ -21,8 +21,9 @@ import {
  getTransitEndYear,
  type GoalCategory,
 } from './clientInterpretations';
-import { applyKmsStyle, applyKmsStyleToHtml } from './kmsStyle';
+import { applyKmsStyle, applyKmsStyleToHtml, kmsExempt } from './kmsStyle';
 import { PILLAR_VOICE_NOTES, voiceNoteUrl } from '../../data/pillarVoiceNotes';
+import { COACHING_CTA_TITLE, COACHING_CTA_PARAGRAPHS } from '../../data/coachingCta';
 import {
  PILLAR_RESOURCE_CARDS,
  PILLAR_RESOURCES,
@@ -784,7 +785,7 @@ function renderResourceCard(card: ResourceCard): string {
 }
 
 function renderResourcesPage(): string {
- return `
+ return kmsExempt(`
 <!-- FREE RESOURCES -->
 <div style="background:#F5F1EB;padding:40px 48px;color:#1C1A2E;">
  <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.14em;color:#999;font-family:${INTER};margin-bottom:8px;">Your Next Steps</div>
@@ -793,7 +794,7 @@ function renderResourcesPage(): string {
  ${PILLAR_RESOURCE_CARDS.map(renderResourceCard).join('')}
  <h3 style="margin:24px 0 10px;font-size:22px;font-weight:700;color:#9A7B2C;font-family:${CORMORANT};">Bonus Gift</h3>
  ${renderResourceCard(BONUS_RESOURCE_CARD)}
-</div>`;
+</div>`);
 }
 
 // ── PAGE 4: COST OF INACTION + CTA ───────────────────────────────────────────
@@ -867,18 +868,11 @@ function renderPage4(results: ConsolidatedResults, intake: ClientIntakeData): st
 
  <!-- CTA box -->
  <div style="background:#FDFBF6;border:1px solid #C9A84C;border-radius:4px;padding:28px 32px;text-align:center;">
- <h3 style="margin:0 0 6px;font-size:21px;font-weight:700;color:#C9A84C;font-family:${CORMORANT};">Your Next Step: Alignment Strategy Call</h3>
- <p style="margin:0 0 18px;font-size:12px;color:#888;font-family:${INTER};">30-minute 1:1 with the Pheydrus team</p>
+ ${kmsExempt(`<h3 style="margin:0 0 16px;font-size:24px;font-weight:700;color:#C9A84C;font-family:${CORMORANT};">${esc(COACHING_CTA_TITLE)}</h3>
 
- <div style="text-align:left;max-width:420px;margin:0 auto 18px;">
- ${[
- `Map how to decondition the unseen forces shaping your reality and unlock the parts of you and your environment that can 10x your life`,
- `Prepare for the identity shift that's already in motion - and make sure you're ready when it arrives`,
- `Determine whether Artist's Way is your aligned next chapter`,
- ].map((b) => `<p style="margin:0 0 8px;font-size:12px;color:#7A5A1A;line-height:1.6;font-family:${INTER};">&rarr; ${b}</p>`).join('')}
- </div>
-
- <p style="margin:0 0 18px;font-size:14px;font-style:italic;color:#7A5A1A;font-family:${CORMORANT};line-height:1.6;">This will be the beginning of your true alignment journey.</p>
+ <div style="text-align:left;max-width:520px;margin:0 auto 18px;">
+ ${COACHING_CTA_PARAGRAPHS.map((p) => `<p style="margin:0 0 10px;font-size:12px;color:#444;line-height:1.7;font-family:${INTER};">${esc(p)}</p>`).join('')}
+ </div>`)}
 
  <a href="https://calendly.com/pheydrus_strategy/1-1-alignment-strategy-call-report"
  style="display:block;width:100%;max-width:420px;margin:0 auto 12px;padding:15px 24px;background:#C9A84C;color:#1C1A2E;font-weight:700;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;border-radius:2px;text-align:center;box-sizing:border-box;font-family:${INTER};">

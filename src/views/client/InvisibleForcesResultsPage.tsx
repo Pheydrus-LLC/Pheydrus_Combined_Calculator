@@ -20,6 +20,7 @@ import { applyKmsStyle } from '../../services/pdfExport/kmsStyle';
 import { getLibraryEntry, getDefaultSteps2, BENEFIC_PLANETS } from '../../data/planetHouseLibrary';
 import { PILLAR_VOICE_NOTES } from '../../data/pillarVoiceNotes';
 import { VoiceNotePlayer } from '../../components/results/VoiceNotePlayer';
+import { COACHING_CTA_TITLE, COACHING_CTA_PARAGRAPHS } from '../../data/coachingCta';
 import {
  PILLAR_RESOURCE_CARDS,
  PILLAR_RESOURCES,
@@ -2354,19 +2355,6 @@ export function InvisibleForcesResultsPage() {
  </div>
 
  <div style={optionCardStyle}>
- <div
- style={{
- fontSize: '11px',
- textTransform: 'uppercase',
- letterSpacing: '0.12em',
- fontWeight: 700,
- color: '#D4A843',
- marginBottom: '10px',
- fontFamily: INTER,
- }}
- >
- #3 Option
- </div>
  <h2
  style={{
  margin: '0 0 18px',
@@ -2376,7 +2364,7 @@ export function InvisibleForcesResultsPage() {
  color: '#E8DEFF',
  }}
  >
- Explore Pheydrus Coaching
+ {COACHING_CTA_TITLE}
  </h2>
  <div
  style={{
@@ -2387,21 +2375,14 @@ export function InvisibleForcesResultsPage() {
  }}
  >
  <div style={{ flex: 1, minWidth: '260px' }}>
- <p style={{ margin: '0 0 14px', fontSize: '0.88rem', color: '#DDD8F8', fontFamily: INTER, lineHeight: 1.75 }}>
- This report gives you a score. That's it.
+ {COACHING_CTA_PARAGRAPHS.map((paragraph) => (
+ <p
+ key={paragraph}
+ style={{ margin: '0 0 14px', fontSize: '0.88rem', color: '#DDD8F8', fontFamily: INTER, lineHeight: 1.75 }}
+ >
+ {paragraph}
  </p>
- <p style={{ margin: '0 0 14px', fontSize: '0.88rem', color: '#DDD8F8', fontFamily: INTER, lineHeight: 1.75 }}>
- Nothing changes until you're willing to work with the unseen forces it surfaced, and you can't do that alone. You need someone who can reflect back what you can't see in yourself and hold you accountable when old patterns try to pull you back.
- </p>
- <p style={{ margin: '0 0 14px', fontSize: '0.88rem', color: '#DDD8F8', fontFamily: INTER, lineHeight: 1.75 }}>
- That's what Pheydrus coaching does.
- </p>
- <p style={{ margin: '0 0 14px', fontSize: '0.88rem', color: '#DDD8F8', fontFamily: INTER, lineHeight: 1.75 }}>
- Thousands of students came to us after trying everything: The right school. The right relationship. The right city. Therapy. Life coaching. And still things were "off." For most of them, this was the last door they hadn't opened. And it was the one that finally changed everything.
- </p>
- <p style={{ margin: '0 0 14px', fontSize: '0.88rem', color: '#DDD8F8', fontFamily: INTER, lineHeight: 1.75 }}>
- If something in this report stirred something in you, don't let it sit.
- </p>
+ ))}
  <p style={{ margin: '0 0 18px', fontSize: '0.88rem', color: '#DDD8F8', fontFamily: INTER, lineHeight: 1.75 }}>
  <a
  href="https://pheydrusmetaverse.com/thank-you-onboarding/"

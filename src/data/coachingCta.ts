@@ -1,0 +1,16 @@
+/**
+ * Closing coaching call-to-action of the Invisible Forces report.
+ * Shared by the web report and the PDF export so both carry the same copy.
+ */
+
+export const COACHING_CTA_TITLE = 'Some Patterns Need More Than a Report.';
+
+export const COACHING_CTA_PARAGRAPHS: string[] = [
+  "This report gave you a score. But a score on its own doesn't change anything.",
+  "What changes things is knowing what to DO with the unseen forces it just surfaced, and that's almost impossible to see from the inside. Patterns are invisible to the person living them. That's what makes them patterns.",
+  'So here\'s the real question: does your situation deserve 1:1 help?',
+  "That's what this call is for. In 15 minutes, we'll dig into what came up in your report and what you're really trying to solve, name the pattern that keeps pulling you back, and make sure you're on the right track with a clear next aligned step.",
+  'No pressure. Just clarity.',
+  'Thousands of students came to us after trying everything: the right school, the right relationship, the right city, therapy, life coaching. And still, things felt "off." For so many of them, it all started with one short conversation.',
+  "If something in this report stirred something in you, don't let it sit. Fifteen minutes is all it takes to find out what it's trying to tell you.",
+];
