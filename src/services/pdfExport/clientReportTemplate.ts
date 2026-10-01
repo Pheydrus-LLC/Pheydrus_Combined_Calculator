@@ -25,6 +25,7 @@ import { applyKmsStyle, applyKmsStyleToHtml, kmsExempt } from './kmsStyle';
 import { PILLAR_VOICE_NOTES, voiceNoteUrl } from '../../data/pillarVoiceNotes';
 import { COACHING_CTA_TITLE, COACHING_CTA_PARAGRAPHS, COACHING_CALL_URL } from '../../data/coachingCta';
 import { COST_OF_INACTION_TITLE, getCostOfInactionCopy } from '../../data/costOfInaction';
+import { ROADMAP_TITLE, ROADMAP_STEPS, ROADMAP_PILLARS, ROADMAP_CLOSER } from '../../data/roadmap';
 import {
  PILLAR_RESOURCE_CARDS,
  PILLAR_RESOURCES,
@@ -843,17 +844,15 @@ function renderPage4(results: ConsolidatedResults, intake: ClientIntakeData): st
  <p style="margin:10px 0 0;font-size:15px;font-weight:700;color:#C9A84C;font-family:${INTER};">${esc(cost.closer)}</p>
  </div>`)}
 
- <!-- Destiny block -->
- <div style="background:#F5FBF5;border:1px solid #C8E6C8;border-radius:4px;padding:20px 24px;margin-bottom:20px;">
- <h3 style="margin:0 0 14px;font-size:20px;font-weight:700;color:#C9A84C;font-family:${CORMORANT};">This is bigger than fixing what's broken.</h3>
- <p style="margin:0 0 10px;font-size:13px;color:#444;line-height:1.8;font-family:${INTER};">Understanding these pillars serves two purposes.</p>
- <p style="margin:0 0 10px;font-size:13px;color:#444;line-height:1.8;font-family:${INTER};">The first is <strong style="color:#1C1A2E;">closure</strong>. The painful patterns, the blocked seasons, the years of almost - they weren't your fault. They were forces you didn't have a map for. You were not failing. You were navigating blind.</p>
- <p style="margin:0 0 10px;font-size:13px;color:#444;line-height:1.8;font-family:${INTER};">The second purpose - and this is the more important one - is <strong style="color:#1C1A2E;">preparation</strong>.</p>
- <p style="margin:0 0 14px;font-size:13px;color:#444;line-height:1.8;font-family:${INTER};">Something is shifting. Your chart doesn't lie. The same forces that created the friction are now creating the conditions for the biggest expansion of your life. A new identity is forming. New opportunities are already in motion.</p>
+ <!-- Roadmap (matches the web report's roadmap section) -->
+ ${kmsExempt(`<div style="background:#F5FBF5;border:1px solid #C8E6C8;border-radius:4px;padding:20px 24px;margin-bottom:20px;">
+ <h3 style="margin:0 0 14px;font-size:20px;font-weight:700;color:#C9A84C;font-family:${CORMORANT};">${esc(ROADMAP_TITLE)}</h3>
+ ${ROADMAP_STEPS.map((step) => `<p style="margin:0 0 10px;font-size:13px;color:#444;line-height:1.8;font-family:${INTER};">${esc(step.before)}<strong style="color:#1C1A2E;">${esc(step.bold)}</strong>${esc(step.after)}</p>`).join('')}
+ ${ROADMAP_PILLARS.map((item) => `<p style="margin:0 0 10px;font-size:13px;color:#444;line-height:1.8;font-family:${INTER};"><span style="color:#38a169;font-weight:800;margin-right:6px;">&#10140;</span>For <strong style="color:#1C1A2E;">${esc(item.pillar)}</strong>${esc(item.text)}</p>`).join('')}
  <div style="border-top:1px solid #C8E6C8;padding-top:14px;margin-top:4px;">
- <p style="margin:0;font-size:18px;font-style:italic;color:#1C1A2E;line-height:1.5;font-family:${CORMORANT};">The question is whether you'll have a map when it arrives. <span style="font-style:normal;font-weight:700;color:#C9A84C;">This call is how you get ready.</span></p>
+ <p style="margin:0;font-size:18px;font-style:italic;color:#1C1A2E;line-height:1.5;font-family:${CORMORANT};">${esc(ROADMAP_CLOSER)}</p>
  </div>
- </div>
+ </div>`)}
 
  <!-- CTA box -->
  <div style="background:#FDFBF6;border:1px solid #C9A84C;border-radius:4px;padding:28px 32px;text-align:center;">

@@ -20,6 +20,7 @@ import { applyKmsStyle } from '../../services/pdfExport/kmsStyle';
 import { getLibraryEntry, getDefaultSteps2, BENEFIC_PLANETS } from '../../data/planetHouseLibrary';
 import { PILLAR_VOICE_NOTES } from '../../data/pillarVoiceNotes';
 import { VoiceNotePlayer } from '../../components/results/VoiceNotePlayer';
+import { ROADMAP_TITLE, ROADMAP_STEPS, ROADMAP_PILLARS, ROADMAP_CLOSER } from '../../data/roadmap';
 import { COST_OF_INACTION_TITLE, getCostOfInactionCopy } from '../../data/costOfInaction';
 import { CalendlyEmbed } from '../../components/results/CalendlyEmbed';
 import {
@@ -2226,36 +2227,28 @@ export function InvisibleForcesResultsPage() {
  lineHeight: 1.3,
  }}
  >
- How to Improve Your Scores, and Stop Living in Pain 🏆
+ {ROADMAP_TITLE} 🏆
  </h3>
+ {ROADMAP_STEPS.map((step) => (
  <p
+ key={step.bold}
  style={{ margin: '0 0 10px', fontSize: '0.85rem', color: '#DDD8F8', lineHeight: 1.8 }}
  >
- The first is <strong style={{ color: '#D4A843' }}>closure</strong>. You were handed a lie: that struggle means growth. It doesn't. It means you've been placed in an energetic grid working against you.
+ {step.before}
+ <strong style={{ color: '#D4A843' }}>{step.bold}</strong>
+ {step.after}
  </p>
+ ))}
+ {ROADMAP_PILLARS.map((item) => (
  <p
- style={{ margin: '0 0 10px', fontSize: '0.85rem', color: '#DDD8F8', lineHeight: 1.8 }}
- >
- The second - and more important - is <strong style={{ color: '#D4A843' }}>preparation</strong>. That grid is already shifting. And to move with it, you need to attack all three pillars at once - because they don't work in isolation. Your blueprint, your timing, and your environment are always talking to each other. Fix one and ignore the others - and you'll keep hitting the same ceiling in a different room.
- </p>
- <p
- style={{ margin: '0 0 10px', fontSize: '0.85rem', color: '#DDD8F8', lineHeight: 1.8 }}
- >
- <span style={{ color: '#38a169', fontWeight: 800, marginRight: '6px' }}>➜</span>
- For <strong>Pillar 1</strong> - we use a sequential deconditioning method that goes directly into your energetic blindspots (desires, addictions, dreams, etc). This isn’t talk therapy or journaling. A specific, structured process that helps you identify the unconscious karmic patterns running your decisions - and consciously transmute them into your greatest assets.
- </p>
- <p
+ key={item.pillar}
  style={{ margin: '0 0 10px', fontSize: '0.85rem', color: '#DDD8F8', lineHeight: 1.8 }}
  >
  <span style={{ color: '#38a169', fontWeight: 800, marginRight: '6px' }}>➜</span>
- For <strong>Pillar 2</strong> - we map your current and upcoming planetary transits so you're never caught off guard again. We show you exactly which seasons to push, which to rest, and how to prepare for the windows that - if you move correctly - will be the most expansive periods of your life.
+ For <strong>{item.pillar}</strong>
+ {item.text}
  </p>
- <p
- style={{ margin: '0 0 10px', fontSize: '0.85rem', color: '#DDD8F8', lineHeight: 1.8 }}
- >
- <span style={{ color: '#38a169', fontWeight: 800, marginRight: '6px' }}>➜</span>
- For <strong>Pillar 3</strong> - we use our proprietary Feng Shui × Astrocartography x Real Estate Numerology to find the best addresses+places in the world that accelerate your goals. This is different for everything. And it works even if you can't move yet. There are ways to shift the energetic frequency of your space, and protect yourself against unseel environmental forces that have been holding you back for years.
- </p>
+ ))}
  <div style={{ borderTop: '1px solid #C8E6C8', paddingTop: '14px', marginTop: '4px' }}>
  <p
  style={{
@@ -2267,7 +2260,7 @@ export function InvisibleForcesResultsPage() {
  lineHeight: 1.5,
  }}
  >
- When all three are addressed together - that's when people stop reacting to their lives and start getting ahead of them.
+ {ROADMAP_CLOSER}
  </p>
  </div>
  </div>
