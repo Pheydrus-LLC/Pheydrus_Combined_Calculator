@@ -17,9 +17,10 @@ import {
  type GoalCategory,
 } from '../../services/pdfExport/clientInterpretations';
 import { applyKmsStyle } from '../../services/pdfExport/kmsStyle';
-import { getLibraryEntry, getDefaultSteps2, BENEFIC_PLANETS } from '../../data/planetHouseLibrary';
+import { getLibraryEntry, getDefaultSteps2 } from '../../data/planetHouseLibrary';
 import { PILLAR_VOICE_NOTES } from '../../data/pillarVoiceNotes';
 import { VoiceNotePlayer } from '../../components/results/VoiceNotePlayer';
+import { getReportItems } from '../../services/diagnostic/reportItems';
 import { PRESS_URL, PRESS_LOGOS_LIGHT, PRESS_LOGOS_ALT } from '../../data/press';
 import { ROADMAP_TITLE, ROADMAP_STEPS, ROADMAP_PILLARS, ROADMAP_CLOSER } from '../../data/roadmap';
 import { COST_OF_INACTION_TITLE, getCostOfInactionCopy } from '../../data/costOfInaction';
@@ -741,31 +742,7 @@ function PillarDeepDiveCard({
  pillar3Items: GradeItem[];
  addressMoveDate: string;
 }) {
- const rawScoringItems = pillar.items.filter(
- (i) => i.grade === 'F' || i.grade === 'C' || i.grade === 'A'
- );
-
- // Skip: grade A + benefic planet (library shows no pressure)
- // Skip: duplicate planet within the same pillar (show once)
- const seenPlanets = new Set<string>();
- const dedupedItems = rawScoringItems.filter((i) => {
- if (i.planet && i.grade === 'A' && BENEFIC_PLANETS.has(i.planet)) return false;
- if (i.planet) {
- if (seenPlanets.has(i.planet)) return false;
- seenPlanets.add(i.planet);
- }
- return true;
- });
-
- // Sort: F first, C second, A last; Life Cycle and Address always last regardless of grade
- const GRADE_ORDER: Record<string, number> = { F: 0, C: 1, A: 2, Neutral: 3 };
- const isFooterSection = (i: GradeItem) => i.section === 'Life Cycle' || i.section === 'Address';
- const scoringItems = [...dedupedItems].sort((a, b) => {
- const aFooter = isFooterSection(a) ? 1 : 0;
- const bFooter = isFooterSection(b) ? 1 : 0;
- if (aFooter !== bFooter) return aFooter - bFooter;
- return (GRADE_ORDER[a.grade] ?? 3) - (GRADE_ORDER[b.grade] ?? 3);
- });
+ const scoringItems = getReportItems(pillar);
 
  const callout = PILLAR_CALLOUT[index](goalShort, location);
  const accentColor = index === 1 ? '#F87171' : index === 2 ? '#C9A84C' : '#9a7d4e';
@@ -2189,23 +2166,6 @@ export function InvisibleForcesResultsPage() {
  alt={PRESS_LOGOS_ALT}
  style={{ display: 'block', margin: '0 auto', width: '100%', maxWidth: '620px', height: 'auto', opacity: 0.85 }}
  />
- </a>
- <a
- href={PRESS_URL}
- target="_blank"
- rel="noopener noreferrer"
- style={{
- display: 'inline-block',
- marginTop: '14px',
- fontSize: '0.75rem',
- fontWeight: 700,
- color: '#C9A84C',
- textDecoration: 'underline',
- textUnderlineOffset: '3px',
- fontFamily: INTER,
- }}
- >
- See all our press features →
  </a>
  </div>
  </div>

@@ -27,6 +27,7 @@ import { COACHING_CTA_TITLE, COACHING_CTA_PARAGRAPHS, COACHING_CALL_URL } from '
 import { COST_OF_INACTION_TITLE, getCostOfInactionCopy } from '../../data/costOfInaction';
 import { ROADMAP_TITLE, ROADMAP_STEPS, ROADMAP_PILLARS, ROADMAP_CLOSER } from '../../data/roadmap';
 import { PRESS_URL, PRESS_LOGOS_DARK, PRESS_LOGOS_ALT } from '../../data/press';
+import { getReportItems } from '../diagnostic/reportItems';
 import {
  PILLAR_RESOURCE_CARDS,
  PILLAR_RESOURCES,
@@ -645,7 +646,6 @@ function renderPage2(
  <div style="margin-top:22px;padding-top:18px;border-top:1px solid #E8E0D0;text-align:center;page-break-inside:avoid;break-inside:avoid;">
  <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.2em;color:#999;font-family:${INTER};margin-bottom:12px;">As Seen On</div>
  <a href="${esc(PRESS_URL)}" target="_blank" rel="noopener noreferrer"><img src="${esc(assetOrigin + PRESS_LOGOS_DARK)}" alt="${esc(PRESS_LOGOS_ALT)}" style="width:100%;max-width:560px;height:auto;opacity:0.8;" /></a>
- <div style="margin-top:10px;"><a href="${esc(PRESS_URL)}" target="_blank" rel="noopener noreferrer" style="font-size:11px;font-weight:700;color:#8B6914;text-decoration:underline;font-family:${INTER};">See all our press features &rarr;</a></div>
  </div>
 
 </div>`;
@@ -698,7 +698,7 @@ function renderPage3(
  pillarGrade: string,
  accent: string,
  ): string {
- const scoringItems = pillar.items.filter((i) => i.grade === 'F' || i.grade === 'C' || i.grade === 'A');
+ const scoringItems = getReportItems(pillar);
  const badgeSty = num === 1
  ? 'background:#FFF0F0;color:#C0392B;border:1px solid #C0392B;'
  : num === 2
