@@ -991,8 +991,6 @@ function usePrintSetup() {
  const pageStyle = document.createElement('style');
  pageStyle.textContent = '@media print { @page { size: A4; margin: 12mm; } }';
  document.head.appendChild(pageStyle);
- // The printout uses Inter Medium (see lightPrint.ts); fetch it now so it's ready when printing starts
- void document.fonts?.load('500 16px Inter');
 
  let restoreColors: (() => void) | null = null;
  const mark = () => {
