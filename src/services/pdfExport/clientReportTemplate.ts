@@ -26,6 +26,7 @@ import { PILLAR_VOICE_NOTES, voiceNoteUrl } from '../../data/pillarVoiceNotes';
 import { COACHING_CTA_TITLE, COACHING_CTA_PARAGRAPHS, COACHING_CALL_URL } from '../../data/coachingCta';
 import { COST_OF_INACTION_TITLE, getCostOfInactionCopy } from '../../data/costOfInaction';
 import { ROADMAP_TITLE, ROADMAP_STEPS, ROADMAP_PILLARS, ROADMAP_CLOSER } from '../../data/roadmap';
+import { PRESS_URL, PRESS_LOGOS_DARK, PRESS_LOGOS_ALT } from '../../data/press';
 import {
  PILLAR_RESOURCE_CARDS,
  PILLAR_RESOURCES,
@@ -564,7 +565,12 @@ function renderPage1(results: ConsolidatedResults, intake: ClientIntakeData, goa
 
 // ── PAGE 2: WHY THIS KEEPS HAPPENING ─────────────────────────────────────────
 
-function renderPage2(results: ConsolidatedResults, _intake: ClientIntakeData, __goal: GoalCategory): string {
+function renderPage2(
+ results: ConsolidatedResults,
+ _intake: ClientIntakeData,
+ __goal: GoalCategory,
+ assetOrigin: string,
+): string {
  const longest = getLongestMaleficTransit(
  results.diagnostic!.allItems,
  results.calculators.transits?.transits ?? [],
@@ -635,6 +641,12 @@ function renderPage2(results: ConsolidatedResults, _intake: ClientIntakeData, __
  <p style="margin:0;font-size:12px;color:#555;line-height:1.7;font-family:${INTER};">Without intervention, your current configuration is projected to persist ${endYear ? `<strong style="color:#C9A84C;">through ${endYear} - approximately ${yearsRemaining} more years</strong>` : '<strong style="color:#C9A84C;">for several more years</strong>'}. The primary driver is <strong style="color:#1C1A2E;">${longest ? esc(longest.planet) + ' transiting House ' + longest.house : 'the dominant outer planet transit'}</strong>, defining the exact window you are in right now. Knowing the window is half the advantage.</p>
  </div>
 
+ <!-- As seen on -->
+ <div style="margin-top:22px;padding-top:18px;border-top:1px solid #E8E0D0;text-align:center;page-break-inside:avoid;break-inside:avoid;">
+ <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.2em;color:#999;font-family:${INTER};margin-bottom:12px;">As Seen On</div>
+ <a href="${esc(PRESS_URL)}" target="_blank" rel="noopener noreferrer"><img src="${esc(assetOrigin + PRESS_LOGOS_DARK)}" alt="${esc(PRESS_LOGOS_ALT)}" style="width:100%;max-width:560px;height:auto;opacity:0.8;" /></a>
+ <div style="margin-top:10px;"><a href="${esc(PRESS_URL)}" target="_blank" rel="noopener noreferrer" style="font-size:11px;font-weight:700;color:#8B6914;text-decoration:underline;font-family:${INTER};">See all our press features &rarr;</a></div>
+ </div>
 
 </div>`;
 }
@@ -917,7 +929,7 @@ export function generateClientReportTemplate(
 </head>
 <body>
  <div class="page-break">${renderPage1(results, intake, goal)}</div>
- <div class="page-break">${renderPage2(results, intake, goal)}</div>
+ <div class="page-break">${renderPage2(results, intake, goal, assetOrigin)}</div>
  <div class="page-break">${renderPage3(results, intake, goal, assetOrigin)}</div>
  <div class="page-break">${renderResourcesPage()}</div>
  <div>${renderPage4(results, intake)}</div>

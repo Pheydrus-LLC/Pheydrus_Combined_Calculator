@@ -20,6 +20,7 @@ import { applyKmsStyle } from '../../services/pdfExport/kmsStyle';
 import { getLibraryEntry, getDefaultSteps2, BENEFIC_PLANETS } from '../../data/planetHouseLibrary';
 import { PILLAR_VOICE_NOTES } from '../../data/pillarVoiceNotes';
 import { VoiceNotePlayer } from '../../components/results/VoiceNotePlayer';
+import { PRESS_URL, PRESS_LOGOS_LIGHT, PRESS_LOGOS_ALT } from '../../data/press';
 import { ROADMAP_TITLE, ROADMAP_STEPS, ROADMAP_PILLARS, ROADMAP_CLOSER } from '../../data/roadmap';
 import { COST_OF_INACTION_TITLE, getCostOfInactionCopy } from '../../data/costOfInaction';
 import { CalendlyEmbed } from '../../components/results/CalendlyEmbed';
@@ -2159,6 +2160,54 @@ export function InvisibleForcesResultsPage() {
  </p>
  </div>
  )}
+
+ {/* As seen on */}
+ <div
+ style={{
+ marginTop: '28px',
+ paddingTop: '22px',
+ borderTop: '1px solid rgba(255,255,255,0.08)',
+ textAlign: 'center',
+ }}
+ >
+ <div
+ style={{
+ fontSize: '10px',
+ fontWeight: 700,
+ textTransform: 'uppercase',
+ letterSpacing: '0.2em',
+ color: '#A098C0',
+ marginBottom: '14px',
+ fontFamily: INTER,
+ }}
+ >
+ As Seen On
+ </div>
+ <a href={PRESS_URL} target="_blank" rel="noopener noreferrer" style={{ display: 'block' }}>
+ <img
+ src={PRESS_LOGOS_LIGHT}
+ alt={PRESS_LOGOS_ALT}
+ style={{ display: 'block', margin: '0 auto', width: '100%', maxWidth: '620px', height: 'auto', opacity: 0.85 }}
+ />
+ </a>
+ <a
+ href={PRESS_URL}
+ target="_blank"
+ rel="noopener noreferrer"
+ style={{
+ display: 'inline-block',
+ marginTop: '14px',
+ fontSize: '0.75rem',
+ fontWeight: 700,
+ color: '#C9A84C',
+ textDecoration: 'underline',
+ textUnderlineOffset: '3px',
+ fontFamily: INTER,
+ }}
+ >
+ See all our press features →
+ </a>
+ </div>
  </div>
  </section>
 
