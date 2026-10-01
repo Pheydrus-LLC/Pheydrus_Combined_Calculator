@@ -167,6 +167,7 @@ export function VoiceNotePlayer({
               {bars.map((h, i) => (
                 <span
                   key={i}
+                  data-wave-bar
                   aria-hidden="true"
                   style={{
                     flex: 1,

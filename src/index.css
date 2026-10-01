@@ -50,18 +50,24 @@ button {
   transition: all 0.25s ease;
 }
 
+/* Print-only versions of report elements (e.g. dark press logos) */
+[data-report-root] [data-print-only] {
+  display: none !important;
+}
+
 /* ── Client report: printing / "Save as PDF" ────────────────────────────────
-   "Download Your Report (PDF)" opens the browser's print dialog. These rules
-   keep the printout looking like the report on screen. */
+   "Download Your Report (PDF)" opens the browser's print dialog. The report
+   prints in a light theme: its colours are switched just before printing
+   (src/services/pdfExport/lightPrint.ts) and these rules handle the rest. */
 @media print {
-  /* The page size and dark page margins are added by the results page itself
+  /* The page size is set by the results page itself
      (an @page rule can't be limited to one page of the site) */
 
-  /* Dark background edge to edge, even if "Background graphics" is off */
+  /* White page; card colours print even if "Background graphics" is off */
   html:has([data-report-root]),
   html:has([data-report-root]) body,
   html:has([data-report-root]) #root {
-    background: #050a18 !important;
+    background: #ffffff !important;
   }
   html:has([data-report-root]),
   html:has([data-report-root]) * {
@@ -78,13 +84,17 @@ button {
   :has(> [data-report-root]) {
     padding-top: 0 !important;
     padding-bottom: 0 !important;
-    /* The starry glow repeats oddly on paper; plain navy instead */
-    background: #050a18 !important;
+    /* No starry navy backdrop on paper */
+    background: #ffffff !important;
   }
 
   /* Menus, buttons and the booking calendar don't belong on paper */
-  [data-report-root] [data-print='hide'] {
+  [data-report-root] [data-print='hide'],
+  [data-report-root] [data-screen-only] {
     display: none !important;
+  }
+  [data-report-root] [data-print-only] {
+    display: block !important;
   }
 
   /* Keep cards whole and headings with what follows (boxes that fit on a page

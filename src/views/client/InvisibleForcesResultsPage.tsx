@@ -20,7 +20,8 @@ import { getLibraryEntry, getDefaultSteps2 } from '../../data/planetHouseLibrary
 import { PILLAR_VOICE_NOTES } from '../../data/pillarVoiceNotes';
 import { VoiceNotePlayer } from '../../components/results/VoiceNotePlayer';
 import { getReportItems } from '../../services/diagnostic/reportItems';
-import { PRESS_URL, PRESS_LOGOS_LIGHT, PRESS_LOGOS_ALT } from '../../data/press';
+import { applyLightPrintTheme } from '../../services/pdfExport/lightPrint';
+import { PRESS_URL, PRESS_LOGOS_LIGHT, PRESS_LOGOS_DARK, PRESS_LOGOS_ALT } from '../../data/press';
 import { ROADMAP_TITLE, ROADMAP_STEPS, ROADMAP_PILLARS, ROADMAP_CLOSER } from '../../data/roadmap';
 import { COST_OF_INACTION_TITLE, getCostOfInactionCopy } from '../../data/costOfInaction';
 import { CalendlyEmbed } from '../../components/results/CalendlyEmbed';
@@ -126,7 +127,8 @@ function getTransmuteLine(item: GradeItem): string | null {
 // ── SVG wrapper ───────────────────────────────────────────────────────────────
 
 function SvgChart({ svg }: { svg: string }) {
- return <div dangerouslySetInnerHTML={{ __html: svg }} />;
+ // The house wheel is drawn for a light background already, so printing leaves its colours alone
+ return <div data-print-keep-colors dangerouslySetInnerHTML={{ __html: svg }} />;
 }
 
 // ── Venn diagram ──────────────────────────────────────────────────────────────
@@ -976,21 +978,25 @@ function CostOfInaction({ goal, endYear }: { goal: GoalCategory; endYear: number
 const PRINT_KEEP_MAX_HEIGHT = 850;
 
 /**
- * Print setup for the report: sets the A4 page with dark margins while the
- * report is open, and just before printing marks every card and callout that
- * fits on one page so it isn't cut across a page break (index.css turns the
- * mark into break-inside: avoid). Covers the Download button and the browser's
- * own Print.
+ * Print setup for the report: sets the A4 page while the report is open, and
+ * just before printing switches the report to its light theme (lightPrint.ts)
+ * and marks every card and callout that fits on one page so it isn't cut
+ * across a page break (index.css turns the mark into break-inside: avoid).
+ * Everything is undone after printing. Covers the Download button and the
+ * browser's own Print.
  */
-function useKeepBoxesWholeWhenPrinting() {
+function usePrintSetup() {
  useEffect(() => {
- // A4 with dark margins, only while the report is open
+ // A4 page, only while the report is open (an @page rule can't target one page of the site)
  const pageStyle = document.createElement('style');
- pageStyle.textContent = '@media print { @page { size: A4; margin: 12mm; background: #050a18; } }';
+ pageStyle.textContent = '@media print { @page { size: A4; margin: 12mm; } }';
  document.head.appendChild(pageStyle);
 
+ let restoreColors: (() => void) | null = null;
  const mark = () => {
- document.querySelectorAll<HTMLElement>('[data-report-root] *').forEach((el) => {
+ const root = document.querySelector<HTMLElement>('[data-report-root]');
+ if (!root) return;
+ root.querySelectorAll<HTMLElement>('*').forEach((el) => {
  const cs = getComputedStyle(el);
  const boxed =
  parseFloat(cs.borderTopWidth) > 0 ||
@@ -1001,9 +1007,14 @@ function useKeepBoxesWholeWhenPrinting() {
  el.setAttribute('data-print-keep', '');
  }
  });
+ restoreColors?.();
+ restoreColors = applyLightPrintTheme(root);
  };
- const unmark = () =>
+ const unmark = () => {
  document.querySelectorAll('[data-print-keep]').forEach((el) => el.removeAttribute('data-print-keep'));
+ restoreColors?.();
+ restoreColors = null;
+ };
  window.addEventListener('beforeprint', mark);
  window.addEventListener('afterprint', unmark);
  return () => {
@@ -1020,7 +1031,7 @@ export function InvisibleForcesResultsPage() {
  const location = useLocation();
  const navigate = useNavigate();
  const [scrollProgress, setScrollProgress] = useState(0);
- useKeepBoxesWholeWhenPrinting();
+ usePrintSetup();
  const [activeSection, setActiveSection] = useState<string>(REPORT_SECTIONS[0].id);
 
  // Accept any truthy ?demo value (e.g., demo=1, demo=true, demo=yes)
@@ -2213,7 +2224,14 @@ export function InvisibleForcesResultsPage() {
  </div>
  <a href={PRESS_URL} target="_blank" rel="noopener noreferrer" style={{ display: 'block' }}>
  <img
+ data-screen-only
  src={PRESS_LOGOS_LIGHT}
+ alt={PRESS_LOGOS_ALT}
+ style={{ display: 'block', margin: '0 auto', width: '100%', maxWidth: '620px', height: 'auto', opacity: 0.85 }}
+ />
+ <img
+ data-print-only
+ src={PRESS_LOGOS_DARK}
  alt={PRESS_LOGOS_ALT}
  style={{ display: 'block', margin: '0 auto', width: '100%', maxWidth: '620px', height: 'auto', opacity: 0.85 }}
  />
