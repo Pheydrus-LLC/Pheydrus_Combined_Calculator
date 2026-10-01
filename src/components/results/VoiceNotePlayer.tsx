@@ -2,9 +2,11 @@
  * VoiceNotePlayer - compact audio player for the pillar voice notes.
  * Custom controls so it looks the same on every browser and phone.
  * Audio loads only when played, and starting one note pauses any other.
+ * Progress shows as a decorative waveform that fills in as the note plays.
  */
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { waveformBars } from '../../utils/waveform';
 
 const GOLD = '#C9A84C';
 const CORMORANT = "'Cormorant Garamond', Georgia, serif";
@@ -17,12 +19,24 @@ function formatTime(seconds: number): string {
   return `${m}:${s.toString().padStart(2, '0')}`;
 }
 
-export function VoiceNotePlayer({ src, label }: { src: string; label: string }) {
+export function VoiceNotePlayer({
+  src,
+  label,
+  variant = 0,
+}: {
+  src: string;
+  label: string;
+  /** Changes the waveform's shape slightly, so each note looks distinct */
+  variant?: number;
+}) {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [playing, setPlaying] = useState(false);
   const [current, setCurrent] = useState(0);
   const [duration, setDuration] = useState(0);
   const [failed, setFailed] = useState(false);
+  const [seekFocused, setSeekFocused] = useState(false);
+  const bars = useMemo(() => waveformBars(44, variant), [variant]);
+  const progress = duration ? current / duration : 0;
 
   // `play` doesn't bubble, so listen in the capture phase to hear every <audio> on the page.
   useEffect(() => {
@@ -134,17 +148,57 @@ export function VoiceNotePlayer({ src, label }: { src: string; label: string }) 
           </p>
         ) : (
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <input
-              type="range"
-              min={0}
-              max={duration || 0}
-              step={0.1}
-              value={current}
-              disabled={!duration}
-              onChange={(e) => seek(Number(e.target.value))}
-              aria-label="Seek voice note"
-              style={{ flex: 1, minWidth: 0, accentColor: GOLD, cursor: duration ? 'pointer' : 'default' }}
-            />
+            <div
+              style={{
+                position: 'relative',
+                flex: '0 1 300px',
+                minWidth: 0,
+                height: '30px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '2px',
+                borderRadius: '4px',
+                outline: seekFocused ? `2px solid ${GOLD}` : 'none',
+                outlineOffset: '3px',
+              }}
+            >
+              {bars.map((h, i) => (
+                <span
+                  key={i}
+                  aria-hidden="true"
+                  style={{
+                    flex: 1,
+                    maxWidth: '5px',
+                    height: `${Math.max(h * 100, 12)}%`,
+                    borderRadius: '999px',
+                    background: (i + 0.5) / bars.length <= progress ? GOLD : 'rgba(192,176,240,0.28)',
+                    transition: 'background 0.2s',
+                  }}
+                />
+              ))}
+              {/* Invisible slider over the bars: tap, drag and arrow keys all seek */}
+              <input
+                type="range"
+                min={0}
+                max={duration || 0}
+                step={0.1}
+                value={current}
+                disabled={!duration}
+                onChange={(e) => seek(Number(e.target.value))}
+                onFocus={() => setSeekFocused(true)}
+                onBlur={() => setSeekFocused(false)}
+                aria-label="Seek voice note"
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  width: '100%',
+                  height: '100%',
+                  margin: 0,
+                  opacity: 0,
+                  cursor: duration ? 'pointer' : 'default',
+                }}
+              />
+            </div>
             <span
               style={{
                 flexShrink: 0,

@@ -798,7 +798,7 @@ function PillarDeepDiveCard({
  </span>
  </div>
 
- {voiceNote && <VoiceNotePlayer src={voiceNote.src} label={voiceNote.label} />}
+ {voiceNote && <VoiceNotePlayer src={voiceNote.src} label={voiceNote.label} variant={index - 1} />}
 
  {/* Goal callout */}
  <p

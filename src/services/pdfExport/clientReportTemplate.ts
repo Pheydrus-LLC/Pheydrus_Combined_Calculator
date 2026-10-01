@@ -28,6 +28,7 @@ import { COST_OF_INACTION_TITLE, getCostOfInactionCopy } from '../../data/costOf
 import { ROADMAP_TITLE, ROADMAP_STEPS, ROADMAP_PILLARS, ROADMAP_CLOSER } from '../../data/roadmap';
 import { PRESS_URL, PRESS_LOGOS_DARK, PRESS_LOGOS_ALT } from '../../data/press';
 import { getReportItems } from '../diagnostic/reportItems';
+import { waveformBars } from '../../utils/waveform';
 import {
  PILLAR_RESOURCE_CARDS,
  PILLAR_RESOURCES,
@@ -653,6 +654,19 @@ function renderPage2(
 
 // ── PAGE 3: PILLAR BREAKDOWN ──────────────────────────────────────────────────
 
+// Static version of the web player's decorative waveform
+function renderWaveformSvg(variant: number): string {
+ const bars = waveformBars(44, variant);
+ const w = 3, gap = 2, h = 22;
+ const rects = bars
+ .map((v, i) => {
+ const bh = Math.max(v * h, 3);
+ return `<rect x="${i * (w + gap)}" y="${((h - bh) / 2).toFixed(1)}" width="${w}" height="${bh.toFixed(1)}" rx="1.5" fill="#C9A84C"/>`;
+ })
+ .join('');
+ return `<svg width="${bars.length * (w + gap) - gap}" height="${h}" viewBox="0 0 ${bars.length * (w + gap) - gap} ${h}" style="flex-shrink:0;margin-left:auto;opacity:0.75;">${rects}</svg>`;
+}
+
 // A PDF can't play audio, so the voice note becomes a link that opens the recording.
 function renderVoiceNoteLink(num: 1 | 2 | 3, assetOrigin: string): string {
  const note = PILLAR_VOICE_NOTES[num];
@@ -665,6 +679,7 @@ function renderVoiceNoteLink(num: 1 | 2 | 3, assetOrigin: string): string {
  <span style="display:block;font-size:15px;font-style:italic;font-weight:600;color:#1C1A2E;font-family:${CORMORANT};">${esc(note.label)}</span>
  <span style="display:block;font-size:10px;color:#7A5A1A;font-family:${INTER};margin-top:2px;">Click to listen to the voice note &rarr;</span>
  </span>
+ ${renderWaveformSvg(num - 1)}
  </a>`;
 }
 
