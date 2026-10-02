@@ -12,7 +12,7 @@ const VENN_ALT =
 export function VennDiagram({ width = 200, withPrintVersion = false }: { width?: number; withPrintVersion?: boolean }) {
   const height = Math.round((width * 228) / 240);
   const img = (src: string, attrs: Record<string, true>) => (
-    <img src={src} alt={VENN_ALT} width={width} height={height} style={{ display: 'block', width: `${width}px`, height: 'auto', margin: '0 auto' }} {...attrs} />
+    <img src={src} alt={VENN_ALT} width={width} height={height} style={{ display: 'block', width: `${width}px`, maxWidth: '100%', height: 'auto', margin: '0 auto' }} {...attrs} />
   );
   // The report's saved PDF is cream, so it swaps in the light version
   return withPrintVersion ? (

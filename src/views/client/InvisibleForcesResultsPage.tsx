@@ -1657,8 +1657,9 @@ export function InvisibleForcesResultsPage() {
  >
  Your Score Breaks Down As:
  </div>
- <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
- <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '12px' }}>
+ {/* On phones the Venn drops below the bars instead of running off the edge */}
+ <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '20px', alignItems: 'center' }}>
+ <div style={{ flex: '1 1 260px', minWidth: 0, display: 'flex', flexDirection: 'column', gap: '12px' }}>
  {rows.map((r) => {
  const gc2 = gradeColor(r.grade);
  return (
