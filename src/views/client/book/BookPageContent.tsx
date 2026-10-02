@@ -376,11 +376,8 @@ export function ForcesPage() {
 const CHAPTER_BACKGROUND = 'radial-gradient(ellipse 80% 65% at 50% 42%, #FCF7EA 0%, #F3E7C9 68%, #E8D7AE 100%)';
 const CHAPTER_GOLD = '#8B6914';
 
-/** A chapter's title page: "Chapter 1 · Pillar 1, Structure", its subtitle and HeyJune's voice note */
-export function ChapterOpenerPage({ ctx, n }: { ctx: ReportContext; n: 1 | 2 | 3 }) {
-  const pillar = ctx.pillars[n - 1];
-  const grade = getPillarLetterGrade(pillar);
-  const note = PILLAR_VOICE_NOTES[n];
+/** The gold-cream title page every chapter opens on: "Chapter n", a star, the title and its subtitle */
+function ChapterTitlePage({ n, title, subtitle, children }: { n: number; title: string; subtitle: string; children?: ReactNode }) {
   return (
     <div style={{ position: 'relative', flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '44px 36px', background: CHAPTER_BACKGROUND }}>
       <div aria-hidden="true" style={{ position: 'absolute', inset: '14px', border: '1px solid rgba(139,105,20,0.35)', pointerEvents: 'none' }} />
@@ -388,12 +385,20 @@ export function ChapterOpenerPage({ ctx, n }: { ctx: ReportContext; n: 1 | 2 | 3
         Chapter {n}
       </div>
       <div style={{ color: CHAPTER_GOLD, fontSize: '0.9rem', margin: '14px 0' }}>✦</div>
-      <h2 style={{ fontFamily: BOOK.serif, fontSize: '2.5rem', fontWeight: 700, lineHeight: 1.15, color: '#2A2238', margin: 0 }}>
-        Pillar {n}, {PILLAR_TITLES[n].title}
-      </h2>
-      <div style={{ fontFamily: BOOK.serif, fontStyle: 'italic', fontSize: '1.3rem', color: CHAPTER_GOLD, margin: '10px 0 26px' }}>
-        {PILLAR_TITLES[n].subtitle}
-      </div>
+      <h2 style={{ fontFamily: BOOK.serif, fontSize: '2.5rem', fontWeight: 700, lineHeight: 1.15, color: '#2A2238', margin: 0 }}>{title}</h2>
+      <div style={{ fontFamily: BOOK.serif, fontStyle: 'italic', fontSize: '1.3rem', color: CHAPTER_GOLD, margin: '10px 0 26px' }}>{subtitle}</div>
+      {children}
+    </div>
+  );
+}
+
+/** A pillar chapter's title page: "Chapter 1 · Pillar 1, Structure", its subtitle and HeyJune's voice note */
+export function ChapterOpenerPage({ ctx, n }: { ctx: ReportContext; n: 1 | 2 | 3 }) {
+  const pillar = ctx.pillars[n - 1];
+  const grade = getPillarLetterGrade(pillar);
+  const note = PILLAR_VOICE_NOTES[n];
+  return (
+    <ChapterTitlePage n={n} title={`Pillar ${n}, ${PILLAR_TITLES[n].title}`} subtitle={PILLAR_TITLES[n].subtitle}>
       {note && (
         <div style={{ width: '100%', maxWidth: '380px', textAlign: 'left' }}>
           <VoiceNotePlayer src={note.src} label={note.label} variant={n - 1} tone="light" />
@@ -406,7 +411,7 @@ export function ChapterOpenerPage({ ctx, n }: { ctx: ReportContext; n: 1 | 2 | 3
       <div style={{ fontFamily: BOOK.sans, fontSize: '0.72rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#7A6A48' }}>
         Pillar grade <strong style={{ color: grade === 'A' ? '#15803d' : grade === 'C' ? '#9A6B00' : '#B42318', fontSize: '0.95rem' }}>{grade}</strong>
       </div>
-    </div>
+    </ChapterTitlePage>
   );
 }
 
@@ -482,6 +487,10 @@ export function FindingPage({
 }
 
 // ── Your solution ────────────────────────────────────────────────────────────
+
+export function SolutionOpenerPage() {
+  return <ChapterTitlePage n={4} title="Your Solution" subtitle="Your Roadmap Out of the Pattern" />;
+}
 
 export function CostPage({ ctx }: { ctx: ReportContext }) {
   const copy = getCostOfInactionCopy(ctx.goal, ctx.endYear);

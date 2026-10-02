@@ -25,6 +25,7 @@ import {
   ForcesPage,
   ChapterOpenerPage,
   FindingPage,
+  SolutionOpenerPage,
   CostPage,
   RoadmapStepsPage,
   RoadmapPillarsPage,
@@ -91,7 +92,8 @@ export function buildBookPages(
   });
 
   pages.push(
-    { id: 'cost', chapter: 'Your Solution', contentsName: 'Chapter 4 · Your Solution', content: <CostPage ctx={ctx} /> },
+    { id: 'solution', chapter: 'Your Solution', contentsName: 'Chapter 4 · Your Solution', fullBleed: true, content: <SolutionOpenerPage /> },
+    { id: 'cost', chapter: 'Your Solution', content: <CostPage ctx={ctx} /> },
     { id: 'roadmap', chapter: 'Your Solution', content: <RoadmapStepsPage pillarCount={ROADMAP_FIRST_PAGE_PILLARS} /> },
     { id: 'roadmap-pillars', chapter: 'Your Solution', alignTop: true, content: <RoadmapPillarsPage fromPillar={ROADMAP_FIRST_PAGE_PILLARS} /> },
     { id: 'kit', chapter: 'Your Pillar Repair Kit', contentsName: 'Chapter 5 · Your Pillar Repair Kit', content: <RepairKitIntroPage /> },
