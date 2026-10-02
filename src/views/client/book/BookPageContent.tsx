@@ -125,9 +125,9 @@ const PILLAR_BAR: Record<1 | 2 | 3, string> = { 1: '#F87171', 2: '#C9A84C', 3: '
 /** A short gold rule between the cover's lines */
 const Rule = () => <div style={{ width: '64px', height: '1px', background: 'rgba(201,168,76,0.6)', margin: '4px auto' }} />;
 
-/** Flat midnight navy and soft champagne gold of the front cover */
-const COVER_NAVY = '#0E1A33';
-const COVER_GOLD = '#CDB07E';
+/** The front cover uses the report's own navy and gold, like the back cover */
+const COVER_NAVY = BOOK.page;
+const COVER_GOLD = BOOK.gold;
 
 /** Four-pointed star with curved sides, centred on (x, y) */
 const starPath = (x: number, y: number, r: number) =>
@@ -165,7 +165,7 @@ const MoonPhases = () => {
   );
 };
 
-const coverSerif = { fontFamily: BOOK.serif, fontWeight: 400, color: COVER_GOLD, margin: 0 };
+const coverSerif = { fontFamily: BOOK.serif, fontWeight: 400, color: BOOK.ink, margin: 0 };
 const coverCaps = { ...coverSerif, textTransform: 'uppercase' as const };
 
 export function CoverPage({ name }: { name: string }) {
@@ -177,7 +177,7 @@ export function CoverPage({ name }: { name: string }) {
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly', padding: '48px 40px 18px' }}>
         <div>
           <p style={{ ...coverSerif, fontStyle: 'italic', fontSize: 'clamp(1.3rem, 7cqw, 1.9rem)', marginBottom: '6px' }}>The</p>
-          <p style={{ ...coverCaps, fontSize: 'clamp(1.6rem, 9.5cqw, 2.7rem)', letterSpacing: '0.14em', lineHeight: 1.2 }}>
+          <p style={{ ...coverCaps, color: BOOK.goldText, fontSize: 'clamp(1.6rem, 9.5cqw, 2.7rem)', fontWeight: 600, letterSpacing: '0.14em', lineHeight: 1.2 }}>
             Invisible
             <br />
             Forces
@@ -188,17 +188,17 @@ export function CoverPage({ name }: { name: string }) {
         <MoonPhases />
         <div>
           <p style={{ ...coverSerif, fontStyle: 'italic', fontSize: '1.05rem' }}>Authored by</p>
-          <p style={{ ...coverCaps, fontSize: '1.05rem', letterSpacing: '0.3em', marginTop: '2px' }}>Pheydrus</p>
+          <p style={{ ...coverCaps, fontFamily: BOOK.sans, color: BOOK.muted, fontSize: '0.74rem', fontWeight: 700, letterSpacing: '0.28em', marginTop: '6px' }}>Pheydrus</p>
           <div style={{ width: '56px', height: '1px', background: COVER_GOLD, opacity: 0.7, margin: '16px auto' }} />
           {name && <p style={{ ...coverSerif, fontStyle: 'italic', fontSize: '1.05rem' }}>For {name}.</p>}
         </div>
       </div>
-      <div style={{ position: 'relative', margin: '0 22px 22px', padding: '16px 22px 20px', borderTop: `1px solid rgba(205,176,126,0.55)` }}>
+      <div style={{ position: 'relative', margin: '0 22px 22px', padding: '16px 22px 20px', borderTop: `1px solid rgba(201,168,76,0.55)` }}>
         <FrameStar top="0" />
         <a href={PRESS_URL} target="_blank" rel="noopener noreferrer" style={{ display: 'block', textDecoration: 'none' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '10px' }}>
             <span style={{ flex: 1, height: '1px', background: COVER_GOLD, opacity: 0.4 }} />
-            <span style={{ fontFamily: BOOK.serif, fontSize: '0.72rem', letterSpacing: '0.3em', textTransform: 'uppercase', color: COVER_GOLD }}>As Seen On</span>
+            <span style={{ fontFamily: BOOK.sans, fontSize: '0.56rem', fontWeight: 700, letterSpacing: '0.3em', textTransform: 'uppercase', color: BOOK.muted }}>As Seen On</span>
             <span style={{ flex: 1, height: '1px', background: COVER_GOLD, opacity: 0.4 }} />
           </div>
           <img src={PRESS_LOGOS_LIGHT} alt={PRESS_LOGOS_ALT} style={{ display: 'block', width: '100%', height: 'auto', opacity: 0.55 }} />
