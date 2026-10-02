@@ -1730,7 +1730,7 @@ export function InvisibleForcesResultsPage() {
  })}
  </div>
  <div style={{ flexShrink: 0, textAlign: 'center' }}>
- <VennDiagram />
+ <VennDiagram withPrintVersion />
  <div style={{ fontSize: '9px', color: '#7068A0', marginTop: '4px' }}>
  3 forces · 1 score
  </div>
@@ -1844,7 +1844,7 @@ export function InvisibleForcesResultsPage() {
  }}
  >
  <div style={{ flexShrink: 0 }}>
- <VennDiagram />
+ <VennDiagram withPrintVersion />
  </div>
  <div
  style={{

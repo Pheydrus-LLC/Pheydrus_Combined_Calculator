@@ -334,7 +334,7 @@ export function PatternPage() {
       <Body style={{ fontWeight: 700, color: BOOK.goldText }}>{PATTERN_COPY.highlight}</Body>
       <Body>{PATTERN_COPY.closing}</Body>
       <div style={{ display: 'flex', justifyContent: 'center', marginTop: 'auto', paddingTop: '6px' }}>
-        <VennDiagram width={150} />
+        <VennDiagram width={190} />
       </div>
     </>
   );
@@ -350,7 +350,7 @@ export function ForcesPage() {
             The Three Invisible Forces
           </h2>
         </div>
-        <VennDiagram width={112} />
+        <VennDiagram width={150} />
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
         {LEGEND_CARDS.map((c) => (

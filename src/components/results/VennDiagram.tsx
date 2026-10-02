@@ -1,44 +1,26 @@
-/** The three-pillar Venn diagram (Identity / Timing / Environment). Used by the report and the book. */
+/**
+ * The three-pillar Venn diagram (Identity / Timing / Environment). Used by the report and the book.
+ * It's a fixed image (made by scripts/render-venn.mjs) so the labels stay inside their circles
+ * whatever the page's zoom or fonts.
+ */
 
-export function VennDiagram({ width = 200 }: { width?: number }) {
- return (
- <svg width={width} height={Math.round((width * 188) / 200)} viewBox="0 0 200 188" xmlns="http://www.w3.org/2000/svg">
- <circle
- cx="100"
- cy="68"
- r="58"
- fill="#C9A84C"
- fillOpacity="0.18"
- stroke="#D4A843"
- strokeWidth="1.5"
- />
- <circle
- cx="67"
- cy="127"
- r="58"
- fill="#7B5EA7"
- fillOpacity="0.18"
- stroke="#B8A8E0"
- strokeWidth="1.5"
- />
- <circle
- cx="133"
- cy="127"
- r="58"
- fill="#2E8B7A"
- fillOpacity="0.18"
- stroke="#7ECFC4"
- strokeWidth="1.5"
- />
- <text x="100" y="23" textAnchor="middle" fontSize="12" fill="#E8C46A" fontFamily="'Cormorant Garamond',Georgia,serif" fontWeight="600">Identity /</text>
- <text x="100" y="36" textAnchor="middle" fontSize="12" fill="#E8C46A" fontFamily="'Cormorant Garamond',Georgia,serif" fontWeight="600">Personality</text>
- <text x="100" y="49" textAnchor="middle" fontSize="9" fill="#C0B4E0" fontFamily="Arial,sans-serif">Pillar 1</text>
- <text x="43" y="162" textAnchor="middle" fontSize="12" fill="#C0B0F0" fontFamily="'Cormorant Garamond',Georgia,serif" fontWeight="600">Timing</text>
- <text x="43" y="174" textAnchor="middle" fontSize="9" fill="#C0B4E0" fontFamily="Arial,sans-serif">Pillar 2</text>
- <text x="148" y="162" textAnchor="middle" fontSize="10" fill="#7ECFC4" fontFamily="'Cormorant Garamond',Georgia,serif" fontWeight="600">Environment</text>
- <text x="148" y="174" textAnchor="middle" fontSize="9" fill="#C0B4E0" fontFamily="Arial,sans-serif">Pillar 3</text>
- <text x="100" y="110" textAnchor="middle" fontSize="11" fill="#E8DEFF" fontFamily="'Cormorant Garamond',Georgia,serif" fontStyle="italic">Full</text>
- <text x="100" y="123" textAnchor="middle" fontSize="11" fill="#E8DEFF" fontFamily="'Cormorant Garamond',Georgia,serif" fontStyle="italic">Alignment</text>
- </svg>
- );
+const VENN_DARK = '/images/venn-dark.png';
+const VENN_LIGHT = '/images/venn-light.png';
+const VENN_ALT =
+  'Venn diagram of three overlapping circles: Identity / Personality (Pillar 1), Timing (Pillar 2) and Environment (Pillar 3), with Full Alignment where all three meet';
+
+export function VennDiagram({ width = 200, withPrintVersion = false }: { width?: number; withPrintVersion?: boolean }) {
+  const height = Math.round((width * 228) / 240);
+  const img = (src: string, attrs: Record<string, true>) => (
+    <img src={src} alt={VENN_ALT} width={width} height={height} style={{ display: 'block', width: `${width}px`, height: 'auto', margin: '0 auto' }} {...attrs} />
+  );
+  // The report's saved PDF is cream, so it swaps in the light version
+  return withPrintVersion ? (
+    <>
+      {img(VENN_DARK, { 'data-screen-only': true })}
+      {img(VENN_LIGHT, { 'data-print-only': true })}
+    </>
+  ) : (
+    img(VENN_DARK, {})
+  );
 }
