@@ -74,7 +74,7 @@ function ContentsMenu({
   );
 }
 
-export function BookViewer({ pages }: { pages: BookPage[] }) {
+export function BookViewer({ pages, onOpenReport }: { pages: BookPage[]; onOpenReport?: () => void }) {
   const wide = useWideScreen();
   const [index, setIndex] = useState(0);
   const [contentsOpen, setContentsOpen] = useState(false);
@@ -88,7 +88,7 @@ export function BookViewer({ pages }: { pages: BookPage[] }) {
     [pages],
   );
   const goTo = useCallback((i: number) => setIndex(Math.max(0, Math.min(pages.length - 1, i))), [pages.length]);
-  const viewerProps = { pages, index, onIndex: goTo, onOpenContents: () => setContentsOpen(true) };
+  const viewerProps = { pages, index, onIndex: goTo, onOpenContents: () => setContentsOpen(true), onOpenReport };
 
   return (
     <div style={{ minHeight: '100dvh', background: BOOK.backdrop, color: BOOK.ink }}>

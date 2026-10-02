@@ -21,15 +21,15 @@ export function InvisibleForcesBookPage({ demo = false }: { demo?: boolean }) {
   const navigate = useNavigate();
   const routeState = location.state as ReportState | null;
 
-  const pages = useMemo(() => {
+  const book = useMemo(() => {
     const state: ReportState | null = demo ? { results: DEMO_RESULTS, intake: DEMO_INTAKE } : routeState;
     if (!state?.results?.diagnostic) return null;
-    return buildBookPages(state.results, state.intake, {
-      onOpenReport: () => (demo ? navigate('/client/demo') : navigate('/client/results', { state })),
-    });
+    // "Open the full report" / "Scroll mode": the same report as one long page
+    const onOpenReport = () => (demo ? navigate('/client/demo') : navigate('/client/results', { state }));
+    return { pages: buildBookPages(state.results, state.intake, { onOpenReport }), onOpenReport };
   }, [demo, routeState, navigate]);
 
-  if (!pages) {
+  if (!book) {
     return (
       <div style={{ minHeight: '100dvh', background: BOOK.backdrop, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
         <div style={{ maxWidth: '420px', textAlign: 'center', background: BOOK.page, border: `1px solid ${BOOK.line}`, borderRadius: '6px', padding: '32px 24px' }}>
@@ -47,7 +47,7 @@ export function InvisibleForcesBookPage({ demo = false }: { demo?: boolean }) {
     );
   }
 
-  return <BookViewer pages={pages} />;
+  return <BookViewer pages={book.pages} onOpenReport={book.onOpenReport} />;
 }
 
 export default InvisibleForcesBookPage;

@@ -13,6 +13,8 @@ export interface ViewerProps {
   index: number;
   onIndex: (index: number) => void;
   onOpenContents: () => void;
+  /** "Scroll mode": the full report on one long page */
+  onOpenReport?: () => void;
 }
 
 const navButton = {
@@ -26,7 +28,7 @@ const navButton = {
   cursor: 'pointer',
 };
 
-export function StoryViewer({ pages, index, onIndex, onOpenContents }: ViewerProps) {
+export function StoryViewer({ pages, index, onIndex, onOpenContents, onOpenReport }: ViewerProps) {
   const [direction, setDirection] = useState<'next' | 'prev'>('next');
   const last = pages.length - 1;
   const next = useCallback(() => {
@@ -89,7 +91,8 @@ export function StoryViewer({ pages, index, onIndex, onOpenContents }: ViewerPro
               background: BOOK.page,
               border: `1px solid ${BOOK.line}`,
               borderRadius: '6px',
-              padding: '24px 20px',
+              padding: page.fullBleed ? 0 : '24px 20px',
+              overflow: page.fullBleed ? 'hidden' : undefined,
               boxSizing: 'border-box',
             }}
           >
@@ -98,7 +101,7 @@ export function StoryViewer({ pages, index, onIndex, onOpenContents }: ViewerPro
         </div>
       </main>
 
-      <footer style={{ display: 'flex', gap: '10px', padding: '10px 16px calc(env(safe-area-inset-bottom, 0px) + 14px)' }}>
+      <footer style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', padding: '10px 16px calc(env(safe-area-inset-bottom, 0px) + 8px)' }}>
         <button
           type="button"
           onClick={prev}
@@ -115,6 +118,17 @@ export function StoryViewer({ pages, index, onIndex, onOpenContents }: ViewerPro
         >
           {index === 0 ? 'Begin ›' : 'Next ›'}
         </button>
+        <div style={{ width: '100%', textAlign: 'center' }}>
+          {onOpenReport && (
+            <button
+              type="button"
+              onClick={onOpenReport}
+              style={{ background: 'transparent', border: 'none', color: BOOK.muted, fontFamily: BOOK.sans, fontSize: '0.7rem', fontWeight: 600, letterSpacing: '0.08em', textDecoration: 'underline', textUnderlineOffset: '3px', cursor: 'pointer', padding: '4px 8px' }}
+            >
+              ↕ Scroll mode: view the full report
+            </button>
+          )}
+        </div>
       </footer>
     </div>
   );

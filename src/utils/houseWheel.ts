@@ -14,7 +14,8 @@ function apt(cx: number, cy: number, r: number, deg: number): [number, number] {
   return [cx + r * Math.cos(toRad(deg)), cy + r * Math.sin(toRad(deg))];
 }
 
-export function renderHouseWheel(items: GradeItem[], size = 120): string {
+/** `highlightHouse` outlines one house in gold, e.g. the placement a book page is about. */
+export function renderHouseWheel(items: GradeItem[], size = 120, highlightHouse?: number): string {
  const cx = size / 2, cy = size / 2;
  const outerR = size * 0.44;
  const innerR = size * 0.22;
@@ -47,8 +48,10 @@ export function renderHouseWheel(items: GradeItem[], size = 120): string {
  const [tx, ty] = apt(cx, cy, labelR, midDeg);
  const fw = grade ? '700' : '400';
  const fc = grade ? '#1f2937' : '#9ca3af';
+ const highlight =
+ h === highlightHouse ? `<path d="${path}" fill="none" stroke="#E8C46A" stroke-width="3" stroke-linejoin="round"/>` : '';
  segments.push(
- `<path d="${path}" fill="${fill}" stroke="${stroke}" stroke-width="1.5"/>` +
+ `<path d="${path}" fill="${fill}" stroke="${stroke}" stroke-width="1.5"/>` + highlight +
  `<text x="${tx.toFixed(1)}" y="${(ty + 3).toFixed(1)}" text-anchor="middle" font-size="7" fill="${fc}" font-weight="${fw}" font-family="Arial,sans-serif">${h}</text>`,
  );
  }

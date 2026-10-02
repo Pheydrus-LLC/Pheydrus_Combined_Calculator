@@ -17,6 +17,10 @@ export function getReportContext(results: ConsolidatedResults, intake: ClientInt
   const diagnosticItems =
     diagnostic.allItems.length > 0 ? diagnostic.allItems : [...p1.items, ...p2.items, ...p3.items];
   const longest = getLongestMaleficTransit(diagnosticItems, transits);
+  // Each pillar's share of the pressure (F = 1, C = 0.5), as in the report's score breakdown
+  const scores = [p1, p2, p3].map((p) => p.fCount + p.cCount * 0.5);
+  const totalScore = scores.reduce((sum, v) => sum + v, 0);
+  const pillarShares = scores.map((v) => (totalScore === 0 ? 0 : Math.round((v / totalScore) * 100)));
   const endYear = longest?.endYear ?? null;
 
   return {
@@ -27,6 +31,7 @@ export function getReportContext(results: ConsolidatedResults, intake: ClientInt
     location: results.userInfo.currentLocation || '',
     transits,
     pillars: [p1, p2, p3] as const,
+    pillarShares,
     finalGrade: diagnostic.finalGrade,
     longest,
     endYear,

@@ -17,19 +17,20 @@ import { PILLAR_TITLES } from '../../../data/reportCopy';
 import { PILLAR_RESOURCE_CARDS } from '../../../data/freeResources';
 import {
   CoverPage,
+  BackCoverPage,
   ScorePage,
+  ScoreMeaningPage,
   BeforeYouBeginPage,
   PatternPage,
   ForcesPage,
-  WindowPage,
-  PillarOpenerPage,
+  ChapterOpenerPage,
   FindingPage,
   CostPage,
   RoadmapStepsPage,
   RoadmapPillarsPage,
+  RepairKitIntroPage,
   RepairKitPage,
   CoachingPage,
-  BackCoverPage,
 } from './BookPageContent';
 
 export interface BookPage {
@@ -37,9 +38,12 @@ export interface BookPage {
   /** Chapter name, shown in the header and the contents list */
   chapter: string;
   content: ReactNode;
+  /** Covers: artwork runs to the page edges, with no page frame or number */
+  fullBleed?: boolean;
 }
 
-// ── The book ─────────────────────────────────────────────────────────────────
+/** Pillar methods that fit on the first roadmap page alongside the two steps */
+const ROADMAP_FIRST_PAGE_PILLARS = 2;
 
 export function buildBookPages(
   results: ConsolidatedResults,
@@ -51,34 +55,45 @@ export function buildBookPages(
   const findingCtx = { goal: ctx.goal, goalShort: ctx.goalShort, goalText: ctx.goalText, transits: ctx.transits };
 
   const pages: BookPage[] = [
-    { id: 'cover', chapter: 'Overview', content: <CoverPage ctx={ctx} name={results.userInfo.name} date={date} /> },
-    { id: 'score', chapter: 'Overview', content: <ScorePage ctx={ctx} /> },
-    { id: 'before', chapter: 'Overview', content: <BeforeYouBeginPage /> },
+    { id: 'cover', chapter: 'Cover', fullBleed: true, content: <CoverPage name={results.userInfo.name} /> },
+    { id: 'score', chapter: 'Your Score', content: <ScorePage ctx={ctx} date={date} /> },
+    { id: 'score-meaning', chapter: 'Your Score', content: <ScoreMeaningPage ctx={ctx} /> },
+    { id: 'before', chapter: 'Your Score', content: <BeforeYouBeginPage /> },
     { id: 'pattern', chapter: 'Why This Happens', content: <PatternPage /> },
     { id: 'forces', chapter: 'Why This Happens', content: <ForcesPage /> },
-    { id: 'window', chapter: 'Why This Happens', content: <WindowPage ctx={ctx} /> },
   ];
 
   ([1, 2, 3] as const).forEach((n) => {
-    const chapter = `Pillar ${n} · ${PILLAR_TITLES[n].title}`;
-    const items = getReportItems(ctx.pillars[n - 1]);
-    pages.push({ id: `pillar-${n}`, chapter, content: <PillarOpenerPage ctx={ctx} n={n} /> });
+    const chapter = `Chapter ${n} · ${PILLAR_TITLES[n].title}`;
+    const pillar = ctx.pillars[n - 1];
+    const items = getReportItems(pillar);
+    pages.push({ id: `pillar-${n}`, chapter, content: <ChapterOpenerPage ctx={ctx} n={n} /> });
     items.forEach((item, i) => {
       pages.push({
         id: `pillar-${n}-finding-${i + 1}`,
         chapter,
-        content: <FindingPage content={getFindingContent(item, findingCtx)} n={n} position={i + 1} total={items.length} />,
+        content: (
+          <FindingPage
+            content={getFindingContent(item, findingCtx)}
+            item={item}
+            pillarItems={pillar.items}
+            n={n}
+            position={i + 1}
+            total={items.length}
+          />
+        ),
       });
     });
   });
 
   pages.push(
     { id: 'cost', chapter: 'Your Solution', content: <CostPage ctx={ctx} /> },
-    { id: 'roadmap', chapter: 'Your Solution', content: <RoadmapStepsPage /> },
-    { id: 'roadmap-pillars', chapter: 'Your Solution', content: <RoadmapPillarsPage /> },
+    { id: 'roadmap', chapter: 'Your Solution', content: <RoadmapStepsPage pillarCount={ROADMAP_FIRST_PAGE_PILLARS} /> },
+    { id: 'roadmap-pillars', chapter: 'Your Solution', content: <RoadmapPillarsPage fromPillar={ROADMAP_FIRST_PAGE_PILLARS} /> },
+    { id: 'kit', chapter: 'Your Pillar Repair Kit', content: <RepairKitIntroPage /> },
     ...PILLAR_RESOURCE_CARDS.map((_, i) => ({ id: `kit-${i + 1}`, chapter: 'Your Pillar Repair Kit', content: <RepairKitPage index={i} /> })),
     { id: 'coaching', chapter: 'Your Next Step', content: <CoachingPage /> },
-    { id: 'back-cover', chapter: 'Your Next Step', content: <BackCoverPage onOpenReport={options.onOpenReport} /> },
+    { id: 'back-cover', chapter: 'The End', fullBleed: true, content: <BackCoverPage onOpenReport={options.onOpenReport} /> },
   );
   return pages;
 }
