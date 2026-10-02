@@ -94,7 +94,7 @@ export function StoryViewer({ pages, index, onIndex, onOpenContents, onOpenRepor
               display: 'flex',
               flexDirection: 'column',
               // Short pages sit in the middle of the card rather than at the top
-              justifyContent: 'center',
+              justifyContent: page.alignTop ? 'flex-start' : 'center',
               background: BOOK.page,
               border: `1px solid ${BOOK.line}`,
               borderRadius: '6px',

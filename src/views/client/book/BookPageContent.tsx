@@ -110,53 +110,6 @@ const HouseWheel = ({ items, size, highlight }: { items: GradeItem[]; size: numb
   <div style={{ display: 'flex', justifyContent: 'center' }} dangerouslySetInnerHTML={{ __html: renderHouseWheel(items, size, highlight) }} />
 );
 
-/** Deep indigo of the covers, lighter towards the centre */
-const COVER_BACKGROUND = 'radial-gradient(ellipse 75% 60% at 50% 46%, #2A3384 0%, #1B2259 55%, #10153A 100%)';
-const COVER_GOLD = '#D9B75E';
-
-/** Thin double gold frame inside the cover's edge */
-const CoverFrame = () => (
-  <>
-    <div aria-hidden="true" style={{ position: 'absolute', inset: '14px', border: `1px solid ${COVER_GOLD}`, opacity: 0.7, pointerEvents: 'none' }} />
-    <div aria-hidden="true" style={{ position: 'absolute', inset: '19px', border: `1px solid ${COVER_GOLD}`, opacity: 0.3, pointerEvents: 'none' }} />
-  </>
-);
-
-/**
- * The cover's centrepiece, after classic astrology book covers: a gold ring
- * with words running round its top and bottom, and a pale glowing disc in the
- * middle for the title. `id` keeps the SVG definitions of the two covers apart.
- */
-function CoverEmblem({ id, top, bottom, children }: { id: string; top: string; bottom: string; children: ReactNode }) {
-  const arcText = { fontFamily: BOOK.sans, fontSize: 10.5, letterSpacing: 5.5, fontWeight: 600, fill: COVER_GOLD };
-  return (
-    <svg viewBox="0 0 300 300" role="img" aria-label={`${top} ${bottom}`} style={{ display: 'block', width: '86%', maxWidth: '360px', margin: '0 auto', overflow: 'visible' }}>
-      <defs>
-        <radialGradient id={`${id}-disc`} cx="50%" cy="40%" r="62%">
-          <stop offset="0%" stopColor="#F6F3FF" />
-          <stop offset="65%" stopColor="#DAD6F6" />
-          <stop offset="100%" stopColor="#B7B2E5" />
-        </radialGradient>
-        {/* Top arc runs clockwise and the bottom one anticlockwise, so both read upright */}
-        <path id={`${id}-top`} d="M 40 150 A 110 110 0 0 1 260 150" />
-        <path id={`${id}-bottom`} d="M 31 150 A 119 119 0 0 0 269 150" />
-      </defs>
-      <circle cx="150" cy="150" r="133" fill="none" stroke={COVER_GOLD} strokeWidth="1" />
-      <circle cx="150" cy="150" r="101" fill="none" stroke={COVER_GOLD} strokeWidth="0.6" opacity="0.7" />
-      <text style={arcText}>
-        <textPath href={`#${id}-top`} startOffset="50%" textAnchor="middle">{top}</textPath>
-      </text>
-      <text style={arcText}>
-        <textPath href={`#${id}-bottom`} startOffset="50%" textAnchor="middle">{bottom}</textPath>
-      </text>
-      <text x="33" y="154" textAnchor="middle" fontSize="11" fill={COVER_GOLD}>✦</text>
-      <text x="267" y="154" textAnchor="middle" fontSize="11" fill={COVER_GOLD}>✦</text>
-      <circle cx="150" cy="150" r="95" fill={`url(#${id}-disc)`} />
-      {children}
-    </svg>
-  );
-}
-
 const IMPACT_CHIP = {
   hurts: { text: '⚡ Hurts Goal', bg: 'rgba(248,113,113,0.12)', color: '#F87171', border: 'rgba(248,113,113,0.4)' },
   caution: { text: '⚠️ Caution', bg: 'rgba(212,168,67,0.1)', color: '#E8A838', border: '#C9A84C' },
@@ -169,66 +122,54 @@ const PILLAR_BAR: Record<1 | 2 | 3, string> = { 1: '#F87171', 2: '#C9A84C', 3: '
 
 // ── Covers ───────────────────────────────────────────────────────────────────
 
+/** A short gold rule between the cover's lines */
+const Rule = () => <div style={{ width: '64px', height: '1px', background: 'rgba(201,168,76,0.6)', margin: '4px auto' }} />;
+
 export function CoverPage({ name }: { name: string }) {
-  const small = { fontFamily: BOOK.sans, fontSize: 9, letterSpacing: 5, fill: '#9A7A2A', fontWeight: 600 };
-  const big = { fontFamily: BOOK.serif, fontSize: 31, fontWeight: 700, letterSpacing: 1.5, fill: '#B08A2E' };
   return (
-    <div style={{ position: 'relative', flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', textAlign: 'center', padding: '42px 34px 34px', background: COVER_BACKGROUND, overflow: 'hidden' }}>
-      <CoverFrame />
-      <div style={{ position: 'relative' }}>
-        <div style={{ fontFamily: BOOK.serif, fontStyle: 'italic', fontSize: '1.05rem', color: '#E9E3FF' }}>A personal 3-pillar analysis</div>
-        {name && (
-          <div style={{ fontFamily: BOOK.sans, fontSize: '0.66rem', fontWeight: 600, letterSpacing: '0.24em', textTransform: 'uppercase', color: COVER_GOLD, marginTop: '6px' }}>
-            Prepared for {name}
-          </div>
-        )}
-      </div>
-      <div style={{ position: 'relative', width: '100%' }}>
-        <CoverEmblem id="ifb-front" top="DECODE YOUR PATTERNS" bottom="REALIGN YOUR LIFE">
-          <text x="150" y="121" textAnchor="middle" style={small}>THE</text>
-          <text x="150" y="152" textAnchor="middle" style={big}>INVISIBLE</text>
-          <text x="150" y="183" textAnchor="middle" style={big}>FORCES</text>
-          <text x="150" y="204" textAnchor="middle" style={small}>◆ REPORT ◆</text>
-        </CoverEmblem>
-      </div>
-      <div style={{ position: 'relative', width: '100%' }}>
-        <div style={{ fontFamily: BOOK.sans, fontSize: '0.92rem', fontWeight: 600, letterSpacing: '0.32em', textTransform: 'uppercase', color: '#E9E3FF' }}>
-          Pheydrus
+    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', textAlign: 'center' }}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '16px' }}>
+        <Eyebrow>Proprietary 3-Pillar Analysis</Eyebrow>
+        <h1 style={{ fontFamily: BOOK.serif, fontSize: '2.6rem', fontWeight: 700, color: BOOK.goldText, lineHeight: 1.1, margin: 0 }}>
+          The Invisible Forces Report
+        </h1>
+        <Rule />
+        <div style={{ fontFamily: BOOK.sans, fontSize: '0.66rem', fontWeight: 700, letterSpacing: '0.28em', textTransform: 'uppercase', color: BOOK.muted }}>
+          Authored by Pheydrus
         </div>
-        <a href={PRESS_URL} target="_blank" rel="noopener noreferrer" style={{ display: 'block', width: '78%', margin: '14px auto 0', textDecoration: 'none' }}>
-          <div style={{ fontFamily: BOOK.sans, fontSize: '0.5rem', fontWeight: 700, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(233,227,255,0.6)', marginBottom: '6px' }}>
-            As Seen On
-          </div>
-          <img src={PRESS_LOGOS_LIGHT} alt={PRESS_LOGOS_ALT} style={{ display: 'block', width: '100%', height: 'auto', opacity: 0.6 }} />
-        </a>
+        {name && <div style={{ fontFamily: BOOK.serif, fontStyle: 'italic', fontSize: '1.25rem', color: BOOK.ink }}>for {name}</div>}
       </div>
+      <a href={PRESS_URL} target="_blank" rel="noopener noreferrer" style={{ display: 'block', width: '100%', marginTop: '24px', textDecoration: 'none' }}>
+        <div style={{ fontFamily: BOOK.sans, fontSize: '0.56rem', fontWeight: 700, letterSpacing: '0.3em', textTransform: 'uppercase', color: BOOK.muted, marginBottom: '8px' }}>
+          As Seen On
+        </div>
+        <img src={PRESS_LOGOS_LIGHT} alt={PRESS_LOGOS_ALT} style={{ display: 'block', width: '100%', height: 'auto', opacity: 0.7 }} />
+      </a>
     </div>
   );
 }
 
 export function BackCoverPage({ onOpenReport }: { onOpenReport?: () => void }) {
-  const line = { fontFamily: BOOK.serif, fontSize: 25, fontStyle: 'italic' as const, fontWeight: 600, fill: '#3A3270' };
   return (
-    <div style={{ position: 'relative', flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '26px', textAlign: 'center', padding: '42px 34px', background: COVER_BACKGROUND, overflow: 'hidden' }}>
-      <CoverFrame />
-      <div style={{ position: 'relative', width: '100%' }}>
-        <CoverEmblem id="ifb-back" top="THIS IS NOT THE END" bottom="OF YOUR STORY">
-          <text x="150" y="146" textAnchor="middle" style={line}>It's only</text>
-          <text x="150" y="176" textAnchor="middle" style={line}>just beginning.</text>
-        </CoverEmblem>
-      </div>
-      <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px' }}>
-        <div style={{ fontFamily: BOOK.sans, fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.32em', textTransform: 'uppercase', color: '#E9E3FF' }}>Pheydrus</div>
-        {onOpenReport && (
-          <button
-            type="button"
-            onClick={onOpenReport}
-            style={{ background: 'transparent', border: `1px solid ${COVER_GOLD}`, color: COVER_GOLD, fontFamily: BOOK.sans, fontSize: '0.72rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', padding: '10px 18px', borderRadius: '2px', cursor: 'pointer' }}
-          >
-            Open the full report
-          </button>
-        )}
-      </div>
+    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center', gap: '16px' }}>
+      <span style={{ color: BOOK.gold, fontSize: '1.2rem' }}>✦</span>
+      <p style={{ fontFamily: BOOK.serif, fontSize: '2rem', fontWeight: 700, lineHeight: 1.2, color: BOOK.goldText, margin: 0 }}>
+        This is not the end of your story.
+      </p>
+      <p style={{ fontFamily: BOOK.serif, fontStyle: 'italic', fontSize: '1.25rem', lineHeight: 1.4, color: BOOK.ink, margin: 0 }}>
+        It's yours, and it's only just beginning.
+      </p>
+      <Rule />
+      <Eyebrow>Pheydrus</Eyebrow>
+      {onOpenReport && (
+        <button
+          type="button"
+          onClick={onOpenReport}
+          style={{ background: 'transparent', border: `1px solid ${BOOK.gold}`, color: BOOK.goldText, fontFamily: BOOK.sans, fontSize: '0.74rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', padding: '11px 18px', borderRadius: '2px', cursor: 'pointer' }}
+        >
+          Open the full report
+        </button>
+      )}
     </div>
   );
 }
@@ -482,7 +423,7 @@ export function FindingPage({
 export function CostPage({ ctx }: { ctx: ReportContext }) {
   const copy = getCostOfInactionCopy(ctx.goal, ctx.endYear);
   return (
-    <>
+    <div style={{ background: 'rgba(248,113,113,0.07)', border: '1px solid rgba(248,113,113,0.28)', borderRadius: '4px', padding: '22px 22px 10px' }}>
       <Eyebrow>Your Solution</Eyebrow>
       <Title size="1.6rem">{COST_OF_INACTION_TITLE}</Title>
       <Body>{copy.intro}</Body>
@@ -499,9 +440,16 @@ export function CostPage({ ctx }: { ctx: ReportContext }) {
         </Body>
       ))}
       <Body style={{ fontWeight: 700, color: BOOK.goldText, marginTop: '14px', fontSize: '1.05rem' }}>{copy.closer}</Body>
-    </>
+    </div>
   );
 }
+
+/** The report's green panel, here only round the roadmap's title and its closing line */
+const GreenPanel = ({ children, style }: { children: ReactNode; style?: CSSProperties }) => (
+  <div style={{ background: 'rgba(74,222,128,0.07)', border: '1px solid rgba(74,222,128,0.35)', borderRadius: '4px', padding: '16px 20px', ...style }}>
+    {children}
+  </div>
+);
 
 const RoadmapPillar = ({ item }: { item: (typeof ROADMAP_PILLARS)[number] }) => (
   <Body style={{ fontSize: '0.9rem' }}>
@@ -516,7 +464,10 @@ export function RoadmapStepsPage({ pillarCount }: { pillarCount: number }) {
   return (
     <>
       <Eyebrow>Your Solution</Eyebrow>
-      <Title size="1.5rem">{ROADMAP_TITLE} 🏆</Title>
+      {/* The title brings its own bottom margin, so the panel's bottom padding is left off */}
+      <GreenPanel style={{ margin: '0 0 18px', padding: '16px 20px 0' }}>
+        <Title size="1.5rem">{ROADMAP_TITLE} 🏆</Title>
+      </GreenPanel>
       {ROADMAP_STEPS.map((step) => (
         <Body key={step.bold} style={{ fontSize: '0.9rem' }}>
           {step.before}
@@ -539,9 +490,11 @@ export function RoadmapPillarsPage({ fromPillar }: { fromPillar: number }) {
       {ROADMAP_PILLARS.slice(fromPillar).map((item) => (
         <RoadmapPillar key={item.pillar} item={item} />
       ))}
-      <p style={{ fontFamily: BOOK.serif, fontStyle: 'italic', fontSize: '1.2rem', lineHeight: 1.5, color: BOOK.ink, borderTop: `1px solid ${BOOK.line}`, paddingTop: '16px', marginTop: '8px' }}>
-        {ROADMAP_CLOSER}
-      </p>
+      <GreenPanel style={{ marginTop: '14px', padding: '26px 26px' }}>
+        <p style={{ fontFamily: BOOK.serif, fontStyle: 'italic', fontSize: '1.75rem', lineHeight: 1.4, color: BOOK.ink, margin: 0 }}>
+          {ROADMAP_CLOSER}
+        </p>
+      </GreenPanel>
     </>
   );
 }

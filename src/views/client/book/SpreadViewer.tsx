@@ -24,7 +24,7 @@ const MIN_FIT = 0.78;
  * fit when it's long (like fitting copy to a printed page). Findings vary in
  * length from client to client, so this is measured rather than fixed.
  */
-function FittedPage({ children }: { children: ReactNode }) {
+function FittedPage({ children, alignTop }: { children: ReactNode; alignTop?: boolean }) {
   const box = useRef<HTMLDivElement>(null);
   const content = useRef<HTMLDivElement>(null);
   useLayoutEffect(() => {
@@ -45,7 +45,7 @@ function FittedPage({ children }: { children: ReactNode }) {
   }, []);
   return (
     <div ref={box} className="ifb-scroll" style={{ position: 'absolute', inset: 0, overflowY: 'auto', padding: `${PAGE_PAD_TOP}px 44px ${PAGE_PAD_BOTTOM}px` }}>
-      <div ref={content} style={{ minHeight: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+      <div ref={content} style={{ minHeight: '100%', display: 'flex', flexDirection: 'column', justifyContent: alignTop ? 'flex-start' : 'center' }}>
         {children}
       </div>
     </div>
@@ -73,7 +73,7 @@ function Face({ page, number, side }: { page?: BookPage; number: number; side: '
       {page && !page.fullBleed && (
         <>
           <div aria-hidden="true" style={{ position: 'absolute', inset: '14px', border: '1px solid rgba(201,168,76,0.22)', pointerEvents: 'none', zIndex: 2 }} />
-          <FittedPage key={page.id}>{page.content}</FittedPage>
+          <FittedPage key={page.id} alignTop={page.alignTop}>{page.content}</FittedPage>
           <div style={{ position: 'absolute', bottom: '20px', left: 0, right: 0, textAlign: 'center', fontFamily: BOOK.sans, fontSize: '0.65rem', letterSpacing: '0.3em', color: BOOK.muted, zIndex: 2, pointerEvents: 'none' }}>
             · {number} ·
           </div>
