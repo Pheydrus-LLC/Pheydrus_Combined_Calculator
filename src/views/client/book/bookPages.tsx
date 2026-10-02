@@ -40,6 +40,8 @@ export interface BookPage {
   content: ReactNode;
   /** Covers and chapter title pages: artwork runs to the page edges, with no page frame or number */
   fullBleed?: boolean;
+  /** Name in the table of contents, when it differs from `chapter` (e.g. "Chapter 4 · Your Solution") */
+  contentsName?: string;
   /** Text starts at the top of the page, as in a printed book, rather than centred */
   alignTop?: boolean;
 }
@@ -89,12 +91,12 @@ export function buildBookPages(
   });
 
   pages.push(
-    { id: 'cost', chapter: 'Your Solution', content: <CostPage ctx={ctx} /> },
+    { id: 'cost', chapter: 'Your Solution', contentsName: 'Chapter 4 · Your Solution', content: <CostPage ctx={ctx} /> },
     { id: 'roadmap', chapter: 'Your Solution', content: <RoadmapStepsPage pillarCount={ROADMAP_FIRST_PAGE_PILLARS} /> },
     { id: 'roadmap-pillars', chapter: 'Your Solution', alignTop: true, content: <RoadmapPillarsPage fromPillar={ROADMAP_FIRST_PAGE_PILLARS} /> },
-    { id: 'kit', chapter: 'Your Pillar Repair Kit', content: <RepairKitIntroPage /> },
+    { id: 'kit', chapter: 'Your Pillar Repair Kit', contentsName: 'Chapter 5 · Your Pillar Repair Kit', content: <RepairKitIntroPage /> },
     ...PILLAR_RESOURCE_CARDS.map((_, i) => ({ id: `kit-${i + 1}`, chapter: 'Your Pillar Repair Kit', content: <RepairKitPage index={i} /> })),
-    { id: 'coaching', chapter: 'Your Next Step', content: <CoachingPage /> },
+    { id: 'coaching', chapter: 'Your Next Step', contentsName: 'Chapter 6 · Your Next Step', content: <CoachingPage /> },
     { id: 'back-cover', chapter: 'Not The End', content: <BackCoverPage onOpenReport={options.onOpenReport} /> },
   );
   return pages;

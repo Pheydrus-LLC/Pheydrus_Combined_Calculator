@@ -18,7 +18,7 @@ function ContentsMenu({
   onPick,
   onClose,
 }: {
-  chapters: Array<{ name: string; start: number }>;
+  chapters: Array<{ name: string; label: string; start: number }>;
   current: string;
   onPick: (index: number) => void;
   onClose: () => void;
@@ -63,7 +63,7 @@ function ContentsMenu({
                   fontWeight: c.name === current ? 700 : 500,
                 }}
               >
-                <span style={{ flex: 1 }}>{c.name}</span>
+                <span style={{ flex: 1 }}>{c.label}</span>
                 <span style={{ color: BOOK.muted, fontSize: '0.78rem' }}>{c.start + 1}</span>
               </button>
             </li>
@@ -90,8 +90,8 @@ export function BookViewer({
 
   const chapters = useMemo(
     () =>
-      pages.reduce<Array<{ name: string; start: number }>>((list, page, i) => {
-        if (!list.some((c) => c.name === page.chapter)) list.push({ name: page.chapter, start: i });
+      pages.reduce<Array<{ name: string; label: string; start: number }>>((list, page, i) => {
+        if (!list.some((c) => c.name === page.chapter)) list.push({ name: page.chapter, label: page.contentsName ?? page.chapter, start: i });
         return list;
       }, []),
     [pages],
