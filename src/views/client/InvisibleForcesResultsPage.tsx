@@ -1323,7 +1323,7 @@ export function InvisibleForcesResultsPage() {
  <button
  type="button"
  onClick={() =>
- navigate(rawState?.bookDemo ? '/client/book/demo' : '/client/book', {
+ navigate(rawState?.bookDemo ? '/client/book/demo' : `/client/book${reportId ? `?id=${encodeURIComponent(reportId)}` : ''}`, {
  state: { results, intake, bookPage: rawState?.bookPage ?? 0 },
  })
  }

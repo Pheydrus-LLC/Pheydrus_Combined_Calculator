@@ -250,8 +250,9 @@ export function InvisibleForcesReportPage() {
     try {
       const results = await runAllCalculators(form);
       if (results.success) {
-        // Store results and get a permanent shareable link
-        let resultsPath = '/client/results';
+        // Store results and get a permanent shareable link. Clients see their report as a book first;
+        // its Scroll mode button opens the same report as one long page (/client/results).
+        let resultsPath = '/client/book';
         if (intake.email) {
           try {
             const storeRes = await fetch('/api/store-results', {
@@ -260,7 +261,7 @@ export function InvisibleForcesReportPage() {
               body: JSON.stringify({ name: form.name, email: intake.email, results, intake, addressCountry: form.addressCountry }),
             });
             const { id } = await storeRes.json();
-            if (id) resultsPath = `/client/results?id=${id}`;
+            if (id) resultsPath = `/client/book?id=${id}`;
           } catch {
             // Non-critical — navigate without ID if storage fails
           }
