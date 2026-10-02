@@ -1047,6 +1047,9 @@ export function InvisibleForcesResultsPage() {
  const rawState = location.state as {
  results: ConsolidatedResults;
  intake: ClientIntakeData;
+ /** Set when arriving from the book's Scroll mode: the page to return to, and whether it was the demo */
+ bookPage?: number;
+ bookDemo?: boolean;
  } | null;
 
  const [fetchedState, setFetchedState] = useState<{
@@ -1316,8 +1319,33 @@ export function InvisibleForcesResultsPage() {
  >
  On this page
  </div>
+ <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+ <button
+ type="button"
+ onClick={() =>
+ navigate(rawState?.bookDemo ? '/client/book/demo' : '/client/book', {
+ state: { results, intake, bookPage: rawState?.bookPage ?? 0 },
+ })
+ }
+ style={{
+ fontSize: '10px',
+ textTransform: 'uppercase',
+ letterSpacing: '0.08em',
+ fontWeight: 700,
+ color: '#D4A843',
+ background: 'transparent',
+ border: '1px solid rgba(201,168,76,0.45)',
+ borderRadius: '2px',
+ padding: '4px 9px',
+ cursor: 'pointer',
+ fontFamily: INTER,
+ }}
+ >
+ 📖 Book mode
+ </button>
  <div style={{ fontSize: '11px', color: '#D4A843', fontWeight: 700 }}>
  {Math.round(scrollProgress)}%
+ </div>
  </div>
  </div>
  <div

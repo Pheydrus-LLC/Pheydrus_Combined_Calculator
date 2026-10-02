@@ -74,9 +74,18 @@ function ContentsMenu({
   );
 }
 
-export function BookViewer({ pages, onOpenReport }: { pages: BookPage[]; onOpenReport?: () => void }) {
+export function BookViewer({
+  pages,
+  onOpenReport,
+  initialPage = 0,
+}: {
+  pages: BookPage[];
+  /** Scroll mode, given the page to come back to */
+  onOpenReport?: (page: number) => void;
+  initialPage?: number;
+}) {
   const wide = useWideScreen();
-  const [index, setIndex] = useState(0);
+  const [index, setIndex] = useState(() => Math.max(0, Math.min(pages.length - 1, initialPage)));
   const [contentsOpen, setContentsOpen] = useState(false);
 
   const chapters = useMemo(
@@ -88,7 +97,13 @@ export function BookViewer({ pages, onOpenReport }: { pages: BookPage[]; onOpenR
     [pages],
   );
   const goTo = useCallback((i: number) => setIndex(Math.max(0, Math.min(pages.length - 1, i))), [pages.length]);
-  const viewerProps = { pages, index, onIndex: goTo, onOpenContents: () => setContentsOpen(true), onOpenReport };
+  const viewerProps = {
+    pages,
+    index,
+    onIndex: goTo,
+    onOpenContents: () => setContentsOpen(true),
+    onOpenReport: onOpenReport ? () => onOpenReport(index) : undefined,
+  };
 
   return (
     <div style={{ minHeight: '100dvh', background: BOOK.backdrop, color: BOOK.ink }}>

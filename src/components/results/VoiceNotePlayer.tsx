@@ -12,6 +12,23 @@ const GOLD = '#C9A84C';
 const CORMORANT = "'Cormorant Garamond', Georgia, serif";
 const INTER = "'Inter', Arial, sans-serif";
 
+const TONES = {
+  dark: {
+    background: 'rgba(201,168,76,0.08)',
+    border: '1px solid rgba(201,168,76,0.35)',
+    label: '#E8DEFF',
+    muted: '#A098C0',
+    bar: 'rgba(192,176,240,0.28)',
+  },
+  light: {
+    background: 'rgba(255,255,255,0.45)',
+    border: '1px solid rgba(139,105,20,0.35)',
+    label: '#2A2238',
+    muted: '#7A6A48',
+    bar: 'rgba(139,105,20,0.25)',
+  },
+};
+
 function formatTime(seconds: number): string {
   if (!Number.isFinite(seconds) || seconds < 0) return '0:00';
   const m = Math.floor(seconds / 60);
@@ -23,12 +40,16 @@ export function VoiceNotePlayer({
   src,
   label,
   variant = 0,
+  tone = 'dark',
 }: {
   src: string;
   label: string;
   /** Picks one of the two waveform shapes, so neighbouring notes look different */
   variant?: number;
+  /** 'light' for pale pages (the book's cream chapter pages) */
+  tone?: 'dark' | 'light';
 }) {
+  const t = TONES[tone];
   const audioRef = useRef<HTMLAudioElement>(null);
   const [playing, setPlaying] = useState(false);
   const [current, setCurrent] = useState(0);
@@ -75,8 +96,8 @@ export function VoiceNotePlayer({
         gap: '14px',
         padding: '12px 14px',
         margin: '0 0 14px',
-        background: 'rgba(201,168,76,0.08)',
-        border: '1px solid rgba(201,168,76,0.35)',
+        background: t.background,
+        border: t.border,
         borderRadius: '6px',
       }}
     >
@@ -139,13 +160,13 @@ export function VoiceNotePlayer({
             fontStyle: 'italic',
             fontSize: '1.05rem',
             lineHeight: 1.3,
-            color: '#E8DEFF',
+            color: t.label,
           }}
         >
           🎧 {label}
         </p>
         {failed ? (
-          <p style={{ margin: 0, fontSize: '0.72rem', color: '#A098C0', fontFamily: INTER }}>
+          <p style={{ margin: 0, fontSize: '0.72rem', color: t.muted, fontFamily: INTER }}>
             This voice note is unavailable right now.
           </p>
         ) : (
@@ -174,7 +195,7 @@ export function VoiceNotePlayer({
                     maxWidth: '5px',
                     height: `${Math.max(h * 100, 12)}%`,
                     borderRadius: '999px',
-                    background: (i + 0.5) / bars.length <= progress ? GOLD : 'rgba(192,176,240,0.28)',
+                    background: (i + 0.5) / bars.length <= progress ? GOLD : t.bar,
                     transition: 'background 0.2s',
                   }}
                 />
@@ -206,7 +227,7 @@ export function VoiceNotePlayer({
               style={{
                 flexShrink: 0,
                 fontSize: '0.72rem',
-                color: '#A098C0',
+                color: t.muted,
                 fontFamily: INTER,
                 fontVariantNumeric: 'tabular-nums',
               }}

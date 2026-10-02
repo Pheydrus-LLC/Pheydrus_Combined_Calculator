@@ -14,7 +14,7 @@ import { buildBookPages } from './book/bookPages';
 import { BookViewer } from './book/BookViewer';
 import { BOOK } from './book/bookTheme';
 
-type ReportState = { results: ConsolidatedResults; intake: ClientIntakeData };
+type ReportState = { results: ConsolidatedResults; intake: ClientIntakeData; bookPage?: number };
 
 export function InvisibleForcesBookPage({ demo = false }: { demo?: boolean }) {
   const location = useLocation();
@@ -24,9 +24,10 @@ export function InvisibleForcesBookPage({ demo = false }: { demo?: boolean }) {
   const book = useMemo(() => {
     const state: ReportState | null = demo ? { results: DEMO_RESULTS, intake: DEMO_INTAKE } : routeState;
     if (!state?.results?.diagnostic) return null;
-    // "Open the full report" / "Scroll mode": the same report as one long page
-    const onOpenReport = () => (demo ? navigate('/client/demo') : navigate('/client/results', { state }));
-    return { pages: buildBookPages(state.results, state.intake, { onOpenReport }), onOpenReport };
+    // "Scroll mode": the same report as one long page; its Book mode button brings you back to this page
+    const onOpenReport = (page = 0) =>
+      navigate('/client/results', { state: { results: state.results, intake: state.intake, bookPage: page, bookDemo: demo } });
+    return { pages: buildBookPages(state.results, state.intake, { onOpenReport: () => onOpenReport() }), onOpenReport };
   }, [demo, routeState, navigate]);
 
   if (!book) {
@@ -47,7 +48,7 @@ export function InvisibleForcesBookPage({ demo = false }: { demo?: boolean }) {
     );
   }
 
-  return <BookViewer pages={book.pages} onOpenReport={book.onOpenReport} />;
+  return <BookViewer pages={book.pages} onOpenReport={book.onOpenReport} initialPage={routeState?.bookPage ?? 0} />;
 }
 
 export default InvisibleForcesBookPage;

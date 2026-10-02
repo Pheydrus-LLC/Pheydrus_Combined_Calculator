@@ -20,8 +20,16 @@ const RESOURCE_CARD_THEME: Record<
  3: { background: 'rgba(46,139,122,0.16)', border: 'rgba(126,207,196,0.45)', accent: '#7ECFC4', button: '#2E8B7A', buttonText: '#fff' },
 };
 
-export function ResourceCardBox({ card }: { card: ResourceCard }) {
+/** Type sizes: 'inline' in the report, 'page' when the card fills a book page */
+const SIZES = {
+ inline: { label: '10px', title: '1.2rem', text: '0.8rem', button: '0.72rem', buttonPad: '8px 16px', gap: '14px', pad: '16px 18px' },
+ page: { label: '11px', title: '1.55rem', text: '0.95rem', button: '0.78rem', buttonPad: '11px 20px', gap: '26px', pad: '28px 26px' },
+};
+
+export function ResourceCardBox({ card, size = 'inline' }: { card: ResourceCard; size?: keyof typeof SIZES }) {
  const t = RESOURCE_CARD_THEME[card.pillar];
+ const z = SIZES[size];
+ const fill = size === 'page';
  return (
  <div
  data-print-card
@@ -29,18 +37,19 @@ export function ResourceCardBox({ card }: { card: ResourceCard }) {
  background: t.background,
  border: `1px solid ${t.border}`,
  borderRadius: '4px',
- padding: '16px 18px',
+ padding: z.pad,
+ ...(fill ? { flex: 1, display: 'flex', flexDirection: 'column' as const, justifyContent: 'center' } : {}),
  }}
  >
  <div
  style={{
- fontSize: '10px',
+ fontSize: z.label,
  textTransform: 'uppercase',
  letterSpacing: '0.08em',
  color: t.accent,
  fontWeight: 700,
  fontFamily: INTER,
- marginBottom: '6px',
+ marginBottom: fill ? '14px' : '6px',
  }}
  >
  {card.label}
@@ -50,7 +59,7 @@ export function ResourceCardBox({ card }: { card: ResourceCard }) {
  key={resource.link}
  style={
  i > 0
- ? { marginTop: '14px', paddingTop: '14px', borderTop: `1px solid ${t.border}` }
+ ? { marginTop: z.gap, paddingTop: z.gap, borderTop: `1px solid ${t.border}` }
  : undefined
  }
  >
@@ -66,7 +75,7 @@ export function ResourceCardBox({ card }: { card: ResourceCard }) {
  <span
  style={{
  fontFamily: CORMORANT,
- fontSize: '1.2rem',
+ fontSize: z.title,
  fontWeight: 700,
  color: '#E8DEFF',
  }}
@@ -90,8 +99,8 @@ export function ResourceCardBox({ card }: { card: ResourceCard }) {
  </div>
  <p
  style={{
- margin: '0 0 10px',
- fontSize: '0.8rem',
+ margin: fill ? '4px 0 14px' : '0 0 10px',
+ fontSize: z.text,
  color: '#DDD8F8',
  lineHeight: 1.6,
  fontFamily: INTER,
@@ -100,7 +109,7 @@ export function ResourceCardBox({ card }: { card: ResourceCard }) {
  {resource.description}
  </p>
  {resource.code && (
- <p style={{ margin: '0 0 10px', fontSize: '0.8rem', color: '#DDD8F8', fontFamily: INTER }}>
+ <p style={{ margin: fill ? '0 0 14px' : '0 0 10px', fontSize: z.text, color: '#DDD8F8', fontFamily: INTER }}>
  Use code{' '}
  <strong
  style={{
@@ -122,11 +131,11 @@ export function ResourceCardBox({ card }: { card: ResourceCard }) {
  rel="noopener noreferrer"
  style={{
  display: 'inline-block',
- padding: '8px 16px',
+ padding: z.buttonPad,
  background: t.button,
  color: t.buttonText,
  fontWeight: 700,
- fontSize: '0.72rem',
+ fontSize: z.button,
  letterSpacing: '0.08em',
  textTransform: 'uppercase',
  textDecoration: 'none',

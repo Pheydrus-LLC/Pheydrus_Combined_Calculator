@@ -7,6 +7,7 @@ import { useCallback, useState } from 'react';
 import type { BookPage } from './bookPages';
 import { BOOK } from './bookTheme';
 import { useArrowKeys, useSwipe } from './bookControls';
+import { ChevronLeftIcon, ChevronRightIcon, MenuIcon } from './bookIcons';
 
 export interface ViewerProps {
   pages: BookPage[];
@@ -18,6 +19,10 @@ export interface ViewerProps {
 }
 
 const navButton = {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  gap: '6px',
   height: '48px',
   borderRadius: '4px',
   fontFamily: BOOK.sans,
@@ -53,9 +58,9 @@ export function StoryViewer({ pages, index, onIndex, onOpenContents, onOpenRepor
             type="button"
             onClick={onOpenContents}
             aria-label="Contents"
-            style={{ background: 'transparent', border: `1px solid ${BOOK.line}`, color: BOOK.ink, borderRadius: '4px', width: '36px', height: '36px', cursor: 'pointer', fontSize: '1rem' }}
+            style={{ background: 'transparent', border: `1px solid ${BOOK.line}`, color: BOOK.ink, borderRadius: '4px', width: '36px', height: '36px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0 }}
           >
-            ☰
+            <MenuIcon />
           </button>
           <div style={{ flex: 1, minWidth: 0, fontFamily: BOOK.sans, fontSize: '0.72rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: BOOK.goldText, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
             {page.chapter}
@@ -88,6 +93,8 @@ export function StoryViewer({ pages, index, onIndex, onOpenContents, onOpenRepor
               margin: '0 auto',
               display: 'flex',
               flexDirection: 'column',
+              // Short pages sit in the middle of the card rather than at the top
+              justifyContent: 'center',
               background: BOOK.page,
               border: `1px solid ${BOOK.line}`,
               borderRadius: '6px',
@@ -108,7 +115,7 @@ export function StoryViewer({ pages, index, onIndex, onOpenContents, onOpenRepor
           disabled={index === 0}
           style={{ ...navButton, width: '34%', background: 'transparent', border: `1px solid ${BOOK.line}`, color: BOOK.ink, opacity: index === 0 ? 0.35 : 1 }}
         >
-          ‹ Back
+          <ChevronLeftIcon /> Back
         </button>
         <button
           type="button"
@@ -116,7 +123,7 @@ export function StoryViewer({ pages, index, onIndex, onOpenContents, onOpenRepor
           disabled={index === last}
           style={{ ...navButton, flex: 1, background: BOOK.gold, border: 'none', color: '#0C1128', opacity: index === last ? 0.35 : 1 }}
         >
-          {index === 0 ? 'Begin ›' : 'Next ›'}
+          {index === 0 ? 'Begin' : 'Next'} <ChevronRightIcon />
         </button>
         <div style={{ width: '100%', textAlign: 'center' }}>
           {onOpenReport && (

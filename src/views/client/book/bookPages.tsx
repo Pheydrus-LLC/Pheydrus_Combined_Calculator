@@ -38,7 +38,7 @@ export interface BookPage {
   /** Chapter name, shown in the header and the contents list */
   chapter: string;
   content: ReactNode;
-  /** Covers: artwork runs to the page edges, with no page frame or number */
+  /** Covers and chapter title pages: artwork runs to the page edges, with no page frame or number */
   fullBleed?: boolean;
 }
 
@@ -67,7 +67,7 @@ export function buildBookPages(
     const chapter = `Chapter ${n} · ${PILLAR_TITLES[n].title}`;
     const pillar = ctx.pillars[n - 1];
     const items = getReportItems(pillar);
-    pages.push({ id: `pillar-${n}`, chapter, content: <ChapterOpenerPage ctx={ctx} n={n} /> });
+    pages.push({ id: `pillar-${n}`, chapter, fullBleed: true, content: <ChapterOpenerPage ctx={ctx} n={n} /> });
     items.forEach((item, i) => {
       pages.push({
         id: `pillar-${n}-finding-${i + 1}`,
