@@ -132,8 +132,8 @@ export function SpreadViewer({ pages, index, onIndex, onOpenContents, onOpenRepo
           <button
             type="button"
             onClick={onOpenContents}
-            aria-label="Contents"
-            title="Contents"
+            aria-label="Table of Contents"
+            title="Table of Contents"
             style={{ ...iconButton, width: '36px', height: '36px', borderRadius: '4px', border: `1px solid ${BOOK.line}`, color: BOOK.ink }}
           >
             <MenuIcon />

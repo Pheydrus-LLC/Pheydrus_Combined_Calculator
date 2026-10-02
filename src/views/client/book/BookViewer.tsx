@@ -26,7 +26,7 @@ function ContentsMenu({
   return (
     <div
       role="dialog"
-      aria-label="Contents"
+      aria-label="Table of Contents"
       onClick={onClose}
       style={{ position: 'fixed', inset: 0, zIndex: 100, background: 'rgba(5,10,24,0.85)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}
     >
@@ -35,8 +35,8 @@ function ContentsMenu({
         style={{ width: '100%', maxWidth: '420px', background: BOOK.page, border: `1px solid rgba(201,168,76,0.35)`, borderRadius: '6px', padding: '22px 20px' }}
       >
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
-          <span style={{ fontFamily: BOOK.serif, fontSize: '1.5rem', fontWeight: 700, color: BOOK.goldText }}>Contents</span>
-          <button type="button" onClick={onClose} aria-label="Close contents" style={{ background: 'transparent', border: 'none', color: BOOK.muted, fontSize: '1.3rem', cursor: 'pointer' }}>
+          <span style={{ fontFamily: BOOK.serif, fontSize: '1.5rem', fontWeight: 700, color: BOOK.goldText }}>Table of Contents</span>
+          <button type="button" onClick={onClose} aria-label="Close table of contents" style={{ background: 'transparent', border: 'none', color: BOOK.muted, fontSize: '1.3rem', cursor: 'pointer' }}>
             ×
           </button>
         </div>

@@ -125,26 +125,85 @@ const PILLAR_BAR: Record<1 | 2 | 3, string> = { 1: '#F87171', 2: '#C9A84C', 3: '
 /** A short gold rule between the cover's lines */
 const Rule = () => <div style={{ width: '64px', height: '1px', background: 'rgba(201,168,76,0.6)', margin: '4px auto' }} />;
 
+/** Flat midnight navy and soft champagne gold of the front cover */
+const COVER_NAVY = '#0E1A33';
+const COVER_GOLD = '#CDB07E';
+
+/** Four-pointed star with curved sides, centred on (x, y) */
+const starPath = (x: number, y: number, r: number) =>
+  `M${x} ${y - r}Q${x} ${y} ${x + r} ${y}Q${x} ${y} ${x} ${y + r}Q${x} ${y} ${x - r} ${y}Q${x} ${y} ${x} ${y - r}Z`;
+
+/** A star sitting on one of the cover's frame lines, with a gap cut round it */
+const FrameStar = ({ top }: { top: string }) => (
+  <svg aria-hidden="true" viewBox="0 0 24 24" style={{ position: 'absolute', top, left: '50%', width: '22px', height: '22px', transform: 'translate(-50%, -50%)', background: COVER_NAVY }}>
+    <path d={starPath(12, 12, 9)} fill={COVER_GOLD} />
+  </svg>
+);
+
+/** Three moon phases with a burst of rays behind the full moon */
+const MoonPhases = () => {
+  const rays = [-150, -130, -110, -90, -70, -50, -30, 30, 50, 70, 90, 110, 130, 150].map((deg) => {
+    const a = (deg * Math.PI) / 180;
+    const inner = deg % 90 === 0 ? 22 : 24;
+    return { x1: 80 + inner * Math.cos(a), y1: 60 + inner * Math.sin(a), x2: 80 + 44 * Math.cos(a), y2: 60 + 44 * Math.sin(a) };
+  });
+  return (
+    <svg aria-hidden="true" viewBox="0 0 160 120" style={{ display: 'block', width: '46%', maxWidth: '190px', margin: '0 auto' }}>
+      {rays.map((r, i) => (
+        <line key={i} {...r} stroke={COVER_GOLD} strokeWidth="0.6" opacity="0.65" />
+      ))}
+      {/* Waxing crescent, full moon with a shaded edge, waning crescent */}
+      <circle cx="40" cy="60" r="11" fill={COVER_GOLD} />
+      <circle cx="44.5" cy="60" r="10" fill={COVER_NAVY} />
+      <circle cx="80" cy="60" r="15" fill={COVER_GOLD} />
+      <path d="M80 45A15 15 0 0 0 80 75A8 15 0 0 1 80 45Z" fill={COVER_NAVY} opacity="0.45" />
+      <circle cx="120" cy="60" r="11" fill={COVER_GOLD} />
+      <circle cx="115.5" cy="60" r="10" fill={COVER_NAVY} />
+      <path d={starPath(80, 8, 5)} fill={COVER_GOLD} />
+      <path d={starPath(80, 112, 5)} fill={COVER_GOLD} />
+    </svg>
+  );
+};
+
+const coverSerif = { fontFamily: BOOK.serif, fontWeight: 400, color: COVER_GOLD, margin: 0 };
+const coverCaps = { ...coverSerif, textTransform: 'uppercase' as const };
+
 export function CoverPage({ name }: { name: string }) {
   return (
-    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', textAlign: 'center' }}>
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '16px' }}>
-        <Eyebrow>Proprietary 3-Pillar Analysis</Eyebrow>
-        <h1 style={{ fontFamily: BOOK.serif, fontSize: '2.6rem', fontWeight: 700, color: BOOK.goldText, lineHeight: 1.1, margin: 0 }}>
-          The Invisible Forces Report
-        </h1>
-        <Rule />
-        <div style={{ fontFamily: BOOK.sans, fontSize: '0.66rem', fontWeight: 700, letterSpacing: '0.28em', textTransform: 'uppercase', color: BOOK.muted }}>
-          Authored by Pheydrus
+    <div style={{ position: 'relative', flex: 1, display: 'flex', flexDirection: 'column', background: COVER_NAVY, textAlign: 'center', containerType: 'inline-size', overflow: 'hidden' }}>
+      {/* Frame, with the press band ruled off at the bottom */}
+      <div aria-hidden="true" style={{ position: 'absolute', inset: '22px', border: `1px solid ${COVER_GOLD}`, opacity: 0.55, pointerEvents: 'none' }} />
+      <FrameStar top="22px" />
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly', padding: '48px 40px 18px' }}>
+        <div>
+          <p style={{ ...coverSerif, fontStyle: 'italic', fontSize: 'clamp(1.3rem, 7cqw, 1.9rem)', marginBottom: '6px' }}>The</p>
+          <p style={{ ...coverCaps, fontSize: 'clamp(1.6rem, 9.5cqw, 2.7rem)', letterSpacing: '0.14em', lineHeight: 1.2 }}>
+            Invisible
+            <br />
+            Forces
+            <br />
+            Report
+          </p>
         </div>
-        {name && <div style={{ fontFamily: BOOK.serif, fontStyle: 'italic', fontSize: '1.25rem', color: BOOK.ink }}>for {name}</div>}
+        <MoonPhases />
+        <div>
+          <p style={{ ...coverSerif, fontStyle: 'italic', fontSize: '1.05rem' }}>Authored by</p>
+          <p style={{ ...coverCaps, fontSize: '1.05rem', letterSpacing: '0.3em', marginTop: '2px' }}>Pheydrus</p>
+          <div style={{ width: '56px', height: '1px', background: COVER_GOLD, opacity: 0.7, margin: '16px auto' }} />
+          {name && <p style={{ ...coverSerif, fontStyle: 'italic', fontSize: '1.05rem' }}>For {name}.</p>}
+        </div>
       </div>
-      <a href={PRESS_URL} target="_blank" rel="noopener noreferrer" style={{ display: 'block', width: '100%', marginTop: '24px', textDecoration: 'none' }}>
-        <div style={{ fontFamily: BOOK.sans, fontSize: '0.56rem', fontWeight: 700, letterSpacing: '0.3em', textTransform: 'uppercase', color: BOOK.muted, marginBottom: '8px' }}>
-          As Seen On
-        </div>
-        <img src={PRESS_LOGOS_LIGHT} alt={PRESS_LOGOS_ALT} style={{ display: 'block', width: '100%', height: 'auto', opacity: 0.7 }} />
-      </a>
+      <div style={{ position: 'relative', margin: '0 22px 22px', padding: '16px 22px 20px', borderTop: `1px solid rgba(205,176,126,0.55)` }}>
+        <FrameStar top="0" />
+        <a href={PRESS_URL} target="_blank" rel="noopener noreferrer" style={{ display: 'block', textDecoration: 'none' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '10px' }}>
+            <span style={{ flex: 1, height: '1px', background: COVER_GOLD, opacity: 0.4 }} />
+            <span style={{ fontFamily: BOOK.serif, fontSize: '0.72rem', letterSpacing: '0.3em', textTransform: 'uppercase', color: COVER_GOLD }}>As Seen On</span>
+            <span style={{ flex: 1, height: '1px', background: COVER_GOLD, opacity: 0.4 }} />
+          </div>
+          <img src={PRESS_LOGOS_LIGHT} alt={PRESS_LOGOS_ALT} style={{ display: 'block', width: '100%', height: 'auto', opacity: 0.55 }} />
+        </a>
+      </div>
     </div>
   );
 }
@@ -157,7 +216,7 @@ export function BackCoverPage({ onOpenReport }: { onOpenReport?: () => void }) {
         This is not the end of your story.
       </p>
       <p style={{ fontFamily: BOOK.serif, fontStyle: 'italic', fontSize: '1.25rem', lineHeight: 1.4, color: BOOK.ink, margin: 0 }}>
-        It's yours, and it's only just beginning.
+        It's only just beginning.
       </p>
       <Rule />
       <Eyebrow>Pheydrus</Eyebrow>

@@ -57,7 +57,7 @@ export function buildBookPages(
   const findingCtx = { goal: ctx.goal, goalShort: ctx.goalShort, goalText: ctx.goalText, transits: ctx.transits };
 
   const pages: BookPage[] = [
-    { id: 'cover', chapter: 'Cover', content: <CoverPage name={results.userInfo.name} /> },
+    { id: 'cover', chapter: 'Cover', fullBleed: true, content: <CoverPage name={results.userInfo.name} /> },
     { id: 'score', chapter: 'Your Score', content: <ScorePage ctx={ctx} date={date} /> },
     { id: 'score-meaning', chapter: 'Your Score', content: <ScoreMeaningPage ctx={ctx} /> },
     { id: 'before', chapter: 'Your Score', content: <BeforeYouBeginPage /> },
@@ -95,7 +95,7 @@ export function buildBookPages(
     { id: 'kit', chapter: 'Your Pillar Repair Kit', content: <RepairKitIntroPage /> },
     ...PILLAR_RESOURCE_CARDS.map((_, i) => ({ id: `kit-${i + 1}`, chapter: 'Your Pillar Repair Kit', content: <RepairKitPage index={i} /> })),
     { id: 'coaching', chapter: 'Your Next Step', content: <CoachingPage /> },
-    { id: 'back-cover', chapter: 'The End', content: <BackCoverPage onOpenReport={options.onOpenReport} /> },
+    { id: 'back-cover', chapter: 'Not The End', content: <BackCoverPage onOpenReport={options.onOpenReport} /> },
   );
   return pages;
 }

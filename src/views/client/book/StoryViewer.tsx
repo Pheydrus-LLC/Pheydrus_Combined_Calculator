@@ -57,7 +57,7 @@ export function StoryViewer({ pages, index, onIndex, onOpenContents, onOpenRepor
           <button
             type="button"
             onClick={onOpenContents}
-            aria-label="Contents"
+            aria-label="Table of Contents"
             style={{ background: 'transparent', border: `1px solid ${BOOK.line}`, color: BOOK.ink, borderRadius: '4px', width: '36px', height: '36px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0 }}
           >
             <MenuIcon />
