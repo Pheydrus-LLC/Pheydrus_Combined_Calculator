@@ -187,10 +187,14 @@ export function CoverPage({ name }: { name: string }) {
         </div>
         <MoonPhases />
         <div>
-          <p style={{ ...coverSerif, fontStyle: 'italic', fontSize: '1.05rem' }}>Authored by</p>
-          <p style={{ ...coverCaps, fontFamily: BOOK.sans, color: BOOK.muted, fontSize: '0.74rem', fontWeight: 700, letterSpacing: '0.28em', marginTop: '6px' }}>Pheydrus</p>
-          <div style={{ width: '56px', height: '1px', background: COVER_GOLD, opacity: 0.7, margin: '16px auto' }} />
-          {name && <p style={{ ...coverSerif, fontStyle: 'italic', fontSize: '1.05rem' }}>For {name}.</p>}
+          {name && (
+            <>
+              <p style={{ ...coverSerif, fontStyle: 'italic', fontSize: '1.3rem' }}>For {name}.</p>
+              <div style={{ width: '56px', height: '1px', background: COVER_GOLD, opacity: 0.7, margin: '16px auto' }} />
+            </>
+          )}
+          <p style={{ ...coverSerif, fontStyle: 'italic', fontSize: '1.2rem' }}>Authored by</p>
+          <p style={{ ...coverCaps, fontFamily: BOOK.sans, color: BOOK.muted, fontSize: '0.84rem', fontWeight: 700, letterSpacing: '0.28em', marginTop: '6px' }}>Pheydrus</p>
         </div>
       </div>
       <div style={{ position: 'relative', margin: '0 22px 22px', padding: '16px 22px 20px', borderTop: `1px solid rgba(201,168,76,0.55)` }}>
