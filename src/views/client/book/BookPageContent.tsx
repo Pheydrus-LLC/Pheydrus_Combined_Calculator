@@ -619,7 +619,7 @@ export function RepairKitPage({ index }: { index: number }) {
 export function CoachingPage() {
   return (
     <>
-      <Eyebrow>Your Next Step</Eyebrow>
+      <Eyebrow>Beyond the Report</Eyebrow>
       <Title>{COACHING_CTA_TITLE}</Title>
       {COACHING_CTA_PARAGRAPHS.map((p) => (
         <Body key={p}>{p}</Body>

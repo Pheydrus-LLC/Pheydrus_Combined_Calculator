@@ -98,7 +98,7 @@ export function buildBookPages(
     { id: 'roadmap-pillars', chapter: 'Your Solution', alignTop: true, content: <RoadmapPillarsPage fromPillar={ROADMAP_FIRST_PAGE_PILLARS} /> },
     { id: 'kit', chapter: 'Your Pillar Repair Kit', contentsName: 'Chapter 5 · Your Pillar Repair Kit', content: <RepairKitIntroPage /> },
     ...PILLAR_RESOURCE_CARDS.map((_, i) => ({ id: `kit-${i + 1}`, chapter: 'Your Pillar Repair Kit', content: <RepairKitPage index={i} /> })),
-    { id: 'coaching', chapter: 'Your Next Step', contentsName: 'Chapter 6 · Your Next Step', content: <CoachingPage /> },
+    { id: 'coaching', chapter: 'Beyond the Report', contentsName: 'Chapter 6 · Beyond the Report', content: <CoachingPage /> },
     { id: 'back-cover', chapter: 'Not The End', content: <BackCoverPage onOpenReport={options.onOpenReport} /> },
   );
   return pages;
