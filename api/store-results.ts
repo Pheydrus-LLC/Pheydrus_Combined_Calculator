@@ -39,6 +39,10 @@ interface UserInfo {
 
 interface Results {
   userInfo?: UserInfo;
+  calculators?: {
+    natalChart?: { risingSign?: string } | null;
+    transits?: { risingSign?: string } | null;
+  };
   diagnostic?: {
     finalGrade?: string;
     score?: number;
@@ -392,10 +396,14 @@ async function addToGoHighLevel(
     firstName: firstName || '',
     lastName: lastName || '',
     phone: intake.phone || undefined,
-    tags: ['Calculator Submission'],
     customFields: [
       { key: 'grade', field_value: results.diagnostic?.finalGrade ?? '' },
       { key: 'score', field_value: String(results.diagnostic?.score ?? '') },
+      {
+        key: 'rising_sign',
+        field_value:
+          results.calculators?.natalChart?.risingSign ?? results.calculators?.transits?.risingSign ?? '',
+      },
       { key: 'desired_outcome', field_value: intake.desiredOutcome || '' },
       { key: 'obstacle', field_value: intake.obstacle || '' },
       { key: 'current_situation', field_value: intake.currentSituation || '' },
@@ -405,7 +413,9 @@ async function addToGoHighLevel(
     ].filter((f) => f.field_value !== ''),
   };
 
-  const contactRes = await fetch('https://services.leadconnectorhq.com/contacts/', {
+  // Upsert rather than create, so a returning client (or a contact GHL already has from
+  // another source) is updated instead of rejected as a duplicate.
+  const contactRes = await fetch('https://services.leadconnectorhq.com/contacts/upsert', {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${apiKey}`,
@@ -421,9 +431,28 @@ async function addToGoHighLevel(
     return;
   }
 
-  const contactData = (await contactRes.json()) as { contact?: { id?: string } };
+  const contactData = (await contactRes.json()) as { new?: boolean; contact?: { id?: string } };
   const contactId = contactData?.contact?.id;
-  console.info(`[store-results] GHL contact created for ${maskedEmail}`);
+  console.info(
+    `[store-results] GHL contact ${contactData?.new === false ? 'updated' : 'created'} for ${maskedEmail}`
+  );
+
+  // Tag separately: the add-tags endpoint appends, so a returning contact keeps its existing tags
+  if (contactId) {
+    const tagRes = await fetch(`https://services.leadconnectorhq.com/contacts/${contactId}/tags`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+        Version: '2021-07-28',
+      },
+      body: JSON.stringify({ tags: ['Calculator Submission'] }),
+    });
+    if (!tagRes.ok) {
+      const text = await tagRes.text();
+      console.warn(`[store-results] GHL tag failed for ${maskedEmail}:`, tagRes.status, text);
+    }
+  }
 
   // Resolve pipeline + stage (env var override, otherwise dynamic lookup by name)
   let pipelineId: string | null = process.env.GHL_PIPELINE_ID ?? null;

@@ -393,7 +393,7 @@ function ChapterTitlePage({ n, title, subtitle, children }: { n: number; title: 
 }
 
 /** A pillar chapter's title page: "Chapter 1 · Pillar 1, Structure", its subtitle and HeyJune's voice note */
-export function ChapterOpenerPage({ ctx, n }: { ctx: ReportContext; n: 1 | 2 | 3 }) {
+export function ChapterOpenerPage({ ctx, n, risingSign }: { ctx: ReportContext; n: 1 | 2 | 3; risingSign?: string }) {
   const pillar = ctx.pillars[n - 1];
   const grade = getPillarLetterGrade(pillar);
   const note = PILLAR_VOICE_NOTES[n];
@@ -411,6 +411,11 @@ export function ChapterOpenerPage({ ctx, n }: { ctx: ReportContext; n: 1 | 2 | 3
       <div style={{ fontFamily: BOOK.sans, fontSize: '0.72rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#7A6A48' }}>
         Pillar grade <strong style={{ color: grade === 'A' ? '#15803d' : grade === 'C' ? '#9A6B00' : '#B42318', fontSize: '0.95rem' }}>{grade}</strong>
       </div>
+      {n === 1 && risingSign && (
+        <div style={{ fontFamily: BOOK.sans, fontSize: '0.72rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#7A6A48', marginTop: '8px' }}>
+          Rising Sign: <strong style={{ color: '#5A4A2A', fontSize: '0.95rem' }}>{risingSign}</strong>
+        </div>
+      )}
     </ChapterTitlePage>
   );
 }

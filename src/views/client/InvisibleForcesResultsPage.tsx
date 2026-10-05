@@ -1173,6 +1173,8 @@ export function InvisibleForcesResultsPage() {
  const goal = detectGoalCategory(intake.desiredOutcome);
  const goalShort = GOAL_SHORT[goal];
  const clientLocation = results.userInfo.currentLocation || '';
+ const risingSign =
+ results.calculators.natalChart?.risingSign || results.calculators.transits?.risingSign || '';
  const transits = results.calculators.transits?.transits ?? [];
  const [p1, p2, p3] = results.diagnostic!.pillars;
 
@@ -1489,7 +1491,7 @@ export function InvisibleForcesResultsPage() {
  >
  {intake.desiredOutcome}
  </p>
- {(results.userInfo.name || results.userInfo.dateOfBirth || intake.obstacle) && (
+ {(results.userInfo.name || results.userInfo.dateOfBirth || risingSign || intake.obstacle) && (
  <div
   style={{
   marginTop: '10px',
@@ -1508,6 +1510,11 @@ export function InvisibleForcesResultsPage() {
   {results.userInfo.dateOfBirth && (
   <span style={{ fontSize: '0.75rem', fontFamily: INTER, color: '#C9A84C' }}>
    <strong>DOB:</strong> {results.userInfo.dateOfBirth}
+  </span>
+  )}
+  {risingSign && (
+  <span style={{ fontSize: '0.75rem', fontFamily: INTER, color: '#C9A84C' }}>
+   <strong>Rising Sign:</strong> {risingSign}
   </span>
   )}
   {intake.obstacle && (

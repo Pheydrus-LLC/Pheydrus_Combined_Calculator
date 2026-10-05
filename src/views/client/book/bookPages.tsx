@@ -57,6 +57,7 @@ export function buildBookPages(
 ): BookPage[] {
   const ctx = getReportContext(results, intake);
   const date = new Date(results.timestamp).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  const risingSign = results.calculators.natalChart?.risingSign || results.calculators.transits?.risingSign;
   const findingCtx = { goal: ctx.goal, goalShort: ctx.goalShort, goalText: ctx.goalText, transits: ctx.transits };
 
   const pages: BookPage[] = [
@@ -72,7 +73,7 @@ export function buildBookPages(
     const chapter = `Chapter ${n} · ${PILLAR_TITLES[n].title}`;
     const pillar = ctx.pillars[n - 1];
     const items = getReportItems(pillar);
-    pages.push({ id: `pillar-${n}`, chapter, fullBleed: true, content: <ChapterOpenerPage ctx={ctx} n={n} /> });
+    pages.push({ id: `pillar-${n}`, chapter, fullBleed: true, content: <ChapterOpenerPage ctx={ctx} n={n} risingSign={risingSign} /> });
     items.forEach((item, i) => {
       pages.push({
         id: `pillar-${n}-finding-${i + 1}`,
