@@ -400,7 +400,7 @@ async function addToGoHighLevel(
       { key: 'grade', field_value: results.diagnostic?.finalGrade ?? '' },
       { key: 'score', field_value: String(results.diagnostic?.score ?? '') },
       {
-        key: 'rising_sign',
+        key: 'rising_sign_field',
         field_value:
           results.calculators?.natalChart?.risingSign ?? results.calculators?.transits?.risingSign ?? '',
       },
