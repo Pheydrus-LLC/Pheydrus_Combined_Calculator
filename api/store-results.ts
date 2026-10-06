@@ -351,6 +351,7 @@ async function appendToGoogleSheet(
     addressCountry || '',
     intake.tosConsent ? 'Yes' : 'No',
     resultsUrl || '',
+    results.calculators?.natalChart?.risingSign ?? results.calculators?.transits?.risingSign ?? '',
   ];
 
   const auth = new google.auth.GoogleAuth({
