@@ -33,7 +33,12 @@ export interface FindingContent {
   library: { hurtOrHelp: string; note: string | null; steps: [string, string] } | null;
   /** Used when there's no library entry */
   fallback: { mirror: string | null; interpretation: string; transmute: string | null } | null;
+  /** Small print shown under the finding (address findings only) */
+  disclaimer: string | null;
 }
+
+export const ADDRESS_DISCLAIMER =
+  'If your address is unique, the calculator will default to giving the L1 instead of the L3.';
 
 const IMPACT: Partial<Record<GradeItem['grade'], FindingContent['impact']>> = {
   F: 'hurts',
@@ -42,7 +47,10 @@ const IMPACT: Partial<Record<GradeItem['grade'], FindingContent['impact']>> = {
 };
 
 export function getFindingContent(item: GradeItem, ctx: FindingContext): FindingContent {
-  const addressLevel = item.section === 'Address' && item.source ? ` (${item.source.split(':')[0]})` : '';
+  // Clients see the graded address level labelled L1, with ADDRESS_DISCLAIMER explaining it
+  const addressLevel =
+    item.section === 'Address' && item.source ? ` (${item.source.split(':')[0].replace('L3', 'L1')})` : '';
+  const disclaimer = item.section === 'Address' ? ADDRESS_DISCLAIMER : null;
   const label = item.section === 'Address' ? `🏠 Address Energy${addressLevel}` : item.source;
   const endYear =
     item.section === 'Transit Angular' || item.section === 'Life Cycle'
@@ -65,6 +73,7 @@ export function getFindingContent(item: GradeItem, ctx: FindingContext): Finding
         ],
       },
       fallback: null,
+      disclaimer,
     };
   }
 
@@ -79,5 +88,6 @@ export function getFindingContent(item: GradeItem, ctx: FindingContext): Finding
       interpretation: applyKmsStyle(getItemInterpretation(item, ctx.goal, ctx.transits, ctx.goalText)),
       transmute: getTransmuteLine(item),
     },
+    disclaimer,
   };
 }

@@ -356,6 +356,15 @@ function AspectCard({
  <strong style={{ color: '#16a34a' }}>✅ Do This:</strong>{' '}
  {libraryEntry.steps[1]}
  </p>
+ {content.disclaimer && (
+ <p style={{ fontFamily: CORMORANT, fontSize: '0.85rem', fontStyle: 'italic', color: '#C9A84C', lineHeight: 1.5, margin: '8px 0 0', paddingLeft: '10px', borderLeft: '2px solid #C9A84C' }}>
+ *{' '}
+ {/* Level names stay upright, in sans: the serif's old-style 1 reads like an I */}
+ {content.disclaimer.split(/(L[13])/).map((part, i) =>
+ /^L[13]$/.test(part) ? <span key={i} style={{ fontStyle: 'normal', fontFamily: INTER, fontWeight: 600, fontSize: '0.85em' }}>{part}</span> : part
+ )}
+ </p>
+ )}
  </div>
  );
  }
@@ -422,7 +431,8 @@ function AspectCard({
  style={{
  fontFamily: INTER,
  fontSize: '0.72rem',
- color: '#8880A8',
+ // Address Energy reads in white like the library findings
+ color: item.section === 'Address' ? '#FFFFFF' : '#8880A8',
  lineHeight: 1.7,
  margin: transmute ? '0 0 8px' : '0',
  }}
@@ -444,6 +454,15 @@ function AspectCard({
  <strong>Higher octave:</strong> {applyKmsStyle(transmute)}
  </p>
  </div>
+ )}
+ {content.disclaimer && (
+ <p style={{ fontFamily: CORMORANT, fontSize: '0.85rem', fontStyle: 'italic', color: '#C9A84C', lineHeight: 1.5, margin: '8px 0 0', paddingLeft: '10px', borderLeft: '2px solid #C9A84C' }}>
+ *{' '}
+ {/* Level names stay upright, in sans: the serif's old-style 1 reads like an I */}
+ {content.disclaimer.split(/(L[13])/).map((part, i) =>
+ /^L[13]$/.test(part) ? <span key={i} style={{ fontStyle: 'normal', fontFamily: INTER, fontWeight: 600, fontSize: '0.85em' }}>{part}</span> : part
+ )}
+ </p>
  )}
  </div>
  );

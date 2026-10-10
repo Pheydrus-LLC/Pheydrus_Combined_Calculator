@@ -487,6 +487,15 @@ export function FindingPage({
           )}
         </>
       )}
+      {content.disclaimer && (
+        <p style={{ fontFamily: BOOK.serif, fontSize: '0.9rem', fontStyle: 'italic', color: BOOK.goldText, lineHeight: 1.5, margin: '14px 0 0', paddingLeft: '12px', borderLeft: `2px solid ${BOOK.gold}` }}>
+          *{' '}
+          {/* Level names stay upright, in sans: the serif's old-style 1 reads like an I */}
+          {content.disclaimer.split(/(L[13])/).map((part, i) =>
+            /^L[13]$/.test(part) ? <span key={i} style={{ fontStyle: 'normal', fontFamily: BOOK.sans, fontWeight: 600, fontSize: '0.85em' }}>{part}</span> : part
+          )}
+        </p>
+      )}
     </>
   );
 }
