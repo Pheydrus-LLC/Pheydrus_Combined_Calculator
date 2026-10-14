@@ -37,7 +37,6 @@ import { applyLightPrintTheme } from '../../services/pdfExport/lightPrint';
 import { PRESS_URL, PRESS_LOGOS_LIGHT, PRESS_LOGOS_DARK, PRESS_LOGOS_ALT } from '../../data/press';
 import { ROADMAP_TITLE, ROADMAP_STEPS, ROADMAP_PILLARS, ROADMAP_CLOSER } from '../../data/roadmap';
 import { COST_OF_INACTION_TITLE, getCostOfInactionCopy } from '../../data/costOfInaction';
-import { CalendlyEmbed } from '../../components/results/CalendlyEmbed';
 import {
  COACHING_CTA_TITLE,
  COACHING_CTA_PARAGRAPHS,
@@ -2172,28 +2171,24 @@ export function InvisibleForcesResultsPage() {
  {paragraph}
  </p>
  ))}
- <div style={{ marginTop: '22px' }}>
- <h3
- style={{
- margin: '0 0 6px',
- fontFamily: CORMORANT,
- fontSize: '1.4rem',
- fontWeight: 700,
- color: '#E8C46A',
- }}
- >
+ <div id="book-call" style={{ marginTop: '8px', scrollMarginTop: '120px' }}>
  <a
  href={COACHING_CALL_URL}
  target="_blank"
  rel="noopener noreferrer"
- style={{ color: 'inherit', textDecoration: 'underline', textUnderlineOffset: '4px' }}
+ style={{
+ display: 'inline-block',
+ padding: '14px 32px',
+ background: '#C9A84C',
+ color: '#0C1128',
+ fontWeight: 700,
+ fontFamily: INTER,
+ textDecoration: 'none',
+ borderRadius: '2px',
+ }}
  >
  Book Your 15-Minute Call →
  </a>
- </h3>
- <p data-print="hide" style={{ margin: '0 0 14px', fontSize: '0.8rem', color: '#A098C0', fontFamily: INTER }}>
- Pick a time that works for you below.
- </p>
  </div>
  </div>
  <div style={{ flexShrink: 0, width: '220px' }}>
@@ -2208,14 +2203,6 @@ export function InvisibleForcesResultsPage() {
  }}
  />
  </div>
- </div>
-
- <div id="book-call" style={{ marginTop: '20px', scrollMarginTop: '120px' }}>
- <CalendlyEmbed
- url={COACHING_CALL_URL}
- name={results.userInfo.name}
- email={intake.email}
- />
  </div>
  </div>
  </>
