@@ -7,6 +7,17 @@ export type PreferredSolution = 'coaching' | 'workshops' | 'self-study' | 'all';
 export type CurrentSituation = 'employed' | 'founder' | 'freelancer' | 'student' | 'monetizing';
 export type PriorHelpOption = 'therapy' | 'coaches' | 'family' | 'media';
 
+// Stored and synced (GHL, Google Sheet) as the label itself, so the answer reads as the client chose it.
+export const YEARLY_INCOME_OPTIONS = [
+  'Under $25K',
+  '$25K–$65K',
+  '$65K–$95K',
+  '$95K–$150K',
+  '$150K+',
+  'No set income, but I have savings or access to cash',
+] as const;
+export type YearlyIncome = (typeof YEARLY_INCOME_OPTIONS)[number];
+
 export interface ClientIntakeData {
   email: string;
   phone: string;
@@ -19,6 +30,7 @@ export interface ClientIntakeData {
   priorHelp: PriorHelpOption[]; // multi-select — support already tried
   preferredSolution: PreferredSolution | '';
   currentSituation: CurrentSituation | '';
+  yearlyIncome: YearlyIncome | '';
   additionalNotes: string; // free text — anything else
 }
 
@@ -34,6 +46,7 @@ export const EMPTY_CLIENT_INTAKE: ClientIntakeData = {
   priorHelp: [],
   preferredSolution: '',
   currentSituation: '',
+  yearlyIncome: '',
   additionalNotes: '',
 };
 

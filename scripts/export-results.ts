@@ -72,6 +72,7 @@ type StoredPayload = {
     priorHelp?: string[];
     preferredSolution?: string;
     currentSituation?: string;
+    yearlyIncome?: string;
     additionalNotes?: string;
   };
   results?: {
@@ -119,6 +120,7 @@ const COLUMNS: Array<keyof Row | string> = [
   'priorHelp',
   'preferredSolution',
   'currentSituation',
+  'yearlyIncome',
   'additionalNotes',
   'finalGrade',
   'score',
@@ -181,6 +183,7 @@ function flattenRow(id: string, data: StoredPayload): Row {
     priorHelp: Array.isArray(intake.priorHelp) ? intake.priorHelp.join('; ') : '',
     preferredSolution: intake.preferredSolution ?? '',
     currentSituation: intake.currentSituation ?? '',
+    yearlyIncome: intake.yearlyIncome ?? '',
     additionalNotes: intake.additionalNotes ?? '',
     finalGrade: d.finalGrade ?? '',
     score: d.score ?? '',

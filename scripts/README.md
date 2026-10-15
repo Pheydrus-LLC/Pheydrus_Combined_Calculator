@@ -70,7 +70,7 @@ One row per submission. 37 columns grouped as follows:
 | Contact     | `name`, `email`, `phone`, `marketingConsent`                                                                         |
 | Birth info  | `dateOfBirth`, `timeOfBirth`, `birthLocation`                                                                        |
 | Location    | `currentLocation`, `address`, `addressMoveDate`                                                                      |
-| Intake      | `desiredOutcome`, `obstacle`, `patternYear`, `priorHelp`, `preferredSolution`, `currentSituation`, `additionalNotes` |
+| Intake      | `desiredOutcome`, `obstacle`, `patternYear`, `priorHelp`, `preferredSolution`, `currentSituation`, `yearlyIncome`, `additionalNotes` |
 | Scoring     | `finalGrade`, `score`, `totalFs`, `totalCs`, `totalAs`                                                               |
 | Pillars     | `pillar{1,2,3}_grade`, `pillar{1,2,3}_{fs,cs,as}`                                                                    |
 | Astro       | `risingSign`                                                                                                         |

@@ -27,6 +27,7 @@ export const DEMO_INTAKE: ClientIntakeData = {
   priorHelp: ['therapy', 'coaches'],
   preferredSolution: 'coaching',
   currentSituation: 'freelancer',
+  yearlyIncome: '$25K–$65K',
   additionalNotes: '',
 };
 

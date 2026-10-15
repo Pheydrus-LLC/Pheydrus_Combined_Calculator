@@ -27,6 +27,7 @@ import {
   PREFERRED_SOLUTION_LABELS,
   CURRENT_SITUATION_LABELS,
   PRIOR_HELP_LABELS,
+  YEARLY_INCOME_OPTIONS,
 } from '../../models/clientIntake';
 
 const TOTAL_STEPS = 6;
@@ -233,7 +234,7 @@ export function InvisibleForcesReportPage() {
       case 4:
         return !!intake.desiredOutcome && !!intake.obstacle;
       case 5:
-        return !!intake.preferredSolution && !!intake.currentSituation;
+        return !!intake.preferredSolution && !!intake.currentSituation && !!intake.yearlyIncome;
       case 6:
         return intake.tosConsent;
       default:
@@ -581,6 +582,22 @@ export function InvisibleForcesReportPage() {
                   )}
                 </div>
               </div>
+              <div>
+                <label className={labelClass}>
+                  What's your current yearly income? <span className="text-[#9a7d4e]">*</span>
+                </label>
+                <div className="space-y-3">
+                  {YEARLY_INCOME_OPTIONS.map((option) => (
+                    <RadioCard
+                      key={option}
+                      value={option}
+                      label={option}
+                      selected={intake.yearlyIncome === option}
+                      onSelect={(v) => setIntakeField('yearlyIncome', v)}
+                    />
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         );
@@ -663,6 +680,7 @@ export function InvisibleForcesReportPage() {
                       : '—'
                   }
                 />
+                <Row label="Yearly income" value={intake.yearlyIncome || '—'} />
               </div>
             </div>
           </div>

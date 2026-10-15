@@ -55,6 +55,7 @@ interface Intake {
   desiredOutcome?: string;
   obstacle?: string;
   currentSituation?: string;
+  yearlyIncome?: string;
   preferredSolution?: string;
   phone?: string;
   patternYear?: string;
@@ -352,6 +353,7 @@ async function appendToGoogleSheet(
     intake.tosConsent ? 'Yes' : 'No',
     resultsUrl || '',
     results.calculators?.natalChart?.risingSign ?? results.calculators?.transits?.risingSign ?? '',
+    intake.yearlyIncome || '',
   ];
 
   const auth = new google.auth.GoogleAuth({
@@ -408,6 +410,7 @@ async function addToGoHighLevel(
       { key: 'desired_outcome', field_value: intake.desiredOutcome || '' },
       { key: 'obstacle', field_value: intake.obstacle || '' },
       { key: 'current_situation', field_value: intake.currentSituation || '' },
+      { key: 'yearly_income', field_value: intake.yearlyIncome || '' },
       { key: 'preferred_solution', field_value: intake.preferredSolution || '' },
       { key: 'pattern_year', field_value: intake.patternYear || '' },
       { key: 'prior_help', field_value: Array.isArray(intake.priorHelp) ? intake.priorHelp.join(', ') : '' },

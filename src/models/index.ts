@@ -82,8 +82,10 @@ export {
   type PreferredSolution,
   type CurrentSituation,
   type PriorHelpOption,
+  type YearlyIncome,
   EMPTY_CLIENT_INTAKE,
   PREFERRED_SOLUTION_LABELS,
   CURRENT_SITUATION_LABELS,
   PRIOR_HELP_LABELS,
+  YEARLY_INCOME_OPTIONS,
 } from './clientIntake';

@@ -1056,6 +1056,7 @@ export function InvisibleForcesResultsPage() {
  priorHelp: ['coaches'],
  preferredSolution: 'coaching',
  currentSituation: 'employed',
+ yearlyIncome: '$65K–$95K',
  additionalNotes: '',
  },
  };
