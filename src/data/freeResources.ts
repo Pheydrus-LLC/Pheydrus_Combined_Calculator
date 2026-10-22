@@ -26,11 +26,11 @@ export const PILLAR_RESOURCE_CARDS: ResourceCard[] = [
     label: 'To address Pillar 1: Structure',
     resources: [
       {
-        title: 'Activate Your Power Law',
+        title: '4 Steps to Re-Writing Your Past',
         description:
-          'A free 60-minute live webinar. Learn the sequence that makes your chart finally move: the one identity trait that pays, the timing that changes everything, and the environment keeping your pattern in place.',
-        link: 'https://event.webinarjam.com/v12wp/register/8zx3ycn9',
-        cta: 'Save My Free Seat →',
+          "A free interactive workbook built on the Hero's Journey Structure. Turn the old emotional loops in your story into a self-led narrative, moving from dream, through nightmare and obstacle, into an identity you author yourself.",
+        link: 'https://www.pheydrus.com/4steps',
+        cta: 'Open the Workbook →',
       },
     ],
   },
