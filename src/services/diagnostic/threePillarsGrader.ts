@@ -1,6 +1,6 @@
 /**
  * Three Pillars Grading Engine
- * Core IP logic — grades a person across Structure, Timing, and Environment.
+ * Core IP logic — grades a person across Identity, Timing, and Environment.
  *
  * Pure function: no side effects, no async, no Swiss Ephemeris calls.
  * Consumes pre-computed calculator results and produces the diagnostic.
@@ -54,7 +54,7 @@ export interface GraderInput {
 }
 
 // ---------------------------------------------------------------------------
-// Pillar 1 — STRUCTURE (Natal Angular)
+// Pillar 1 — IDENTITY (Natal Angular)
 // ---------------------------------------------------------------------------
 
 function gradePillar1(natalChart: NatalChartResult | null): GradeItem[] {
@@ -301,7 +301,7 @@ function gradePillar3Address(addressNumerology: AddressNumerologyResult | null):
 
 function buildPillarSummary(
   pillar: 1 | 2 | 3,
-  name: 'Structure' | 'Timing' | 'Environment',
+  name: 'Identity' | 'Timing' | 'Environment',
   description: string,
   items: GradeItem[]
 ): PillarSummary {
@@ -350,7 +350,7 @@ export function gradeThreePillars(input: GraderInput): AngularDiagnosticResult {
   const p3bItems = gradePillar3Address(input.addressNumerology);
 
   // Build pillar summaries
-  const pillar1 = buildPillarSummary(1, 'Structure', 'What you were born with', p1Items);
+  const pillar1 = buildPillarSummary(1, 'Identity', 'What you were born with', p1Items);
 
   const pillar2 = buildPillarSummary(2, 'Timing', 'What is happening now', [
     ...p2aItems,

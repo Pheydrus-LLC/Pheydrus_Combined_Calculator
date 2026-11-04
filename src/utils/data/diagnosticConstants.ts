@@ -13,7 +13,7 @@
 export const PHEYDRUS_ANGULAR_HOUSES = new Set([1, 5, 7, 10]);
 
 // ---------------------------------------------------------------------------
-// Pillar 1 — STRUCTURE (Natal)
+// Pillar 1 — IDENTITY (Natal)
 // ---------------------------------------------------------------------------
 export const PILLAR_1_MALEFICS = new Set(['Pluto', 'Saturn', 'Uranus', 'Mars', 'Neptune']);
 export const PILLAR_1_BENEFICS = new Set(['Sun', 'Moon', 'Venus', 'Jupiter']);

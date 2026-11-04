@@ -36,7 +36,7 @@ export interface GradeItem {
  */
 export interface PillarSummary {
   pillar: 1 | 2 | 3;
-  name: 'Structure' | 'Timing' | 'Environment';
+  name: 'Identity' | 'Timing' | 'Environment';
   description: string;
   fCount: number;
   cCount: number;

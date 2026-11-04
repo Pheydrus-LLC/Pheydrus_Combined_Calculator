@@ -392,7 +392,7 @@ function ChapterTitlePage({ n, title, subtitle, children }: { n: number; title: 
   );
 }
 
-/** A pillar chapter's title page: "Chapter 1 · Pillar 1, Structure", its subtitle and HeyJune's voice note */
+/** A pillar chapter's title page: "Chapter 1 · Pillar 1, Identity", its subtitle and HeyJune's voice note */
 export function ChapterOpenerPage({ ctx, n, risingSign }: { ctx: ReportContext; n: 1 | 2 | 3; risingSign?: string }) {
   const pillar = ctx.pillars[n - 1];
   const grade = getPillarLetterGrade(pillar);
