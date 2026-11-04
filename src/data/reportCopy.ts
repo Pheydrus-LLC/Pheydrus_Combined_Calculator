@@ -114,7 +114,7 @@ export const LEGEND_CARDS = [
 // ── Pillars ──────────────────────────────────────────────────────────────────
 
 export const PILLAR_TITLES: Record<1 | 2 | 3, { title: string; subtitle: string }> = {
-  1: { title: 'Structure', subtitle: 'Your Energetic Blueprint' },
+  1: { title: 'Identity', subtitle: 'Your Energetic Blueprint' },
   2: { title: 'Timing', subtitle: 'The Window You Are In' },
   3: { title: 'Environment', subtitle: 'Location & Address' },
 };

@@ -31,7 +31,7 @@ const GRADE_COLORS: Record<
   F: { bg: 'bg-red-50', text: 'text-red-700', border: 'border-red-400', label: 'Difficult' },
 };
 
-// Pillar colours: Structure=orange, Timing=blue, Environment=purple
+// Pillar colours: Identity=orange, Timing=blue, Environment=purple
 const PILLAR_COLORS = ['#f97316', '#3b82f6', '#8b5cf6'] as const;
 
 // ─── Pie chart ────────────────────────────────────────────────────────────────
@@ -342,7 +342,7 @@ export function AngularDiagnosticResults({ result }: AngularDiagnosticResultsPro
             <div>
               <h2 className="text-lg font-semibold text-[#9a7d4e]">Angular Diagnostic</h2>
               <p className="text-sm text-[#6b6188] mt-1">
-                The Three Pillars Model — Structure, Timing, Environment
+                The Three Pillars Model — Identity, Timing, Environment
               </p>
             </div>
             <div className="flex items-center gap-4">

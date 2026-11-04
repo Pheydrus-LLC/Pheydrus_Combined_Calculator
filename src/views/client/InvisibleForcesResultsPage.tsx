@@ -877,7 +877,7 @@ export function InvisibleForcesResultsPage() {
  pillars: [
  {
  pillar: 1,
- name: 'Structure',
+ name: 'Identity',
  description: 'Natal chart angular placements',
  fCount: 5,
  cCount: 3,
@@ -1642,7 +1642,7 @@ export function InvisibleForcesResultsPage() {
  (() => {
  const rows = [
  {
- label: 'Structure',
+ label: 'Identity',
  sub: 'Pillar 1',
  pct: p1pct,
  color: '#F87171',

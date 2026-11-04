@@ -23,7 +23,7 @@ export interface ResourceCard {
 export const PILLAR_RESOURCE_CARDS: ResourceCard[] = [
   {
     pillar: 1,
-    label: 'To address Pillar 1: Structure',
+    label: 'To address Pillar 1: Identity',
     resources: [
       {
         title: '4 Steps to Re-Writing Your Past',

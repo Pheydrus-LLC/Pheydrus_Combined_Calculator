@@ -30,7 +30,7 @@ function renderDiagnosticSection(diagnostic: AngularDiagnosticResult): string {
       <div style="display: flex; justify-content: space-between; align-items: center;">
         <div>
           <h2 style="margin: 0; border: none; padding: 0;">Angular Diagnostic</h2>
-          <p style="margin: 4px 0 0; color: #666; font-size: 12px;">The Three Pillars Model — Structure, Timing, Environment</p>
+          <p style="margin: 4px 0 0; color: #666; font-size: 12px;">The Three Pillars Model — Identity, Timing, Environment</p>
         </div>
         <div style="display: flex; align-items: center; gap: 15px;">
           <div style="text-align: center;">
