@@ -10,3 +10,4 @@ export { AstrocartographyPage } from './AstrocartographyPage';
 export { BusinessEnergyBlueprintPage } from './BusinessEnergyBlueprintPage';
 export { RewriteYourPastPage } from './RewriteYourPastPage';
 export { BarbaultWorksheetPage } from './BarbaultWorksheetPage';
+export { MercuryPlacementPage } from './MercuryPlacementPage';
